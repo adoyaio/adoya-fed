@@ -1,0 +1,16 @@
+{
+	"auth": {
+		"adoyafedae42c0e9": {
+			"service": "Cognito",
+			"providerPlugin": "awscloudformation",
+			"dependsOn": [],
+			"customAuth": false
+		}
+	},
+	"storage": {
+		"s36e1fb62b": {
+			"service": "S3",
+			"providerPlugin": "awscloudformation"
+		}
+	}
+}

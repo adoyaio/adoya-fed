@@ -1,0 +1,148 @@
+th {
+  background-color: #f2f2f2;
+  font-weight: 300;
+  border: 1px solid #d6d6d6;
+}
+.field-label {
+  background-color: #f2f2f2;
+  font-weight: 300;
+  border: 1px solid #d6d6d6;
+  margin: 10px 0;
+  padding: 10px;
+}
+.data-field {
+  margin: 0 0 20px;
+}
+.submit-button {
+  margin: 20px 0 50px 0;
+}
+body {
+  font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans",
+    "DejaVu Sans", Verdana, "sans-serif";
+  margin-top: 50px;
+  color: #666666;
+}
+
+img {
+  max-width: 100%;
+}
+
+.input-styles {
+  border: 2px solid #f2f2f2;
+  padding: 10px;
+  box-shadow: 0 0 5px #f2f2f2;
+  margin: 9px 0 3px -8px;
+}
+
+.current {
+  font-size: 0.8em;
+}
+.time-allowance {
+  padding-top: 10px;
+  font-size: 0.75em;
+}
+
+h1 {
+  font-size: 1.8em;
+  margin-bottom: 50px;
+}
+
+.date {
+  text-transform: uppercase;
+  font-size: 0.8em;
+  font-weight: 600;
+}
+.blog-text {
+  font-size: 0.9em;
+}
+.login-blog-item {
+  margin-top: 30px;
+  padding-top: 10px;
+  border-top: 1px solid #dfdfdf;
+}
+.wide {
+  width: 100%;
+}
+.oops {
+  padding-top: 50px;
+  text-align: center;
+  font-size: 0.8em;
+}
+.sign-out {
+  padding-top: 10px;
+  text-align: center;
+  font-size: 0.8em;
+}
+.sign-in img {
+  padding: 0 0 20px;
+}
+
+input[type="submit"] {
+  padding: 5px 15px;
+  background: #8da870;
+  border: 2px solid #8da870;
+  cursor: pointer;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  box-shadow: 0 0 5px #f2f2f2;
+  margin: 3px 0 3px -8px;
+  color: #fff;
+}
+
+input[type="submit"]:hover {
+  transition: all 0.4s ease 0s;
+  background: #abd181;
+  border: 2px solid #abd181;
+  color: #fff;
+}
+
+input[type="submit"]:disabled {
+  background: #dddddd;
+}
+
+.bottom-border {
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 50px;
+}
+
+::ng-deep {
+  .amplify-authenticator {
+    border: none;
+    box-shadow: none;
+  }
+  .amplify-form-button {
+    background-color: #8da870 !important;
+  }
+}
+
+// phone
+@media (min-width: 576px) {
+  .client-logo {
+    max-width: 50%;
+    margin: 0 auto;
+  }
+}
+
+// tablet wide maybe
+@media (min-width: 768px) {
+  .client-logo {
+    max-width: 50%;
+    margin: 0 auto;
+  }
+}
+
+// desktop narrow
+@media (min-width: 992px) {
+  .client-logo {
+    max-width: 100%;
+    margin: 0 auto;
+  }
+}
+
+// desktop wide
+@media (min-width: 1200px) {
+  .client-logo {
+    max-width: 100%;
+    margin: 0 auto;
+  }
+}

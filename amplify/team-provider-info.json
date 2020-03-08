@@ -1,0 +1,20 @@
+{
+    "prod": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-adoya-fed-prod-163547-authRole",
+            "UnauthRoleArn": "arn:aws:iam::496475828721:role/amplify-adoya-fed-prod-163547-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::496475828721:role/amplify-adoya-fed-prod-163547-authRole",
+            "Region": "us-east-1",
+            "DeploymentBucketName": "amplify-adoya-fed-prod-163547-deployment",
+            "UnauthRoleName": "amplify-adoya-fed-prod-163547-unauthRole",
+            "StackName": "amplify-adoya-fed-prod-163547",
+            "StackId": "arn:aws:cloudformation:us-east-1:496475828721:stack/amplify-adoya-fed-prod-163547/c2df2a80-60d4-11ea-ab76-0a60596032c9",
+            "AmplifyAppId": "d2nahj69l1vm4e"
+        },
+        "categories": {
+            "auth": {
+                "adoyafedae42c0e9": {}
+            }
+        }
+    }
+}
