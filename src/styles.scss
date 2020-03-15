@@ -37,7 +37,7 @@
 
 @import "~@angular/material/theming";
 @import "~aws-amplify-angular/Theme.css";
-@import "./utilities.css";
+@import "./utilities.scss";
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
@@ -184,6 +184,23 @@ body {
   --text-primary-color: #{$dark-primary-text};
   --text-primary-lighter-color: #{$dark-primary-text};
   --text-primary-darker-color: #{$dark-primary-text};
+  //override AWS
+  --color-primary: #8da870;
+  --color-primary-highlight: #cfdac3;
+  --lightAmazonOrange: #cfdac3;
+  --darkAmazonOrange: #8da870;
+  --amazonOrange: #8da870;
+  --button-background-color: #8da870;
+  --squidInk: #232f3e;
+  --lightSquidInk: #31465f;
+  --deepSquidInk: #152939;
+  --grey: #828282;
+  --lightGrey: #c4c4c4;
+  --silver: #e1e4ea;
+  --darkBlue: #31465f;
+  --red: #dd3f5b;
+  --white: #ffffff;
+  --light-blue: #00a1c9;
 }
 
 $mat-primary: (

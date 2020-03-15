@@ -102,7 +102,7 @@ input[type="submit"]:disabled {
 
 .bottom-border {
   border-bottom: 1px solid #ccc;
-  padding-bottom: 50px;
+  padding-bottom: 1rem;
 }
 
 ::ng-deep {
@@ -112,6 +112,24 @@ input[type="submit"]:disabled {
   }
   .amplify-form-button {
     background-color: #8da870 !important;
+  }
+  .amplify-form-input {
+    width: 100%;
+  }
+
+  .amplify-select-phone-country {
+    width: 85px;
+    height: 42px;
+    // margin-right: 1rem;
+    padding-right: 1rem;
+  }
+
+  .amplify-greeting {
+    justify-content: end;
+    padding-top: 0px;
+  }
+  .amplify-greeting-flex-spacer {
+    width: 1rem;
   }
 }
 

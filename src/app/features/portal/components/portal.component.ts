@@ -14,7 +14,7 @@ export class PortalComponent implements OnInit {
         this.user = null;
       } else {
         this.user = authState.user;
-        this.greeting = "Hello " + this.user.username;
+        //this.greeting = "Hello " + this.user.username;
       }
     });
   }
@@ -23,7 +23,7 @@ export class PortalComponent implements OnInit {
   greeting: string;
   usernameAttributes = "email";
   signUpConfig = {
-    header: "My Customized Sign Up",
+    header: "Client Portal Sign Up",
     hideAllDefaults: true,
     defaultCountryCode: "1",
     signUpFields: [
@@ -49,10 +49,18 @@ export class PortalComponent implements OnInit {
         type: "string"
       },
       {
-        label: "Custom Attribute",
-        key: "custom_attr",
+        label: "First Name",
+        key: "first_name",
         required: false,
         displayOrder: 4,
+        type: "string",
+        custom: true
+      },
+      {
+        label: "Last Name",
+        key: "last_name",
+        required: false,
+        displayOrder: 5,
         type: "string",
         custom: true
       }
