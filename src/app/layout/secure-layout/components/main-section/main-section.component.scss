@@ -1,0 +1,39 @@
+::ng-deep app-main-section {
+  overflow-x: hidden !important;
+  height: 100%;
+}
+
+.main-section-wrapper {
+  margin-left: 5%;
+  margin-right: 5%;
+  .top-bar-panel {
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+    .page-title {
+      font-size: 1.5rem;
+      font-weight: 400;
+    }
+  }
+}
+
+/* Tablet Screen */
+@media only screen and (min-width: 768px) {
+  .main-section-wrapper .top-bar-panel {
+    height: 75px;
+    .page-title {
+      font-weight: 600;
+    }
+  }
+}
+
+/* Medium Screen */
+@media only screen and (min-width: 1000px) {
+}
+
+/* Large Screen */
+@media only screen and (min-width: 1600px) {
+}

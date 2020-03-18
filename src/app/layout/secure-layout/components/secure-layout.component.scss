@@ -1,0 +1,44 @@
+@import "variables";
+
+.layout-container {
+  height: 100%;
+  overflow: hidden;
+  -moz-overflow-style: none;
+  -ms-overflow-style: none;
+  overflow-style: none;
+}
+
+.sidenav-container {
+  height: 100%;
+  overflow-x: hidden;
+}
+
+.menu-sidenav {
+  box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2),
+    0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
+  overflow-y: visible;
+  z-index: 5;
+  border: hidden;
+}
+
+.collapse-animation {
+  -webkit-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  -moz-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  -ms-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  -o-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidenav-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.logo-div {
+  width: 175px;
+}
+
+.logo-img {
+  width: 150px;
+  height: 50px;
+}

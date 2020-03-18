@@ -1,0 +1,110 @@
+@import "custom-palettes.scss";
+
+$adoya-web-primary: mat-palette($md-adoya-green, 500);
+$adoya-web-accent: mat-palette($md-adoya-green, 200);
+$adoya-web-warn: mat-palette($mat-red);
+
+// Custom color variables
+$adoya-web-tooltip-color: rgba(60, 60, 60, 0.8);
+
+// Custom colors map
+$custom-colors: (
+  adoya-web-primary: #cfdac3,
+  adoya-web-nav-primary: #cfdac3,
+  adoya-web-nav-border: #8da870
+);
+
+@mixin themed-classes() {
+  $primary: $adoya-web-primary;
+  $accent: $adoya-web-accent;
+  $warn: $adoya-web-warn;
+  $background: map-get($mat-grey, background);
+
+  // Define any styles affected by the theme.
+  .adoya-web-primary {
+    color: mat-color($primary);
+  }
+  .adoya-web-accent {
+    color: mat-color($accent);
+  }
+
+  .adoya-web-warn {
+    color: mat-color($warn);
+  }
+
+  .adoya-web-primary-bg {
+    background-color: mat-color($primary) !important;
+  }
+
+  .adoya-web-accent-bg {
+    background-color: mat-color($accent);
+  }
+
+  .adoya-web-lighter-accent-bg {
+    background-color: mat-color($accent, lighter);
+  }
+
+  .adoya-web-tooltip {
+    background-color: $adoya-web-tooltip-color;
+  }
+
+  .color-primary {
+    color: mat-color($primary);
+  }
+
+  .border-primary {
+    border-color: mat-color($primary);
+  }
+
+  .grey-bg {
+    background-color: mat-color($mat-grey, 100);
+  }
+
+  .container {
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+
+  .flex-extend {
+    display: flex;
+    flex: 1 0 auto;
+  }
+
+  .flex-column {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .flex-row {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .horizontal-items {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    -ms-flex-direction: row;
+    flex-direction: row;
+  }
+
+  .centered-items {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding-top: 15px;
+  }
+
+  .vertical-items {
+    display: flex;
+    align-items: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  .clickable {
+    cursor: pointer;
+  }
+}
+
+@include themed-classes();

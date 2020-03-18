@@ -1,0 +1,189 @@
+<mat-accordion
+  class="nav-links__mat-accordion d-flex flex-column align-items-start"
+  *ngIf="!sidenavCollapsed || isMobile"
+  displayMode="flat"
+>
+  <ng-container
+    *ngFor="
+      let link of navLinkService.navLinks;
+      let i = index;
+      trackBy: trackLink
+    "
+  >
+    <mat-expansion-panel
+      #panel
+      *ngIf="link.type === 'panel'"
+      class="nav-links__mat-accordion__mat-expansion-panel mat-elevation-z jtv-web-primary-bg toolbar-item rounded-0 w-100"
+      (destroyed)="closePanel(panel)"
+      (opened)="setOpenPanel(link.index)"
+      [expanded]="getOpenPanel() === link.index"
+      hideToggle
+    >
+      <mat-expansion-panel-header
+        class="nav-links__mat-accordion__mat-expansion-panel__mat-expansion-panel-header px-4 text-nowrap"
+      >
+        <mat-panel-title class="font-weight-light toolbar-item unselectable">
+          <mat-icon
+            *ngIf="isSvg(link.icon)"
+            [svgIcon]="link.icon.split('.')[1]"
+            class="pr-1"
+          ></mat-icon>
+
+          <mat-icon *ngIf="!isSvg(link.icon)" class="pr-1">
+            {{ link.icon }}
+          </mat-icon>
+          &nbsp;&nbsp;{{ link.title }}
+
+          <div class="chevron-div d-flex flex-fill justify-content-end">
+            <mat-icon id="expansion-panel-chevron" class="chevron-icon">
+              chevron_right
+            </mat-icon>
+          </div>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <mat-nav-list
+        class="nav-links__mat-accordion__mat-expansion-panel__mat-nav-sub-list"
+      >
+        <ng-container
+          *ngFor="
+            let sublink of navLinkService.navLinks[i].subLinks;
+            trackBy: trackLink
+          "
+        >
+          <div
+            class="nav-links__mat-accordion__mat-expansion-panel__mat-nav-sub-list__mat-sub-list-item"
+          >
+            <a
+              mat-list-item
+              class="text-reset"
+              routerLinkActive="active-page"
+              [routerLinkActiveOptions]="{ exact: false }"
+              [routerLink]="sublink.routerLink"
+              (click)="handleClick(sublink, link.index)"
+            >
+              {{ sublink.title }}
+            </a>
+          </div>
+        </ng-container>
+      </mat-nav-list>
+    </mat-expansion-panel>
+
+    <button
+      *ngIf="link.onclick && link.type === 'button'"
+      routerLinkActive="active-page"
+      [routerLinkActiveOptions]="{ exact: false }"
+      class="nav-links__button"
+      color="primary"
+      (click)="handleClick(link, link.index)"
+      mat-button
+    >
+      <mat-icon
+        *ngIf="isSvg(link.icon)"
+        [svgIcon]="link.icon.split('.')[1]"
+        class="pr-1"
+      ></mat-icon>
+      <mat-icon *ngIf="!isSvg(link.icon)" class="pr-1">
+        {{ link.icon }}
+      </mat-icon>
+      &nbsp;&nbsp;{{ link.title }}
+    </button>
+
+    <button
+      *ngIf="!link.onclick && link.type === 'button'"
+      [routerLink]="link.routerLink"
+      routerLinkActive="active-page"
+      (click)="handleClick(link, link.index)"
+      [routerLinkActiveOptions]="{ exact: true }"
+      class="nav-links__button"
+      mat-button
+    >
+      <mat-icon
+        *ngIf="isSvg(link.icon)"
+        [svgIcon]="link.icon.split('.')[1]"
+        class="pr-1"
+      ></mat-icon>
+      <mat-icon *ngIf="!isSvg(link.icon)" class="pr-1">
+        {{ link.icon }}
+      </mat-icon>
+      &nbsp;&nbsp;{{ link.title }}
+    </button>
+  </ng-container>
+</mat-accordion>
+
+<div class="nav-links__collapsed-nav" *ngIf="sidenavCollapsed && !isMobile">
+  <mat-nav-list
+    class="nav-links__collapsed-nav__mat-nav-list jtv-web-primary-bg pt-0"
+  >
+    <ng-container
+      *ngFor="
+        let link of navLinkService.navLinks;
+        let i = index;
+        trackBy: trackLink
+      "
+    >
+      <button
+        *ngIf="!link.onclick && !link.subLinks"
+        mat-button
+        (click)="handleClick(link, link.index)"
+        routerLinkActive="active-page"
+        [routerLink]="link.routerLink"
+        [routerLinkActiveOptions]="{ exact: false }"
+        [matTooltip]="link.title"
+        matTooltipPosition="right"
+        matTooltipClass="large-blue-tooltip"
+        class="nav-links__button"
+      >
+        <mat-icon *ngIf="!isSvg(link.icon)">{{ link.icon }}</mat-icon>
+        <mat-icon
+          *ngIf="isSvg(link.icon)"
+          [svgIcon]="link.icon.split('.')[1]"
+        ></mat-icon>
+      </button>
+
+      <button
+        *ngIf="link.onclick && !link.subLinks"
+        mat-button
+        (click)="handleClick(link, link.index)"
+        routerLinkActive="active-page"
+        [routerLinkActiveOptions]="{ exact: false }"
+        [matTooltip]="link.title"
+        matTooltipPosition="right"
+        matTooltipClass="large-blue-tooltip"
+        class="nav-links__button"
+      >
+        <mat-icon *ngIf="!isSvg(link.icon)">{{ link.icon }}</mat-icon>
+        <mat-icon
+          *ngIf="isSvg(link.icon)"
+          [svgIcon]="link.icon.split('.')[1]"
+        ></mat-icon>
+      </button>
+
+      <button
+        *ngIf="link.subLinks"
+        mat-button
+        (click)="subLinkSlideToggle(link, link.index)"
+        routerLinkActive="active-page"
+        [routerLinkActiveOptions]="{ exact: false }"
+        [matTooltip]="getTooltipForSublink(link)"
+        matTooltipPosition="right"
+        matTooltipClass="large-blue-tooltip"
+        class="nav-links__button"
+        [ngClass]="{
+          'sub-links-expanded d-none': navLinkService.isTheSameLink(link)
+        }"
+      >
+        <mat-icon *ngIf="!isSvg(link.icon)" class="collapsed-menu-icon--iefix">
+          {{ link.icon }}
+        </mat-icon>
+        <mat-icon
+          *ngIf="isSvg(link.icon)"
+          [svgIcon]="link.icon.split('.')[1]"
+        ></mat-icon>
+        <mat-icon class="chevron-icon chevron-animate-right">
+          chevron_right
+        </mat-icon>
+      </button>
+    </ng-container>
+  </mat-nav-list>
+</div>
