@@ -1,4 +1,19 @@
 @import "variables.scss";
 
-.nav-links__button {
+//Styles for Nav Bar collapsed
+.nav-links__collapsed-nav {
+  height: calc(100% - 90px);
+
+  .nav-links__collapsed-nav__mat-nav-list {
+    height: 100%;
+    z-index: 5;
+
+    ::ng-deep .sub-links-expanded .mat-button-wrapper .chevron-icon {
+      display: none;
+    }
+
+    ::ng-deep mat-icon.toolbar-icon > svg {
+      width: inherit;
+    }
+  }
 }

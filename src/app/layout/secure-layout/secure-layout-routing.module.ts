@@ -10,17 +10,26 @@ const routes: Routes = [
     children: [
       {
         path: "",
-        redirectTo: "main",
+        redirectTo: "dashboard",
         pathMatch: "full"
       },
       {
-        path: "main",
+        path: "dashboard",
         loadChildren: () =>
           import("../../features/workbench/workbench.module").then(
             m => m.WorkbenchModule
           ),
         // canActivate: [AuthGuard],
         data: { title: "Dashboard" }
+      },
+      {
+        path: "reporting",
+        loadChildren: () =>
+          import("../../features/reporting/reporting.module").then(
+            m => m.ReportingModule
+          ),
+        // canActivate: [AuthGuard],
+        data: { title: "Reporting" }
       }
     ]
   }

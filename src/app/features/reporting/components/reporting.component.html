@@ -1,0 +1,79 @@
+<mat-tab-group color="accent">
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon>history</mat-icon>
+      <span class="ml-2">Cost Per Install History</span>
+    </ng-template>
+    <div class="mat-elevation-z8 mt-2 reporting-component__table-container">
+      <mat-paginator
+        [pageSizeOptions]="[25, 50, 100]"
+        showFirstLastButtons
+      ></mat-paginator>
+
+      <table mat-table [dataSource]="dataSource">
+        <!-- cpi column -->
+        <ng-container matColumnDef="cpi">
+          <th mat-header-cell *matHeaderCellDef>CPI</th>
+          <td mat-cell *matCellDef="let element">{{ element.cpi }}</td>
+        </ng-container>
+
+        <!-- installs column -->
+        <ng-container matColumnDef="installs">
+          <th mat-header-cell *matHeaderCellDef>Installs</th>
+          <td mat-cell *matCellDef="let element">{{ element.installs }}</td>
+        </ng-container>
+
+        <!-- orgId Column -->
+        <ng-container matColumnDef="orgId">
+          <th mat-header-cell *matHeaderCellDef>Org Id</th>
+          <td mat-cell *matCellDef="let element">{{ element.orgId }}</td>
+        </ng-container>
+
+        <!-- timestamp Column -->
+        <ng-container matColumnDef="timestamp">
+          <th mat-header-cell *matHeaderCellDef>Timestamp</th>
+          <td mat-cell *matCellDef="let element">{{ element.timestamp }}</td>
+        </ng-container>
+
+        <!-- spend Column -->
+        <ng-container matColumnDef="spend">
+          <th mat-header-cell *matHeaderCellDef>Spend</th>
+          <td mat-cell *matCellDef="let element">{{ element.spend }}</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+  </mat-tab>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon>thumb_up</mat-icon><span class="ml-2">Positive Keywords</span>
+    </ng-template>
+    <div class="container px-2">
+      <mat-chip-list class="mat-chip-list-stacked pt-2">
+        <mat-chip>Papadum</mat-chip>
+        <mat-chip>Naan</mat-chip>
+        <mat-chip>Dal</mat-chip>
+        <mat-chip>Papadum</mat-chip>
+        <mat-chip>Naan</mat-chip>
+        <mat-chip>Dal</mat-chip>
+        <mat-chip>Papadum</mat-chip>
+        <mat-chip>Naan</mat-chip>
+        <mat-chip>Dal</mat-chip>
+        <mat-chip>Papadum</mat-chip>
+        <mat-chip>Naan</mat-chip>
+        <mat-chip>Dal</mat-chip>
+        <mat-chip>Papadum</mat-chip>
+        <mat-chip>Naan</mat-chip>
+        <mat-chip>Dal</mat-chip>
+      </mat-chip-list>
+    </div>
+  </mat-tab>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon>thumb_down</mat-icon><span class="ml-2">Negative Keywords</span>
+    </ng-template>
+    <h1>Negative Keywords here</h1>
+    <p>...</p>
+  </mat-tab>
+</mat-tab-group>

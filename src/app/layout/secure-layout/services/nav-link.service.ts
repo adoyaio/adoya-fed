@@ -24,11 +24,58 @@ export class NavLinkService implements OnDestroy {
     this.navLinks = new Array<LayoutNavLinks>();
 
     this.navLinks.push(
-      LayoutNavLinks.build(1, "button", "Dashboard", "/pc/main", "dashboard")
+      LayoutNavLinks.build(
+        1,
+        "button",
+        "Dashboard",
+        "/workbench/dashboard",
+        "dashboard",
+        undefined,
+        () => {
+          location.href = "/workbench/dashboard";
+        }
+      )
     );
 
     this.navLinks.push(
-      LayoutNavLinks.build(1, "button", "Account", "/pc/main", "dashboard")
+      LayoutNavLinks.build(
+        2,
+        "button",
+        "Reporting",
+        "/workbench/reporting",
+        "assessment",
+        undefined,
+        () => {
+          location.href = "/workbench/reporting";
+        }
+      )
+    );
+
+    this.navLinks.push(
+      LayoutNavLinks.build(
+        3,
+        "button",
+        "Account",
+        "/workbench/account",
+        "account_box",
+        undefined,
+        () => {
+          location.href = "/workbench/reporting";
+        }
+      )
+    );
+    this.navLinks.push(
+      LayoutNavLinks.build(
+        4,
+        "button",
+        "Feedback",
+        "/workbench/feedback",
+        "feedback",
+        undefined,
+        () => {
+          location.href = "/workbench/feedback";
+        }
+      )
     );
   }
 

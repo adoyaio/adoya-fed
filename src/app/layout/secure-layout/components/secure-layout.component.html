@@ -1,37 +1,18 @@
-<div id="non-mobile-sidenav-container" class="layout-container is-not-mobile">
-  <mat-sidenav-container hasBackdrop="false" class="sidenav-container">
-    <mat-sidenav
-      class="jtv-web-primary-bg menu-sidenav collapse-animation"
-      mode="side"
-      opened="true"
-    >
-      <div class="logo-div clickable">
-        <img
-          class="logo-img"
-          src="./../../../../assets/images/adoya-client-portal.png"
-          alt="JTV logo"
-        />
-      </div>
-      <!-- <div class="sidenav-collapse-btn-container">
-        <button
-          class="sidenav-collapse-button circular-edges"
-          (click)="toggleDrawer()"
-          mat-button
-        >
-          <mat-icon>
-            arrow_left
-          </mat-icon>
-        </button>
-      </div> -->
-      <mat-divider></mat-divider>
-      <app-nav-links [isMobile]="false"> </app-nav-links>
-    </mat-sidenav>
-    <mat-sidenav-content class="sidenav-content collapse-animation">
-      <app-main-section
-        (toggleDrawerCalled)="toggleDrawer()"
-        [isMobile]="false"
-      >
-      </app-main-section>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
-</div>
+<mat-sidenav-container hasBackdrop="false" class="sidenav-container">
+  <mat-sidenav class="menu-sidenav" mode="side" opened="true">
+    <div class="logo-div clickable">
+      <img
+        class="logo-img"
+        src="./../../../../assets/images/adoya-client-portal.png"
+        alt="Adoya logo"
+      />
+    </div>
+
+    <mat-divider></mat-divider>
+    <app-nav-links [isMobile]="false"> </app-nav-links>
+  </mat-sidenav>
+  <mat-sidenav-content class="sidenav-content">
+    <app-main-section (toggleDrawerCalled)="toggleDrawer()" [isMobile]="false">
+    </app-main-section>
+  </mat-sidenav-content>
+</mat-sidenav-container>

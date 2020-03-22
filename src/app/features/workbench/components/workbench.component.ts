@@ -1,5 +1,4 @@
 import { Router } from "@angular/router";
-import { Router } from "@angular/router";
 import { Component, OnInit } from "@angular/core";
 import { AmplifyService } from "aws-amplify-angular";
 import { map, tap } from "rxjs/operators";

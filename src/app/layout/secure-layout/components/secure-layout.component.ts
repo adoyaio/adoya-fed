@@ -1,5 +1,4 @@
 import { NavLinkService } from "./../services/nav-link.service";
-import { MaterialModule } from "./../../../shared/material-design/material.module";
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 

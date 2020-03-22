@@ -1,1 +1,6 @@
-<router-outlet></router-outlet>
+<div class="d-flex justify-content-center" *ngIf="isAppLoading">
+  <mat-spinner></mat-spinner>
+</div>
+<div *ngIf="!isAppLoading" class="h-100">
+  <router-outlet></router-outlet>
+</div>
