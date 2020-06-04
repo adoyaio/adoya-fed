@@ -5,17 +5,11 @@ import { MatTableDataSource, MatPaginator } from "@angular/material";
 @Component({
   selector: "app-reporting",
   templateUrl: "./reporting.component.html",
-  styleUrls: ["./reporting.component.scss"]
+  styleUrls: ["./reporting.component.scss"],
 })
 export class ReportingComponent implements OnInit {
   cpiHistory = [];
-  displayedColumns: string[] = [
-    "cpi",
-    "installs",
-    "orgId",
-    "timestamp",
-    "spend"
-  ];
+  displayedColumns: string[] = ["cpi", "installs", "timestamp", "spend"];
 
   dataSource = new MatTableDataSource<CostPerInstallDayObject>(this.cpiHistory);
 
