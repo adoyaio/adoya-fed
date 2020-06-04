@@ -17,3 +17,26 @@
     }
   }
 }
+
+.nav-links__button {
+  height: 50px;
+}
+
+.nav-links__button:hover {
+  height: 50px;
+  background-color: mat-color($adoya-web-accent) !important;
+}
+
+.nav-links__button-container:hover {
+  background-color: mat-color($adoya-web-accent) !important;
+}
+
+.nav-links__container {
+  // height: 100vh !important;
+  height: calc(100vh) !important;
+  width: 200px;
+}
+
+.active-page {
+  background-color: mat-color($adoya-web-primary) !important;
+}
