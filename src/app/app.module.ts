@@ -1,3 +1,4 @@
+import { HttpClientModule } from "@angular/common/http";
 import { PortalModule } from "./features/portal/portal.module";
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
@@ -16,9 +17,10 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
     BrowserAnimationsModule,
     PortalModule,
     AmplifyAngularModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    HttpClientModule,
   ],
   providers: [AmplifyService],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {}
