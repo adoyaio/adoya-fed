@@ -1,3 +1,4 @@
+import { FormBuilder, FormControl } from "@angular/forms";
 import { ClientService } from "./../../../core/services/client.service";
 import { CostPerInstallDayObject } from "./../models/cost-per-install-day-object";
 import { Component, OnInit, ViewChild, AfterViewInit } from "@angular/core";
@@ -15,6 +16,7 @@ import {
   map,
   catchError,
   combineAll,
+  delay,
 } from "rxjs/operators";
 import { combineLatest } from "rxjs";
 
@@ -23,7 +25,7 @@ import { combineLatest } from "rxjs";
   templateUrl: "./reporting.component.html",
   styleUrls: ["./reporting.component.scss"],
 })
-export class ReportingComponent implements AfterViewInit {
+export class ReportingComponent implements AfterViewInit, OnInit {
   cpiHistory: CostPerInstallDayObject[] = [];
   displayedColumns: string[] = [
     "timestamp",
@@ -41,9 +43,12 @@ export class ReportingComponent implements AfterViewInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-  constructor(private clientService: ClientService) {}
+  // listSizeControl: FormControl = this.fb.control(365);
+  constructor(private clientService: ClientService, private fb: FormBuilder) {}
 
+  ngOnInit() {}
   ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
     // If the user changes the sort order, reset back to the first page.
     // this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
     // this.dataSource
@@ -55,8 +60,59 @@ export class ReportingComponent implements AfterViewInit {
     //   )
     //   .subscribe();
 
+    // this.listSizeControl.valueChanges
+    //   .pipe(
+    //     startWith(365),
+    //     switchMap((val) => {
+    //       this.isLoadingResults = true;
+    //       // return this.exampleDatabase!.getRepoIssues(
+    //       //   this.sort.active, this.sort.direction, this.paginator.pageIndex);
+    //       console.log(this.sort.direction);
+    //       console.log(this.paginator.pageIndex);
+
+    //       return this.clientService.getClientHistory("1056410", val);
+    //     }),
+    //     map((data) => {
+    //       // Flip flag to show that loading has finished.
+    //       this.isLoadingResults = false;
+    //       this.cpiHistory = CostPerInstallDayObject.buildFromGetHistoryResponse(
+    //         data
+    //       );
+    //       this.dataSource.data = this.cpiHistory;
+    //       this.paginator.length = this.cpiHistory.length;
+    //       return data;
+    //     }),
+
+    //     catchError(() => {
+    //       this.isLoadingResults = false;
+    //       return [];
+    //     })
+    //   )
+    //   .subscribe();
+
+    this.clientService
+      .getClientHistory("1056410", 1000)
+      .pipe(
+        map((data) => {
+          // Flip flag to show that loading has finished.
+          this.isLoadingResults = false;
+          this.cpiHistory = CostPerInstallDayObject.buildFromGetHistoryResponse(
+            data
+          );
+          this.dataSource.data = this.cpiHistory;
+          this.paginator.length = this.cpiHistory.length;
+          return data;
+        }),
+        catchError(() => {
+          this.isLoadingResults = false;
+          return [];
+        })
+      )
+      .subscribe();
+
     this.sort.sortChange
       .pipe(
+        delay(0),
         tap((val) => {
           console.log("sortChange::dir::" + val.direction);
           console.log("sortChange::active::" + val.active);
@@ -66,6 +122,12 @@ export class ReportingComponent implements AfterViewInit {
                 return +a.cpi - +b.cpi;
               }
               return +b.cpi - +a.cpi;
+            }
+            if (val.active === "spend") {
+              if (val.direction === "asc") {
+                return +a.spend - +b.spend;
+              }
+              return +b.spend - +a.spend;
             }
             if (val.active === "timestamp") {
               if (val.direction === "asc") {
@@ -80,38 +142,40 @@ export class ReportingComponent implements AfterViewInit {
       .subscribe();
 
     //combineLatest([this.sort.sortChange, this.paginator.page])
-    this.paginator.page
-      .pipe(
-        startWith({}),
-        switchMap(() => {
-          this.isLoadingResults = true;
-          // return this.exampleDatabase!.getRepoIssues(
-          //   this.sort.active, this.sort.direction, this.paginator.pageIndex);
-          console.log(this.sort.direction);
-          console.log(this.paginator.pageIndex);
+    // this.paginator.page
+    //   .pipe(
+    //     startWith({}),
+    //     switchMap(() => {
+    //       this.isLoadingResults = true;
+    //       // return this.exampleDatabase!.getRepoIssues(
+    //       //   this.sort.active, this.sort.direction, this.paginator.pageIndex);
+    //       console.log(this.sort.direction);
+    //       console.log(this.paginator.pageIndex);
+    //       console.log(this.paginator.pageSize);
 
-          return this.clientService.getClientHistory(
-            "1056410",
-            this.paginator.pageSize
-          );
-        }),
-        map((data) => {
-          // Flip flag to show that loading has finished.
-          this.isLoadingResults = false;
-          this.cpiHistory = CostPerInstallDayObject.buildFromGetHistoryResponse(
-            data
-          );
-          this.dataSource.data = this.cpiHistory;
-          this.paginator.length = this.cpiHistory.length;
-          return data;
-        }),
+    //       return this.clientService.getClientHistory(
+    //         "1056410",
+    //         this.paginator.pageIndex,
+    //         this.paginator.pageSize
+    //       );
+    //     }),
+    //     map((data) => {
+    //       // Flip flag to show that loading has finished.
+    //       this.isLoadingResults = false;
+    //       this.cpiHistory = CostPerInstallDayObject.buildFromGetHistoryResponse(
+    //         data
+    //       );
+    //       this.dataSource.data = this.cpiHistory;
+    //       this.paginator.length = this.cpiHistory.length;
+    //       return data;
+    //     }),
 
-        catchError(() => {
-          this.isLoadingResults = false;
-          return [];
-        })
-      )
-      .subscribe();
+    //     catchError(() => {
+    //       this.isLoadingResults = false;
+    //       return [];
+    //     })
+    //   )
+    //   .subscribe();
   }
 
   addEvent(type: string, event: MatDatepickerInputEvent<Date>) {
@@ -119,11 +183,12 @@ export class ReportingComponent implements AfterViewInit {
     console.log(event.value);
   }
 
-  lengthChanged(event: any) {
-    console.log(event.value);
+  listSizeChanged(event: any) {
     this.isLoadingResults = true;
+
+    // TODO pull from token service
     this.clientService
-      .getClientHistory("1056410", this.paginator.pageSize)
+      .getClientHistory("1056410", event.target.value)
       .pipe(
         map((data) => {
           this.cpiHistory = CostPerInstallDayObject.buildFromGetHistoryResponse(
@@ -134,7 +199,7 @@ export class ReportingComponent implements AfterViewInit {
           return data;
         }),
         tap((data) => {
-          this.isLoadingResults = true;
+          this.isLoadingResults = false;
         })
       )
       .subscribe();

@@ -1,0 +1,21 @@
+.hidden-input {
+  display: none;
+}
+.select-control .field-item {
+  margin-right: 0.5rem !important;
+}
+
+.select__mat-icon-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.readonly-wrapper {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.readonly-wrapper .readonly-block {
+  pointer-events: none;
+}

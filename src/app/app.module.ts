@@ -1,3 +1,4 @@
+import { DynamicFormModule } from "./shared/dynamic-form/dynamic-form.module";
 import { HttpClientModule } from "@angular/common/http";
 import { PortalModule } from "./features/portal/portal.module";
 import { BrowserModule } from "@angular/platform-browser";
@@ -19,6 +20,7 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
     AmplifyAngularModule,
     MatProgressSpinnerModule,
     HttpClientModule,
+    DynamicFormModule,
   ],
   providers: [AmplifyService],
   bootstrap: [AppComponent],

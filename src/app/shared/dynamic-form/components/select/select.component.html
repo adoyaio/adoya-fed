@@ -1,0 +1,53 @@
+<div [ngClass]="field.tooltipIcon ? 'd-flex has-tooltip' : 'd-flex'">
+    <div
+        class="field-control select-control"
+        [ngClass]="field.visible === false ? 'hidden-input' : ''"
+    >
+        <mat-form-field
+            class="field-item"
+            [formGroup]="form"
+            [ngClass]="field.readonly ? 'readonly-wrapper' : ''"
+        >
+            <mat-select
+                #select
+                [placeholder]="field.label"
+                [formControlName]="field.name"
+                [(value)]="defaultSelection"
+                [ngClass]="field.readonly ? 'readonly-block' : ''"
+                [multiple]="field.multiple"
+            >
+                <mat-option
+                    *ngFor="let option of field.options; trackBy: trackOption"
+                    [value]="option.value"
+                >
+                    {{ option.label }}
+                </mat-option>
+            </mat-select>
+
+            <ng-container
+                *ngFor="let validation of field.validations; trackBy: trackValidation"
+                ngProjectAs="mat-error"
+            >
+                <mat-error *ngIf="fieldHasError(form, field, validation)">
+                    {{ getMessage(validation.message) }}
+                </mat-error>
+            </ng-container>
+
+            <mat-hint *ngIf="field.hint">{{ field.hint }}</mat-hint>
+        </mat-form-field>
+        <!--Displays Tooltip Icon-->
+        <div class="select__mat-icon-container">
+            <a
+                mat-icon-button
+                class="color-primary"
+                href="#"
+                (click)="$event.preventDefault(); handleTooltipClick()"
+                *ngIf="field.tooltipIcon"
+            >
+                <mat-icon>
+                    {{ field.tooltipIcon }}
+                </mat-icon>
+            </a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,60 @@
+<form
+    [id]="formId"
+    class="dynamic-form"
+    [formGroup]="form"
+    (submit)="onSubmit($event)"
+    (keydown)="keyDownFunction($event)"
+>
+    <div
+        class="field-groups"
+        [id]="entry + 'Group'"
+        *ngFor="let entry of getFieldGroupKeys() | async; trackBy: trackEntry"
+    >
+        <h2 class="form-group-titles" *ngIf="this.groupTitlesEnabled">
+            {{ entry }}
+        </h2>
+        <div class="field-items-container">
+            <ng-container *ngFor="let field of getFieldConfigs(entry) | async; trackBy: trackField">
+                <app-dynamic-field
+                    *ngIf="!field.disabled"
+                    class="dynamic-field"
+                    [ngClass]="field.fullwidth ? 'full-width-field' : ''"
+                    [field]="field"
+                    [form]="form"
+                    [isLabels]="isLabels"
+                >
+                </app-dynamic-field>
+            </ng-container>
+        </div>
+    </div>
+</form>
+<div *ngIf="!this.isDebugDisabled" class="mt-0 mb-2">
+    <button
+        (click)="showDebug = !showDebug"
+        [innerHtml]="!showDebug ? 'Show Info ....' : 'Hide Info ....'"
+    ></button>
+    <div *ngIf="showDebug" class="d-flex flex-column">
+        <span>FormId:&nbsp;{{ formId | json }}</span>
+        <span>Form {{ form.valid ? 'IS' : 'IS NOT' }} valid!</span>
+        <span>Form {{ form.pristine ? 'IS' : 'IS NOT' }} pristine!</span>
+        <span>Form {{ form.touched ? 'IS' : 'IS NOT' }} touched!</span>
+        <span>Form {{ form.dirty ? 'IS' : 'IS NOT' }} dirty!</span>
+        <span *ngIf="!form.valid"
+            >First Invalid Control is ... {{ findFirstInvalidControl() }}</span
+        >
+        <button
+            class="w-25"
+            (click)="showConfigs = !showConfigs"
+            [innerHtml]="!showConfigs ? 'Show FieldConfigs ....' : 'FieldConfigs Info ....'"
+        ></button>
+        <div *ngIf="showConfigs">
+            <div *ngFor="let entry of getFieldGroupKeys() | async; trackBy: trackEntry">
+                <span>Field Group:&nbsp;{{ entry }}</span>
+                <div *ngFor="let field of getFieldConfigs(entry) | async; trackBy: trackField">
+                    <span>{{ field | json }}</span>
+                </div>
+            </div>
+        </div>
+        <span>Form Value:&nbsp;{{ form.value | json }}</span>
+    </div>
+</div>

@@ -1,0 +1,50 @@
+<div class="field-control">
+    <mat-form-field
+        [id]="field.name"
+        class="field-item"
+        [formGroup]="form"
+        *ngIf="show"
+        [ngClass]="field.visible === false ? 'hidden-input' : ''"
+        [hideRequiredMarker]="shouldHideRequiredMarker()"
+    >
+        <mat-label>{{ getLabel() }}</mat-label>
+        <input
+            matInput
+            #input
+            [readonly]="field.readonly"
+            [formControlName]="field.name"
+            [placeholder]="field.placeholder"
+            [type]="field.inputType"
+            [appUpperCase]="field.uppercase"
+            [maxLength]="getMaxLength()"
+            [required]="getRequiredAsterisk()"
+            [prefix]="field.prefix || ''"
+            [mask]="field.mask"
+            [dropSpecialCharacters]="!field.keepMask"
+        />
+        <img class="mr-1" matPrefix [src]="prefixUrl" *ngIf="prefixUrl" />
+        <ng-container
+            *ngFor="let validation of field.validations; trackBy: trackValidation"
+            ngProjectAs="mat-error"
+        >
+            <mat-error *ngIf="fieldHasError(form, field, validation)">
+                {{ getMessage(validation.message) }}
+            </mat-error>
+        </ng-container>
+        <mat-icon matSuffix *ngIf="field.icon">{{ field.icon }}</mat-icon>
+        <mat-hint *ngIf="field.hint">{{ field.hint }}</mat-hint>
+    </mat-form-field>
+    <div class="input__mat-icon-container">
+        <a
+            mat-icon-button
+            href="#"
+            class="color-primary"
+            (click)="$event.preventDefault(); handleTooltipClick()"
+            *ngIf="field.tooltipIcon"
+        >
+            <mat-icon>
+                {{ field.tooltipIcon }}
+            </mat-icon>
+        </a>
+    </div>
+</div>

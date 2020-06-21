@@ -1,0 +1,17 @@
+.hidden-input {
+  display: none;
+}
+
+.field-control .field-item {
+  margin-right: 0.5rem !important;
+}
+
+.input__mat-icon-container {
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  flex-direction: row;
+  -webkit-box-align: center;
+  align-items: center;
+}

@@ -1,0 +1,57 @@
+<div class="list__component">
+    <div class="d-flex align-items-center">
+        <label class="list__header">{{ getLabel() }}</label>
+        <!--Displays Tooltip Icon-->
+        <div class="list__mat-icon-container d-flex flex-row">
+            <button
+                mat-icon-button
+                class="color-primary"
+                (click)="handleTooltipClick()"
+                *ngIf="field.tooltipIcon"
+            >
+                <mat-icon>
+                    {{ field.tooltipIcon }}
+                </mat-icon>
+            </button>
+        </div>
+    </div>
+    <mat-list class="list__container">
+        <div class="m-4 text-center font-weight-bold" *ngIf="!field.options">
+            No Addresses Exist
+        </div>
+        <mat-list-item
+            class="list__list-item"
+            *ngFor="let item of field.options; trackBy: trackOption"
+            [ngClass]="
+                item.value === form.controls[field.name].value ? 'list__list-item--active' : ''
+            "
+            (click)="handleClick(item.value)"
+            tabindex="0"
+        >
+            <div class="flex-column">
+                <div class="p-3">
+                    <span [innerHTML]="item.label"></span>
+                </div>
+            </div>
+        </mat-list-item>
+    </mat-list>
+    <ng-container
+        *ngFor="let validation of field.validations; trackBy: trackValidation"
+        ngProjectAs="mat-error"
+    >
+        <mat-error class="text-center" *ngIf="fieldHasError(form, field, validation)">
+            {{ getMessage(validation.message) }}
+        </mat-error>
+    </ng-container>
+    <div class="list__button">
+        <button
+            mat-button
+            color="primary"
+            class="ml-3 font-weight-bold"
+            (click)="handleButtonClick()"
+            *ngIf="field.buttonLabel"
+        >
+            {{ field.buttonLabel }}
+        </button>
+    </div>
+</div>

@@ -10,10 +10,15 @@
     </div>
     <div class="mat-elevation-z8 mt-2 reporting-component__table-container">
       <div class="d-flex justify-content-start">
-        <mat-form-field class="mr-4">
+        <!-- <mat-form-field class="mr-4">
           <mat-label>List length</mat-label>
-          <input matInput (blur)="lengthChanged($event)" type="number" />
-        </mat-form-field>
+          <input
+            matInput
+            [formControl]="listSizeControl"
+            (blur)="listSizeChanged($event)"
+            type="number"
+          />
+        </mat-form-field> -->
 
         <mat-form-field class="mr-4">
           <mat-label>Start Date</mat-label>

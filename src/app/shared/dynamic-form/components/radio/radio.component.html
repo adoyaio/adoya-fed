@@ -1,0 +1,27 @@
+<div [ngClass]="field.visible === false ? 'hidden-input' : 'field-item'" [formGroup]="form">
+    <div class="radio__container">
+        <div class="radio__inner-container">
+            <label class="radio-label-padding">{{ field.label }}</label>
+            <mat-radio-group class="radio-group-padding" [formControlName]="field.name">
+                <mat-radio-button
+                    class="radio-btns"
+                    *ngFor="let item of field.options; trackBy: trackOption"
+                    [value]="item.value"
+                    >{{ item.label }}</mat-radio-button
+                >
+            </mat-radio-group>
+        </div>
+        <div>
+            <button
+                mat-icon-button
+                class="color-primary"
+                (click)="handleTooltipClick()"
+                *ngIf="field.tooltipIcon"
+            >
+                <mat-icon>
+                    {{ field.tooltipIcon }}
+                </mat-icon>
+            </button>
+        </div>
+    </div>
+</div>

@@ -1,3 +1,4 @@
+import { DynamicFormModule } from "./../../shared/dynamic-form/dynamic-form.module";
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 
@@ -16,7 +17,8 @@ import { MaterialModule } from "src/app/shared/material-design/material.module";
     ReportingRoutingModule,
     MatTabsModule,
     MaterialModule,
-    AmplifyAngularModule
-  ]
+    AmplifyAngularModule,
+    DynamicFormModule,
+  ],
 })
 export class ReportingModule {}

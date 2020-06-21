@@ -1,0 +1,44 @@
+.field-item {
+  padding: 5px;
+}
+
+.radio__container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.radio__inner-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.radio-group-padding {
+  padding: 5px;
+}
+
+.radio-btn-padding {
+  padding: 5px;
+}
+
+.hidden-input {
+  display: none;
+}
+
+::ng-deep .mat-radio-label-content {
+  font-size: 12px;
+}
+
+::ng-deep .mat-radio-checked {
+  font-weight: 500;
+}
+
+.radio-label-padding {
+  font-size: 16px !important;
+  font-weight: bold !important;
+}
+
+.radio-btns {
+  margin-right: 16px;
+  padding-bottom: 5px;
+}
