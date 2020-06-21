@@ -166,12 +166,11 @@ export class ReportingComponent implements AfterViewInit, OnInit {
   resetDateForms() {
     this.endPickerInputControl.reset();
     this.startPickerInputControl.reset();
-
+    this.isLoadingResults = true;
     this.clientService
       .getClientHistory("1056410", 1000)
       .pipe(
         map((data) => {
-          this.isLoadingResults = true;
           this.cpiHistory = CostPerInstallDayObject.buildFromGetHistoryResponse(
             data
           );
