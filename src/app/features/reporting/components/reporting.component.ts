@@ -50,7 +50,7 @@ export class ReportingComponent implements AfterViewInit, OnInit {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     // If the user changes the sort order, reset back to the first page.
-    // this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
+    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
     // this.dataSource
     //   .connect()
     //   .pipe(
@@ -94,7 +94,6 @@ export class ReportingComponent implements AfterViewInit, OnInit {
       .getClientHistory("1056410", 1000)
       .pipe(
         map((data) => {
-          // Flip flag to show that loading has finished.
           this.isLoadingResults = false;
           this.cpiHistory = CostPerInstallDayObject.buildFromGetHistoryResponse(
             data
@@ -129,11 +128,19 @@ export class ReportingComponent implements AfterViewInit, OnInit {
               }
               return +b.spend - +a.spend;
             }
+            if (val.active === "installs") {
+              if (val.direction === "asc") {
+                return +a.installs - +b.installs;
+              }
+              return +b.installs - +a.installs;
+            }
+
             if (val.active === "timestamp") {
               if (val.direction === "asc") {
-                return +a.timestamp - +b.timestamp;
+                return a.timestamp < b.timestamp ? -1 : 1;
               }
-              return +b.timestamp - +a.timestamp;
+
+              return a.timestamp > b.timestamp ? -1 : 1;
             }
           });
           this.dataSource.data = this.cpiHistory;
