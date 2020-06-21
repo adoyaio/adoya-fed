@@ -7,6 +7,8 @@ import {
   MatPaginator,
   MatSort,
   MatDatepickerInputEvent,
+  MatDatepickerInput,
+  MatDatepicker,
 } from "@angular/material";
 import {
   tap,
@@ -42,8 +44,13 @@ export class ReportingComponent implements AfterViewInit, OnInit {
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild(MatDatepicker, { static: false }) endpicker: MatDatepicker<number>;
+  @ViewChild(MatDatepicker, { static: false }) startpicker: MatDatepicker<
+    number
+  >;
 
-  // listSizeControl: FormControl = this.fb.control(365);
+  startPickerInputControl: FormControl = this.fb.control("");
+  endPickerInputControl: FormControl = this.fb.control("");
   constructor(private clientService: ClientService, private fb: FormBuilder) {}
 
   ngOnInit() {}
@@ -113,8 +120,6 @@ export class ReportingComponent implements AfterViewInit, OnInit {
       .pipe(
         delay(0),
         tap((val) => {
-          console.log("sortChange::dir::" + val.direction);
-          console.log("sortChange::active::" + val.active);
           this.cpiHistory.sort((a, b) => {
             if (val.active === "cpi") {
               if (val.direction === "asc") {
@@ -147,55 +152,54 @@ export class ReportingComponent implements AfterViewInit, OnInit {
         })
       )
       .subscribe();
-
-    //combineLatest([this.sort.sortChange, this.paginator.page])
-    // this.paginator.page
-    //   .pipe(
-    //     startWith({}),
-    //     switchMap(() => {
-    //       this.isLoadingResults = true;
-    //       // return this.exampleDatabase!.getRepoIssues(
-    //       //   this.sort.active, this.sort.direction, this.paginator.pageIndex);
-    //       console.log(this.sort.direction);
-    //       console.log(this.paginator.pageIndex);
-    //       console.log(this.paginator.pageSize);
-
-    //       return this.clientService.getClientHistory(
-    //         "1056410",
-    //         this.paginator.pageIndex,
-    //         this.paginator.pageSize
-    //       );
-    //     }),
-    //     map((data) => {
-    //       // Flip flag to show that loading has finished.
-    //       this.isLoadingResults = false;
-    //       this.cpiHistory = CostPerInstallDayObject.buildFromGetHistoryResponse(
-    //         data
-    //       );
-    //       this.dataSource.data = this.cpiHistory;
-    //       this.paginator.length = this.cpiHistory.length;
-    //       return data;
-    //     }),
-
-    //     catchError(() => {
-    //       this.isLoadingResults = false;
-    //       return [];
-    //     })
-    //   )
-    //   .subscribe();
   }
 
+  // TODO remove
   addEvent(type: string, event: MatDatepickerInputEvent<Date>) {
-    //this.events.push(`${type}: ${event.value}`);
-    console.log(event.value);
+    const date: Date = event.value;
+    date.setSeconds(0);
+    date.setMilliseconds(0);
+    date.setHours(0);
+    console.log(date.toISOString().split("T")[0]);
   }
 
-  listSizeChanged(event: any) {
+  resetDateForms() {
+    this.endPickerInputControl.reset();
+    this.startPickerInputControl.reset();
+
+    this.clientService
+      .getClientHistory("1056410", 1000)
+      .pipe(
+        map((data) => {
+          this.isLoadingResults = true;
+          this.cpiHistory = CostPerInstallDayObject.buildFromGetHistoryResponse(
+            data
+          );
+          this.dataSource.data = this.cpiHistory;
+          this.paginator.length = this.cpiHistory.length;
+          this.isLoadingResults = false;
+          return data;
+        }),
+        catchError(() => {
+          this.isLoadingResults = false;
+          return [];
+        })
+      )
+      .subscribe();
+  }
+
+  filterByDate() {
     this.isLoadingResults = true;
+    const start: Date = this.startPickerInputControl.value;
+    const end: Date = this.endPickerInputControl.value;
 
     // TODO pull from token service
     this.clientService
-      .getClientHistory("1056410", event.target.value)
+      .getClientHistoryByTime(
+        "1056410",
+        start.toISOString().split("T")[0],
+        end.toISOString().split("T")[0]
+      )
       .pipe(
         map((data) => {
           this.cpiHistory = CostPerInstallDayObject.buildFromGetHistoryResponse(
@@ -210,6 +214,16 @@ export class ReportingComponent implements AfterViewInit, OnInit {
         })
       )
       .subscribe();
+  }
+
+  filterByDateDisabled() {
+    if (
+      this.endPickerInputControl.value &&
+      this.startPickerInputControl.value
+    ) {
+      return false;
+    }
+    return true;
   }
 
   // ngAfterViewInit() {

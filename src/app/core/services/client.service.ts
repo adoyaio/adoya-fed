@@ -16,14 +16,27 @@ export class ClientService {
     orgId: string,
     pageSize: number
   ): Observable<CostPerInstallDayObject[]> {
-    // const url = `${this.gatewayPartnerUrl}?org_id=${orgId}&start_date=2020-06-12&end_date=2020-06-01`;
     const url = `${this.gatewayPartnerUrl}?org_id=${orgId}&total_recs=${pageSize}`;
     return this.http.get<any>(url).pipe(
       map((response) => {
         console.log("getClientHistory");
-        const retVal = CostPerInstallDayObject.buildFromGetHistoryResponse(
-          response
-        );
+        return response;
+      }),
+      catchError((error: HttpErrorResponse) => {
+        throw new Error(error.message);
+      })
+    );
+  }
+
+  public getClientHistoryByTime(
+    orgId: string,
+    startDate: string,
+    endDate: string
+  ): Observable<CostPerInstallDayObject[]> {
+    const url = `${this.gatewayPartnerUrl}?org_id=${orgId}&start_date=${endDate}&end_date=${startDate}`;
+    return this.http.get<any>(url).pipe(
+      map((response) => {
+        console.log("getClientHistoryByTime");
         return response;
       }),
       catchError((error: HttpErrorResponse) => {

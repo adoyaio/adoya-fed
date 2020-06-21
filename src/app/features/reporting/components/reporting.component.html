@@ -24,6 +24,7 @@
           <mat-label>Start Date</mat-label>
           <input
             matInput
+            [formControl]="startPickerInputControl"
             [matDatepicker]="startpicker"
             (dateInput)="addEvent('input', $event)"
             (dateChange)="addEvent('change', $event)"
@@ -39,6 +40,7 @@
           <mat-label>End Date</mat-label>
           <input
             matInput
+            [formControl]="endPickerInputControl"
             [matDatepicker]="endpicker"
             (dateInput)="addEvent('input', $event)"
             (dateChange)="addEvent('change', $event)"
@@ -49,6 +51,31 @@
           ></mat-datepicker-toggle>
           <mat-datepicker #endpicker></mat-datepicker>
         </mat-form-field>
+
+        <div>
+          <button
+            [disabled]="filterByDateDisabled()"
+            mat-icon-button
+            class="reporting__buttons"
+            (click)="filterByDate()"
+            mat-icon-button
+          >
+            <mat-icon aria-label="Save">filter_alt</mat-icon>
+            Filter By Date
+          </button>
+        </div>
+
+        <div>
+          <button
+            mat-icon-button
+            class="reporting__buttons"
+            (click)="resetDateForms()"
+            mat-icon-button
+          >
+            <mat-icon aria-label="Clear">clear</mat-icon>
+            Clear Date Form
+          </button>
+        </div>
       </div>
 
       <mat-paginator
