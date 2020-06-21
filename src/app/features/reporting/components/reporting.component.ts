@@ -1,7 +1,12 @@
 import { ClientService } from "./../../../core/services/client.service";
 import { CostPerInstallDayObject } from "./../models/cost-per-install-day-object";
 import { Component, OnInit, ViewChild, AfterViewInit } from "@angular/core";
-import { MatTableDataSource, MatPaginator, MatSort } from "@angular/material";
+import {
+  MatTableDataSource,
+  MatPaginator,
+  MatSort,
+  MatDatepickerInputEvent,
+} from "@angular/material";
 import {
   tap,
   merge,
@@ -29,10 +34,9 @@ export class ReportingComponent implements AfterViewInit {
     "spend",
   ];
   dataSource = new MatTableDataSource<CostPerInstallDayObject>(this.cpiHistory);
-
   resultsLength = 0;
+  length = 365;
   isLoadingResults = true;
-  isRateLimitReached = false;
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -94,7 +98,6 @@ export class ReportingComponent implements AfterViewInit {
         map((data) => {
           // Flip flag to show that loading has finished.
           this.isLoadingResults = false;
-          this.isRateLimitReached = false;
           this.cpiHistory = CostPerInstallDayObject.buildFromGetHistoryResponse(
             data
           );
@@ -106,6 +109,32 @@ export class ReportingComponent implements AfterViewInit {
         catchError(() => {
           this.isLoadingResults = false;
           return [];
+        })
+      )
+      .subscribe();
+  }
+
+  addEvent(type: string, event: MatDatepickerInputEvent<Date>) {
+    //this.events.push(`${type}: ${event.value}`);
+    console.log(event.value);
+  }
+
+  lengthChanged(event: any) {
+    console.log(event.value);
+    this.isLoadingResults = true;
+    this.clientService
+      .getClientHistory("1056410", this.paginator.pageSize)
+      .pipe(
+        map((data) => {
+          this.cpiHistory = CostPerInstallDayObject.buildFromGetHistoryResponse(
+            data
+          );
+          this.dataSource.data = this.cpiHistory;
+          this.paginator.length = this.cpiHistory.length;
+          return data;
+        }),
+        tap((data) => {
+          this.isLoadingResults = true;
         })
       )
       .subscribe();
