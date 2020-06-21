@@ -13,9 +13,11 @@ export class ClientService {
   gatewayPartnerUrl = `/api/client/history`;
 
   public getClientHistory(
-    orgId: string
+    orgId: string,
+    pageSize: number
   ): Observable<CostPerInstallDayObject[]> {
-    const url = `${this.gatewayPartnerUrl}?org_id=${orgId}&start_date=2020-06-12&end_date=2020-06-01`;
+    // const url = `${this.gatewayPartnerUrl}?org_id=${orgId}&start_date=2020-06-12&end_date=2020-06-01`;
+    const url = `${this.gatewayPartnerUrl}?org_id=${orgId}&total_recs=${pageSize}`;
     return this.http.get<any>(url).pipe(
       map((response) => {
         console.log("getClientHistory");

@@ -1,7 +1,7 @@
 import { ClientService } from "./../../../core/services/client.service";
 import { CostPerInstallDayObject } from "./../models/cost-per-install-day-object";
 import { Component, OnInit, ViewChild, AfterViewInit } from "@angular/core";
-import { MatTableDataSource, MatPaginator } from "@angular/material";
+import { MatTableDataSource, MatPaginator, MatSort } from "@angular/material";
 import {
   tap,
   merge,
@@ -9,7 +9,9 @@ import {
   switchMap,
   map,
   catchError,
+  combineAll,
 } from "rxjs/operators";
+import { combineLatest } from "rxjs";
 
 @Component({
   selector: "app-reporting",
@@ -18,7 +20,14 @@ import {
 })
 export class ReportingComponent implements AfterViewInit {
   cpiHistory: CostPerInstallDayObject[] = [];
-  displayedColumns: string[] = ["cpi", "installs", "timestamp", "spend"];
+  displayedColumns: string[] = [
+    "timestamp",
+    "cpi",
+    "installs",
+    "revenue",
+    "commerce-events",
+    "spend",
+  ];
   dataSource = new MatTableDataSource<CostPerInstallDayObject>(this.cpiHistory);
 
   resultsLength = 0;
@@ -26,21 +35,47 @@ export class ReportingComponent implements AfterViewInit {
   isRateLimitReached = false;
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   constructor(private clientService: ClientService) {}
 
   ngAfterViewInit() {
     // If the user changes the sort order, reset back to the first page.
-    // this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
-    this.dataSource
-      .connect()
+    // this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
+    // this.dataSource
+    //   .connect()
+    //   .pipe(
+    //     map((data) => {
+    //       console.log("found data of length" + data.length);
+    //     })
+    //   )
+    //   .subscribe();
+
+    this.sort.sortChange
       .pipe(
-        map((data) => {
-          console.log("found data of length" + data.length);
+        tap((val) => {
+          console.log("sortChange::dir::" + val.direction);
+          console.log("sortChange::active::" + val.active);
+          this.cpiHistory.sort((a, b) => {
+            if (val.active === "cpi") {
+              if (val.direction === "asc") {
+                return +a.cpi - +b.cpi;
+              }
+              return +b.cpi - +a.cpi;
+            }
+            if (val.active === "timestamp") {
+              if (val.direction === "asc") {
+                return +a.timestamp - +b.timestamp;
+              }
+              return +b.timestamp - +a.timestamp;
+            }
+          });
+          this.dataSource.data = this.cpiHistory;
         })
       )
       .subscribe();
 
+    //combineLatest([this.sort.sortChange, this.paginator.page])
     this.paginator.page
       .pipe(
         startWith({}),
@@ -48,7 +83,13 @@ export class ReportingComponent implements AfterViewInit {
           this.isLoadingResults = true;
           // return this.exampleDatabase!.getRepoIssues(
           //   this.sort.active, this.sort.direction, this.paginator.pageIndex);
-          return this.clientService.getClientHistory("1056410");
+          console.log(this.sort.direction);
+          console.log(this.paginator.pageIndex);
+
+          return this.clientService.getClientHistory(
+            "1056410",
+            this.paginator.pageSize
+          );
         }),
         map((data) => {
           // Flip flag to show that loading has finished.
@@ -58,6 +99,7 @@ export class ReportingComponent implements AfterViewInit {
             data
           );
           this.dataSource.data = this.cpiHistory;
+          this.paginator.length = this.cpiHistory.length;
           return data;
         }),
 
