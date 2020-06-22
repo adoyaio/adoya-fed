@@ -2,7 +2,7 @@
   <!--CPI reporting-->
   <mat-tab>
     <ng-template mat-tab-label>
-      <mat-icon>history</mat-icon>
+      <mat-icon>leaderboard</mat-icon>
       <span class="ml-2">Cost Per Install History</span>
     </ng-template>
     <div class="reporting__loading-shade" *ngIf="isLoadingResults">
@@ -26,8 +26,6 @@
             matInput
             [formControl]="startPickerInputControl"
             [matDatepicker]="startpicker"
-            (dateInput)="addEvent('input', $event)"
-            (dateChange)="addEvent('change', $event)"
           />
           <mat-datepicker-toggle
             matSuffix
@@ -42,8 +40,6 @@
             matInput
             [formControl]="endPickerInputControl"
             [matDatepicker]="endpicker"
-            (dateInput)="addEvent('input', $event)"
-            (dateChange)="addEvent('change', $event)"
           />
           <mat-datepicker-toggle
             matSuffix
@@ -73,7 +69,7 @@
             mat-icon-button
           >
             <mat-icon aria-label="clear">clear</mat-icon>
-            clear filter
+            clear filters
           </button>
         </div>
 
@@ -191,9 +187,10 @@
   </mat-tab>
   <mat-tab>
     <ng-template mat-tab-label>
-      <mat-icon>thumb_down</mat-icon><span class="ml-2">Negative Keywords</span>
+      <mat-icon>dynamic_feed</mat-icon
+      ><span class="ml-2">Data Visualization</span>
     </ng-template>
-    <h1>Negative Keywords here</h1>
+    <h1>Data Visualization</h1>
     <p>...</p>
   </mat-tab>
 </mat-tab-group>

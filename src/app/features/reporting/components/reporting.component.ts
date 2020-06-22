@@ -51,6 +51,7 @@ export class ReportingComponent implements AfterViewInit, OnInit {
 
   startPickerInputControl: FormControl = this.fb.control("");
   endPickerInputControl: FormControl = this.fb.control("");
+
   constructor(private clientService: ClientService, private fb: FormBuilder) {}
 
   ngOnInit() {}
@@ -58,44 +59,6 @@ export class ReportingComponent implements AfterViewInit, OnInit {
     this.dataSource.paginator = this.paginator;
     // If the user changes the sort order, reset back to the first page.
     this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
-    // this.dataSource
-    //   .connect()
-    //   .pipe(
-    //     map((data) => {
-    //       console.log("found data of length" + data.length);
-    //     })
-    //   )
-    //   .subscribe();
-
-    // this.listSizeControl.valueChanges
-    //   .pipe(
-    //     startWith(365),
-    //     switchMap((val) => {
-    //       this.isLoadingResults = true;
-    //       // return this.exampleDatabase!.getRepoIssues(
-    //       //   this.sort.active, this.sort.direction, this.paginator.pageIndex);
-    //       console.log(this.sort.direction);
-    //       console.log(this.paginator.pageIndex);
-
-    //       return this.clientService.getClientHistory("1056410", val);
-    //     }),
-    //     map((data) => {
-    //       // Flip flag to show that loading has finished.
-    //       this.isLoadingResults = false;
-    //       this.cpiHistory = CostPerInstallDayObject.buildFromGetHistoryResponse(
-    //         data
-    //       );
-    //       this.dataSource.data = this.cpiHistory;
-    //       this.paginator.length = this.cpiHistory.length;
-    //       return data;
-    //     }),
-
-    //     catchError(() => {
-    //       this.isLoadingResults = false;
-    //       return [];
-    //     })
-    //   )
-    //   .subscribe();
 
     this.clientService
       .getClientHistory("1056410", 1000)
@@ -152,15 +115,45 @@ export class ReportingComponent implements AfterViewInit, OnInit {
         })
       )
       .subscribe();
-  }
 
-  // TODO remove
-  addEvent(type: string, event: MatDatepickerInputEvent<Date>) {
-    const date: Date = event.value;
-    date.setSeconds(0);
-    date.setMilliseconds(0);
-    date.setHours(0);
-    console.log(date.toISOString().split("T")[0]);
+    // this.dataSource
+    //   .connect()
+    //   .pipe(
+    //     map((data) => {
+    //       console.log("found data of length" + data.length);
+    //     })
+    //   )
+    //   .subscribe();
+
+    // this.listSizeControl.valueChanges
+    //   .pipe(
+    //     startWith(365),
+    //     switchMap((val) => {
+    //       this.isLoadingResults = true;
+    //       // return this.exampleDatabase!.getRepoIssues(
+    //       //   this.sort.active, this.sort.direction, this.paginator.pageIndex);
+    //       console.log(this.sort.direction);
+    //       console.log(this.paginator.pageIndex);
+
+    //       return this.clientService.getClientHistory("1056410", val);
+    //     }),
+    //     map((data) => {
+    //       // Flip flag to show that loading has finished.
+    //       this.isLoadingResults = false;
+    //       this.cpiHistory = CostPerInstallDayObject.buildFromGetHistoryResponse(
+    //         data
+    //       );
+    //       this.dataSource.data = this.cpiHistory;
+    //       this.paginator.length = this.cpiHistory.length;
+    //       return data;
+    //     }),
+
+    //     catchError(() => {
+    //       this.isLoadingResults = false;
+    //       return [];
+    //     })
+    //   )
+    //   .subscribe();
   }
 
   resetDateForms() {
@@ -234,6 +227,15 @@ export class ReportingComponent implements AfterViewInit, OnInit {
     }
     return true;
   }
+
+  // TODO remove
+  // addEvent(type: string, event: MatDatepickerInputEvent<Date>) {
+  //   const date: Date = event.value;
+  //   date.setSeconds(0);
+  //   date.setMilliseconds(0);
+  //   date.setHours(0);
+  //   console.log(date.toISOString().split("T")[0]);
+  // }
 
   // ngAfterViewInit() {
   //   //this.setupDataModel();
