@@ -164,9 +164,15 @@ export class ReportingComponent implements AfterViewInit, OnInit {
   }
 
   resetDateForms() {
+    this.isLoadingResults = true;
     this.endPickerInputControl.reset();
     this.startPickerInputControl.reset();
-    this.isLoadingResults = true;
+    this.paginator.pageIndex = 0;
+    this.sort.active = "timestamp";
+    this.sort.direction = "desc";
+    this.sort.sortChange.emit({ active: "timestamp", direction: "desc" });
+    this.sort._stateChanges.next();
+
     this.clientService
       .getClientHistory("1056410", 1000)
       .pipe(
@@ -189,6 +195,10 @@ export class ReportingComponent implements AfterViewInit, OnInit {
 
   filterByDate() {
     this.isLoadingResults = true;
+    this.sort.active = "timestamp";
+    this.sort.direction = "desc";
+    this.sort.sortChange.emit({ active: "timestamp", direction: "desc" });
+    this.sort._stateChanges.next();
     const start: Date = this.startPickerInputControl.value;
     const end: Date = this.endPickerInputControl.value;
 
