@@ -82,11 +82,17 @@ export class ReportingComponent implements AfterViewInit, OnInit {
     //   console.log(val.Name);
     // });
 
+    // TODO messaging here
     this.orgId = this.userAccountService
       .getCurrentUser()
       .UserAttributes.find((val) => {
         return val.Name === "custom:org_id";
       }).Value;
+
+    // this.userAccountService.getCurrentUser().UserAttributes.forEach((val) => {
+    //   console.log(val.Value);
+    //   console.log(val.Name);
+    // });
   }
 
   ngAfterViewInit() {
