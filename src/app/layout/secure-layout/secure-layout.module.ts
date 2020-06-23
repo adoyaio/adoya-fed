@@ -14,13 +14,13 @@ import { AmplifyAngularModule } from "aws-amplify-angular";
     SecureLayoutComponent,
     MainSectionComponent,
     NavLinksComponent,
-    FooterComponent
+    FooterComponent,
   ],
   imports: [
     CommonModule,
     SecureLayoutRoutingModule,
     MaterialModule,
-    AmplifyAngularModule
-  ]
+    AmplifyAngularModule,
+  ],
 })
 export class SecureLayoutModule {}

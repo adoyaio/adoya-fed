@@ -1,4 +1,4 @@
-<mat-sidenav-container hasBackdrop="false" class="sidenav-container">
+<mat-sidenav-container hasBackdrop="false">
   <mat-sidenav class="menu-sidenav" mode="side" opened="true">
     <div class="logo-div clickable">
       <img
@@ -11,7 +11,7 @@
     <mat-divider></mat-divider>
     <app-nav-links [isMobile]="false"> </app-nav-links>
   </mat-sidenav>
-  <mat-sidenav-content class="sidenav-content">
+  <mat-sidenav-content>
     <app-main-section (toggleDrawerCalled)="toggleDrawer()" [isMobile]="false">
     </app-main-section>
   </mat-sidenav-content>

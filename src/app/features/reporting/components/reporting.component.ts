@@ -1,3 +1,4 @@
+import { User } from "../../../shared/models/user-account";
 import { FormBuilder, FormControl } from "@angular/forms";
 import { ClientService } from "./../../../core/services/client.service";
 import { CostPerInstallDayObject } from "./../models/cost-per-install-day-object";
@@ -21,6 +22,7 @@ import {
   delay,
 } from "rxjs/operators";
 import { combineLatest } from "rxjs";
+import { UserAccountService } from "src/app/shared/services/user-account.service";
 
 @Component({
   selector: "app-reporting",
@@ -41,6 +43,7 @@ export class ReportingComponent implements AfterViewInit, OnInit {
   resultsLength = 0;
   length = 365;
   isLoadingResults = true;
+  orgId: string;
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -52,16 +55,47 @@ export class ReportingComponent implements AfterViewInit, OnInit {
   startPickerInputControl: FormControl = this.fb.control("");
   endPickerInputControl: FormControl = this.fb.control("");
 
-  constructor(private clientService: ClientService, private fb: FormBuilder) {}
+  constructor(
+    private clientService: ClientService,
+    private fb: FormBuilder,
+    private userAccountService: UserAccountService
+  ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    // let user: User = JSON.parse(
+    //   localStorage.getItem(
+    //     "CognitoIdentityServiceProvider.3cokktgqcs0o8oem003hotfjl7.9cde3279-ae17-44e5-b327-a0e4b2f0417e.userData"
+    //   )
+    // );
+    // user.userAttributes.forEach((attribute) => {
+    //   console.log(attribute.name);
+    //   console.log(attribute.value);
+    // });
+    // this.orgId = this.userAccountService.currentUserValue.UserAttributes.find(
+    //   (val) => {
+    //     return val.Name === "custom:org_id";
+    //   }
+    // ).Value;
+
+    // this.userAccountService.currentUserValue.UserAttributes.forEach((val) => {
+    //   console.log(val.Value);
+    //   console.log(val.Name);
+    // });
+
+    this.orgId = this.userAccountService
+      .getCurrentUser()
+      .UserAttributes.find((val) => {
+        return val.Name === "custom:org_id";
+      }).Value;
+  }
+
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     // If the user changes the sort order, reset back to the first page.
     this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
 
     this.clientService
-      .getClientHistory("1056410", 1000)
+      .getClientHistory(this.orgId, 1000)
       .pipe(
         map((data) => {
           this.isLoadingResults = false;

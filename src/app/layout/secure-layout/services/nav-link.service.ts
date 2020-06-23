@@ -4,7 +4,7 @@ import { takeUntil, tap } from "rxjs/operators";
 import { LayoutNavLinks } from "../models/layout-nav-links";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class NavLinkService implements OnDestroy {
   navLinks: Array<LayoutNavLinks>;
@@ -56,11 +56,11 @@ export class NavLinkService implements OnDestroy {
         3,
         "button",
         "Account",
-        "/workbench/account",
+        "/portal",
         "account_box",
         undefined,
         () => {
-          location.href = "/workbench/reporting";
+          location.href = "/portal";
         }
       )
     );

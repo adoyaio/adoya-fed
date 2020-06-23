@@ -1,22 +1,57 @@
+import { UserAccountService } from "./../../../shared/services/user-account.service";
 import { Component, OnInit } from "@angular/core";
 import { AmplifyService } from "aws-amplify-angular";
+import { Router } from "@angular/router";
+import { tap } from "rxjs/operators";
+import { UserAccount } from "src/app/shared/models/user-account";
 
 @Component({
   selector: "app-portal",
   templateUrl: "./portal.component.html",
-  styleUrls: ["./portal.component.scss"]
+  styleUrls: ["./portal.component.scss"],
 })
 export class PortalComponent implements OnInit {
-  constructor(private amplifyService: AmplifyService) {
-    this.amplifyService.authStateChange$.subscribe(authState => {
-      this.signedIn = authState.state === "signedIn";
-      if (!authState.user) {
-        this.user = null;
-      } else {
-        this.user = authState.user;
-        //this.greeting = "Hello " + this.user.username;
-      }
-    });
+  constructor(
+    private amplifyService: AmplifyService,
+    private router: Router,
+    private userAccountService: UserAccountService
+  ) {
+    // this.amplifyService.authStateChange$.subscribe((authState) => {
+    //   if (authState.state === "signedIn") {
+    //     this.signedIn = authState.state === "signedIn";
+    //     if (!authState.user) {
+    //       this.user = null;
+    //     } else {
+    //       this.user = authState.user;
+    //       console.log(this.userAccountService.getCurrentUser().userName);
+    //       // this.greeting = this.user.username;
+    //     }
+    //     this.router.navigateByUrl("/workbench/reporting");
+    //   } else {
+    //     this.router.navigateByUrl("/portal");
+    //   }
+    // });
+
+    this.amplifyService.authStateChange$
+      .pipe(
+        tap((authState) => {
+          if (authState.state === "signedIn") {
+            this.signedIn = authState.state === "signedIn";
+            if (!authState.user) {
+              this.user = null;
+            } else {
+              this.user = authState.user;
+              const user: UserAccount = this.userAccountService.getCurrentUser();
+              this.userAccountService.setCurrentUser(user);
+              // this.greeting = this.user.username;
+            }
+            this.router.navigateByUrl("/workbench/reporting");
+          } else {
+            this.router.navigateByUrl("/portal");
+          }
+        })
+      )
+      .subscribe();
   }
   signedIn: boolean;
   user: any;
@@ -32,21 +67,21 @@ export class PortalComponent implements OnInit {
         key: "email",
         required: true,
         displayOrder: 1,
-        type: "string"
+        type: "string",
       },
       {
         label: "Password",
         key: "password",
         required: true,
         displayOrder: 2,
-        type: "password"
+        type: "password",
       },
       {
         label: "Phone Number",
         key: "phone_number",
         required: true,
         displayOrder: 3,
-        type: "string"
+        type: "string",
       },
       {
         label: "First Name",
@@ -54,7 +89,7 @@ export class PortalComponent implements OnInit {
         required: false,
         displayOrder: 4,
         type: "string",
-        custom: true
+        custom: true,
       },
       {
         label: "Last Name",
@@ -62,9 +97,17 @@ export class PortalComponent implements OnInit {
         required: false,
         displayOrder: 5,
         type: "string",
-        custom: true
-      }
-    ]
+        custom: true,
+      },
+      {
+        label: "Organization",
+        key: "org_id",
+        required: true,
+        displayOrder: 6,
+        type: "string",
+        custom: true,
+      },
+    ],
   };
 
   ngOnInit(): void {}

@@ -5,7 +5,7 @@ import {
   CanLoad,
   Route,
   RouterStateSnapshot,
-  UrlSegment
+  UrlSegment,
 } from "@angular/router";
 import { Observable, of } from "rxjs";
 import { AmplifyService } from "aws-amplify-angular";
@@ -23,18 +23,14 @@ export class AuthGuard implements CanActivate {
     let signedIn = false;
 
     return this.amplifyService.authState().pipe(
-      map(authState => {
+      map((authState: AuthState) => {
+        console.log("canUpdate " + authState.user);
+
         signedIn = authState.state === "signedIn" ? true : false;
         console.log("setting signedIn " + signedIn);
         console.log("found state " + authState.state);
         return signedIn;
       })
     );
-
-    // this.amplifyService.authStateChange$.subscribe(authState => {
-    //   signedId = authState.state === "signedIn" ? true : false;
-    // });
-    //console.log("canActivate " + signedIn);
-    //return of(signedIn);
   }
 }

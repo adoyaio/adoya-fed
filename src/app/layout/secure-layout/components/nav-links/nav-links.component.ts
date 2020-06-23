@@ -1,11 +1,13 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { LayoutNavLinks } from "../../models/layout-nav-links";
 import { NavLinkService } from "../../services/nav-link.service";
+import { AmplifyService } from "aws-amplify-angular";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-nav-links",
   templateUrl: "./nav-links.component.html",
-  styleUrls: ["./nav-links.component.scss"]
+  styleUrls: ["./nav-links.component.scss"],
 })
 export class NavLinksComponent {
   @Input()
@@ -18,7 +20,19 @@ export class NavLinksComponent {
 
   openPanel = 0;
 
-  constructor(private navLinkService: NavLinkService) {}
+  constructor(
+    private navLinkService: NavLinkService,
+    private amplifyService: AmplifyService,
+    private router: Router
+  ) {
+    this.amplifyService.authStateChange$.subscribe((authState) => {
+      if (authState.state === "signedIn") {
+        this.router.navigateByUrl("/workbench/reporting");
+      } else {
+        this.router.navigateByUrl("/portal");
+      }
+    });
+  }
 
   setOpenPanel(index: number) {
     this.openPanel = index;
