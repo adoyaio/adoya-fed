@@ -30,13 +30,13 @@ export class UserAccountService {
     const keys = Object.keys(localStorage);
     const regexp: RegExp = /CognitoIdentityServiceProvider.*userData/;
 
-    // CognitoIdentityServiceProvider.3cokktgqcs0o8oem003hotfjl7.453c26ec-6d27-49fb-a902-16a094f69118.userData
-    keys.forEach((val) => {
-      if (val.match(regexp)) {
-        const user: string = localStorage.getItem(val);
-        userAccount = JSON.parse(user);
+    const userDataKey = keys.find((key) => {
+      if (key.match(regexp)) {
+        return key;
       }
     });
+    const user: string = localStorage.getItem(userDataKey);
+    userAccount = JSON.parse(user);
     return userAccount;
   }
 
