@@ -1,4 +1,246 @@
-<div class="container h-100">
-  <p>workbench works!</p>
+<div class="h-100 d-flex flex-row">
+  <div class="d-flex col-5">
+    <mat-card class="workbench__card">
+      <mat-card-title>
+        Update Optimizations Settings
+      </mat-card-title>
+      <mat-card-content>
+        <div class="example-container">
+          <mat-card-subtitle>
+            Settings Group 1
+          </mat-card-subtitle>
+
+          <form>
+            <div>
+              <label>Float label: </label>
+              <mat-radio-group color="accent">
+                <mat-radio-button value="auto">Auto</mat-radio-button>
+                <mat-radio-button value="always">Always</mat-radio-button>
+              </mat-radio-group>
+            </div>
+
+            <mat-form-field
+              appearance="fill"
+              color="accent"
+              [hideRequiredMarker]="hideRequiredControl.value"
+              [floatLabel]="floatLabelControl.value"
+            >
+              <input matInput placeholder="Simple placeholder" required />
+            </mat-form-field>
+
+            <mat-form-field
+              appearance="fill"
+              color="accent"
+              [floatLabel]="floatLabelControl.value"
+            >
+              <mat-label>Both a label and a placeholder</mat-label>
+              <input matInput placeholder="Simple placeholder" />
+            </mat-form-field>
+          </form>
+        </div>
+
+        <div class="example-container">
+          <mat-card-subtitle>
+            Settings Group 2
+          </mat-card-subtitle>
+
+          <form>
+            <mat-form-field
+              appearance="fill"
+              color="accent"
+              [hideRequiredMarker]="hideRequiredControl.value"
+              [floatLabel]="floatLabelControl.value"
+            >
+              <input matInput placeholder="Simple placeholder" required />
+            </mat-form-field>
+
+            <mat-form-field
+              appearance="fill"
+              color="accent"
+              [floatLabel]="floatLabelControl.value"
+            >
+              <mat-label>Both a label and a placeholder</mat-label>
+              <input matInput placeholder="Simple placeholder" />
+            </mat-form-field>
+
+            <mat-form-field
+              appearance="fill"
+              color="accent"
+              [hideRequiredMarker]="hideRequiredControl.value"
+              [floatLabel]="floatLabelControl.value"
+            >
+              <mat-select required>
+                <mat-option>-- None --</mat-option>
+                <mat-option value="option">Option</mat-option>
+              </mat-select>
+              <mat-label
+                ><mat-icon>favorite</mat-icon> <b> Fancy</b>
+                <i> label</i></mat-label
+              >
+            </mat-form-field>
+          </form>
+        </div>
+
+        <div class="example-container">
+          <mat-card-subtitle>
+            Settings Group 3
+          </mat-card-subtitle>
+
+          <form>
+            <mat-form-field
+              appearance="fill"
+              color="accent"
+              [hideRequiredMarker]="hideRequiredControl.value"
+              [floatLabel]="floatLabelControl.value"
+            >
+              <input matInput placeholder="Simple placeholder" required />
+            </mat-form-field>
+
+            <mat-form-field
+              appearance="fill"
+              color="accent"
+              [floatLabel]="floatLabelControl.value"
+            >
+              <mat-label>Both a label and a placeholder</mat-label>
+              <input matInput placeholder="Simple placeholder" />
+            </mat-form-field>
+
+            <mat-form-field
+              appearance="fill"
+              color="accent"
+              [hideRequiredMarker]="hideRequiredControl.value"
+              [floatLabel]="floatLabelControl.value"
+            >
+              <mat-select required>
+                <mat-option>-- None --</mat-option>
+                <mat-option value="option">Option</mat-option>
+              </mat-select>
+              <mat-label
+                ><mat-icon>favorite</mat-icon> <b> Fancy</b>
+                <i> label</i></mat-label
+              >
+            </mat-form-field>
+          </form>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div class="d-flex col-6">
+    <mat-card class="workbench__card">
+      <mat-card-title>
+        Update Prefernces
+      </mat-card-title>
+      <mat-card-content>
+        <div class="example-container">
+          <mat-card-subtitle>
+            Settings Group 1
+          </mat-card-subtitle>
+
+          <form>
+            <div>
+              <label>Float label: </label>
+              <mat-radio-group color="accent">
+                <mat-radio-button value="auto">Auto</mat-radio-button>
+                <mat-radio-button value="always">Always</mat-radio-button>
+              </mat-radio-group>
+            </div>
+
+            <mat-form-field
+              appearance="fill"
+              color="accent"
+              [hideRequiredMarker]="hideRequiredControl.value"
+              [floatLabel]="floatLabelControl.value"
+            >
+              <input matInput placeholder="Simple placeholder" required />
+            </mat-form-field>
+
+            <mat-form-field
+              appearance="fill"
+              color="accent"
+              [floatLabel]="floatLabelControl.value"
+            >
+              <mat-label>Both a label and a placeholder</mat-label>
+              <input matInput placeholder="Simple placeholder" />
+            </mat-form-field>
+
+            <mat-form-field
+              appearance="fill"
+              color="accent"
+              [hideRequiredMarker]="hideRequiredControl.value"
+              [floatLabel]="floatLabelControl.value"
+            >
+              <mat-select required>
+                <mat-option>-- None --</mat-option>
+                <mat-option value="option">Option</mat-option>
+              </mat-select>
+              <mat-label
+                ><mat-icon>favorite</mat-icon> <b> Fancy</b>
+                <i> label</i></mat-label
+              >
+            </mat-form-field>
+          </form>
+        </div>
+
+        <div class="example-container">
+          <mat-card-subtitle>
+            Settings Group 2
+          </mat-card-subtitle>
+
+          <form>
+            <div>
+              <label>Float label: </label>
+              <mat-radio-group color="accent">
+                <mat-radio-button value="auto">Auto</mat-radio-button>
+                <mat-radio-button value="always">Always</mat-radio-button>
+              </mat-radio-group>
+            </div>
+
+            <mat-form-field
+              appearance="fill"
+              color="accent"
+              [hideRequiredMarker]="hideRequiredControl.value"
+              [floatLabel]="floatLabelControl.value"
+            >
+              <input matInput placeholder="Simple placeholder" required />
+            </mat-form-field>
+
+            <mat-form-field
+              appearance="fill"
+              color="accent"
+              [floatLabel]="floatLabelControl.value"
+            >
+              <mat-label>Both a label and a placeholder</mat-label>
+              <input matInput placeholder="Simple placeholder" />
+            </mat-form-field>
+          </form>
+        </div>
+
+        <div class="example-container">
+          <mat-card-subtitle>
+            Settings Group 3
+          </mat-card-subtitle>
+
+          <form>
+            <mat-form-field
+              appearance="fill"
+              color="accent"
+              [hideRequiredMarker]="hideRequiredControl.value"
+              [floatLabel]="floatLabelControl.value"
+            >
+              <input matInput placeholder="Simple placeholder" required />
+            </mat-form-field>
+
+            <mat-form-field
+              appearance="fill"
+              color="accent"
+              [floatLabel]="floatLabelControl.value"
+            >
+              <mat-label>Both a label and a placeholder</mat-label>
+              <input matInput placeholder="Simple placeholder" />
+            </mat-form-field>
+          </form>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
 </div>
-<div class="d-flex flex-column">test</div>

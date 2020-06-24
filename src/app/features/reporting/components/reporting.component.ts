@@ -1,4 +1,4 @@
-import { User } from "../../../shared/models/user-account";
+import { UserAccount } from "../../../shared/models/user-account";
 import { FormBuilder, FormControl } from "@angular/forms";
 import { ClientService } from "./../../../core/services/client.service";
 import { CostPerInstallDayObject } from "./../models/cost-per-install-day-object";
@@ -207,7 +207,7 @@ export class ReportingComponent implements AfterViewInit, OnInit {
     this.sort._stateChanges.next();
 
     this.clientService
-      .getClientHistory("1056410", 1000)
+      .getClientHistory(this.orgId, 1000)
       .pipe(
         map((data) => {
           this.cpiHistory = CostPerInstallDayObject.buildFromGetHistoryResponse(
@@ -238,7 +238,7 @@ export class ReportingComponent implements AfterViewInit, OnInit {
     // TODO pull from token service
     this.clientService
       .getClientHistoryByTime(
-        "1056410",
+        this.orgId,
         start.toISOString().split("T")[0],
         end.toISOString().split("T")[0]
       )

@@ -25,13 +25,13 @@ export class NavLinksComponent {
     private amplifyService: AmplifyService,
     private router: Router
   ) {
-    this.amplifyService.authStateChange$.subscribe((authState) => {
-      if (authState.state === "signedIn") {
-        this.router.navigateByUrl("/workbench/reporting");
-      } else {
-        this.router.navigateByUrl("/portal");
-      }
-    });
+    // this.amplifyService.authStateChange$.subscribe((authState) => {
+    //   if (authState.state === "signedIn") {
+    //     this.router.navigateByUrl("/workbench/reporting");
+    //   } else {
+    //     this.router.navigateByUrl("/portal");
+    //   }
+    // });
   }
 
   setOpenPanel(index: number) {

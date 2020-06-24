@@ -32,8 +32,8 @@ export class UserAccountService {
 
     const userDataKey = keys.find((key) => {
       if (key.match(regexp)) {
-        console.log("found key" + key);
-        return key;
+        // console.log("found key" + key);
+        return true;
       }
     });
     const user: string = localStorage.getItem(userDataKey);
