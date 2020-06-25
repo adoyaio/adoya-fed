@@ -1,35 +1,58 @@
-<div class="h-100 d-flex flex-row">
-  <div class="d-flex col-5">
-    <mat-card class="workbench__card mat-elevation-z0">
-      <mat-card-title class="pb-2">
-        Bid Optimizations
-      </mat-card-title>
-      <mat-card-content>
-        <div class="example-container w-100">
-          <mat-card-subtitle class="mt-2 mb-2" color="primary">
-            Settings Group 1
-          </mat-card-subtitle>
+<!-- <div class="h-100 d-flex flex-row"> -->
+<mat-tab-group color="accent">
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon>tune</mat-icon>
+      <span class="ml-2">Bid Optimization</span>
+    </ng-template>
+    <div class="d-flex col-12 px-0">
+      <mat-card class="workbench__card mat-elevation-z0 mt-3 w-100">
+        <mat-card-title class="pb-2">
+          Bid Optimizations
+          <button
+            mat-icon-button
+            class="workbench__buttons float-right"
+            mat-icon-button
+          >
+            <mat-icon aria-label="clear">clear</mat-icon>
+            reset form
+          </button>
+          <button
+            mat-icon-button
+            class="workbench__buttons float-right"
+            mat-icon-button
+          >
+            <mat-icon aria-label="clear">cloud_done</mat-icon>
+            save changes
+          </button>
+        </mat-card-title>
 
-          <form>
-            <div class="w-100">
-              <label>Float label: </label>
-              <mat-radio-group class="px-2 w-100">
-                <mat-radio-button value="auto">Auto</mat-radio-button>
-                <mat-radio-button value="always">Always</mat-radio-button>
-                <mat-radio-button value="always">Off</mat-radio-button>
-              </mat-radio-group>
-            </div>
+        <mat-card-content>
+          <div class="example-container w-100">
+            <mat-card-subtitle class="mt-2 mb-2" color="primary">
+              Settings Group 1
+            </mat-card-subtitle>
 
-            <div class="w-100">
-              <label>Float label: </label>
-              <mat-radio-group class="px-2 w-100">
-                <mat-radio-button value="auto">Auto</mat-radio-button>
-                <mat-radio-button value="always">Always</mat-radio-button>
-                <mat-radio-button value="always">Off</mat-radio-button>
-              </mat-radio-group>
-            </div>
+            <form>
+              <div class="w-100">
+                <label>Float label: </label>
+                <mat-radio-group class="px-2 w-100">
+                  <mat-radio-button value="auto">Auto</mat-radio-button>
+                  <mat-radio-button value="always">Always</mat-radio-button>
+                  <mat-radio-button value="always">Off</mat-radio-button>
+                </mat-radio-group>
+              </div>
 
-            <!-- <div class="w-100">
+              <div class="w-100">
+                <label>Float label: </label>
+                <mat-radio-group class="px-2 w-100">
+                  <mat-radio-button value="auto">Auto</mat-radio-button>
+                  <mat-radio-button value="always">Always</mat-radio-button>
+                  <mat-radio-button value="always">Off</mat-radio-button>
+                </mat-radio-group>
+              </div>
+
+              <!-- <div class="w-100">
               <mat-form-field
                 appearance="fill"
                 color="accent"
@@ -52,67 +75,121 @@
                 <input matInput placeholder="Simple placeholder" />
               </mat-form-field>
             </div> -->
-          </form>
-        </div>
+            </form>
+          </div>
 
-        <div class="example-container w-100">
-          <mat-card-subtitle class="mt-2 mb-2">
-            Settings Group 2
-          </mat-card-subtitle>
+          <div class="example-container w-100">
+            <mat-card-subtitle class="mt-2 mb-2">
+              Settings Group 2
+            </mat-card-subtitle>
 
-          <form>
-            <mat-form-field
-              appearance="fill"
-              color="accent"
-              [hideRequiredMarker]="hideRequiredControl.value"
-              [floatLabel]="floatLabelControl.value"
-              class="w-100 px-2"
-            >
-              <mat-select required>
-                <mat-option>-- None --</mat-option>
-                <mat-option value="option">Option</mat-option>
-              </mat-select>
-              <mat-label><mat-icon>favorite</mat-icon>Dropdown</mat-label>
-            </mat-form-field>
-          </form>
-        </div>
+            <form>
+              <mat-form-field
+                appearance="fill"
+                color="accent"
+                [hideRequiredMarker]="hideRequiredControl.value"
+                [floatLabel]="floatLabelControl.value"
+                class="w-100 px-2"
+              >
+                <mat-select required>
+                  <mat-option>-- None --</mat-option>
+                  <mat-option value="option">Option</mat-option>
+                </mat-select>
+                <mat-label><mat-icon>favorite</mat-icon>Dropdown</mat-label>
+              </mat-form-field>
+            </form>
+          </div>
 
-        <div class="example-container w-100">
-          <mat-card-subtitle class="mt-2 mb-2">
-            Settings Group 3
-          </mat-card-subtitle>
+          <div class="example-container w-100">
+            <mat-card-subtitle class="mt-2 mb-2">
+              Settings Group 3
+            </mat-card-subtitle>
 
-          <form>
-            <mat-form-field
-              appearance="fill"
-              [floatLabel]="floatLabelControl.value"
-              class="w-100 workbench__field"
-            >
-              <mat-label>Both a label and a placeholder</mat-label>
-              <input
-                [readOnly]="true"
-                matInput
-                placeholder="Simple placeholder"
-              />
-            </mat-form-field>
-          </form>
-        </div>
-      </mat-card-content>
-    </mat-card>
-  </div>
-  <div class="d-flex col-6">
-    <mat-card class="workbench__card mat-elevation-z0">
-      <mat-card-title class="pb-2">
-        Preferences
-      </mat-card-title>
-      <mat-card-content>
-        <div class="example-container w-100">
-          <mat-card-subtitle class="pb-1">
-            Settings Group 1
-          </mat-card-subtitle>
+            <form>
+              <mat-form-field
+                appearance="fill"
+                [floatLabel]="floatLabelControl.value"
+                class="w-100 workbench__field"
+              >
+                <mat-label>Both a label and a placeholder</mat-label>
+                <input
+                  [readOnly]="true"
+                  matInput
+                  placeholder="Simple placeholder"
+                />
+              </mat-form-field>
+            </form>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </mat-tab>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon>build</mat-icon>
+      <span class="ml-2">Preferences</span>
+    </ng-template>
+    <div class="d-flex col-12 px-0">
+      <mat-card class="workbench__card mat-elevation-z0 mt-3 w-100">
+        <mat-card-title class="pb-2">
+          Preferences
+          <button
+            mat-icon-button
+            class="workbench__buttons float-right"
+            mat-icon-button
+          >
+            <mat-icon aria-label="clear">clear</mat-icon>
+            reset form
+          </button>
+          <button
+            mat-icon-button
+            class="workbench__buttons float-right"
+            mat-icon-button
+          >
+            <mat-icon aria-label="clear">cloud_done</mat-icon>
+            save changes
+          </button>
+        </mat-card-title>
+        <mat-card-content>
+          <div class="example-container w-100">
+            <mat-card-subtitle class="pb-1">
+              Settings Group 1
+            </mat-card-subtitle>
 
-          <form>
-            <div class="w-100">
+            <form>
+              <div class="w-100">
+                <mat-form-field
+                  appearance="fill"
+                  color="accent"
+                  [hideRequiredMarker]="hideRequiredControl.value"
+                  [floatLabel]="floatLabelControl.value"
+                  class="w-100"
+                >
+                  <mat-label>Both a label and a placeholder</mat-label>
+                  <input matInput placeholder="Simple placeholder" required />
+                </mat-form-field>
+              </div>
+
+              <div class="w-100">
+                <mat-form-field
+                  appearance="fill"
+                  color="accent"
+                  [floatLabel]="floatLabelControl.value"
+                  class="w-100"
+                >
+                  <mat-label>Both a label and a placeholder</mat-label>
+                  <input matInput placeholder="Simple placeholder" />
+                </mat-form-field>
+              </div>
+            </form>
+          </div>
+
+          <div class="example-container w-100">
+            <mat-card-subtitle class="pb-1">
+              Settings Group 2
+            </mat-card-subtitle>
+
+            <form>
               <mat-form-field
                 appearance="fill"
                 color="accent"
@@ -123,9 +200,7 @@
                 <mat-label>Both a label and a placeholder</mat-label>
                 <input matInput placeholder="Simple placeholder" required />
               </mat-form-field>
-            </div>
 
-            <div class="w-100">
               <mat-form-field
                 appearance="fill"
                 color="accent"
@@ -135,68 +210,39 @@
                 <mat-label>Both a label and a placeholder</mat-label>
                 <input matInput placeholder="Simple placeholder" />
               </mat-form-field>
-            </div>
-          </form>
-        </div>
+            </form>
+          </div>
 
-        <div class="example-container w-100">
-          <mat-card-subtitle class="pb-1">
-            Settings Group 2
-          </mat-card-subtitle>
+          <div class="example-container w-100">
+            <mat-card-subtitle class="pb-1">
+              Settings Group 2
+            </mat-card-subtitle>
 
-          <form>
-            <mat-form-field
-              appearance="fill"
-              color="accent"
-              [hideRequiredMarker]="hideRequiredControl.value"
-              [floatLabel]="floatLabelControl.value"
-              class="w-100"
-            >
-              <mat-label>Both a label and a placeholder</mat-label>
-              <input matInput placeholder="Simple placeholder" required />
-            </mat-form-field>
+            <form>
+              <mat-form-field
+                appearance="fill"
+                color="accent"
+                [hideRequiredMarker]="hideRequiredControl.value"
+                [floatLabel]="floatLabelControl.value"
+                class="w-100"
+              >
+                <mat-label>Both a label and a placeholder</mat-label>
+                <input matInput placeholder="Simple placeholder" required />
+              </mat-form-field>
 
-            <mat-form-field
-              appearance="fill"
-              color="accent"
-              [floatLabel]="floatLabelControl.value"
-              class="w-100"
-            >
-              <mat-label>Both a label and a placeholder</mat-label>
-              <input matInput placeholder="Simple placeholder" />
-            </mat-form-field>
-          </form>
-        </div>
-
-        <div class="example-container w-100">
-          <mat-card-subtitle class="pb-1">
-            Settings Group 2
-          </mat-card-subtitle>
-
-          <form>
-            <mat-form-field
-              appearance="fill"
-              color="accent"
-              [hideRequiredMarker]="hideRequiredControl.value"
-              [floatLabel]="floatLabelControl.value"
-              class="w-100"
-            >
-              <mat-label>Both a label and a placeholder</mat-label>
-              <input matInput placeholder="Simple placeholder" required />
-            </mat-form-field>
-
-            <mat-form-field
-              appearance="fill"
-              color="accent"
-              [floatLabel]="floatLabelControl.value"
-              class="w-100"
-            >
-              <mat-label>Both a label and a placeholder</mat-label>
-              <input matInput placeholder="Simple placeholder" />
-            </mat-form-field>
-          </form>
-        </div>
-      </mat-card-content>
-    </mat-card>
-  </div>
-</div>
+              <mat-form-field
+                appearance="fill"
+                color="accent"
+                [floatLabel]="floatLabelControl.value"
+                class="w-100"
+              >
+                <mat-label>Both a label and a placeholder</mat-label>
+                <input matInput placeholder="Simple placeholder" />
+              </mat-form-field>
+            </form>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </mat-tab>
+</mat-tab-group>
