@@ -11,32 +11,41 @@ const routes: Routes = [
       {
         path: "",
         redirectTo: "dashboard",
-        pathMatch: "full"
+        pathMatch: "full",
       },
       {
         path: "dashboard",
         loadChildren: () =>
           import("../../features/workbench/workbench.module").then(
-            m => m.WorkbenchModule
+            (m) => m.WorkbenchModule
           ),
         // canActivate: [AuthGuard],
-        data: { title: "Dashboard" }
+        data: { title: "Dashboard" },
       },
       {
         path: "reporting",
         loadChildren: () =>
           import("../../features/reporting/reporting.module").then(
-            m => m.ReportingModule
+            (m) => m.ReportingModule
           ),
         // canActivate: [AuthGuard],
-        data: { title: "Reporting" }
-      }
-    ]
-  }
+        data: { title: "Reporting" },
+      },
+      {
+        path: "account",
+        loadChildren: () =>
+          import("../../features/account/account.module").then(
+            (m) => m.AccountModule
+          ),
+        // canActivate: [AuthGuard],
+        data: { title: "Account" },
+      },
+    ],
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class SecureLayoutRoutingModule {}

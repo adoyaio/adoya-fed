@@ -56,11 +56,11 @@ export class NavLinkService implements OnDestroy {
         3,
         "button",
         "Account",
-        "/portal",
+        "/workbench/account",
         "account_box",
         undefined,
         () => {
-          location.href = "/portal";
+          location.href = "/workbench/account";
         }
       )
     );
