@@ -2,8 +2,8 @@
   class="secure-layout__mat-sidenav-container"
   hasBackdrop="false"
 >
-  <mat-sidenav class="menu-sidenav" mode="side" opened="true">
-    <div class="logo-div clickable">
+  <mat-sidenav #drawer class="menu-sidenav" mode="side" opened="true">
+    <div (click)="handleLogoClick()" class="logo-div clickable px-3 mt-2 mb-2">
       <img
         class="logo-img"
         src="./../../../../assets/images/adoya-client-portal.png"
@@ -15,7 +15,11 @@
     <app-nav-links [isMobile]="false"> </app-nav-links>
   </mat-sidenav>
   <mat-sidenav-content>
-    <app-main-section (toggleDrawerCalled)="toggleDrawer()" [isMobile]="false">
+    <app-main-section
+      (toggleDrawerCalled)="toggleDrawer()"
+      [sidenavCollapsed]="!drawer.opened"
+      [isMobile]="false"
+    >
     </app-main-section>
   </mat-sidenav-content>
 </mat-sidenav-container>

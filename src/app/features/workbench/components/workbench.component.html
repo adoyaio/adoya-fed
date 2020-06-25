@@ -29,11 +29,11 @@
 
         <mat-card-content>
           <div class="example-container w-100">
-            <mat-card-subtitle class="mt-2 mb-2" color="primary">
+            <!-- <mat-card-subtitle class="mt-2 mb-2" color="primary">
               Settings Group 1
-            </mat-card-subtitle>
+            </mat-card-subtitle> -->
 
-            <form>
+            <!-- <form>
               <div class="w-100">
                 <label>Float label: </label>
                 <mat-radio-group class="px-2 w-100">
@@ -52,7 +52,7 @@
                 </mat-radio-group>
               </div>
 
-              <!-- <div class="w-100">
+              <div class="w-100">
               <mat-form-field
                 appearance="fill"
                 color="accent"
@@ -74,8 +74,8 @@
                 <mat-label>Both a label and a placeholder</mat-label>
                 <input matInput placeholder="Simple placeholder" />
               </mat-form-field>
-            </div> -->
-            </form>
+            </div>
+            </form> -->
           </div>
 
           <div class="example-container w-100">
@@ -95,7 +95,24 @@
                   <mat-option>-- None --</mat-option>
                   <mat-option value="option">Option</mat-option>
                 </mat-select>
-                <mat-label><mat-icon>favorite</mat-icon>Dropdown</mat-label>
+                <mat-label
+                  ><mat-icon>settings</mat-icon>&nbsp;Dropdown</mat-label
+                >
+              </mat-form-field>
+              <mat-form-field
+                appearance="fill"
+                color="accent"
+                [hideRequiredMarker]="hideRequiredControl.value"
+                [floatLabel]="floatLabelControl.value"
+                class="w-100 px-2"
+              >
+                <mat-select required>
+                  <mat-option>-- None --</mat-option>
+                  <mat-option value="option">Option</mat-option>
+                </mat-select>
+                <mat-label
+                  ><mat-icon>schedule</mat-icon>&nbsp;Dropdown</mat-label
+                >
               </mat-form-field>
             </form>
           </div>
@@ -152,40 +169,7 @@
         </mat-card-title>
         <mat-card-content>
           <div class="example-container w-100">
-            <mat-card-subtitle class="pb-1">
-              Settings Group 1
-            </mat-card-subtitle>
-
-            <form>
-              <div class="w-100">
-                <mat-form-field
-                  appearance="fill"
-                  color="accent"
-                  [hideRequiredMarker]="hideRequiredControl.value"
-                  [floatLabel]="floatLabelControl.value"
-                  class="w-100"
-                >
-                  <mat-label>Both a label and a placeholder</mat-label>
-                  <input matInput placeholder="Simple placeholder" required />
-                </mat-form-field>
-              </div>
-
-              <div class="w-100">
-                <mat-form-field
-                  appearance="fill"
-                  color="accent"
-                  [floatLabel]="floatLabelControl.value"
-                  class="w-100"
-                >
-                  <mat-label>Both a label and a placeholder</mat-label>
-                  <input matInput placeholder="Simple placeholder" />
-                </mat-form-field>
-              </div>
-            </form>
-          </div>
-
-          <div class="example-container w-100">
-            <mat-card-subtitle class="pb-1">
+            <mat-card-subtitle class="mt-2 mb-2">
               Settings Group 2
             </mat-card-subtitle>
 
@@ -195,49 +179,51 @@
                 color="accent"
                 [hideRequiredMarker]="hideRequiredControl.value"
                 [floatLabel]="floatLabelControl.value"
-                class="w-100"
+                class="w-100 px-2"
               >
-                <mat-label>Both a label and a placeholder</mat-label>
-                <input matInput placeholder="Simple placeholder" required />
+                <mat-select required>
+                  <mat-option>-- None --</mat-option>
+                  <mat-option value="option">Option</mat-option>
+                </mat-select>
+                <mat-label
+                  ><mat-icon>settings</mat-icon>&nbsp;Dropdown</mat-label
+                >
               </mat-form-field>
-
-              <mat-form-field
-                appearance="fill"
-                color="accent"
-                [floatLabel]="floatLabelControl.value"
-                class="w-100"
-              >
-                <mat-label>Both a label and a placeholder</mat-label>
-                <input matInput placeholder="Simple placeholder" />
-              </mat-form-field>
-            </form>
-          </div>
-
-          <div class="example-container w-100">
-            <mat-card-subtitle class="pb-1">
-              Settings Group 2
-            </mat-card-subtitle>
-
-            <form>
               <mat-form-field
                 appearance="fill"
                 color="accent"
                 [hideRequiredMarker]="hideRequiredControl.value"
                 [floatLabel]="floatLabelControl.value"
-                class="w-100"
+                class="w-100 px-2"
               >
-                <mat-label>Both a label and a placeholder</mat-label>
-                <input matInput placeholder="Simple placeholder" required />
+                <mat-select required>
+                  <mat-option>-- None --</mat-option>
+                  <mat-option value="option">Option</mat-option>
+                </mat-select>
+                <mat-label
+                  ><mat-icon>schedule</mat-icon>&nbsp;Dropdown</mat-label
+                >
               </mat-form-field>
+            </form>
+          </div>
 
+          <div class="example-container w-100">
+            <mat-card-subtitle class="mt-2 mb-2">
+              Settings Group 3
+            </mat-card-subtitle>
+
+            <form>
               <mat-form-field
                 appearance="fill"
-                color="accent"
                 [floatLabel]="floatLabelControl.value"
-                class="w-100"
+                class="w-100 workbench__field"
               >
                 <mat-label>Both a label and a placeholder</mat-label>
-                <input matInput placeholder="Simple placeholder" />
+                <input
+                  [readOnly]="true"
+                  matInput
+                  placeholder="Simple placeholder"
+                />
               </mat-form-field>
             </form>
           </div>

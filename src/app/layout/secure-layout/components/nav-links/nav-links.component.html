@@ -1,5 +1,5 @@
 <div
-  class="h-100 nav-links__container flex-column d-flex justify-content-start align-items-start"
+  class="h-100 nav-links__container flex-column d-flex justify-content-start align-items-start ml-2 mr-2"
 >
   <ng-container
     *ngFor="
@@ -8,33 +8,8 @@
       trackBy: trackLink
     "
   >
-    <!-- <mat-nav-list
-      class="nav-links__mat-accordion__mat-expansion-panel__mat-nav-sub-list"
-    >
-      <ng-container
-        *ngFor="
-          let sublink of navLinkService.navLinks[i].subLinks;
-          trackBy: trackLink
-        "
-      >
-        <div
-          class="nav-links__mat-accordion__mat-expansion-panel__mat-nav-sub-list__mat-sub-list-item"
-        >
-          <a
-            mat-list-item
-            class="text-reset"
-            routerLinkActive="active-page"
-            [routerLinkActiveOptions]="{ exact: false }"
-            [routerLink]="sublink.routerLink"
-            (click)="handleClick(sublink, link.index)"
-          >
-            {{ sublink.title }}
-          </a>
-        </div>
-      </ng-container>
-    </mat-nav-list> -->
     <div
-      class="w-100 d-flex flex-row align-items-start justify-content-start nav-links__button-container"
+      class="w-100 d-flex flex-row align-items-start justify-content-start nav-links__button-container px-1"
     >
       <button
         routerLinkActive="active-page"
