@@ -8,7 +8,7 @@ import { LayoutNavLinks } from "../models/layout-nav-links";
 })
 export class NavLinkService implements OnDestroy {
   navLinks: Array<LayoutNavLinks>;
-  private activeLink: LayoutNavLinks;
+  private activeLink;
 
   destroyed$: Subject<boolean> = new Subject<boolean>();
 
@@ -93,20 +93,24 @@ export class NavLinkService implements OnDestroy {
     );
   }
 
-  setActiveLink(link: LayoutNavLinks) {
-    if (this.activeLink && link) {
-      this.activeLink.isOpen = false;
-      link.setOpened();
-      this.activeLink = link;
-    } else if (!this.activeLink && link) {
-      link.setOpened();
-      this.activeLink = link;
-    } else if (this.activeLink && !link) {
-      this.activeLink.isOpen = false;
-      this.activeLink = undefined;
-    } else if (!this.activeLink && !link) {
-      this.activeLink = undefined;
-    }
+  // setActiveLink(link: LayoutNavLinks) {
+  //   if (this.activeLink && link) {
+  //     this.activeLink.isOpen = false;
+  //     link.setOpened();
+  //     this.activeLink = link;
+  //   } else if (!this.activeLink && link) {
+  //     link.setOpened();
+  //     this.activeLink = link;
+  //   } else if (this.activeLink && !link) {
+  //     this.activeLink.isOpen = false;
+  //     this.activeLink = undefined;
+  //   } else if (!this.activeLink && !link) {
+  //     this.activeLink = undefined;
+  //   }
+  // }
+
+  setActiveLink(index: number) {
+    this.activeLink = index;
   }
 
   isTheSameLink(link: LayoutNavLinks) {

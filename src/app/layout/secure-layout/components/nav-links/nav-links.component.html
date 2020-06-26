@@ -1,5 +1,5 @@
 <div
-  class="h-100 nav-links__container flex-column d-flex justify-content-start align-items-start ml-2 mr-2"
+  class="h-100 nav-links__container flex-column d-flex justify-content-start align-items-start"
 >
   <ng-container
     *ngFor="
@@ -9,11 +9,15 @@
     "
   >
     <div
-      class="w-100 d-flex flex-row align-items-start justify-content-start nav-links__button-container px-1"
+      routerLinkActive="active-page"
+      [routerLinkActiveOptions]="{ exact: false }"
+      [routerLink]="link.routerLink"
+      class="w-100 d-flex flex-row align-items-start justify-content-start nav-links__button-container px-2"
     >
       <button
         routerLinkActive="active-page"
         [routerLinkActiveOptions]="{ exact: false }"
+        [routerLink]="link.routerLink"
         class="nav-links__button px-0"
         color="accent"
         (click)="handleClick(link, link.index)"

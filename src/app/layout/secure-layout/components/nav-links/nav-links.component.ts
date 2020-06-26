@@ -50,22 +50,22 @@ export class NavLinksComponent {
     }
   }
 
-  subLinkSlideToggle(link: LayoutNavLinks, index: number) {
-    const isSame = this.navLinkService.isTheSameLink(link);
-    this.setOpenPanel(index);
-    if (link.isOpen && isSame) {
-      link.isOpen = false;
-      this.navLinkService.setActiveLink(undefined);
-    } else if (!link.isOpen && isSame) {
-      link.isOpen = true;
-      this.navLinkService.setActiveLink(link);
-    } else if (link.isOpen && !isSame) {
-      this.navLinkService.setActiveLink(link);
-    } else if (!link.isOpen && !isSame) {
-      link.isOpen = true;
-      this.navLinkService.setActiveLink(link);
-    }
-  }
+  // subLinkSlideToggle(link: LayoutNavLinks, index: number) {
+  //   const isSame = this.navLinkService.isTheSameLink(link);
+  //   this.setOpenPanel(index);
+  //   if (link.isOpen && isSame) {
+  //     link.isOpen = false;
+  //     this.navLinkService.setActiveLink(undefined);
+  //   } else if (!link.isOpen && isSame) {
+  //     link.isOpen = true;
+  //     this.navLinkService.setActiveLink(link);
+  //   } else if (link.isOpen && !isSame) {
+  //     this.navLinkService.setActiveLink(link);
+  //   } else if (!link.isOpen && !isSame) {
+  //     link.isOpen = true;
+  //     this.navLinkService.setActiveLink(link);
+  //   }
+  // }
 
   getTooltipForSublink(link: LayoutNavLinks) {
     if (this.navLinkService.isTheSameLink(link)) {
@@ -77,7 +77,7 @@ export class NavLinksComponent {
 
   handleClick(link: LayoutNavLinks, index: number) {
     this.navButtonClicked.emit();
-    this.setOpenPanel(index);
+    this.navLinkService.setActiveLink(index);
     if (link.onclick) {
       link.onclick();
     }
@@ -85,11 +85,6 @@ export class NavLinksComponent {
 
   isSvg(icon: string) {
     return icon.includes("svg.");
-  }
-
-  handleSubLinkClicked(index: number, link: LayoutNavLinks) {
-    this.navLinkService.setActiveLink(link);
-    this.closePanel(index);
   }
 
   trackLink(index: any, link: LayoutNavLinks) {
