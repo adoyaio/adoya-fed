@@ -55,6 +55,20 @@ export class NavLinkService implements OnDestroy {
       LayoutNavLinks.build(
         3,
         "button",
+        "Notifications",
+        "/workbench/notifications",
+        "dynamic_feed",
+        undefined,
+        () => {
+          location.href = "/workbench/notifications";
+        }
+      )
+    );
+
+    this.navLinks.push(
+      LayoutNavLinks.build(
+        4,
+        "button",
         "Account",
         "/workbench/account",
         "account_box",
@@ -66,14 +80,14 @@ export class NavLinkService implements OnDestroy {
     );
     this.navLinks.push(
       LayoutNavLinks.build(
-        4,
+        5,
         "button",
-        "Feedback",
-        "/workbench/feedback",
+        "Support",
+        "/workbench/support",
         "feedback",
         undefined,
         () => {
-          location.href = "/workbench/feedback";
+          location.href = "/workbench/support";
         }
       )
     );
