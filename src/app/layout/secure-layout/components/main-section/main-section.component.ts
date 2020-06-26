@@ -5,7 +5,7 @@ import { AmplifyService } from "aws-amplify-angular";
 @Component({
   selector: "app-main-section",
   templateUrl: "./main-section.component.html",
-  styleUrls: ["./main-section.component.scss"]
+  styleUrls: ["./main-section.component.scss"],
 })
 export class MainSectionComponent implements OnInit {
   @Input()
@@ -17,12 +17,7 @@ export class MainSectionComponent implements OnInit {
   @Output()
   toggleDrawerCalled = new EventEmitter();
 
-  constructor(
-    private titleService: Title,
-    private amplifyService: AmplifyService
-  ) {}
-
-  usernameAttributes = "email";
+  constructor(private titleService: Title) {}
 
   ngOnInit() {}
 

@@ -34,6 +34,8 @@ export class NavLinksComponent {
     // });
   }
 
+  usernameAttributes = "email";
+
   setOpenPanel(index: number) {
     this.openPanel = index;
   }

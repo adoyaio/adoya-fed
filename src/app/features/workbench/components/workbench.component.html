@@ -3,7 +3,7 @@
   <mat-tab>
     <ng-template mat-tab-label>
       <mat-icon>tune</mat-icon>
-      <span class="ml-2">Bid Optimization</span>
+      <span class="ml-2">Bid Optimizations</span>
     </ng-template>
     <div class="d-flex col-12 px-0">
       <mat-card class="workbench__card mat-elevation-z0 mt-3 w-100">
@@ -80,26 +80,98 @@
 
           <div class="example-container w-100">
             <mat-card-subtitle class="mt-2 mb-2">
-              Settings Group 2
+              Apple Search Ads Settings
             </mat-card-subtitle>
 
             <form>
               <mat-form-field
                 appearance="fill"
-                color="accent"
                 [hideRequiredMarker]="hideRequiredControl.value"
                 [floatLabel]="floatLabelControl.value"
-                class="w-100 px-2"
+                class="w-100"
+                color="accent"
               >
                 <mat-select required>
-                  <mat-option>-- None --</mat-option>
-                  <mat-option value="option">Option</mat-option>
+                  <mat-option value="standard">Standard</mat-option>
+                  <mat-option value="agressive">Agressive</mat-option>
+                  <mat-option value="conservative">Conservative</mat-option>
                 </mat-select>
                 <mat-label
-                  ><mat-icon>settings</mat-icon>&nbsp;Dropdown</mat-label
+                  ><mat-icon>settings</mat-icon>&nbsp;Objective</mat-label
                 >
               </mat-form-field>
               <mat-form-field
+                appearance="fill"
+                [floatLabel]="floatLabelControl.value"
+                class="w-100"
+                color="accent"
+              >
+                <mat-label>High Cost Per Install</mat-label>
+                <input
+                  required
+                  [readOnly]="true"
+                  matInput
+                  type="number"
+                  placeholder="High CPI"
+                />
+              </mat-form-field>
+            </form>
+          </div>
+          <div class="example-container w-100">
+            <mat-card-subtitle class="mt-2 mb-2">
+              Branch Settings
+            </mat-card-subtitle>
+
+            <form>
+              <mat-form-field
+                appearance="fill"
+                [floatLabel]="floatLabelControl.value"
+                class="w-100 workbench__field mb-1"
+              >
+                <mat-label
+                  ><mat-icon>attach_money</mat-icon>&nbsp;Branch Optimization
+                  Goal</mat-label
+                >
+                <input
+                  [readOnly]="true"
+                  matInput
+                  type="number"
+                  placeholder="Branch Optimization Goal"
+                />
+              </mat-form-field>
+              <mat-form-field
+                appearance="fill"
+                [floatLabel]="floatLabelControl.value"
+                class="w-100 workbench__field mb-1"
+              >
+                <mat-label
+                  ><mat-icon>attach_money</mat-icon>&nbsp;Cost Per Purchase
+                  Threshold</mat-label
+                >
+                <input
+                  [readOnly]="true"
+                  matInput
+                  type="number"
+                  placeholder="Cost Per Purchase Threshold"
+                />
+              </mat-form-field>
+              <mat-form-field
+                appearance="fill"
+                [floatLabel]="floatLabelControl.value"
+                class="w-100 workbench__field mb-1"
+              >
+                <mat-label
+                  ><mat-icon>attach_money</mat-icon>&nbsp;Revenue Over Ad
+                  Spend</mat-label
+                >
+                <input
+                  [readOnly]="true"
+                  matInput
+                  type="number"
+                  placeholder="Revenue Over Ad Spend"
+                />
+              </mat-form-field>
+              <!-- <mat-form-field
                 appearance="fill"
                 color="accent"
                 [hideRequiredMarker]="hideRequiredControl.value"
@@ -113,28 +185,7 @@
                 <mat-label
                   ><mat-icon>schedule</mat-icon>&nbsp;Dropdown</mat-label
                 >
-              </mat-form-field>
-            </form>
-          </div>
-
-          <div class="example-container w-100">
-            <mat-card-subtitle class="mt-2 mb-2">
-              Settings Group 3
-            </mat-card-subtitle>
-
-            <form>
-              <mat-form-field
-                appearance="fill"
-                [floatLabel]="floatLabelControl.value"
-                class="w-100 workbench__field"
-              >
-                <mat-label>Both a label and a placeholder</mat-label>
-                <input
-                  [readOnly]="true"
-                  matInput
-                  placeholder="Simple placeholder"
-                />
-              </mat-form-field>
+              </mat-form-field> -->
             </form>
           </div>
         </mat-card-content>
