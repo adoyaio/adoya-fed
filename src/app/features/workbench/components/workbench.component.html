@@ -106,7 +106,10 @@
                 class="w-100"
                 color="accent"
               >
-                <mat-label>High Cost Per Install</mat-label>
+                <mat-label
+                  ><mat-icon>attach_money</mat-icon>&nbsp;High Cost Per
+                  Install</mat-label
+                >
                 <input
                   required
                   [readOnly]="true"
@@ -128,16 +131,15 @@
                 [floatLabel]="floatLabelControl.value"
                 class="w-100 workbench__field mb-1"
               >
+                <mat-select>
+                  <mat-option value="standard">Cost Per Purchase</mat-option>
+                  <mat-option value="agressive">Revenue/Cost</mat-option>
+                  <mat-option value="conservative">None</mat-option>
+                </mat-select>
                 <mat-label
-                  ><mat-icon>attach_money</mat-icon>&nbsp;Branch Optimization
-                  Goal</mat-label
+                  ><mat-icon>settings</mat-icon>&nbsp;Branch Optimization
+                  Objective</mat-label
                 >
-                <input
-                  [readOnly]="true"
-                  matInput
-                  type="number"
-                  placeholder="Branch Optimization Goal"
-                />
               </mat-form-field>
               <mat-form-field
                 appearance="fill"
