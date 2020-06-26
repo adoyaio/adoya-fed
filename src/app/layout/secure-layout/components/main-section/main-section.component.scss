@@ -1,6 +1,17 @@
+@import "variables.scss";
+
 ::ng-deep app-main-section {
   overflow-x: hidden !important;
   height: 100%;
+}
+
+.main-section__buttons {
+  color: mat-color($adoya-web-accent);
+}
+
+.main-section__buttons-text {
+  color: mat-color($adoya-web-accent);
+  //#5d7d41
 }
 
 .main-section-wrapper {

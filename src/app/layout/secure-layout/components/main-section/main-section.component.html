@@ -3,18 +3,20 @@
     *ngIf="sidenavCollapsed"
     mat-icon-button
     (click)="toggleDrawer()"
-    class="main-section_buttons float-left ml-2"
+    class="main-section__buttons float-left ml-2"
     mat-icon-button
   >
     <mat-icon aria-label="menu">menu</mat-icon>
-    display menu
+    menu
   </button>
+
   <button
     *ngIf="!sidenavCollapsed"
     mat-icon-button
     (click)="toggleDrawer()"
     class="main-section_buttons float-left ml-1"
     mat-icon-button
+    color="accent"
   >
     <mat-icon aria-label="menu">menu_open</mat-icon>
     hide menu
@@ -24,7 +26,7 @@
     class="main-section_buttons float-right ml-1"
     mat-icon-button
   >
-    <mat-icon aria-label="menu">account_box</mat-icon>
+    <mat-icon color="accent" aria-label="menu">account_box</mat-icon>
   </button>
   <div class="top-bar-panel d-flex">
     <div class="page-title col-6">
