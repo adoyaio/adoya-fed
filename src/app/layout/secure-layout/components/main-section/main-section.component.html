@@ -22,12 +22,17 @@
     hide menu
   </button>
   <button
+    [matMenuTriggerFor]="menu"
     mat-icon-button
     class="main-section_buttons float-right ml-1"
     mat-icon-button
   >
-    <mat-icon color="accent" aria-label="menu">account_box</mat-icon>
+    <mat-icon color="accent" aria-label="menu">face</mat-icon>
   </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item>Profile</button>
+    <button mat-menu-item>Log Out</button>
+  </mat-menu>
   <div class="top-bar-panel d-flex">
     <div class="page-title col-6">
       {{ getPageTitle() }}
