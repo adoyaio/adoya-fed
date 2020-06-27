@@ -10,13 +10,27 @@ import { map, catchError } from "rxjs/operators";
 export class ClientService {
   constructor(private http: HttpClient) {}
 
-  gatewayPartnerUrl = `/api/client/history`;
+  clientHistoryUrl = `/api/client/history`;
+  clientUrl = `/api/client/`;
+
+  public getClient(orgId: string): Observable<CostPerInstallDayObject[]> {
+    const url = `${this.clientHistoryUrl}?org_id=${orgId}`;
+    return this.http.get<any>(url).pipe(
+      map((response) => {
+        console.log("getClient");
+        return response;
+      }),
+      catchError((error: HttpErrorResponse) => {
+        throw new Error(error.message);
+      })
+    );
+  }
 
   public getClientHistory(
     orgId: string,
     pageSize: number
   ): Observable<CostPerInstallDayObject[]> {
-    const url = `${this.gatewayPartnerUrl}?org_id=${orgId}&total_recs=${pageSize}`;
+    const url = `${this.clientHistoryUrl}?org_id=${orgId}&total_recs=${pageSize}`;
     return this.http.get<any>(url).pipe(
       map((response) => {
         console.log("getClientHistory");
@@ -33,7 +47,7 @@ export class ClientService {
     startDate: string,
     endDate: string
   ): Observable<CostPerInstallDayObject[]> {
-    const url = `${this.gatewayPartnerUrl}?org_id=${orgId}&start_date=${endDate}&end_date=${startDate}`;
+    const url = `${this.clientHistoryUrl}?org_id=${orgId}&start_date=${endDate}&end_date=${startDate}`;
     return this.http.get<any>(url).pipe(
       map((response) => {
         console.log("getClientHistoryByTime");
