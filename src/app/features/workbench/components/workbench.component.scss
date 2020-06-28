@@ -19,3 +19,17 @@
 .workbench__buttons {
   width: 125px;
 }
+
+.workbench__loading-shade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 56px;
+  right: 0;
+  background: rgba(0, 0, 0, 0.05);
+  // background: #5d7d41, 0.15;
+  z-index: 1;
+  display: flex;
+  align-items: top;
+  justify-content: center;
+}

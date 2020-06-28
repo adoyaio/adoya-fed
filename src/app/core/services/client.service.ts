@@ -14,7 +14,7 @@ export class ClientService {
   clientUrl = `/api/client/`;
 
   public getClient(orgId: string): Observable<CostPerInstallDayObject[]> {
-    const url = `${this.clientHistoryUrl}?org_id=${orgId}`;
+    const url = `${this.clientUrl}?org_id=${orgId}`;
     return this.http.get<any>(url).pipe(
       map((response) => {
         console.log("getClient");
