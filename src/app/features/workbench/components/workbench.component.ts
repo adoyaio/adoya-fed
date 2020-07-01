@@ -1,12 +1,19 @@
+import { Validator } from "./../../../shared/dynamic-form/interfaces/validator.interface";
 import { Router } from "@angular/router";
 import { Component, OnInit } from "@angular/core";
 import { AmplifyService } from "aws-amplify-angular";
 import { map, tap, catchError } from "rxjs/operators";
-import { FormBuilder, FormGroup, FormControl } from "@angular/forms";
+import {
+  FormBuilder,
+  FormGroup,
+  FormControl,
+  Validators,
+} from "@angular/forms";
 import { UserAccountService } from "src/app/shared/services/user-account.service";
 import { ClientService } from "src/app/core/services/client.service";
 import { Client } from "../../reporting/models/client";
 import { CustomFormValidators } from "src/app/shared/dynamic-form/validators/CustomFormValidators";
+import { EMPTY } from "rxjs";
 
 @Component({
   selector: "app-workbench",
@@ -39,6 +46,11 @@ export class WorkbenchComponent implements OnInit {
   ngOnInit() {
     // this.branchForm.setValidators(CustomFormValidators.noWhitespaceValidator)
     // this.appleForm.setValidators(CustomFormValidators.noWhitespaceValidator)
+    this.appleForm.controls["highCPI"].setValidators(Validators.minLength(1));
+    this.appleForm.controls["highCPI"].setValidators([
+      Validators.min(0.1),
+      Validators.max(1000),
+    ]);
 
     this.amplifyService
       .authState()
@@ -60,11 +72,12 @@ export class WorkbenchComponent implements OnInit {
     this.clientService
       .getClient(this.orgId)
       .pipe(
-        map((data) => {
+        tap((_) => {
           this.isLoadingResults = true;
+        }),
+        map((data) => {
           this.client = Client.buildFromGetClientResponse(data);
-          console.log(this.client.orgDetails);
-
+          this.isLoadingResults = false;
           return data;
         }),
         catchError(() => {
@@ -96,12 +109,35 @@ export class WorkbenchComponent implements OnInit {
   onAppleSubmit() {
     console.log(this.appleForm.get("objective").value);
     console.log(this.appleForm.get("highCPI").value);
-
+    this.isLoadingResults = true;
     this.client.orgDetails.bidParameters.objective = this.appleForm.get(
-      "highCPI"
+      "objective"
     ).value;
     this.client.orgDetails.adgroupBidParameters.objective = this.appleForm.get(
+      "objective"
+    ).value;
+    this.client.orgDetails.bidParameters.highCPIBidDecreaseThresh = this.appleForm.get(
       "highCPI"
     ).value;
+    this.client.orgDetails.adgroupBidParameters.highCPIBidDecreaseThresh = this.appleForm.get(
+      "highCPI"
+    ).value;
+
+    this.clientService
+      .postClient(this.client)
+      .pipe(
+        tap((_) => {
+          this.isLoadingResults = true;
+        }),
+        map((data) => {
+          this.isLoadingResults = false;
+          return data;
+        }),
+        catchError(() => {
+          this.isLoadingResults = false;
+          return [];
+        })
+      )
+      .subscribe();
   }
 }

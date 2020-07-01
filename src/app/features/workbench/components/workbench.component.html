@@ -5,6 +5,9 @@
       <mat-icon>tune</mat-icon>
       <span class="ml-2">Bid Optimizations</span>
     </ng-template>
+    <div class="workbench__loading-shade" *ngIf="isLoadingResults">
+      <mat-spinner color="accent" *ngIf="isLoadingResults"></mat-spinner>
+    </div>
     <div class="d-flex col-12 px-0">
       <mat-card class="workbench__card mat-elevation-z0 mt-3 w-100">
         <mat-card-title class="pb-2">
@@ -164,10 +167,6 @@
           </button>
         </mat-card-title>
         <mat-card-content>
-          <div class="workbench__loading-shade" *ngIf="isLoadingResults">
-            <mat-spinner color="accent" *ngIf="isLoadingResults"></mat-spinner>
-          </div>
-
           <div class="example-container w-100">
             <mat-card-subtitle class="mt-2 mb-2">
               Settings Group 2
