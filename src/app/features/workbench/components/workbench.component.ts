@@ -64,7 +64,7 @@ export class WorkbenchComponent implements OnInit {
           this.isLoadingResults = true;
           this.client = Client.buildFromGetClientResponse(data);
           console.log(this.client.orgDetails);
-          console.log("test");
+
           return data;
         }),
         catchError(() => {

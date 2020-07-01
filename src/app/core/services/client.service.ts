@@ -18,7 +18,7 @@ export class ClientService {
     return this.http.get<any>(url).pipe(
       map((response) => {
         console.log("getClient");
-        return response;
+        return response[0];
       }),
       catchError((error: HttpErrorResponse) => {
         throw new Error(error.message);
