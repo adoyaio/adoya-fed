@@ -45,12 +45,19 @@ export class WorkbenchComponent implements OnInit {
   orgId: string;
 
   ngOnInit() {
-    this.appleForm.controls["highCPI"].setValidators([
-      Validators.min(0.1),
-      Validators.max(1000),
-    ]);
+    this.appleForm
+      .get("highCPI")
+      .setValidators([Validators.min(0.1), Validators.max(1000)]);
 
-    this.appleForm.controls["objective"].setValidators([Validators.required]);
+    this.branchForm
+      .get("branchObjective")
+      .setValidators([Validators.min(0.1), Validators.max(1000)]);
+
+    this.branchForm
+      .get("revenueOverSpend")
+      .setValidators([Validators.min(0.1), Validators.max(1000)]);
+
+    // this.appleForm.get("objective").setValidators([Validators.required]);
 
     this.amplifyService
       .authState()
@@ -78,7 +85,6 @@ export class WorkbenchComponent implements OnInit {
         map((data) => {
           this.client = Client.buildFromGetClientResponse(data);
 
-          console.log(this.client.orgDetails.bidParameters.objective);
           this.appleForm
             .get("objective")
             .setValue(this.client.orgDetails.bidParameters.objective);
@@ -87,6 +93,24 @@ export class WorkbenchComponent implements OnInit {
             .get("highCPI")
             .setValue(
               this.client.orgDetails.bidParameters.highCPIBidDecreaseThresh
+            );
+
+          this.branchForm
+            .get("branchObjective")
+            .setValue(
+              this.client.orgDetails.branchBidParameters.branchOptimizationGoal
+            );
+          this.branchForm
+            .get("cppThreshold")
+            .setValue(
+              this.client.orgDetails.branchBidParameters
+                .costPerPurchaseThreshold
+            );
+          this.branchForm
+            .get("revenueOverSpend")
+            .setValue(
+              this.client.orgDetails.branchBidParameters
+                .revenueOverAdSpendThreshold
             );
           this.isLoadingResults = false;
           return data;
@@ -99,9 +123,36 @@ export class WorkbenchComponent implements OnInit {
       .subscribe();
   }
 
+  onResetForm() {
+    this.appleForm
+      .get("objective")
+      .setValue(this.client.orgDetails.bidParameters.objective);
+
+    this.appleForm
+      .get("highCPI")
+      .setValue(this.client.orgDetails.bidParameters.highCPIBidDecreaseThresh);
+
+    this.branchForm
+      .get("branchObjective")
+      .setValue(
+        this.client.orgDetails.branchBidParameters.branchOptimizationGoal
+      );
+    this.branchForm
+      .get("cppThreshold")
+      .setValue(
+        this.client.orgDetails.branchBidParameters.costPerPurchaseThreshold
+      );
+    this.branchForm
+      .get("revenueOverSpend")
+      .setValue(
+        this.client.orgDetails.branchBidParameters.revenueOverAdSpendThreshold
+      );
+  }
+
   onAppleSubmit() {
     if (this.appleForm.valid) {
       this.isLoadingResults = true;
+
       this.client.orgDetails.bidParameters.objective = this.appleForm.get(
         "objective"
       ).value;
@@ -113,6 +164,16 @@ export class WorkbenchComponent implements OnInit {
       ).value;
       this.client.orgDetails.adgroupBidParameters.highCPIBidDecreaseThresh = this.appleForm.get(
         "highCPI"
+      ).value;
+
+      this.client.orgDetails.branchBidParameters.branchOptimizationGoal = this.branchForm.get(
+        "branchObjective"
+      ).value;
+      this.client.orgDetails.branchBidParameters.costPerPurchaseThreshold = this.branchForm.get(
+        "cppThreshold"
+      ).value;
+      this.client.orgDetails.branchBidParameters.revenueOverAdSpendThreshold = this.branchForm.get(
+        "revenueOverSpend"
       ).value;
 
       this.clientService
@@ -131,6 +192,8 @@ export class WorkbenchComponent implements OnInit {
           })
         )
         .subscribe();
+    } else {
+      // snackbar
     }
   }
 }

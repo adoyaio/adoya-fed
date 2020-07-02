@@ -1,5 +1,6 @@
 <!-- <div class="h-100 d-flex flex-row"> -->
 <mat-tab-group color="accent">
+  <!--Bid Optimizations-->
   <mat-tab>
     <ng-template mat-tab-label>
       <mat-icon>tune</mat-icon>
@@ -13,6 +14,7 @@
         <mat-card-title class="pb-2">
           Bid Optimizations
           <button
+            (click)="onResetForm()"
             mat-icon-button
             class="workbench__buttons float-right"
             mat-icon-button
@@ -79,8 +81,10 @@
                 appearance="fill"
                 class="w-100 workbench__field mb-1"
               >
-                <mat-select>
-                  <mat-option value="standard">Cost Per Purchase</mat-option>
+                <mat-select formControlName="branchObjective">
+                  <mat-option value="cost_per_purchase"
+                    >Cost Per Purchase</mat-option
+                  >
                   <mat-option value="agressive">Revenue/Cost</mat-option>
                   <mat-option value="conservative">None</mat-option>
                 </mat-select>
@@ -98,7 +102,7 @@
                   Threshold</mat-label
                 >
                 <input
-                  [readOnly]="true"
+                  formControlName="cppThreshold"
                   matInput
                   type="number"
                   placeholder="Cost Per Purchase Threshold"
@@ -113,7 +117,7 @@
                   Spend</mat-label
                 >
                 <input
-                  [readOnly]="true"
+                  formControlName="revenueOverSpend"
                   matInput
                   type="number"
                   placeholder="Revenue Over Ad Spend"
@@ -140,6 +144,8 @@
       </mat-card>
     </div>
   </mat-tab>
+
+  <!--Other preferences-->
   <mat-tab>
     <ng-template mat-tab-label>
       <mat-icon>build</mat-icon>

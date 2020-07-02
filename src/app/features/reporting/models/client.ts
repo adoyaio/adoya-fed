@@ -15,6 +15,7 @@ export class BranchBidParameters {
 
   static buildFromResponse(response: any) {
     const retVal = new BranchBidParameters();
+    console.log("buildFromResponse" + response);
     retVal.branchBidAdjustment = response.branch_bid_adjustment;
     retVal.branchOptimizationGoal = response.branch_optimization_goal;
     retVal.minAppleInstalls = response.min_apple_installs;
@@ -27,6 +28,8 @@ export class BranchBidParameters {
     retVal.costPerPurchaseThresholdBuffer =
       response.cost_per_purchase_threshold_buffer;
     retVal.objective = response.objective;
+
+    console.log(retVal.branchOptimizationGoal);
     return retVal;
   }
 }
