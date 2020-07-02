@@ -184,6 +184,7 @@ export class OrgDetails {
   campaignName: string;
 
   static buildFromResponse(response: any) {
+    console.log("orgdetails " + response);
     const retVal = new OrgDetails();
     retVal.campaignName = response.campaignName;
     retVal.campaignIds = response.campaignIds;
@@ -226,11 +227,10 @@ export class Client {
   orgDetails: OrgDetails;
 
   static buildFromGetClientResponse(response: any): Client {
-    console.log("build from response");
     const retVal = new Client();
     retVal.orgDetails = OrgDetails.buildFromResponse(response.orgDetails);
     retVal.orgId = response.orgId;
-    console.log(response.orgId);
+
     return retVal;
   }
 }

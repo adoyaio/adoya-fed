@@ -4,6 +4,7 @@ import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { CostPerInstallDayObject } from "src/app/features/reporting/models/cost-per-install-day-object";
 import { map, catchError } from "rxjs/operators";
+import { ClientPayload } from "src/app/features/reporting/models/client-payload";
 
 @Injectable({
   providedIn: "root",
@@ -14,7 +15,7 @@ export class ClientService {
   clientHistoryUrl = `/api/client/history`;
   clientUrl = `/api/client`;
 
-  public postClient(client: Client): Observable<any> {
+  public postClient(client: ClientPayload): Observable<any> {
     const url = `${this.clientUrl}`;
     return this.http
       .post<any>(url, {
