@@ -193,9 +193,10 @@ export class OrgDetails {
     retVal.campaignIds = response.campaignIds;
     retVal.disabled = response.disabled;
     retVal.currency = response.currency;
+    console.log("buildFromResponse " + response.appID);
     retVal.appID = response.appID;
     retVal.emailAddresses = response.emailAddresses;
-    console.log("buildFromResponse " + response.keyFilename);
+
     retVal.keyFilename = response.keyFilename;
     retVal.orgId = response.orgId;
     retVal.pemFilename = response.pemFilename;

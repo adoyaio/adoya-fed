@@ -194,6 +194,7 @@ export class OrgDetailsPayload {
     retVal.campaignIds = response.campaignIds;
     retVal.disabled = response.disabled;
     retVal.currency = response.currency;
+    console.log("buildFromClient " + response.appID);
     retVal.appID = response.appID;
     retVal.emailAddresses = response.emailAddresses;
     retVal.keyFilename = response.keyFilename;
