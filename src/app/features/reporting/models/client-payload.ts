@@ -196,7 +196,8 @@ export class OrgDetailsPayload {
     retVal.currency = response.currency;
     retVal.appId = response.appId;
     retVal.emailAddresses = response.emailAddresses;
-    retVal.keyFileName = response.keyFileName;
+    console.log("buildFromClient " + response.keyFilename);
+    retVal.keyFileName = response.keyFilename;
     retVal.orgId = response.orgId;
     retVal.pemFilename = response.pemFilename;
     retVal.appName = response.appName;

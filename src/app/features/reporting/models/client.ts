@@ -178,7 +178,7 @@ export class OrgDetails {
   appName: string;
   pemFilename: string;
   orgId: number;
-  keyFileName: string;
+  keyFilename: string;
   emailAddresses: string[];
   appId: string;
   currency: string;
@@ -195,7 +195,8 @@ export class OrgDetails {
     retVal.currency = response.currency;
     retVal.appId = response.appId;
     retVal.emailAddresses = response.emailAddresses;
-    retVal.keyFileName = response.keyFileName;
+    console.log("buildFromResponse " + response.keyFilename);
+    retVal.keyFilename = response.keyFilename;
     retVal.orgId = response.orgId;
     retVal.pemFilename = response.pemFilename;
     retVal.appName = response.appName;

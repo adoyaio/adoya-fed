@@ -1,9 +1,9 @@
-import { UserAccountService } from "./../../../shared/services/user-account.service";
 import { Component, OnInit } from "@angular/core";
 import { AmplifyService } from "aws-amplify-angular";
 import { Router } from "@angular/router";
 import { tap } from "rxjs/operators";
 import { UserAccount } from "src/app/shared/models/user-account";
+import { UserAccountService } from "src/app/core/services/user-account.service";
 
 @Component({
   selector: "app-portal",

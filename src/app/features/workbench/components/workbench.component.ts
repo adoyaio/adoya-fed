@@ -9,7 +9,7 @@ import {
   FormControl,
   Validators,
 } from "@angular/forms";
-import { UserAccountService } from "src/app/shared/services/user-account.service";
+import { UserAccountService } from "src/app/core/services/user-account.service";
 import { ClientService } from "src/app/core/services/client.service";
 import { Client } from "../../reporting/models/client";
 import { CustomFormValidators } from "src/app/shared/dynamic-form/validators/CustomFormValidators";

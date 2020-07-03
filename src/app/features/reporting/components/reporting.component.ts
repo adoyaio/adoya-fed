@@ -22,7 +22,7 @@ import {
   delay,
 } from "rxjs/operators";
 import { combineLatest } from "rxjs";
-import { UserAccountService } from "src/app/shared/services/user-account.service";
+import { UserAccountService } from "src/app/core/services/user-account.service";
 
 @Component({
   selector: "app-reporting",
