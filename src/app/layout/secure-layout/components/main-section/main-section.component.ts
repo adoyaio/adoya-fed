@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { Title } from "@angular/platform-browser";
 import { AmplifyService } from "aws-amplify-angular";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-main-section",
@@ -17,7 +18,7 @@ export class MainSectionComponent implements OnInit {
   @Output()
   toggleDrawerCalled = new EventEmitter();
 
-  constructor(private titleService: Title) {}
+  constructor(private titleService: Title, private router: Router) {}
 
   ngOnInit() {}
 
@@ -25,11 +26,14 @@ export class MainSectionComponent implements OnInit {
     this.toggleDrawerCalled.emit();
   }
 
-  getCollapseIcon() {
-    return !this.sidenavCollapsed ? "navigate_before" : "navigate_next";
-  }
-
   getPageTitle() {
     return this.titleService.getTitle();
+  }
+
+  onProfileClicked() {
+    this.router.navigateByUrl("/workbench/account");
+  }
+  onLogoutClicked() {
+    this.router.navigateByUrl("/portal");
   }
 }

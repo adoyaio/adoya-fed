@@ -29,8 +29,8 @@
     <mat-icon color="accent" aria-label="menu">face</mat-icon>
   </button>
   <mat-menu #menu="matMenu">
-    <button mat-menu-item>Profile</button>
-    <button mat-menu-item>Log Out</button>
+    <button (click)="onProfileClicked()" mat-menu-item>Profile</button>
+    <button (click)="onLogoutClicked()" mat-menu-item>Log Out</button>
   </mat-menu>
   <div class="top-bar-panel d-flex">
     <div class="page-title col-6">
