@@ -1,4 +1,3 @@
-<!-- <div class="h-100 d-flex flex-row"> -->
 <mat-tab-group color="accent">
   <!--Bid Optimizations-->
   <mat-tab>
@@ -69,19 +68,18 @@
                 >
               </mat-form-field>
               <mat-form-field
-                matTooltip="High Cost Per Install"
+                matTooltip="Maximum Cost Per Install: Enter the most you’re willing to spend for an install. Be realistic. Setting target too low will severely restrict your volume. Also, keep changes +/- 20% of the previous value (if applicable). This prevents volatility. Also, try to allow for 7 days of performance before making adjustments."
                 appearance="fill"
                 class="w-100"
                 color="accent"
               >
                 <mat-label
-                  ><mat-icon>attach_money</mat-icon>&nbsp;High Cost Per
+                  ><mat-icon>attach_money</mat-icon>&nbsp;Maximum Cost Per
                   Install</mat-label
                 >
                 <input
                   formControlName="highCPI"
                   required
-                  [readOnly]="true"
                   matInput
                   type="number"
                   placeholder="High CPI"
@@ -222,23 +220,6 @@
               </mat-form-field>
             </form>
           </div>
-
-          <!-- <div class="example-container w-100">
-            <mat-card-subtitle class="mt-2 mb-2">
-              Settings Group 3
-            </mat-card-subtitle>
-
-             <form>
-            <mat-form-field appearance="fill" class="w-100 workbench__field">
-              <mat-label>Both a label and a placeholder</mat-label>
-              <input
-                [readOnly]="true"
-                matInput
-                placeholder="Simple placeholder"
-              />
-            </mat-form-field>
-            </form>
-           </div> -->
         </mat-card-content>
       </mat-card>
     </div>
