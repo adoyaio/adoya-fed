@@ -219,9 +219,9 @@ export class WorkbenchComponent implements OnInit {
     if (this.preferencesForm.valid) {
       this.isLoadingResults = true;
 
-      this.client.orgDetails.emailAddresses = this.preferencesForm.get(
-        "emailAddresses"
-      ).value;
+      this.client.orgDetails.emailAddresses = this.preferencesForm
+        .get("emailAddresses")
+        .value.split(",");
 
       this.clientService
         .postClient(ClientPayload.buildFromClient(this.client))

@@ -1,3 +1,4 @@
+import { OrgDetails } from "./client";
 import {
   BranchBidParameters,
   AdgroupBidParameters,
@@ -187,8 +188,7 @@ export class OrgDetailsPayload {
   campaignIds: string[];
   campaignName: string;
 
-  static buildFromClient(response: any) {
-    console.log("orgdetails " + response);
+  static buildFromClient(response: OrgDetails) {
     const retVal = new OrgDetailsPayload();
     retVal.campaignName = response.campaignName;
     retVal.campaignIds = response.campaignIds;
@@ -231,7 +231,7 @@ export class ClientPayload {
   orgDetails: OrgDetailsPayload;
 
   static buildFromClient(client: Client): any {
-    console.log("build from client");
+    console.log("build payload from client");
     const retVal = new ClientPayload();
     retVal.orgDetails = OrgDetailsPayload.buildFromClient(client.orgDetails);
     retVal.orgId = client.orgId;

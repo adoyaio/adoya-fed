@@ -45,17 +45,35 @@
                 [hideRequiredMarker]="false"
                 class="w-100"
                 color="accent"
+                matTooltip="Description of objective."
               >
                 <mat-select required formControlName="objective">
-                  <mat-option value="standard">Standard</mat-option>
-                  <mat-option value="agressive">Agressive</mat-option>
-                  <mat-option value="conservative">Conservative</mat-option>
+                  <mat-option
+                    matTooltip="Standard: description of standard strategy"
+                    value="standard"
+                    >Standard</mat-option
+                  >
+                  <mat-option
+                    matTooltip="Agressive: description of agressive strategy"
+                    value="agressive"
+                    >Agressive</mat-option
+                  >
+                  <mat-option
+                    matTooltip="Conservative: description of conservative strategy"
+                    value="conservative"
+                    >Conservative</mat-option
+                  >
                 </mat-select>
                 <mat-label
                   ><mat-icon>settings</mat-icon>&nbsp;Objective</mat-label
                 >
               </mat-form-field>
-              <mat-form-field appearance="fill" class="w-100" color="accent">
+              <mat-form-field
+                matTooltip="High Cost Per Install description"
+                appearance="fill"
+                class="w-100"
+                color="accent"
+              >
                 <mat-label
                   ><mat-icon>attach_money</mat-icon>&nbsp;High Cost Per
                   Install</mat-label
@@ -80,6 +98,7 @@
               <mat-form-field
                 appearance="fill"
                 class="w-100 workbench__accent-field mb-1"
+                matTooltip="Branch Objective: description of branch objective strategy"
               >
                 <mat-select formControlName="branchObjective">
                   <mat-option value="cost_per_purchase"
@@ -170,7 +189,11 @@
                 should receive daily performance summaries.
               </mat-card-subtitle>
 
-              <mat-form-field appearance="fill" class="w-100" color="accent">
+              <mat-form-field
+                appearance="fill"
+                class="w-100 workbench__accent-field"
+                color="accent"
+              >
                 <mat-label
                   ><mat-icon>settings</mat-icon>&nbsp;Reporting
                   Emails</mat-label
@@ -180,7 +203,7 @@
                   required
                   matInput
                   type="text"
-                  placeholder="Enter email addresses seperated by comma"
+                  placeholder="Add email addresses seperated by comma"
                 />
               </mat-form-field>
             </form>
