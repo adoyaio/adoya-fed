@@ -54,7 +54,7 @@ export class WorkbenchComponent implements OnInit {
       .setValidators([Validators.min(0.1), Validators.max(1000)]);
 
     this.branchForm
-      .get("branchObjective")
+      .get("cppThreshold")
       .setValidators([Validators.min(0.1), Validators.max(1000)]);
 
     this.branchForm
@@ -168,7 +168,11 @@ export class WorkbenchComponent implements OnInit {
   }
 
   onAppleSubmit() {
-    if (this.appleForm.valid) {
+    if (
+      this.preferencesForm.valid &&
+      this.appleForm.valid &&
+      this.branchForm.valid
+    ) {
       this.isLoadingResults = true;
 
       this.client.orgDetails.bidParameters.objective = this.appleForm.get(
@@ -216,7 +220,11 @@ export class WorkbenchComponent implements OnInit {
   }
 
   onPreferencesSubmit() {
-    if (this.preferencesForm.valid) {
+    if (
+      this.preferencesForm.valid &&
+      this.appleForm.valid &&
+      this.branchForm.valid
+    ) {
       this.isLoadingResults = true;
 
       this.client.orgDetails.emailAddresses = this.preferencesForm
