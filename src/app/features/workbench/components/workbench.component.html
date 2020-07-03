@@ -45,23 +45,23 @@
                 [hideRequiredMarker]="false"
                 class="w-100"
                 color="accent"
-                matTooltip="Description of objective."
+                matTooltip="Objective determines how aggressive our system will bid to your cost per install target. We recommend allowing for 7 days of performance before changing your objective. Mouse over options for more detailed information on each strategy."
               >
                 <mat-select required formControlName="objective">
                   <mat-option
-                    matTooltip="Standard: description of standard strategy"
+                    matTooltip="Standard: Finds a balance between growth and efficiency goals and is recommended for most advertisers."
                     value="standard"
                     >Standard</mat-option
                   >
                   <mat-option
-                    matTooltip="Agressive: description of agressive strategy"
+                    matTooltip="Growth: You’ll be more likely to spend your daily budget but could exceed your cost per install target."
                     value="agressive"
-                    >Agressive</mat-option
+                    >Growth</mat-option
                   >
                   <mat-option
-                    matTooltip="Conservative: description of conservative strategy"
+                    matTooltip="Efficiency: You’re more likely to stay within your cost per install target but you may not hit your daily budget."
                     value="conservative"
-                    >Conservative</mat-option
+                    >Efficiency</mat-option
                   >
                 </mat-select>
                 <mat-label
@@ -69,7 +69,7 @@
                 >
               </mat-form-field>
               <mat-form-field
-                matTooltip="High Cost Per Install description"
+                matTooltip="High Cost Per Install"
                 appearance="fill"
                 class="w-100"
                 color="accent"
@@ -98,14 +98,24 @@
               <mat-form-field
                 appearance="fill"
                 class="w-100 workbench__accent-field mb-1"
-                matTooltip="Branch Objective: description of branch objective strategy"
+                matTooltip="Branch Objective: Use this option if you want our system to also optimize for in-app purchases. This will be a secondary objective as our system optimizes primarily for cost per install. If you have Branch enabled, we strongly recommend you select either Cost Per Purchase or Return On Ad Spend (ROAS). Mouse over options for more detailed information on each strategy."
               >
                 <mat-select formControlName="branchObjective">
-                  <mat-option value="cost_per_purchase"
+                  <mat-option
+                    matTooltip="Cost Per Purchase: Use this option if you’re looking to acquire/retain paying customers and less focused on the revenue amount. This option works best if you’re taking a longer-term strategy with a focus on customer lifetime value (LTV)."
+                    value="cost_per_purchase"
                     >Cost Per Purchase</mat-option
                   >
-                  <mat-option value="agressive">Revenue/Cost</mat-option>
-                  <mat-option value="conservative">None</mat-option>
+                  <mat-option
+                    matTooltip="Return On Ad Spend (ROAS): Use this option if you’re looking to generate immediate revenue. ROAS is calculated by dividing revenue by cost."
+                    value="revenue_over_ad_spend"
+                    >Revenue/Cost</mat-option
+                  >
+                  <mat-option
+                    matTooltip="None: Use this option if you want our system to only optimize for installs. (Not recommended if you have Branch enabled.)"
+                    value="none"
+                    >None</mat-option
+                  >
                 </mat-select>
                 <mat-label
                   ><mat-icon>settings</mat-icon>&nbsp;Branch Optimization
@@ -125,6 +135,8 @@
                   matInput
                   type="number"
                   placeholder="Cost Per Purchase Threshold"
+                  matTooltip="Enter the most you’re willing to spend for a purchase. Be realistic. Setting a target too low will severely restrict your volume. Also, keep changes within +/- 20% of the previous value (if applicable). This prevents volatility. Also, try to allow for 7 days of performance before making adjustments.
+                  Important: This factors in mobile measurement partner (MMP) data. Apple limits data passed through MMPs due to their privacy policies. Therefore, MMP data is often understated. Sometimes by 20% or more. Factor in that 20% when using this option. For example, if your target cost per purchase is $10, give it a 20% buffer and set the target to $12."
                 />
               </mat-form-field>
               <mat-form-field
@@ -140,6 +152,8 @@
                   matInput
                   type="number"
                   placeholder="Revenue Over Ad Spend"
+                  matTooltip="Enter your target ROAS. ROAS formula = revenue / cost. Be realistic. Setting a target too high will severely restrict your volume. Also, keep changes within +/- 20% of the previous value (if applicable). This prevents volatility. Also, try to allow for 7 days of performance before making adjustments.
+                  Important: This factors in mobile measurement partner (MMP) data. Apple limits data passed through MMPs due to their privacy policies. Therefore, MMP data is often understated. Sometimes by 20% or more. Factor in that 20% when using this option. For example, if your target ROAS is $2.00, give it a 20% discount and set it to $1.60. Formula for ROAS discount = (100% - 20%) x ROAS target."
                 />
               </mat-form-field>
             </form>

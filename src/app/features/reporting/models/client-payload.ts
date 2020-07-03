@@ -180,9 +180,9 @@ export class OrgDetailsPayload {
   appName: string;
   pemFilename: string;
   orgId: number;
-  keyFileName: string;
+  keyFilename: string;
   emailAddresses: string[];
-  appId: string;
+  appID: string;
   currency: string;
   disabled: boolean;
   campaignIds: string[];
@@ -194,10 +194,9 @@ export class OrgDetailsPayload {
     retVal.campaignIds = response.campaignIds;
     retVal.disabled = response.disabled;
     retVal.currency = response.currency;
-    retVal.appId = response.appId;
+    retVal.appID = response.appID;
     retVal.emailAddresses = response.emailAddresses;
-    console.log("buildFromClient " + response.keyFilename);
-    retVal.keyFileName = response.keyFilename;
+    retVal.keyFilename = response.keyFilename;
     retVal.orgId = response.orgId;
     retVal.pemFilename = response.pemFilename;
     retVal.appName = response.appName;
@@ -232,7 +231,6 @@ export class ClientPayload {
   orgDetails: OrgDetailsPayload;
 
   static buildFromClient(client: Client): any {
-    console.log("build payload from client");
     const retVal = new ClientPayload();
     retVal.orgDetails = OrgDetailsPayload.buildFromClient(client.orgDetails);
     retVal.orgId = client.orgId;

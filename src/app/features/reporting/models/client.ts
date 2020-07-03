@@ -180,7 +180,7 @@ export class OrgDetails {
   orgId: number;
   keyFilename: string;
   emailAddresses: string[];
-  appId: string;
+  appID: string;
   currency: string;
   disabled: boolean;
   campaignIds: string[];
@@ -193,7 +193,7 @@ export class OrgDetails {
     retVal.campaignIds = response.campaignIds;
     retVal.disabled = response.disabled;
     retVal.currency = response.currency;
-    retVal.appId = response.appId;
+    retVal.appID = response.appID;
     retVal.emailAddresses = response.emailAddresses;
     console.log("buildFromResponse " + response.keyFilename);
     retVal.keyFilename = response.keyFilename;
