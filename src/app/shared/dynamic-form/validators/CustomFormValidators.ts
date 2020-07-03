@@ -185,6 +185,24 @@ export class CustomFormValidators {
     };
   }
 
+  // Validates email list
+  static emailListValidator(emailAddresses): any {
+    if (emailAddresses.pristine) {
+      return null;
+    }
+    if (!emailAddresses.value) {
+      return null;
+    }
+    const EMAIL_LIST_REGEXP = /\w+@\w+\.\w+(,\s*\w+@\w+\.\w+)*/;
+    emailAddresses.markAsTouched();
+    if (EMAIL_LIST_REGEXP.test(emailAddresses.value)) {
+      return null;
+    }
+    return {
+      invalidList: true,
+    };
+  }
+
   // Validates country code
   static countryCodeValidator(code): any {
     if (code.pristine) {

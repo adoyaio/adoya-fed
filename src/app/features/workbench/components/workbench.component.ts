@@ -40,6 +40,10 @@ export class WorkbenchComponent implements OnInit {
     revenueOverSpend: [""],
   });
 
+  preferencesForm = this.fb.group({
+    emailAddresses: [""],
+  });
+
   client: Client = new Client();
   isLoadingResults = true;
   orgId: string;
@@ -56,6 +60,10 @@ export class WorkbenchComponent implements OnInit {
     this.branchForm
       .get("revenueOverSpend")
       .setValidators([Validators.min(0.1), Validators.max(1000)]);
+
+    this.preferencesForm
+      .get("emailAddresses")
+      .setValidators([CustomFormValidators.emailListValidator]);
 
     // this.appleForm.get("objective").setValidators([Validators.required]);
 
@@ -100,18 +108,25 @@ export class WorkbenchComponent implements OnInit {
             .setValue(
               this.client.orgDetails.branchBidParameters.branchOptimizationGoal
             );
+
           this.branchForm
             .get("cppThreshold")
             .setValue(
               this.client.orgDetails.branchBidParameters
                 .costPerPurchaseThreshold
             );
+
           this.branchForm
             .get("revenueOverSpend")
             .setValue(
               this.client.orgDetails.branchBidParameters
                 .revenueOverAdSpendThreshold
             );
+
+          this.preferencesForm
+            .get("emailAddresses")
+            .setValue(this.client.orgDetails.emailAddresses);
+
           this.isLoadingResults = false;
           return data;
         }),
@@ -147,6 +162,9 @@ export class WorkbenchComponent implements OnInit {
       .setValue(
         this.client.orgDetails.branchBidParameters.revenueOverAdSpendThreshold
       );
+    this.preferencesForm
+      .get("emailAddresses")
+      .setValue(this.client.orgDetails.emailAddresses);
   }
 
   onAppleSubmit() {
@@ -174,6 +192,35 @@ export class WorkbenchComponent implements OnInit {
       ).value;
       this.client.orgDetails.branchBidParameters.revenueOverAdSpendThreshold = this.branchForm.get(
         "revenueOverSpend"
+      ).value;
+
+      this.clientService
+        .postClient(ClientPayload.buildFromClient(this.client))
+        .pipe(
+          tap((_) => {
+            this.isLoadingResults = true;
+          }),
+          map((data) => {
+            this.isLoadingResults = false;
+            return data;
+          }),
+          catchError(() => {
+            this.isLoadingResults = false;
+            return [];
+          })
+        )
+        .subscribe();
+    } else {
+      // snackbar
+    }
+  }
+
+  onPreferencesSubmit() {
+    if (this.preferencesForm.valid) {
+      this.isLoadingResults = true;
+
+      this.client.orgDetails.emailAddresses = this.preferencesForm.get(
+        "emailAddresses"
       ).value;
 
       this.clientService
