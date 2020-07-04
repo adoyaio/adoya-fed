@@ -51,19 +51,19 @@ export class NavLinkService implements OnDestroy {
       )
     );
 
-    this.navLinks.push(
-      LayoutNavLinks.build(
-        3,
-        "button",
-        "Notifications",
-        "/workbench/notifications",
-        "dynamic_feed",
-        undefined,
-        () => {
-          location.href = "/workbench/notifications";
-        }
-      )
-    );
+    // this.navLinks.push(
+    //   LayoutNavLinks.build(
+    //     3,
+    //     "button",
+    //     "Notifications",
+    //     "/workbench/notifications",
+    //     "dynamic_feed",
+    //     undefined,
+    //     () => {
+    //       location.href = "/workbench/notifications";
+    //     }
+    //   )
+    // );
 
     this.navLinks.push(
       LayoutNavLinks.build(
@@ -92,22 +92,6 @@ export class NavLinkService implements OnDestroy {
       )
     );
   }
-
-  // setActiveLink(link: LayoutNavLinks) {
-  //   if (this.activeLink && link) {
-  //     this.activeLink.isOpen = false;
-  //     link.setOpened();
-  //     this.activeLink = link;
-  //   } else if (!this.activeLink && link) {
-  //     link.setOpened();
-  //     this.activeLink = link;
-  //   } else if (this.activeLink && !link) {
-  //     this.activeLink.isOpen = false;
-  //     this.activeLink = undefined;
-  //   } else if (!this.activeLink && !link) {
-  //     this.activeLink = undefined;
-  //   }
-  // }
 
   setActiveLink(index: number) {
     this.activeLink = index;

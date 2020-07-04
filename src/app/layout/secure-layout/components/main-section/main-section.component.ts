@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { Title } from "@angular/platform-browser";
 import { AmplifyService } from "aws-amplify-angular";
 import { Router } from "@angular/router";
+import { UserAccountService } from "src/app/core/services/user-account.service";
 
 @Component({
   selector: "app-main-section",
@@ -18,7 +19,11 @@ export class MainSectionComponent implements OnInit {
   @Output()
   toggleDrawerCalled = new EventEmitter();
 
-  constructor(private titleService: Title, private router: Router) {}
+  constructor(
+    private titleService: Title,
+    private router: Router,
+    private userAccountService: UserAccountService
+  ) {}
 
   ngOnInit() {}
 
@@ -34,6 +39,7 @@ export class MainSectionComponent implements OnInit {
     this.router.navigateByUrl("/workbench/account");
   }
   onLogoutClicked() {
+    this.userAccountService.logout();
     this.router.navigateByUrl("/portal");
   }
 }

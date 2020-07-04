@@ -18,8 +18,6 @@ export class NavLinksComponent {
   @Output()
   navButtonClicked = new EventEmitter();
 
-  openPanel = 0;
-
   constructor(
     private navLinkService: NavLinkService,
     private amplifyService: AmplifyService,
@@ -35,37 +33,6 @@ export class NavLinksComponent {
   }
 
   usernameAttributes = "email";
-
-  setOpenPanel(index: number) {
-    this.openPanel = index;
-  }
-
-  getOpenPanel() {
-    return this.openPanel;
-  }
-
-  closePanel(panel: any) {
-    if (panel.expanded) {
-      this.openPanel = 0;
-    }
-  }
-
-  // subLinkSlideToggle(link: LayoutNavLinks, index: number) {
-  //   const isSame = this.navLinkService.isTheSameLink(link);
-  //   this.setOpenPanel(index);
-  //   if (link.isOpen && isSame) {
-  //     link.isOpen = false;
-  //     this.navLinkService.setActiveLink(undefined);
-  //   } else if (!link.isOpen && isSame) {
-  //     link.isOpen = true;
-  //     this.navLinkService.setActiveLink(link);
-  //   } else if (link.isOpen && !isSame) {
-  //     this.navLinkService.setActiveLink(link);
-  //   } else if (!link.isOpen && !isSame) {
-  //     link.isOpen = true;
-  //     this.navLinkService.setActiveLink(link);
-  //   }
-  // }
 
   getTooltipForSublink(link: LayoutNavLinks) {
     if (this.navLinkService.isTheSameLink(link)) {
