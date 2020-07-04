@@ -40,6 +40,15 @@ const routes: Routes = [
         // canActivate: [AuthGuard],
         data: { title: "Account" },
       },
+      {
+        path: "support",
+        loadChildren: () =>
+          import("../../features/support/support.module").then(
+            (m) => m.SupportModule
+          ),
+        // canActivate: [AuthGuard],
+        data: { title: "Support" },
+      },
     ],
   },
 ];
