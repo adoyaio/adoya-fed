@@ -7,8 +7,8 @@
     "config": {
       "SourceDir": "src",
       "DistributionDir": "dist/adoya-fed",
-      "BuildCommand": "npm run-script build",
-      "StartCommand": "ng serve"
+      "BuildCommand": "ng build --prod",
+      "StartCommand": "ng serve --prod"
     }
   },
   "providers": ["awscloudformation"]

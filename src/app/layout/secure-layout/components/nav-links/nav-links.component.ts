@@ -19,9 +19,9 @@ export class NavLinksComponent {
   navButtonClicked = new EventEmitter();
 
   constructor(
-    private navLinkService: NavLinkService,
-    private amplifyService: AmplifyService,
-    private router: Router
+    public navLinkService: NavLinkService,
+    public amplifyService: AmplifyService,
+    public router: Router
   ) {
     // this.amplifyService.authStateChange$.subscribe((authState) => {
     //   if (authState.state === "signedIn") {

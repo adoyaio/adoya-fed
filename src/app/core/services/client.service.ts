@@ -5,6 +5,7 @@ import { Observable } from "rxjs";
 import { CostPerInstallDayObject } from "src/app/features/reporting/models/cost-per-install-day-object";
 import { map, catchError } from "rxjs/operators";
 import { ClientPayload } from "src/app/features/reporting/models/client-payload";
+import { environment } from "src/environments/environment";
 
 @Injectable({
   providedIn: "root",
@@ -12,11 +13,21 @@ import { ClientPayload } from "src/app/features/reporting/models/client-payload"
 export class ClientService {
   constructor(private http: HttpClient) {}
 
-  clientHistoryUrl = `/api/client/history`;
-  clientUrl = `/api/client`;
+  baseUrl = environment.baseUrl;
+
+  clientHistoryUrl = this.baseUrl + `/client/history`;
+  clientGetUrl = this.baseUrl + `/client/get`;
+  clientPostUrl = this.baseUrl + `/client/post`;
+
+  // clientHistoryUrl = this.baseUrl + `/client/history`;
+  // clientUrl = this.baseUrl + `/client`;
+
+  // clientHistoryUrl = `/api/client/history`;
+  // clientUrl = `/api/client`;
 
   public postClient(client: ClientPayload): Observable<any> {
-    const url = `${this.clientUrl}`;
+    // const url = `${this.clientUrl}`;
+    const url = `${this.clientPostUrl}`;
     return this.http
       .post<any>(url, {
         operation: "create",
@@ -35,7 +46,7 @@ export class ClientService {
   }
 
   public getClient(orgId: string): Observable<Client[]> {
-    const url = `${this.clientUrl}?org_id=${orgId}`;
+    const url = `${this.clientGetUrl}?org_id=${orgId}`;
     return this.http.get<any>(url).pipe(
       map((response) => {
         console.log("getClient");
