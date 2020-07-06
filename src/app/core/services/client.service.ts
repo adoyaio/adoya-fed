@@ -1,6 +1,6 @@
 import { Client } from "./../../features/reporting/models/client";
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse, HttpHeaders } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { CostPerInstallDayObject } from "src/app/features/reporting/models/cost-per-install-day-object";
 import { map, catchError } from "rxjs/operators";
@@ -18,6 +18,7 @@ export class ClientService {
   clientHistoryUrl = this.baseUrl + `/client/history`;
   clientGetUrl = this.baseUrl + `/client/get`;
   clientPostUrl = this.baseUrl + `/client/post`;
+  authKey = "GerGRueNWE3qCkPG8GfPV649wyVnQEQN2oJQUpnI"
 
   // clientHistoryUrl = this.baseUrl + `/client/history`;
   // clientUrl = this.baseUrl + `/client`;
@@ -26,14 +27,15 @@ export class ClientService {
   // clientUrl = `/api/client`;
 
   public postClient(client: ClientPayload): Observable<any> {
-    // const url = `${this.clientUrl}`;
     const url = `${this.clientPostUrl}`;
+    const header = new HttpHeaders();
+    header.set("x-api-key", this.authKey)
     return this.http
       .post<any>(url, {
         operation: "create",
         tableName: "clients",
         payload: client,
-      })
+      }, {headers: header})
       .pipe(
         map((response) => {
           console.log("putClient");
@@ -47,7 +49,9 @@ export class ClientService {
 
   public getClient(orgId: string): Observable<Client[]> {
     const url = `${this.clientGetUrl}?org_id=${orgId}`;
-    return this.http.get<any>(url).pipe(
+    const header = new HttpHeaders();
+    header.set("x-api-key", this.authKey)
+    return this.http.get<any>(url, {headers: header}).pipe(
       map((response) => {
         console.log("getClient");
         return response[0];
@@ -63,7 +67,9 @@ export class ClientService {
     pageSize: number
   ): Observable<CostPerInstallDayObject[]> {
     const url = `${this.clientHistoryUrl}?org_id=${orgId}&total_recs=${pageSize}`;
-    return this.http.get<any>(url).pipe(
+    const header = new HttpHeaders();
+    header.set('x-api-key', this.authKey)
+    return this.http.get<any>(url,{headers: header}).pipe(
       map((response) => {
         console.log("getClientHistory");
         return response;
@@ -80,7 +86,9 @@ export class ClientService {
     endDate: string
   ): Observable<CostPerInstallDayObject[]> {
     const url = `${this.clientHistoryUrl}?org_id=${orgId}&start_date=${endDate}&end_date=${startDate}`;
-    return this.http.get<any>(url).pipe(
+    const header = new HttpHeaders();
+    header.set("x-api-key", this.authKey)
+    return this.http.get<any>(url, {headers: header}).pipe(
       map((response) => {
         console.log("getClientHistoryByTime");
         return response;
