@@ -33,11 +33,10 @@ export class ReportingComponent implements AfterViewInit, OnInit {
   cpiHistory: CostPerInstallDayObject[] = [];
   displayedColumns: string[] = [
     "timestamp",
-    "cpi",
-    "installs",
-    "revenue",
-    "commerce-events",
     "spend",
+    "installs",
+    "cpi",
+    "revenue",
   ];
   dataSource = new MatTableDataSource<CostPerInstallDayObject>(this.cpiHistory);
   resultsLength = 0;
@@ -62,37 +61,12 @@ export class ReportingComponent implements AfterViewInit, OnInit {
   ) {}
 
   ngOnInit() {
-    // let user: User = JSON.parse(
-    //   localStorage.getItem(
-    //     "CognitoIdentityServiceProvider.3cokktgqcs0o8oem003hotfjl7.9cde3279-ae17-44e5-b327-a0e4b2f0417e.userData"
-    //   )
-    // );
-    // user.userAttributes.forEach((attribute) => {
-    //   console.log(attribute.name);
-    //   console.log(attribute.value);
-    // });
-    // this.orgId = this.userAccountService.currentUserValue.UserAttributes.find(
-    //   (val) => {
-    //     return val.Name === "custom:org_id";
-    //   }
-    // ).Value;
-
-    // this.userAccountService.currentUserValue.UserAttributes.forEach((val) => {
-    //   console.log(val.Value);
-    //   console.log(val.Name);
-    // });
-
     // TODO messaging here
     this.orgId = this.userAccountService
       .getCurrentUser()
       .UserAttributes.find((val) => {
         return val.Name === "custom:org_id";
       }).Value;
-
-    // this.userAccountService.getCurrentUser().UserAttributes.forEach((val) => {
-    //   console.log(val.Value);
-    //   console.log(val.Name);
-    // });
   }
 
   ngAfterViewInit() {
@@ -235,7 +209,6 @@ export class ReportingComponent implements AfterViewInit, OnInit {
     const start: Date = this.startPickerInputControl.value;
     const end: Date = this.endPickerInputControl.value;
 
-    // TODO pull from token service
     this.clientService
       .getClientHistoryByTime(
         this.orgId,

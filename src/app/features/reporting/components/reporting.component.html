@@ -108,10 +108,8 @@
         [dataSource]="dataSource"
         matSort
         matSortActive="timestamp"
-        matSortDisableClear
         matSortDirection="desc"
       >
-        <!-- timestamp Column -->
         <ng-container matColumnDef="timestamp">
           <th mat-header-cell mat-sort-header *matHeaderCellDef>
             Timestamp
@@ -119,15 +117,13 @@
           <td mat-cell *matCellDef="let element">{{ element.timestamp }}</td>
         </ng-container>
 
-        <!-- cpi column -->
-        <ng-container matColumnDef="cpi">
+        <ng-container matColumnDef="spend">
           <th mat-header-cell mat-sort-header *matHeaderCellDef>
-            CPI
+            Cost
           </th>
-          <td mat-cell *matCellDef="let element">{{ element.cpi }}</td>
+          <td mat-cell *matCellDef="let element">{{ element.spend }}</td>
         </ng-container>
 
-        <!-- installs column -->
         <ng-container matColumnDef="installs">
           <th mat-header-cell mat-sort-header *matHeaderCellDef>
             Installs
@@ -135,29 +131,43 @@
           <td mat-cell *matCellDef="let element">{{ element.installs }}</td>
         </ng-container>
 
-        <!-- cpi column -->
-        <ng-container matColumnDef="revenue">
+        <ng-container matColumnDef="cpi">
           <th mat-header-cell mat-sort-header *matHeaderCellDef>
-            Revenue
+            Cost Per Install
           </th>
           <td mat-cell *matCellDef="let element">{{ element.cpi }}</td>
         </ng-container>
 
-        <!-- installs column -->
-        <ng-container matColumnDef="commerce-events">
+        <!-- <ng-container matColumnDef="purchases">
           <th mat-header-cell mat-sort-header *matHeaderCellDef>
-            Commerce Events
+            Purchases
           </th>
-          <td mat-cell *matCellDef="let element">{{ element.installs }}</td>
-        </ng-container>
+          <td mat-cell *matCellDef="let element">{{ element.purchases }}</td>
+        </ng-container> -->
 
-        <!-- spend Column -->
-        <ng-container matColumnDef="spend">
-          <th mat-header-cell mat-sort-header disableClear *matHeaderCellDef>
-            Spend
+        <ng-container matColumnDef="revenue">
+          <th mat-header-cell mat-sort-header *matHeaderCellDef>
+            Revenue
           </th>
-          <td mat-cell *matCellDef="let element">{{ element.spend }}</td>
+          <td mat-cell *matCellDef="let element">{{ element.revenue }}</td>
         </ng-container>
+        <!--
+        <ng-container matColumnDef="cpp">
+          <th mat-header-cell mat-sort-header *matHeaderCellDef>
+            Cost Per Purchase
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.cpp }}</td>
+        </ng-container> -->
+
+        <!-- <ng-container matColumnDef="revenueOverCost">
+          <th mat-header-cell mat-sort-header *matHeaderCellDef>
+            Revenue Over Cost
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.revenueOverCost }}
+          </td>
+        </ng-container> -->
+
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
