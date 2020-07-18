@@ -12,8 +12,10 @@ export class CostPerInstallDayObject {
   revenueOverCost: string;
 
   static buildFromGetHistoryResponse(response: any): CostPerInstallDayObject[] {
+    console.log("buildFromGetHistoryResponse");
     if (response) {
       return response.map((item) => {
+        console.log("buildFromGetHistoryResponse");
         const retVal = new CostPerInstallDayObject();
         retVal.cpi = item.cpi;
         retVal.installs = item.installs;
@@ -22,6 +24,9 @@ export class CostPerInstallDayObject {
         retVal.spend = item.spend;
         // branch data
         retVal.purchases = item.purchases;
+        console.log(
+          "buildFromGetHistoryResponse:::purchases" + retVal.purchases
+        );
         retVal.revenue = item.revenue;
         retVal.cpp = item.cpp;
         retVal.revenueOverCost = item.revenueOverCost;

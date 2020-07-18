@@ -36,7 +36,10 @@ export class ReportingComponent implements AfterViewInit, OnInit {
     "spend",
     "installs",
     "cpi",
+    "purchases",
     "revenue",
+    "cpp",
+    "revenueOverCost",
   ];
   dataSource = new MatTableDataSource<CostPerInstallDayObject>(this.cpiHistory);
   resultsLength = 0;
@@ -61,7 +64,7 @@ export class ReportingComponent implements AfterViewInit, OnInit {
   ) {}
 
   ngOnInit() {
-    // TODO messaging here
+    // TODO messaging here if no user
     this.orgId = this.userAccountService
       .getCurrentUser()
       .UserAttributes.find((val) => {

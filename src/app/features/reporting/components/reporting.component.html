@@ -138,12 +138,12 @@
           <td mat-cell *matCellDef="let element">{{ element.cpi }}</td>
         </ng-container>
 
-        <!-- <ng-container matColumnDef="purchases">
+        <ng-container matColumnDef="purchases">
           <th mat-header-cell mat-sort-header *matHeaderCellDef>
             Purchases
           </th>
           <td mat-cell *matCellDef="let element">{{ element.purchases }}</td>
-        </ng-container> -->
+        </ng-container>
 
         <ng-container matColumnDef="revenue">
           <th mat-header-cell mat-sort-header *matHeaderCellDef>
@@ -151,22 +151,22 @@
           </th>
           <td mat-cell *matCellDef="let element">{{ element.revenue }}</td>
         </ng-container>
-        <!--
+
         <ng-container matColumnDef="cpp">
           <th mat-header-cell mat-sort-header *matHeaderCellDef>
             Cost Per Purchase
           </th>
           <td mat-cell *matCellDef="let element">{{ element.cpp }}</td>
-        </ng-container> -->
+        </ng-container>
 
-        <!-- <ng-container matColumnDef="revenueOverCost">
+        <ng-container matColumnDef="revenueOverCost">
           <th mat-header-cell mat-sort-header *matHeaderCellDef>
             Revenue Over Cost
           </th>
           <td mat-cell *matCellDef="let element">
             {{ element.revenueOverCost }}
           </td>
-        </ng-container> -->
+        </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
@@ -262,71 +262,6 @@
         class="reporting__paginator"
       >
       </mat-paginator>
-
-      <table
-        mat-table
-        [dataSource]="dataSource"
-        matSort
-        matSortActive="timestamp"
-        matSortDisableClear
-        matSortDirection="desc"
-      >
-        <!-- timestamp Column -->
-        <ng-container matColumnDef="timestamp">
-          <th mat-header-cell mat-sort-header *matHeaderCellDef>
-            Timestamp
-          </th>
-          <td mat-cell *matCellDef="let element">{{ element.timestamp }}</td>
-        </ng-container>
-
-        <!-- cpi column -->
-        <ng-container matColumnDef="cpi">
-          <th mat-header-cell mat-sort-header *matHeaderCellDef>
-            CPI
-          </th>
-          <td mat-cell *matCellDef="let element">{{ element.cpi }}</td>
-        </ng-container>
-
-        <!-- installs column -->
-        <ng-container matColumnDef="installs">
-          <th mat-header-cell mat-sort-header *matHeaderCellDef>
-            Installs
-          </th>
-          <td mat-cell *matCellDef="let element">{{ element.installs }}</td>
-        </ng-container>
-
-        <!-- cpi column -->
-        <ng-container matColumnDef="revenue">
-          <th mat-header-cell mat-sort-header *matHeaderCellDef>
-            Revenue
-          </th>
-          <td mat-cell *matCellDef="let element">{{ element.cpi }}</td>
-        </ng-container>
-
-        <!-- installs column -->
-        <ng-container matColumnDef="commerce-events">
-          <th mat-header-cell mat-sort-header *matHeaderCellDef>
-            Commerce Events
-          </th>
-          <td mat-cell *matCellDef="let element">{{ element.installs }}</td>
-        </ng-container>
-
-        <!-- orgId Column -->
-        <!-- <ng-container matColumnDef="orgId">
-          <th mat-header-cell *matHeaderCellDef>Org Id</th>
-          <td mat-cell *matCellDef="let element">{{ element.orgId }}</td>
-        </ng-container> -->
-
-        <!-- spend Column -->
-        <ng-container matColumnDef="spend">
-          <th mat-header-cell mat-sort-header disableClear *matHeaderCellDef>
-            Spend
-          </th>
-          <td mat-cell *matCellDef="let element">{{ element.spend }}</td>
-        </ng-container>
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-      </table>
     </div>
     <!-- <div class="container px-2">
       <mat-chip-list class="mat-chip-list-stacked pt-2">
