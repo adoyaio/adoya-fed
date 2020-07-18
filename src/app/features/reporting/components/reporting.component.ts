@@ -101,18 +101,20 @@ export class ReportingComponent implements AfterViewInit, OnInit {
         delay(0),
         tap((val) => {
           this.cpiHistory.sort((a, b) => {
-            if (val.active === "cpi") {
+            if (val.active === "timestamp") {
               if (val.direction === "asc") {
-                return +a.cpi - +b.cpi;
+                return a.timestamp < b.timestamp ? -1 : 1;
               }
-              return +b.cpi - +a.cpi;
+              return a.timestamp > b.timestamp ? -1 : 1;
             }
+
             if (val.active === "spend") {
               if (val.direction === "asc") {
                 return +a.spend - +b.spend;
               }
               return +b.spend - +a.spend;
             }
+
             if (val.active === "installs") {
               if (val.direction === "asc") {
                 return +a.installs - +b.installs;
@@ -120,12 +122,39 @@ export class ReportingComponent implements AfterViewInit, OnInit {
               return +b.installs - +a.installs;
             }
 
-            if (val.active === "timestamp") {
+            if (val.active === "cpi") {
               if (val.direction === "asc") {
-                return a.timestamp < b.timestamp ? -1 : 1;
+                return +a.cpi - +b.cpi;
               }
+              return +b.cpi - +a.cpi;
+            }
 
-              return a.timestamp > b.timestamp ? -1 : 1;
+            if (val.active === "purchases") {
+              if (val.direction === "asc") {
+                return a.purchases < b.purchases ? -1 : 1;
+              }
+              return a.purchases > b.purchases ? -1 : 1;
+            }
+
+            if (val.active === "revenue") {
+              if (val.direction === "asc") {
+                return a.revenue < b.revenue ? -1 : 1;
+              }
+              return a.revenue > b.revenue ? -1 : 1;
+            }
+
+            if (val.active === "cpp") {
+              if (val.direction === "asc") {
+                return a.cpp < b.cpp ? -1 : 1;
+              }
+              return a.cpp > b.cpp ? -1 : 1;
+            }
+
+            if (val.active === "revenueOverCost") {
+              if (val.direction === "asc") {
+                return a.revenueOverCost < b.revenueOverCost ? -1 : 1;
+              }
+              return a.revenueOverCost > b.revenueOverCost ? -1 : 1;
             }
           });
           this.dataSource.data = this.cpiHistory;
