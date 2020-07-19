@@ -32,8 +32,8 @@ export class ClientService {
 
   public postClient(client: ClientPayload): Observable<any> {
     const url = `${this.clientPostUrl}`;
-    const header = new HttpHeaders();
-    header.set("x-api-key", this.authKey);
+    let headers = new HttpHeaders();
+    headers = headers.set("x-api-key", this.authKey);
     return this.http
       .post<any>(
         url,
@@ -42,7 +42,7 @@ export class ClientService {
           tableName: "clients",
           payload: client,
         },
-        { headers: header }
+        { headers: headers }
       )
       .pipe(
         map((response) => {
@@ -57,13 +57,12 @@ export class ClientService {
 
   public getClient(orgId: string): Observable<Client[]> {
     const url = `${this.clientGetUrl}?org_id=${orgId}`;
-    const header = new HttpHeaders();
-    header.set("x-api-key", this.authKey);
+    let headers = new HttpHeaders();
+    headers = headers.set("x-api-key", this.authKey);
     return this.http
-      .get<any>(url, { headers: header })
+      .get<any>(url, { headers: headers })
       .pipe(
         map((response) => {
-          console.log("getClient");
           return response[0];
         }),
         catchError((error: HttpErrorResponse) => {
@@ -77,14 +76,12 @@ export class ClientService {
     pageSize: number
   ): Observable<CostPerInstallDayObject[]> {
     const url = `${this.clientHistoryUrl}?org_id=${orgId}&total_recs=${pageSize}`;
-    const header = new HttpHeaders();
-    header.set("x-api-key", this.authKey);
+    let headers = new HttpHeaders();
+    headers = headers.set("x-api-key", this.authKey);
     return this.http
-      .get<any>(url, { headers: header })
+      .get<any>(url, { headers: headers })
       .pipe(
         map((response) => {
-          console.log("getClientHistory");
-          // return response;
           return CostPerInstallDayObject.buildFromGetHistoryResponse(response);
         }),
         catchError((error: HttpErrorResponse) => {
@@ -99,18 +96,15 @@ export class ClientService {
     endDate: string
   ): Observable<CostPerInstallDayObject[]> {
     const url = `${this.clientHistoryUrl}?org_id=${orgId}&start_date=${endDate}&end_date=${startDate}`;
-    const header = new HttpHeaders();
-    header.set("x-api-key", this.authKey);
-    return this.http
-      .get<any>(url, { headers: header })
-      .pipe(
-        map((response) => {
-          console.log("getClientHistoryByTime");
-          return response;
-        }),
-        catchError((error: HttpErrorResponse) => {
-          throw new Error(error.message);
-        })
-      );
+    let headers = new HttpHeaders();
+    headers = headers.set("x-api-key", this.authKey);
+    return this.http.get<any>(url).pipe(
+      map((response) => {
+        return response; //TODO???
+      }),
+      catchError((error: HttpErrorResponse) => {
+        throw new Error(error.message);
+      })
+    );
   }
 }
