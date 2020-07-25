@@ -15,7 +15,7 @@ export class BranchBidParameters {
 
   static buildFromResponse(response: any) {
     const retVal = new BranchBidParameters();
-    console.log("buildFromResponse" + response);
+
     retVal.branchBidAdjustment = response.branch_bid_adjustment;
     retVal.branchOptimizationGoal = response.branch_optimization_goal;
     retVal.minAppleInstalls = response.min_apple_installs;
@@ -29,7 +29,6 @@ export class BranchBidParameters {
       response.cost_per_purchase_threshold_buffer;
     retVal.objective = response.objective;
 
-    console.log(retVal.branchOptimizationGoal);
     return retVal;
   }
 }
@@ -187,13 +186,12 @@ export class OrgDetails {
   campaignName: string;
 
   static buildFromResponse(response: any) {
-    console.log("orgdetails " + response);
     const retVal = new OrgDetails();
     retVal.campaignName = response.campaignName;
     retVal.campaignIds = response.campaignIds;
     retVal.disabled = response.disabled;
     retVal.currency = response.currency;
-    console.log("buildFromResponse " + response.appID);
+
     retVal.appID = response.appID;
     retVal.emailAddresses = response.emailAddresses;
 

@@ -23,6 +23,7 @@ import {
 } from "rxjs/operators";
 import { combineLatest } from "rxjs";
 import { UserAccountService } from "src/app/core/services/user-account.service";
+import { AppService } from "src/app/core/services/app.service";
 
 @Component({
   selector: "app-reporting",
@@ -60,7 +61,8 @@ export class ReportingComponent implements AfterViewInit, OnInit {
   constructor(
     private clientService: ClientService,
     private fb: FormBuilder,
-    private userAccountService: UserAccountService
+    private userAccountService: UserAccountService,
+    private appService: AppService
   ) {}
 
   ngOnInit() {
@@ -161,45 +163,6 @@ export class ReportingComponent implements AfterViewInit, OnInit {
         })
       )
       .subscribe();
-
-    // this.dataSource
-    //   .connect()
-    //   .pipe(
-    //     map((data) => {
-    //       console.log("found data of length" + data.length);
-    //     })
-    //   )
-    //   .subscribe();
-
-    // this.listSizeControl.valueChanges
-    //   .pipe(
-    //     startWith(365),
-    //     switchMap((val) => {
-    //       this.isLoadingResults = true;
-    //       // return this.exampleDatabase!.getRepoIssues(
-    //       //   this.sort.active, this.sort.direction, this.paginator.pageIndex);
-    //       console.log(this.sort.direction);
-    //       console.log(this.paginator.pageIndex);
-
-    //       return this.clientService.getClientHistory("1056410", val);
-    //     }),
-    //     map((data) => {
-    //       // Flip flag to show that loading has finished.
-    //       this.isLoadingResults = false;
-    //       this.cpiHistory = CostPerInstallDayObject.buildFromGetHistoryResponse(
-    //         data
-    //       );
-    //       this.dataSource.data = this.cpiHistory;
-    //       this.paginator.length = this.cpiHistory.length;
-    //       return data;
-    //     }),
-
-    //     catchError(() => {
-    //       this.isLoadingResults = false;
-    //       return [];
-    //     })
-    //   )
-    //   .subscribe();
   }
 
   resetDateForms() {
@@ -273,7 +236,10 @@ export class ReportingComponent implements AfterViewInit, OnInit {
     return true;
   }
 
-  // TODO remove
+  download() {
+    this.appService.downloadFile(this.dataSource.data, "data");
+  }
+
   // addEvent(type: string, event: MatDatepickerInputEvent<Date>) {
   //   const date: Date = event.value;
   //   date.setSeconds(0);
@@ -296,6 +262,15 @@ export class ReportingComponent implements AfterViewInit, OnInit {
   //     )
   //     .subscribe();
   //   this.dataSource.paginator = this.paginator;
+
+  // this.dataSource
+  //   .connect()
+  //   .pipe(
+  //     map((data) => {
+  //       console.log("found data of length" + data.length);
+  //     })
+  //   )
+  //   .subscribe();
   // }
 
   // setupDataModel() {
