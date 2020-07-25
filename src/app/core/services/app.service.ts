@@ -15,10 +15,6 @@ export class AppService {
       "cpp",
       "revenueOverCost",
     ]);
-    // console.log(csvData);
-    // let blob = new Blob(["\ufeff" + csvData], {
-    //   type: "text/csv;charset=utf-8;",
-    // });
     let blob = new Blob([csvData], {
       type: "text/csv;charset=utf-8;",
     });
@@ -28,7 +24,7 @@ export class AppService {
       navigator.userAgent.indexOf("Safari") != -1 &&
       navigator.userAgent.indexOf("Chrome") == -1;
     if (isSafariBrowser) {
-      //if Safari open in new window to save file with random filename.
+      // if Safari open in new window to save file with random filename.
       dwldLink.setAttribute("target", "_blank");
     }
     dwldLink.setAttribute("href", url);
