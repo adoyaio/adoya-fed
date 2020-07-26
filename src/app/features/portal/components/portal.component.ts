@@ -2,8 +2,6 @@ import { Component, OnInit } from "@angular/core";
 import { AmplifyService } from "aws-amplify-angular";
 import { Router } from "@angular/router";
 import { tap } from "rxjs/operators";
-import { UserAccount } from "src/app/shared/models/user-account";
-import { UserAccountService } from "src/app/core/services/user-account.service";
 
 @Component({
   selector: "app-portal",
@@ -11,41 +9,12 @@ import { UserAccountService } from "src/app/core/services/user-account.service";
   styleUrls: ["./portal.component.scss"],
 })
 export class PortalComponent implements OnInit {
-  constructor(
-    private amplifyService: AmplifyService,
-    private router: Router,
-    private userAccountService: UserAccountService
-  ) {
-    // this.amplifyService.authStateChange$.subscribe((authState) => {
-    //   if (authState.state === "signedIn") {
-    //     this.signedIn = authState.state === "signedIn";
-    //     if (!authState.user) {
-    //       this.user = null;
-    //     } else {
-    //       this.user = authState.user;
-    //       console.log(this.userAccountService.getCurrentUser().userName);
-    //       // this.greeting = this.user.username;
-    //     }
-    //     this.router.navigateByUrl("/workbench/reporting");
-    //   } else {
-    //     this.router.navigateByUrl("/portal");
-    //   }
-    // });
-
+  constructor(private amplifyService: AmplifyService, private router: Router) {
     this.amplifyService.authStateChange$
       .pipe(
         tap((authState) => {
           if (authState.state === "signedIn") {
-            this.signedIn = authState.state === "signedIn";
-            if (!authState.user) {
-              this.user = null;
-            } else {
-              this.user = authState.user;
-              const user: UserAccount = this.userAccountService.getCurrentUser();
-              this.userAccountService.setCurrentUser(user);
-              // this.greeting = this.user.username;
-            }
-            this.router.navigateByUrl("/workbench/reporting");
+            this.router.navigateByUrl("/workbench");
           } else {
             this.router.navigateByUrl("/portal");
           }
@@ -53,7 +22,6 @@ export class PortalComponent implements OnInit {
       )
       .subscribe();
   }
-  signedIn: boolean;
   user: any;
   greeting: string;
   usernameAttributes = "email";

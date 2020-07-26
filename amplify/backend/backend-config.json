@@ -1,21 +1,37 @@
 {
 	"auth": {
-		"adoyafedae42c0e9": {
+		"workbench758f09f9": {
 			"service": "Cognito",
 			"providerPlugin": "awscloudformation",
 			"dependsOn": [],
 			"customAuth": false
-		}
-	},
-	"storage": {
-		"s36e1fb62b": {
-			"service": "S3",
-			"providerPlugin": "awscloudformation"
+		},
+		"userPoolGroups": {
+			"service": "Cognito-UserPool-Groups",
+			"providerPlugin": "awscloudformation",
+			"dependsOn": [
+				{
+					"category": "auth",
+					"resourceName": "workbench758f09f9",
+					"attributes": [
+						"UserPoolId",
+						"AppClientIDWeb",
+						"AppClientID",
+						"IdentityPoolId"
+					]
+				}
+			]
 		}
 	},
 	"hosting": {
 		"S3AndCloudFront": {
 			"service": "S3AndCloudFront",
+			"providerPlugin": "awscloudformation"
+		}
+	},
+	"storage": {
+		"s35841d024": {
+			"service": "S3",
 			"providerPlugin": "awscloudformation"
 		}
 	}

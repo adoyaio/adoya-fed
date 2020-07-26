@@ -66,7 +66,6 @@ export class ReportingComponent implements AfterViewInit, OnInit {
   ) {}
 
   ngOnInit() {
-    // TODO messaging here if no user
     this.orgId = this.userAccountService
       .getCurrentUser()
       .UserAttributes.find((val) => {
