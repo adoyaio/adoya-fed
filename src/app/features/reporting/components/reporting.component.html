@@ -174,16 +174,6 @@
     </div>
     <div class="mat-elevation-z8 mt-2 reporting-component__table-container">
       <div class="d-flex justify-content-start">
-        <!-- <mat-form-field class="mr-4">
-          <mat-label>List length</mat-label>
-          <input
-            matInput
-            [formControl]="listSizeControl"
-            (blur)="listSizeChanged($event)"
-            type="number"
-          />
-        </mat-form-field> -->
-
         <mat-form-field class="mr-4">
           <mat-label>start date</mat-label>
           <input matInput [disabled]="true" />
@@ -222,7 +212,7 @@
           </button>
         </div>
 
-        <div>
+        <!-- <div>
           <button
             mat-icon-button
             class="reporting__buttons ml-2"
@@ -231,7 +221,7 @@
             <mat-icon class="ml-1" aria-label="download">show_chart</mat-icon>
             visualization
           </button>
-        </div>
+        </div> -->
 
         <div>
           <button
@@ -239,9 +229,7 @@
             class="reporting__buttons ml-2"
             mat-icon-button
           >
-            <mat-icon class="ml-1" aria-label="download"
-              >cloud_download</mat-icon
-            >
+            <mat-icon class="ml-1" aria-label="download">save_alt</mat-icon>
             csv download
           </button>
         </div>
@@ -274,12 +262,4 @@
       </mat-chip-list>
     </div> -->
   </mat-tab>
-  <!-- <mat-tab>
-    <ng-template mat-tab-label>
-      <mat-icon>dynamic_feed</mat-icon
-      ><span class="ml-2">Data Visualization</span>
-    </ng-template>
-    <h1>Data Visualization</h1>
-    <p>...</p>
-  </mat-tab> -->
 </mat-tab-group>

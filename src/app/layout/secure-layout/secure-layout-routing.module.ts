@@ -2,6 +2,10 @@ import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { AuthGuard } from "src/app/core/guards/auth.guard";
 import { SecureLayoutComponent } from "./components/secure-layout.component";
+import { WorkbenchComponent } from "src/app/features/workbench/components/workbench.component";
+import { ReportingComponent } from "src/app/features/reporting/components/reporting.component";
+import { AccountComponent } from "src/app/features/account/components/account.component";
+import { SupportComponent } from "src/app/features/support/components/support.component";
 
 const routes: Routes = [
   {
@@ -15,37 +19,41 @@ const routes: Routes = [
       },
       {
         path: "dashboard",
-        loadChildren: () =>
-          import("../../features/workbench/workbench.module").then(
-            (m) => m.WorkbenchModule
-          ),
+        component: WorkbenchComponent,
+        // loadChildren: () =>
+        //   import("../../features/workbench/workbench.module").then(
+        //     (m) => m.WorkbenchModule
+        //   ),
         // canActivate: [AuthGuard],
         data: { title: "Dashboard" },
       },
       {
         path: "reporting",
-        loadChildren: () =>
-          import("../../features/reporting/reporting.module").then(
-            (m) => m.ReportingModule
-          ),
+        component: ReportingComponent,
+        // loadChildren: () =>
+        //   import("../../features/reporting/reporting.module").then(
+        //     (m) => m.ReportingModule
+        //   ),
         // canActivate: [AuthGuard],
         data: { title: "Reporting" },
       },
       {
         path: "account",
-        loadChildren: () =>
-          import("../../features/account/account.module").then(
-            (m) => m.AccountModule
-          ),
+        component: AccountComponent,
+        // loadChildren: () =>
+        //   import("../../features/account/account.module").then(
+        //     (m) => m.AccountModule
+        //   ),
         // canActivate: [AuthGuard],
         data: { title: "Account" },
       },
       {
         path: "support",
-        loadChildren: () =>
-          import("../../features/support/support.module").then(
-            (m) => m.SupportModule
-          ),
+        component: SupportComponent,
+        // loadChildren: () =>
+        //   import("../../features/support/support.module").then(
+        //     (m) => m.SupportModule
+        //   ),
         // canActivate: [AuthGuard],
         data: { title: "Support" },
       },

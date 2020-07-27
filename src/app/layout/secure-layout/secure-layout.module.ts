@@ -8,6 +8,10 @@ import { MaterialModule } from "../../shared/material-design/material.module";
 import { SecureLayoutRoutingModule } from "./secure-layout-routing.module";
 import { SecureLayoutComponent } from "./components/secure-layout.component";
 import { AmplifyAngularModule } from "aws-amplify-angular";
+import { WorkbenchModule } from "src/app/features/workbench/workbench.module";
+import { ReportingModule } from "src/app/features/reporting/reporting.module";
+import { AccountModule } from "src/app/features/account/account.module";
+import { SupportModule } from "src/app/features/support/support.module";
 
 @NgModule({
   declarations: [
@@ -21,6 +25,10 @@ import { AmplifyAngularModule } from "aws-amplify-angular";
     SecureLayoutRoutingModule,
     MaterialModule,
     AmplifyAngularModule,
+    WorkbenchModule,
+    ReportingModule,
+    AccountModule,
+    SupportModule,
   ],
 })
 export class SecureLayoutModule {}

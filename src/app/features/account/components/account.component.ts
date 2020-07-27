@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { AmplifyService } from "aws-amplify-angular";
 import { FormBuilder } from "@angular/forms";
 import { UserAccountService } from "src/app/core/services/user-account.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-account",
@@ -12,7 +13,8 @@ export class AccountComponent implements OnInit {
   constructor(
     private amplifyService: AmplifyService,
     private fb: FormBuilder,
-    private userAccountService: UserAccountService
+    private userAccountService: UserAccountService,
+    private router: Router
   ) {}
 
   accountForm = this.fb.group({
@@ -54,5 +56,10 @@ export class AccountComponent implements OnInit {
       }).Value;
 
     this.accountForm.get("email").setValue(email);
+  }
+
+  onSupportClick() {
+    console.log("onsupport");
+    this.router.navigateByUrl("/workbench/support");
   }
 }

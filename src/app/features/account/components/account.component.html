@@ -8,15 +8,12 @@
 
         <mat-card-subtitle class="pb-1">
           User account information is confidential and encrypted at all times.
-          Privacy and security are taken VERY seriously at Adoya and user
+          Privacy and security are of utmost importance at Adoya and user
           account data is never shared. For changes please contact
-          <span class="primary">Adoya support</span>.
+          <span (click)="onSupportClick()" class="primary clickable"
+            >Adoya support</span
+          >.
         </mat-card-subtitle>
-
-        <!-- <mat-card-subtitle class="pb-1">
-          Privacy and security are taken VERY seriously at Adoya and user
-          account data is never shared.
-        </mat-card-subtitle> -->
 
         <form [formGroup]="accountForm">
           <div class="w-100">
@@ -58,30 +55,7 @@
             </mat-form-field>
           </div>
         </form>
-        <!--
-        <mat-card-subtitle class="pb-1">
-          For changes please contact
-          <span class="primary">Adoya support</span>.
-        </mat-card-subtitle> -->
       </div>
-
-      <!-- <div class="example-container w-100">
-        <mat-card-subtitle class="pb-1">
-          Settings Group 2
-        </mat-card-subtitle>
-
-        <form>
-          <mat-form-field appearance="fill" color="accent" class="w-100">
-            <mat-label>Both a label and a placeholder</mat-label>
-            <input matInput placeholder="Simple placeholder" required />
-          </mat-form-field>
-
-          <mat-form-field appearance="fill" color="accent" class="w-100">
-            <mat-label>Both a label and a placeholder</mat-label>
-            <input matInput placeholder="Simple placeholder" />
-          </mat-form-field>
-        </form>
-      </div> -->
     </mat-card-content>
   </mat-card>
 </div>
