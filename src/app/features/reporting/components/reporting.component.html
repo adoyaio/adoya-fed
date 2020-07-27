@@ -3,7 +3,7 @@
   <mat-tab>
     <ng-template mat-tab-label>
       <mat-icon>leaderboard</mat-icon>
-      <span class="ml-2">Cost Per Install History</span>
+      <span class="ml-2">Aggregate Performance</span>
     </ng-template>
     <div class="reporting__loading-shade" *ngIf="isLoadingResults">
       <mat-spinner color="accent" *ngIf="isLoadingResults"></mat-spinner>
@@ -63,7 +63,7 @@
           </button>
         </div>
 
-        <div>
+        <!-- <div>
           <button
             mat-icon-button
             class="reporting__buttons ml-1"
@@ -72,7 +72,7 @@
             <mat-icon class="ml-2" aria-label="download">show_chart</mat-icon>
             visualization
           </button>
-        </div>
+        </div> -->
 
         <div>
           <button
@@ -152,7 +152,7 @@
 
         <ng-container matColumnDef="revenueOverCost">
           <th mat-header-cell mat-sort-header *matHeaderCellDef>
-            Revenue Over Cost
+            Return On Ad Spend
           </th>
           <td mat-cell *matCellDef="let element">
             {{ element.revenueOverCost }}

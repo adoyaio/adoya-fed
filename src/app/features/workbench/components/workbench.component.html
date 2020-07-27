@@ -82,7 +82,8 @@
                   required
                   matInput
                   type="number"
-                  placeholder="High CPI"
+                  placeholder="Maximum Cost Per
+                  Install"
                 />
               </mat-form-field>
             </form>
@@ -125,14 +126,14 @@
                 class="w-100 workbench__accent-field mb-1"
               >
                 <mat-label
-                  ><mat-icon>attach_money</mat-icon>&nbsp;Cost Per Purchase
-                  Threshold</mat-label
+                  ><mat-icon>attach_money</mat-icon>&nbsp;Target Cost Per
+                  Purchase</mat-label
                 >
                 <input
                   formControlName="cppThreshold"
                   matInput
                   type="number"
-                  placeholder="Cost Per Purchase Threshold"
+                  placeholder="Target Cost Per Purchase"
                   matTooltip="Enter the most you’re willing to spend for a purchase. Be realistic. Setting a target too low will severely restrict your volume. Also, keep changes within +/- 20% of the previous value (if applicable). This prevents volatility. Also, try to allow for 7 days of performance before making adjustments.
                   Important: This factors in mobile measurement partner (MMP) data. Apple limits data passed through MMPs due to their privacy policies. Therefore, MMP data is often understated. Sometimes by 20% or more. Factor in that 20% when using this option. For example, if your target cost per purchase is $10, give it a 20% buffer and set the target to $12."
                 />
@@ -142,14 +143,14 @@
                 class="w-100 workbench__accent-field mb-1"
               >
                 <mat-label
-                  ><mat-icon>attach_money</mat-icon>&nbsp;Revenue Over Ad
+                  ><mat-icon>attach_money</mat-icon>&nbsp;Return On Ad
                   Spend</mat-label
                 >
                 <input
                   formControlName="revenueOverSpend"
                   matInput
                   type="number"
-                  placeholder="Revenue Over Ad Spend"
+                  placeholder="Return On Ad Spend"
                   matTooltip="Enter your target ROAS. ROAS formula = revenue / cost. Be realistic. Setting a target too high will severely restrict your volume. Also, keep changes within +/- 20% of the previous value (if applicable). This prevents volatility. Also, try to allow for 7 days of performance before making adjustments.
                   Important: This factors in mobile measurement partner (MMP) data. Apple limits data passed through MMPs due to their privacy policies. Therefore, MMP data is often understated. Sometimes by 20% or more. Factor in that 20% when using this option. For example, if your target ROAS is $2.00, give it a 20% discount and set it to $1.60. Formula for ROAS discount = (100% - 20%) x ROAS target."
                 />

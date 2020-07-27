@@ -27,10 +27,6 @@ export class AuthGuard implements CanActivate {
     state: RouterStateSnapshot
   ): Observable<boolean> | Promise<boolean> | boolean {
     let signedIn = false;
-    //console.log("authGuard:::" + this.userAccountService.getSignedInState());
-    // return this.userAccountService.signedIn;
-    // return this.userAccountService.getSignedInState();
-
     //   return this.amplifyService.authState().pipe(
     //     map((authState: AuthState) => {
     //       console.log("canUpdate " + authState.user);
@@ -48,25 +44,6 @@ export class AuthGuard implements CanActivate {
     //   this.router.navigateByUrl("/portal");
     //   return false;
     // }
-
-    // return this.userAccountService.currentUser$.pipe(
-    //   filter((user) => user !== undefined),
-    //   map((user) => {
-    //     console.log("canActivate");
-    //     if (user) {
-    //       console.log("canActivate:::found user" + user.Username);
-    //       signedIn = true;
-    //       //if(window.location.href)
-    //       //this.router.navigate["/workbench"];
-    //     } else {
-    //       console.log("canActivate:::no user");
-    //       signedIn = false;
-    //       this.router.navigateByUrl("/portal");
-    //     }
-    //     return signedIn;
-    //   })
-    // );
-    // return true;
 
     if (
       this.userAccountService.getCurrentUser() === undefined ||
