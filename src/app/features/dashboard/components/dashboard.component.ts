@@ -17,11 +17,11 @@ import { EMPTY } from "rxjs";
 import { ClientPayload } from "../../reporting/models/client-payload";
 
 @Component({
-  selector: "app-workbench",
-  templateUrl: "./workbench.component.html",
-  styleUrls: ["./workbench.component.scss"],
+  selector: "app-dashboard",
+  templateUrl: "./dashboard.component.html",
+  styleUrls: ["./dashboard.component.scss"],
 })
-export class WorkbenchComponent implements OnInit {
+export class DashboardComponent implements OnInit {
   constructor(
     private amplifyService: AmplifyService,
     private router: Router,

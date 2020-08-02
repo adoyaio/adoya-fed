@@ -1,16 +1,16 @@
-import { WorkbenchComponent } from "./components/workbench.component";
+import { DashboardComponent } from "./components/dashboard.component";
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 
 const routes: Routes = [
   {
     path: "",
-    component: WorkbenchComponent
-  }
+    component: DashboardComponent,
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class WorkbenchRoutingModule {}
+export class DashboardRoutingModule {}

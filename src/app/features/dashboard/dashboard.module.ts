@@ -1,20 +1,19 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 
-import { WorkbenchRoutingModule } from "./workbench-routing.module";
-import { WorkbenchComponent } from "./components/workbench.component";
-
 import { AmplifyAngularModule, AmplifyService } from "aws-amplify-angular";
 import { MaterialModule } from "src/app/shared/material-design/material.module";
 import { DynamicFormModule } from "src/app/shared/dynamic-form/dynamic-form.module";
+import { DashboardRoutingModule } from "./dashboard-routing.module";
+import { DashboardComponent } from "./components/dashboard.component";
 
 @NgModule({
-  declarations: [WorkbenchComponent],
+  declarations: [DashboardComponent],
   imports: [
     CommonModule,
-    WorkbenchRoutingModule,
+    DashboardRoutingModule,
     MaterialModule,
     DynamicFormModule,
   ],
 })
-export class WorkbenchModule {}
+export class DashboardModule {}

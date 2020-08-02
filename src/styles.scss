@@ -281,6 +281,12 @@ $altTheme: mat-dark-theme($theme-primary, $theme-accent, $theme-warn);
 }
 
 // Specific component overrides, pieces that are not in line with the general theming
+.adoya-link {
+  font-style: normal;
+  color: #708d53;
+  text-decoration: none !important;
+  cursor: pointer;
+}
 
 // Handle buttons appropriately, with respect to line-height
 .mat-raised-button,
