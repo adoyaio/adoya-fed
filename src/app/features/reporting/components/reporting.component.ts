@@ -24,6 +24,7 @@ import {
 import { combineLatest } from "rxjs";
 import { UserAccountService } from "src/app/core/services/user-account.service";
 import { AppService } from "src/app/core/services/app.service";
+import { KeywordDayObject } from "../models/keyword-day-object";
 
 @Component({
   selector: "app-reporting",
@@ -32,6 +33,7 @@ import { AppService } from "src/app/core/services/app.service";
 })
 export class ReportingComponent implements AfterViewInit, OnInit {
   cpiHistory: CostPerInstallDayObject[] = [];
+  keywordHistory: KeywordDayObject[] = [];
   displayedColumns: string[] = [
     "timestamp",
     "spend",
@@ -42,9 +44,28 @@ export class ReportingComponent implements AfterViewInit, OnInit {
     "cpp",
     "revenueOverCost",
   ];
+
+  displayedKeywordColumns: string[] = [
+    "date",
+    "keyword_id",
+    "keyword",
+    "matchType",
+    "keywordDisplayStatus",
+    "bid",
+    "local_spend",
+    "installs",
+    "avg_cpa",
+  ];
   dataSource = new MatTableDataSource<CostPerInstallDayObject>(this.cpiHistory);
   resultsLength = 0;
   length = 365;
+
+  keywordDataSource = new MatTableDataSource<KeywordDayObject>(
+    this.keywordHistory
+  );
+  keywordResultsLength = 0;
+  keywordLength = 1000;
+
   isLoadingResults = true;
   orgId: string;
 
@@ -79,15 +100,33 @@ export class ReportingComponent implements AfterViewInit, OnInit {
     this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
 
     this.clientService
-      .getClientHistory(this.orgId, 1000)
+      .getClientCostHistory(this.orgId, 1000)
       .pipe(
         map((data) => {
-          this.isLoadingResults = false;
+          // this.isLoadingResults = false;
           this.cpiHistory = CostPerInstallDayObject.buildFromGetHistoryResponse(
             data
           );
           this.dataSource.data = this.cpiHistory;
           this.paginator.length = this.cpiHistory.length;
+          return data;
+        }),
+        catchError(() => {
+          this.isLoadingResults = false;
+          return [];
+        })
+      )
+      .subscribe();
+
+    // keyword history load
+    this.clientService
+      .getClientKeywordHistory(this.orgId, 10000)
+      .pipe(
+        map((data) => {
+          this.isLoadingResults = false;
+          this.keywordHistory = data;
+          this.keywordDataSource.data = this.keywordHistory;
+          // this.paginator.length = this.cpiHistory.length;
           return data;
         }),
         catchError(() => {
@@ -175,7 +214,7 @@ export class ReportingComponent implements AfterViewInit, OnInit {
     this.sort._stateChanges.next();
 
     this.clientService
-      .getClientHistory(this.orgId, 1000)
+      .getClientCostHistory(this.orgId, 1000)
       .pipe(
         map((data) => {
           this.cpiHistory = CostPerInstallDayObject.buildFromGetHistoryResponse(

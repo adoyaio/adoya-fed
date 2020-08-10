@@ -10,6 +10,7 @@ import { CostPerInstallDayObject } from "src/app/features/reporting/models/cost-
 import { map, catchError } from "rxjs/operators";
 import { ClientPayload } from "src/app/features/reporting/models/client-payload";
 import { environment } from "src/environments/environment";
+import { KeywordDayObject } from "src/app/features/reporting/models/keyword-day-object";
 
 @Injectable({
   providedIn: "root",
@@ -19,16 +20,12 @@ export class ClientService {
 
   baseUrl = environment.baseUrl;
 
-  clientHistoryUrl = this.baseUrl + `/client/history`;
+  clientCostHistoryUrl = this.baseUrl + `/client/cost/history`;
+  clientKeywordHistoryUrl = this.baseUrl + `/client/keyword/history`;
   clientGetUrl = this.baseUrl + `/client/get`;
   clientPostUrl = this.baseUrl + `/client/post`;
+  clientAdminUrl = this.baseUrl + `/client/admin`;
   authKey = "GerGRueNWE3qCkPG8GfPV649wyVnQEQN2oJQUpnI";
-
-  // clientHistoryUrl = this.baseUrl + `/client/history`;
-  // clientUrl = this.baseUrl + `/client`;
-
-  // clientHistoryUrl = `/api/client/history`;
-  // clientUrl = `/api/client`;
 
   public postClient(client: ClientPayload): Observable<any> {
     const url = `${this.clientPostUrl}`;
@@ -71,11 +68,11 @@ export class ClientService {
       );
   }
 
-  public getClientHistory(
+  public getClientCostHistory(
     orgId: string,
     pageSize: number
   ): Observable<CostPerInstallDayObject[]> {
-    const url = `${this.clientHistoryUrl}?org_id=${orgId}&total_recs=${pageSize}`;
+    const url = `${this.clientCostHistoryUrl}?org_id=${orgId}&total_recs=${pageSize}`;
     let headers = new HttpHeaders();
     headers = headers.set("x-api-key", this.authKey);
     return this.http
@@ -90,12 +87,51 @@ export class ClientService {
       );
   }
 
+  public getClientCostHistoryByTime(
+    orgId: string,
+    startDate: string,
+    endDate: string
+  ): Observable<CostPerInstallDayObject[]> {
+    const url = `${this.clientCostHistoryUrl}?org_id=${orgId}&start_date=${endDate}&end_date=${startDate}`;
+    let headers = new HttpHeaders();
+    headers = headers.set("x-api-key", this.authKey);
+    return this.http
+      .get<any>(url, { headers: headers })
+      .pipe(
+        map((response) => {
+          return CostPerInstallDayObject.buildFromGetHistoryResponse(response);
+        }),
+        catchError((error: HttpErrorResponse) => {
+          throw new Error(error.message);
+        })
+      );
+  }
+
+  public getClientKeywordHistory(
+    orgId: string,
+    pageSize: number
+  ): Observable<KeywordDayObject[]> {
+    const url = `${this.clientKeywordHistoryUrl}?org_id=${orgId}&total_recs=${pageSize}`;
+    let headers = new HttpHeaders();
+    headers = headers.set("x-api-key", this.authKey);
+    return this.http
+      .get<any>(url, { headers: headers })
+      .pipe(
+        map((response) => {
+          return response;
+        }),
+        catchError((error: HttpErrorResponse) => {
+          throw new Error(error.message);
+        })
+      );
+  }
+
   public getClientHistoryByTime(
     orgId: string,
     startDate: string,
     endDate: string
   ): Observable<CostPerInstallDayObject[]> {
-    const url = `${this.clientHistoryUrl}?org_id=${orgId}&start_date=${endDate}&end_date=${startDate}`;
+    const url = `${this.clientCostHistoryUrl}?org_id=${orgId}&start_date=${endDate}&end_date=${startDate}`;
     let headers = new HttpHeaders();
     headers = headers.set("x-api-key", this.authKey);
     return this.http
