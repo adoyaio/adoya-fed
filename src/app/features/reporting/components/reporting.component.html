@@ -236,7 +236,8 @@
       </div>
 
       <mat-paginator
-        [pageSizeOptions]="[25, 50, 100, 365]"
+        #keywordsPaginator
+        [pageSizeOptions]="[100, 250, 500, 1000, 10000]"
         showFirstLastButtons
         class="reporting__paginator"
       >

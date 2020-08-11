@@ -11,6 +11,7 @@ import { map, catchError } from "rxjs/operators";
 import { ClientPayload } from "src/app/features/reporting/models/client-payload";
 import { environment } from "src/environments/environment";
 import { KeywordDayObject } from "src/app/features/reporting/models/keyword-day-object";
+import { OffsetObject } from "src/app/features/reporting/models/offset-object";
 
 @Injectable({
   providedIn: "root",
@@ -109,9 +110,10 @@ export class ClientService {
 
   public getClientKeywordHistory(
     orgId: string,
-    pageSize: number
-  ): Observable<KeywordDayObject[]> {
-    const url = `${this.clientKeywordHistoryUrl}?org_id=${orgId}&total_recs=${pageSize}`;
+    pageSize: number,
+    offsetIndex: string
+  ): Observable<[KeywordDayObject[], OffsetObject, number]> {
+    const url = `${this.clientKeywordHistoryUrl}?org_id=${orgId}&total_recs=${pageSize}&offset=${offsetIndex}`;
     let headers = new HttpHeaders();
     headers = headers.set("x-api-key", this.authKey);
     return this.http

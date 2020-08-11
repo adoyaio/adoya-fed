@@ -65,11 +65,14 @@ export class ReportingComponent implements AfterViewInit, OnInit {
   );
   keywordResultsLength = 0;
   keywordLength = 1000;
+  keywordOffsetKey = undefined;
 
   isLoadingResults = true;
   orgId: string;
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild("keywordsPaginator", { static: true })
+  keywordsPaginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatDatepicker, { static: false }) endpicker: MatDatepicker<number>;
   @ViewChild(MatDatepicker, { static: false }) startpicker: MatDatepicker<
@@ -120,13 +123,24 @@ export class ReportingComponent implements AfterViewInit, OnInit {
 
     // keyword history load
     this.clientService
-      .getClientKeywordHistory(this.orgId, 10000)
+      .getClientKeywordHistory(
+        this.orgId,
+        this.keywordsPaginator.pageSize,
+        "init"
+      )
       .pipe(
         map((data) => {
           this.isLoadingResults = false;
-          this.keywordHistory = data;
+          this.keywordHistory = data["history"];
+          this.keywordOffsetKey =
+            String(data["offset"]["date"]) +
+            "|" +
+            String(data["offset"]["keyword_id"]) +
+            "|" +
+            String(data["offset"]["org_id"]);
           this.keywordDataSource.data = this.keywordHistory;
-          // this.paginator.length = this.cpiHistory.length;
+          this.keywordsPaginator.length = data["count"];
+
           return data;
         }),
         catchError(() => {
@@ -198,6 +212,43 @@ export class ReportingComponent implements AfterViewInit, OnInit {
             }
           });
           this.dataSource.data = this.cpiHistory;
+        })
+      )
+      .subscribe();
+
+    this.keywordsPaginator.page
+      .pipe(
+        delay(0),
+        tap((val) => {
+          this.isLoadingResults = true;
+        }),
+        switchMap((val) => {
+          return this.clientService
+            .getClientKeywordHistory(
+              this.orgId,
+              this.keywordsPaginator.pageSize,
+              this.keywordOffsetKey
+            )
+            .pipe(
+              map((data) => {
+                this.isLoadingResults = false;
+                this.keywordHistory = data["history"];
+                this.keywordOffsetKey =
+                  String(data["offset"]["date"]) +
+                  "|" +
+                  String(data["offset"]["keyword_id"]) +
+                  "|" +
+                  String(data["offset"]["org_id"]);
+                this.keywordDataSource.data = this.keywordHistory;
+                this.keywordsPaginator.length = data["count"];
+
+                return data;
+              }),
+              catchError(() => {
+                this.isLoadingResults = false;
+                return [];
+              })
+            );
         })
       )
       .subscribe();
