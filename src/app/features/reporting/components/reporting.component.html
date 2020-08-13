@@ -76,7 +76,7 @@
 
         <div>
           <button
-            (click)="download()"
+            (click)="downloadAggregateCsv()"
             mat-icon-button
             class="reporting__buttons ml-2"
             mat-icon-button
@@ -204,7 +204,7 @@
           <button
             mat-icon-button
             class="reporting__buttons"
-            (click)="resetDateForms()"
+            (click)="resetKeywordFilters()"
             mat-icon-button
           >
             <mat-icon aria-label="clear">clear</mat-icon>
@@ -225,6 +225,7 @@
 
         <div>
           <button
+            (click)="downloadKeywordsCsv()"
             mat-icon-button
             class="reporting__buttons ml-2"
             mat-icon-button
@@ -246,12 +247,12 @@
         mat-table
         [dataSource]="keywordDataSource"
         matSort
-        matSortActive="timestamp"
+        matSortActive="date"
         matSortDirection="desc"
       >
         <ng-container matColumnDef="date">
           <th mat-header-cell mat-sort-header *matHeaderCellDef>
-            Timestamp
+            Date
           </th>
           <td mat-cell *matCellDef="let element">{{ element.date }}</td>
         </ng-container>
@@ -279,25 +280,16 @@
 
         <ng-container matColumnDef="keywordDisplayStatus">
           <th mat-header-cell mat-sort-header *matHeaderCellDef>
-            Keyword Status
+            Status
           </th>
           <td mat-cell *matCellDef="let element">
             {{ element.keywordDisplayStatus }}
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="bid">
-          <th mat-header-cell mat-sort-header *matHeaderCellDef>
-            Bid
-          </th>
-          <td mat-cell *matCellDef="let element">
-            {{ element.bid }}
-          </td>
-        </ng-container>
-
         <ng-container matColumnDef="local_spend">
           <th mat-header-cell mat-sort-header *matHeaderCellDef>
-            Local Spend
+            Cost
           </th>
           <td mat-cell *matCellDef="let element">
             {{ element.local_spend }}
@@ -315,7 +307,7 @@
 
         <ng-container matColumnDef="avg_cpa">
           <th mat-header-cell mat-sort-header *matHeaderCellDef>
-            AVG CPA
+            Cost Per Install
           </th>
           <td mat-cell *matCellDef="let element">
             {{ element.avg_cpa }}

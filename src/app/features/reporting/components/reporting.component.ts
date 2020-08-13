@@ -42,7 +42,6 @@ export class ReportingComponent implements AfterViewInit, OnInit {
     "keyword",
     "matchType",
     "keywordDisplayStatus",
-    "bid",
     "local_spend",
     "installs",
     "avg_cpa",
@@ -257,6 +256,39 @@ export class ReportingComponent implements AfterViewInit, OnInit {
       .subscribe();
   }
 
+  resetKeywordFilters() {
+    // this.keywordsPaginator.pageIndex = 0;
+    // this.keywordsPaginator.pageSize = 100;
+    // this.keywordOffsetKeys = ["init|init|init"];
+    // this.clientService
+    //   .getClientKeywordHistory(
+    //     this.orgId,
+    //     this.keywordsPaginator.pageSize,
+    //     this.keywordOffsetKeys[this.keywordsPaginator.pageIndex]
+    //   )
+    //   .pipe(
+    //     map((data) => {
+    //       this.isLoadingResults = false;
+    //       this.keywordHistory = data["history"];
+    //       this.keywordOffsetKeys.push(
+    //         String(data["offset"]["org_id"]) +
+    //           "|" +
+    //           String(data["offset"]["keyword_id"]) +
+    //           "|" +
+    //           String(data["offset"]["date"])
+    //       );
+    //       this.keywordDataSource.data = this.keywordHistory;
+    //       this.keywordsPaginator.length = data["count"];
+    //       return data;
+    //     }),
+    //     catchError(() => {
+    //       this.isLoadingResults = false;
+    //       return [];
+    //     })
+    //   )
+    //   .subscribe();
+  }
+
   resetDateForms() {
     this.isLoadingResults = true;
     this.endPickerInputControl.reset();
@@ -297,7 +329,7 @@ export class ReportingComponent implements AfterViewInit, OnInit {
     const end: Date = this.endPickerInputControl.value;
 
     this.clientService
-      .getClientHistoryByTime(
+      .getClientCostHistoryByTime(
         this.orgId,
         start.toISOString().split("T")[0],
         end.toISOString().split("T")[0]
@@ -328,8 +360,12 @@ export class ReportingComponent implements AfterViewInit, OnInit {
     return true;
   }
 
-  download() {
-    this.appService.downloadFile(this.dataSource.data, "data");
+  downloadAggregateCsv() {
+    this.appService.downloadAggregateFile(this.dataSource.data, "aggregate");
+  }
+
+  downloadKeywordsCsv() {
+    this.appService.downloadKeywordFile(this.keywordDataSource.data, "keyword");
   }
 
   // addEvent(type: string, event: MatDatepickerInputEvent<Date>) {
