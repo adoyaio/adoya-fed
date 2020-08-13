@@ -111,10 +111,15 @@ export class ClientService {
   public getClientKeywordHistory(
     orgId: string,
     pageSize: number,
-    offsetIndex: string
+    offsetKey: string
   ): Observable<[KeywordDayObject[], OffsetObject, number]> {
-    const url = `${this.clientKeywordHistoryUrl}?org_id=${orgId}&total_recs=${pageSize}&offset=${offsetIndex}`;
+    let offsetIndexComposite = offsetKey.split("|");
+    const offsetOrgId = offsetIndexComposite[0];
+    const offsetKeywordId = offsetIndexComposite[1];
+    const offsetDate = offsetIndexComposite[2];
+    const url = `${this.clientKeywordHistoryUrl}?org_id=${orgId}&total_recs=${pageSize}&offsetOrgId=${offsetOrgId}&offsetKeywordId=${offsetKeywordId}&offsetDate=${offsetDate}`;
     let headers = new HttpHeaders();
+
     headers = headers.set("x-api-key", this.authKey);
     return this.http
       .get<any>(url, { headers: headers })

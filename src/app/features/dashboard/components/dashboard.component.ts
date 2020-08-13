@@ -15,6 +15,7 @@ import { Client } from "../../reporting/models/client";
 import { CustomFormValidators } from "src/app/shared/dynamic-form/validators/CustomFormValidators";
 import { EMPTY } from "rxjs";
 import { ClientPayload } from "../../reporting/models/client-payload";
+import { MatSnackBar } from "@angular/material";
 
 @Component({
   selector: "app-dashboard",
@@ -27,7 +28,8 @@ export class DashboardComponent implements OnInit {
     private router: Router,
     private fb: FormBuilder,
     private userAccountService: UserAccountService,
-    private clientService: ClientService
+    private clientService: ClientService,
+    private snackBar: MatSnackBar
   ) {}
 
   appleForm = this.fb.group({
@@ -46,6 +48,7 @@ export class DashboardComponent implements OnInit {
 
   client: Client = new Client();
   isLoadingResults = true;
+  isSendingResults;
   orgId: string;
 
   ngOnInit() {
@@ -138,6 +141,13 @@ export class DashboardComponent implements OnInit {
       .subscribe();
   }
 
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 8000,
+      panelClass: "standard",
+    });
+  }
+
   onResetForm() {
     this.appleForm
       .get("objective")
@@ -173,7 +183,7 @@ export class DashboardComponent implements OnInit {
       this.appleForm.valid &&
       this.branchForm.valid
     ) {
-      this.isLoadingResults = true;
+      this.isSendingResults = true;
 
       this.client.orgDetails.bidParameters.objective = this.appleForm.get(
         "objective"
@@ -202,20 +212,28 @@ export class DashboardComponent implements OnInit {
         .postClient(ClientPayload.buildFromClient(this.client))
         .pipe(
           tap((_) => {
-            this.isLoadingResults = true;
+            this.isSendingResults = true;
           }),
           map((data) => {
-            this.isLoadingResults = false;
+            this.isSendingResults = false;
+            this.openSnackBar("we've updated your settings", "");
             return data;
           }),
           catchError(() => {
-            this.isLoadingResults = false;
+            this.isSendingResults = false;
+            this.openSnackBar(
+              "we were unable to process changes to your preferences or settings at this time",
+              ""
+            );
             return [];
           })
         )
         .subscribe();
     } else {
-      // snackbar
+      this.openSnackBar(
+        "please double check the preferences and settings, something appears to be invalid",
+        ""
+      );
     }
   }
 
@@ -225,30 +243,46 @@ export class DashboardComponent implements OnInit {
       this.appleForm.valid &&
       this.branchForm.valid
     ) {
-      this.isLoadingResults = true;
+      this.isSendingResults = true;
 
-      this.client.orgDetails.emailAddresses = this.preferencesForm
-        .get("emailAddresses")
-        .value.split(",");
+      if (
+        String(this.preferencesForm.get("emailAddresses").value).includes(",")
+      ) {
+        this.client.orgDetails.emailAddresses = String(
+          this.preferencesForm.get("emailAddresses").value
+        ).split(",");
+      } else {
+        this.client.orgDetails.emailAddresses = [
+          this.preferencesForm.get("emailAddresses").value,
+        ];
+      }
 
       this.clientService
         .postClient(ClientPayload.buildFromClient(this.client))
         .pipe(
           tap((_) => {
-            this.isLoadingResults = true;
+            this.isSendingResults = true;
           }),
           map((data) => {
-            this.isLoadingResults = false;
+            this.isSendingResults = false;
+            this.openSnackBar("we've updated your preferences", "");
             return data;
           }),
           catchError(() => {
-            this.isLoadingResults = false;
+            this.isSendingResults = false;
+            this.openSnackBar(
+              "we were unable to process changes to your preferences or settings at this time",
+              "!"
+            );
             return [];
           })
         )
         .subscribe();
     } else {
-      // snackbar
+      this.openSnackBar(
+        "please double check preferences and settings, something appears to be invalid",
+        "!"
+      );
     }
   }
 }

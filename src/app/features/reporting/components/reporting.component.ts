@@ -11,16 +11,7 @@ import {
   MatDatepickerInput,
   MatDatepicker,
 } from "@angular/material";
-import {
-  tap,
-  merge,
-  startWith,
-  switchMap,
-  map,
-  catchError,
-  combineAll,
-  delay,
-} from "rxjs/operators";
+import { tap, switchMap, map, catchError, delay } from "rxjs/operators";
 import { combineLatest } from "rxjs";
 import { UserAccountService } from "src/app/core/services/user-account.service";
 import { AppService } from "src/app/core/services/app.service";
@@ -63,10 +54,8 @@ export class ReportingComponent implements AfterViewInit, OnInit {
   keywordDataSource = new MatTableDataSource<KeywordDayObject>(
     this.keywordHistory
   );
-  keywordResultsLength = 0;
-  keywordLength = 1000;
-  keywordOffsetKey = undefined;
 
+  keywordOffsetKeys: string[] = ["init|init|init"]; // hack for dynamo paging by key
   isLoadingResults = true;
   orgId: string;
 
@@ -126,21 +115,21 @@ export class ReportingComponent implements AfterViewInit, OnInit {
       .getClientKeywordHistory(
         this.orgId,
         this.keywordsPaginator.pageSize,
-        "init"
+        this.keywordOffsetKeys[this.keywordsPaginator.pageIndex]
       )
       .pipe(
         map((data) => {
           this.isLoadingResults = false;
           this.keywordHistory = data["history"];
-          this.keywordOffsetKey =
-            String(data["offset"]["date"]) +
-            "|" +
-            String(data["offset"]["keyword_id"]) +
-            "|" +
-            String(data["offset"]["org_id"]);
+          this.keywordOffsetKeys.push(
+            String(data["offset"]["org_id"]) +
+              "|" +
+              String(data["offset"]["keyword_id"]) +
+              "|" +
+              String(data["offset"]["date"])
+          );
           this.keywordDataSource.data = this.keywordHistory;
           this.keywordsPaginator.length = data["count"];
-
           return data;
         }),
         catchError(() => {
@@ -223,25 +212,39 @@ export class ReportingComponent implements AfterViewInit, OnInit {
           this.isLoadingResults = true;
         }),
         switchMap((val) => {
+          let keywordOffsetKey = this.keywordOffsetKeys[val.pageIndex];
           return this.clientService
             .getClientKeywordHistory(
               this.orgId,
               this.keywordsPaginator.pageSize,
-              this.keywordOffsetKey
+              keywordOffsetKey
             )
             .pipe(
               map((data) => {
                 this.isLoadingResults = false;
                 this.keywordHistory = data["history"];
-                this.keywordOffsetKey =
-                  String(data["offset"]["date"]) +
-                  "|" +
-                  String(data["offset"]["keyword_id"]) +
-                  "|" +
-                  String(data["offset"]["org_id"]);
+
+                //
+                if (val.pageIndex > val.previousPageIndex) {
+                  this.keywordOffsetKeys.push(
+                    String(data["offset"]["org_id"]) +
+                      "|" +
+                      String(data["offset"]["keyword_id"]) +
+                      "|" +
+                      String(data["offset"]["date"])
+                  );
+                } else if (val.pageIndex == val.previousPageIndex) {
+                  this.keywordOffsetKeys = ["init|init|init"];
+                  this.keywordOffsetKeys.push(
+                    String(data["offset"]["org_id"]) +
+                      "|" +
+                      String(data["offset"]["keyword_id"]) +
+                      "|" +
+                      String(data["offset"]["date"])
+                  );
+                }
                 this.keywordDataSource.data = this.keywordHistory;
                 this.keywordsPaginator.length = data["count"];
-
                 return data;
               }),
               catchError(() => {
