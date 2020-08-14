@@ -57,6 +57,8 @@ export class ReportingComponent implements AfterViewInit, OnInit {
   keywordOffsetKeys: string[] = ["init|init|init"]; // hack for dynamo paging by key
   isLoadingResults = true;
   orgId: string;
+  isAggregateDataVisMode = false;
+  isKeywordDataVisMode = false;
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild("keywordsPaginator", { static: true })
@@ -254,6 +256,14 @@ export class ReportingComponent implements AfterViewInit, OnInit {
         })
       )
       .subscribe();
+  }
+
+  showAggregateDataView() {
+    this.isAggregateDataVisMode = true;
+  }
+
+  showAggregateTableView() {
+    this.isAggregateDataVisMode = false;
   }
 
   resetKeywordFilters() {

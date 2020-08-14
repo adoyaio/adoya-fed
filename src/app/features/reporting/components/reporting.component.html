@@ -9,7 +9,7 @@
       <mat-spinner color="accent" *ngIf="isLoadingResults"></mat-spinner>
     </div>
     <div class="mat-elevation-z8 mt-2 reporting-component__table-container">
-      <div class="d-flex justify-content-start">
+      <div class="d-flex justify-content-start col-12 flex-wrap">
         <mat-form-field class="mr-4">
           <mat-label>start date</mat-label>
           <input
@@ -63,17 +63,6 @@
           </button>
         </div>
 
-        <!-- <div>
-          <button
-            mat-icon-button
-            class="reporting__buttons ml-1"
-            mat-icon-button
-          >
-            <mat-icon class="ml-2" aria-label="download">show_chart</mat-icon>
-            visualization
-          </button>
-        </div> -->
-
         <div>
           <button
             (click)="downloadAggregateCsv()"
@@ -85,9 +74,40 @@
             csv download
           </button>
         </div>
+
+        <div>
+          <button
+            mat-icon-button
+            class="reporting__buttons"
+            (click)="showAggregateDataView()"
+            *ngIf="!isAggregateDataVisMode"
+            mat-icon-button
+          >
+            <mat-icon class="ml-2" aria-label="download">show_chart</mat-icon>
+            visualization
+          </button>
+
+          <button
+            mat-icon-button
+            class="reporting__buttons"
+            (click)="showAggregateTableView()"
+            *ngIf="isAggregateDataVisMode"
+            mat-icon-button
+          >
+            <mat-icon class="ml-2" aria-label="download">table_view</mat-icon>
+            table
+          </button>
+        </div>
       </div>
 
+      <!-- data view -->
+      <div *ngIf="isAggregateDataVisMode">
+        chart here
+      </div>
+
+      <!-- normal view -->
       <mat-paginator
+        *ngIf="!isAggregateDataVisMode"
         [pageSizeOptions]="[25, 50, 100, 365]"
         showFirstLastButtons
         class="reporting__paginator"
@@ -95,6 +115,7 @@
       </mat-paginator>
 
       <table
+        *ngIf="!isAggregateDataVisMode"
         mat-table
         [dataSource]="dataSource"
         matSort
