@@ -2,9 +2,15 @@ import { Component, OnInit, Input } from "@angular/core";
 import { ChartDataSets, ChartOptions, ChartType } from "chart.js";
 import { Color, Label } from "ng2-charts";
 import { CostPerInstallDayObject } from "../../models/cost-per-install-day-object";
-import { chain as _chain, includes as _includes, each as _each } from "lodash";
+import {
+  chain as _chain,
+  includes as _includes,
+  each as _each,
+  map as _map,
+} from "lodash";
 import { ReportingService } from "../../reporting.service";
 import { tap } from "rxjs/internal/operators/tap";
+import { combineLatest } from "rxjs";
 
 @Component({
   selector: "app-line-chart",
@@ -12,8 +18,6 @@ import { tap } from "rxjs/internal/operators/tap";
   styleUrls: ["./line-chart.component.css"],
 })
 export class LineChartComponent implements OnInit {
-  @Input() dataSource: CostPerInstallDayObject[];
-
   public lineChartData: ChartDataSets[] = [];
   public lineChartLabels: Label[] = [];
   public lineChartOptions: ChartOptions = {
@@ -32,11 +36,17 @@ export class LineChartComponent implements OnInit {
   constructor(private reportingService: ReportingService) {}
 
   ngOnInit() {
-    this.reportingService.costPerInstallDayObject$
+    combineLatest([
+      this.reportingService.costPerInstallDayObject$,
+      this.reportingService.activeLineChartLabel$,
+    ])
       .pipe(
-        tap((data) => {
+        tap(([data, labels]) => {
+          // init chart
           this.lineChartData = [];
           this.lineChartLabels = [];
+
+          //init data lines - build these dynamically
           const cpiDataLine = { data: [], label: "Cost Per Install" };
           const installsDataLine = { data: [], label: "Installs" };
           const spendDataLine = { data: [], label: "Spend" };
@@ -45,8 +55,10 @@ export class LineChartComponent implements OnInit {
           const revenueDataLine = { data: [], label: "Revenue" };
           const revenueOverCostDataLine = {
             data: [],
-            label: "Revenue Over Cost",
+            label: "Return On Ad Spend",
           };
+
+          // build datalines
           _each(data, (cpiObject) => {
             this.lineChartLabels.push(cpiObject.timestamp);
             cpiDataLine.data.push(cpiObject.cpi);
@@ -57,13 +69,31 @@ export class LineChartComponent implements OnInit {
             revenueDataLine.data.push(cpiObject.revenue);
             revenueOverCostDataLine.data.push(cpiObject.revenueOverCost);
           });
-          this.lineChartData.push(cpiDataLine);
-          this.lineChartData.push(installsDataLine);
-          this.lineChartData.push(spendDataLine);
-          this.lineChartData.push(purchasesDataLine);
-          this.lineChartData.push(cppDataLine);
-          this.lineChartData.push(revenueDataLine);
-          this.lineChartData.push(revenueOverCostDataLine);
+
+          _each(
+            [
+              cpiDataLine,
+              installsDataLine,
+              spendDataLine,
+              purchasesDataLine,
+              cppDataLine,
+              revenueDataLine,
+              revenueOverCostDataLine,
+            ],
+            (dataline) => {
+              if (
+                _chain(labels)
+                  .find((label) => {
+                    return label.name === dataline.label;
+                  })
+                  .get("state")
+                  .value() === true
+              ) {
+                this.lineChartData.push(dataline);
+                this.lineChartLabels.push(dataline.label);
+              }
+            }
+          );
         })
       )
       .subscribe();

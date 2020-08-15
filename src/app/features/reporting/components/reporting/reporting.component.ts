@@ -10,14 +10,25 @@ import {
   MatDatepickerInputEvent,
   MatDatepickerInput,
   MatDatepicker,
+  MatChipList,
+  MatChipSelectionChange,
 } from "@angular/material";
 import { tap, switchMap, map, catchError, delay } from "rxjs/operators";
-import { combineLatest } from "rxjs";
+import { combineLatest, Observable, of } from "rxjs";
 import { UserAccountService } from "src/app/core/services/user-account.service";
 import { AppService } from "src/app/core/services/app.service";
 import { KeywordDayObject } from "../../models/keyword-day-object";
 import { LineChartComponent } from "../line-chart/line-chart.component";
 import { ReportingService } from "../../reporting.service";
+import {
+  chain as _chain,
+  includes as _includes,
+  each as _each,
+  map as _map,
+  clone as _clone,
+  cloneDeep as _cloneDeep,
+} from "lodash";
+import { state } from "@angular/animations";
 
 @Component({
   selector: "app-reporting",
@@ -66,10 +77,12 @@ export class ReportingComponent implements AfterViewInit, OnInit {
   @ViewChild("keywordsPaginator", { static: true })
   keywordsPaginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
-  @ViewChild(MatDatepicker, { static: false }) endpicker: MatDatepicker<number>;
-  @ViewChild(MatDatepicker, { static: false }) startpicker: MatDatepicker<
-    number
-  >;
+  // @ViewChild(MatDatepicker, { static: false }) endpicker: MatDatepicker<number>;
+  // @ViewChild(MatDatepicker, { static: false }) startpicker: MatDatepicker<
+  //   number
+  // >;
+  @ViewChild(MatChipList, { static: false })
+  lineChartLabelChipList: MatChipList;
 
   startPickerInputControl: FormControl = this.fb.control("");
   endPickerInputControl: FormControl = this.fb.control("");
@@ -79,7 +92,7 @@ export class ReportingComponent implements AfterViewInit, OnInit {
     private fb: FormBuilder,
     private userAccountService: UserAccountService,
     private appService: AppService,
-    private reportingService: ReportingService
+    public reportingService: ReportingService
   ) {}
 
   ngOnInit() {
@@ -260,6 +273,22 @@ export class ReportingComponent implements AfterViewInit, OnInit {
         })
       )
       .subscribe();
+  }
+
+  onChipClicked(updated) {
+    console.log("updated" + updated.name);
+    const updatedLineChartLabel = _cloneDeep(
+      this.reportingService.activeLineChartLabel$.getValue()
+    );
+
+    _chain(updatedLineChartLabel)
+      .find((label) => {
+        return label.name === updated.name;
+      })
+      .set("state", !updated.state)
+      .value();
+
+    this.reportingService.activeLineChartLabel$.next(updatedLineChartLabel);
   }
 
   showAggregateDataView() {
