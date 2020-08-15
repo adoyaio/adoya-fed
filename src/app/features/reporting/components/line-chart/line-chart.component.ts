@@ -38,11 +38,32 @@ export class LineChartComponent implements OnInit {
           this.lineChartData = [];
           this.lineChartLabels = [];
           const cpiDataLine = { data: [], label: "Cost Per Install" };
+          const installsDataLine = { data: [], label: "Installs" };
+          const spendDataLine = { data: [], label: "Spend" };
+          const purchasesDataLine = { data: [], label: "Purchases" };
+          const cppDataLine = { data: [], label: "Cost Per Purchase" };
+          const revenueDataLine = { data: [], label: "Revenue" };
+          const revenueOverCostDataLine = {
+            data: [],
+            label: "Revenue Over Cost",
+          };
           _each(data, (cpiObject) => {
             this.lineChartLabels.push(cpiObject.timestamp);
             cpiDataLine.data.push(cpiObject.cpi);
+            installsDataLine.data.push(cpiObject.installs);
+            spendDataLine.data.push(cpiObject.spend);
+            purchasesDataLine.data.push(cpiObject.purchases);
+            cppDataLine.data.push(cpiObject.cpp);
+            revenueDataLine.data.push(cpiObject.revenue);
+            revenueOverCostDataLine.data.push(cpiObject.revenueOverCost);
           });
           this.lineChartData.push(cpiDataLine);
+          this.lineChartData.push(installsDataLine);
+          this.lineChartData.push(spendDataLine);
+          this.lineChartData.push(purchasesDataLine);
+          this.lineChartData.push(cppDataLine);
+          this.lineChartData.push(revenueDataLine);
+          this.lineChartData.push(revenueOverCostDataLine);
         })
       )
       .subscribe();
