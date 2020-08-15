@@ -102,10 +102,7 @@
 
       <!-- data view -->
       <div *ngIf="isAggregateDataVisMode">
-        <app-line-chart
-          [dataSource]="dataSource"
-          [displayedColumns]="displayedColumns"
-        ></app-line-chart>
+        <app-line-chart [dataSource]="dataSource"></app-line-chart>
       </div>
 
       <!-- normal view -->

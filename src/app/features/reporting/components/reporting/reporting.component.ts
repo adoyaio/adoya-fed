@@ -17,6 +17,7 @@ import { UserAccountService } from "src/app/core/services/user-account.service";
 import { AppService } from "src/app/core/services/app.service";
 import { KeywordDayObject } from "../../models/keyword-day-object";
 import { LineChartComponent } from "../line-chart/line-chart.component";
+import { ReportingService } from "../../reporting.service";
 
 @Component({
   selector: "app-reporting",
@@ -77,7 +78,8 @@ export class ReportingComponent implements AfterViewInit, OnInit {
     private clientService: ClientService,
     private fb: FormBuilder,
     private userAccountService: UserAccountService,
-    private appService: AppService
+    private appService: AppService,
+    private reportingService: ReportingService
   ) {}
 
   ngOnInit() {
@@ -102,6 +104,7 @@ export class ReportingComponent implements AfterViewInit, OnInit {
             data
           );
           this.dataSource.data = this.cpiHistory;
+          this.reportingService.costPerInstallDayObject$.next(this.cpiHistory);
           this.paginator.length = this.cpiHistory.length;
           return data;
         }),
@@ -319,6 +322,7 @@ export class ReportingComponent implements AfterViewInit, OnInit {
           );
           this.dataSource.data = this.cpiHistory;
           this.paginator.length = this.cpiHistory.length;
+          this.reportingService.costPerInstallDayObject$.next(this.cpiHistory);
           this.isLoadingResults = false;
           return data;
         }),
@@ -351,6 +355,7 @@ export class ReportingComponent implements AfterViewInit, OnInit {
             data
           );
           this.dataSource.data = this.cpiHistory;
+          this.reportingService.costPerInstallDayObject$.next(this.cpiHistory);
           this.paginator.length = this.cpiHistory.length;
           return data;
         }),

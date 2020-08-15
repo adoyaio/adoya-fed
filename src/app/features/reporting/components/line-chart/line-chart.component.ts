@@ -2,6 +2,9 @@ import { Component, OnInit, Input } from "@angular/core";
 import { ChartDataSets, ChartOptions, ChartType } from "chart.js";
 import { Color, Label } from "ng2-charts";
 import { CostPerInstallDayObject } from "../../models/cost-per-install-day-object";
+import { chain as _chain, includes as _includes, each as _each } from "lodash";
+import { ReportingService } from "../../reporting.service";
+import { tap } from "rxjs/internal/operators/tap";
 
 @Component({
   selector: "app-line-chart",
@@ -10,20 +13,9 @@ import { CostPerInstallDayObject } from "../../models/cost-per-install-day-objec
 })
 export class LineChartComponent implements OnInit {
   @Input() dataSource: CostPerInstallDayObject[];
-  @Input() displayedColumns: string[];
 
-  public lineChartData: ChartDataSets[] = [
-    { data: [65, 59, 80, 81, 56, 55, 40], label: "Series A" },
-  ];
-  public lineChartLabels: Label[] = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-  ];
+  public lineChartData: ChartDataSets[] = [];
+  public lineChartLabels: Label[] = [];
   public lineChartOptions: ChartOptions = {
     responsive: true,
   };
@@ -37,9 +29,22 @@ export class LineChartComponent implements OnInit {
   public lineChartType: ChartType = "line";
   public lineChartPlugins = [];
 
-  constructor() {}
+  constructor(private reportingService: ReportingService) {}
 
   ngOnInit() {
-    this.lineChartLabels = this.displayedColumns;
+    this.reportingService.costPerInstallDayObject$
+      .pipe(
+        tap((data) => {
+          this.lineChartData = [];
+          this.lineChartLabels = [];
+          const cpiDataLine = { data: [], label: "Cost Per Install" };
+          _each(data, (cpiObject) => {
+            this.lineChartLabels.push(cpiObject.timestamp);
+            cpiDataLine.data.push(cpiObject.cpi);
+          });
+          this.lineChartData.push(cpiDataLine);
+        })
+      )
+      .subscribe();
   }
 }

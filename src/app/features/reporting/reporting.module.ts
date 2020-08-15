@@ -1,5 +1,5 @@
 import { DynamicFormModule } from "./../../shared/dynamic-form/dynamic-form.module";
-import { NgModule } from "@angular/core";
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
 import { CommonModule } from "@angular/common";
 
 import { ReportingRoutingModule } from "./reporting-routing.module";
@@ -23,5 +23,6 @@ import { LineChartComponent } from "./components/line-chart/line-chart.component
     DynamicFormModule,
     ChartsModule,
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class ReportingModule {}
