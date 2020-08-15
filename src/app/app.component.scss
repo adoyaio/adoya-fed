@@ -1,0 +1,10 @@
+@import "variables";
+
+::ng-deep snack-bar-container.standard {
+  background: mat-color($adoya-web-primary);
+  opacity: 0.5;
+}
+
+::ng-deep snack-bar-container.standard simple-snack-bar span {
+  color: black;
+}

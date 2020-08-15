@@ -11,19 +11,11 @@ import {
   MatDatepickerInput,
   MatDatepicker,
 } from "@angular/material";
-import {
-  tap,
-  merge,
-  startWith,
-  switchMap,
-  map,
-  catchError,
-  combineAll,
-  delay,
-} from "rxjs/operators";
+import { tap, switchMap, map, catchError, delay } from "rxjs/operators";
 import { combineLatest } from "rxjs";
 import { UserAccountService } from "src/app/core/services/user-account.service";
 import { AppService } from "src/app/core/services/app.service";
+import { KeywordDayObject } from "../models/keyword-day-object";
 
 @Component({
   selector: "app-reporting",
@@ -32,6 +24,7 @@ import { AppService } from "src/app/core/services/app.service";
 })
 export class ReportingComponent implements AfterViewInit, OnInit {
   cpiHistory: CostPerInstallDayObject[] = [];
+  keywordHistory: KeywordDayObject[] = [];
   displayedColumns: string[] = [
     "timestamp",
     "spend",
@@ -42,13 +35,34 @@ export class ReportingComponent implements AfterViewInit, OnInit {
     "cpp",
     "revenueOverCost",
   ];
+
+  displayedKeywordColumns: string[] = [
+    "date",
+    "keyword_id",
+    "keyword",
+    "matchType",
+    "keywordDisplayStatus",
+    "local_spend",
+    "installs",
+    "avg_cpa",
+  ];
   dataSource = new MatTableDataSource<CostPerInstallDayObject>(this.cpiHistory);
   resultsLength = 0;
   length = 365;
+
+  keywordDataSource = new MatTableDataSource<KeywordDayObject>(
+    this.keywordHistory
+  );
+
+  keywordOffsetKeys: string[] = ["init|init|init"]; // hack for dynamo paging by key
   isLoadingResults = true;
   orgId: string;
+  isAggregateDataVisMode = false;
+  isKeywordDataVisMode = false;
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild("keywordsPaginator", { static: true })
+  keywordsPaginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatDatepicker, { static: false }) endpicker: MatDatepicker<number>;
   @ViewChild(MatDatepicker, { static: false }) startpicker: MatDatepicker<
@@ -79,15 +93,44 @@ export class ReportingComponent implements AfterViewInit, OnInit {
     this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
 
     this.clientService
-      .getClientHistory(this.orgId, 1000)
+      .getClientCostHistory(this.orgId, 1000)
       .pipe(
         map((data) => {
-          this.isLoadingResults = false;
+          // this.isLoadingResults = false;
           this.cpiHistory = CostPerInstallDayObject.buildFromGetHistoryResponse(
             data
           );
           this.dataSource.data = this.cpiHistory;
           this.paginator.length = this.cpiHistory.length;
+          return data;
+        }),
+        catchError(() => {
+          this.isLoadingResults = false;
+          return [];
+        })
+      )
+      .subscribe();
+
+    // keyword history load
+    this.clientService
+      .getClientKeywordHistory(
+        this.orgId,
+        this.keywordsPaginator.pageSize,
+        this.keywordOffsetKeys[this.keywordsPaginator.pageIndex]
+      )
+      .pipe(
+        map((data) => {
+          this.isLoadingResults = false;
+          this.keywordHistory = data["history"];
+          this.keywordOffsetKeys.push(
+            String(data["offset"]["org_id"]) +
+              "|" +
+              String(data["offset"]["keyword_id"]) +
+              "|" +
+              String(data["offset"]["date"])
+          );
+          this.keywordDataSource.data = this.keywordHistory;
+          this.keywordsPaginator.length = data["count"];
           return data;
         }),
         catchError(() => {
@@ -162,6 +205,98 @@ export class ReportingComponent implements AfterViewInit, OnInit {
         })
       )
       .subscribe();
+
+    this.keywordsPaginator.page
+      .pipe(
+        delay(0),
+        tap((val) => {
+          this.isLoadingResults = true;
+        }),
+        switchMap((val) => {
+          let keywordOffsetKey = this.keywordOffsetKeys[val.pageIndex];
+          return this.clientService
+            .getClientKeywordHistory(
+              this.orgId,
+              this.keywordsPaginator.pageSize,
+              keywordOffsetKey
+            )
+            .pipe(
+              map((data) => {
+                this.isLoadingResults = false;
+                this.keywordHistory = data["history"];
+
+                //
+                if (val.pageIndex > val.previousPageIndex) {
+                  this.keywordOffsetKeys.push(
+                    String(data["offset"]["org_id"]) +
+                      "|" +
+                      String(data["offset"]["keyword_id"]) +
+                      "|" +
+                      String(data["offset"]["date"])
+                  );
+                } else if (val.pageIndex == val.previousPageIndex) {
+                  this.keywordOffsetKeys = ["init|init|init"];
+                  this.keywordOffsetKeys.push(
+                    String(data["offset"]["org_id"]) +
+                      "|" +
+                      String(data["offset"]["keyword_id"]) +
+                      "|" +
+                      String(data["offset"]["date"])
+                  );
+                }
+                this.keywordDataSource.data = this.keywordHistory;
+                this.keywordsPaginator.length = data["count"];
+                return data;
+              }),
+              catchError(() => {
+                this.isLoadingResults = false;
+                return [];
+              })
+            );
+        })
+      )
+      .subscribe();
+  }
+
+  showAggregateDataView() {
+    this.isAggregateDataVisMode = true;
+  }
+
+  showAggregateTableView() {
+    this.isAggregateDataVisMode = false;
+  }
+
+  resetKeywordFilters() {
+    // this.keywordsPaginator.pageIndex = 0;
+    // this.keywordsPaginator.pageSize = 100;
+    // this.keywordOffsetKeys = ["init|init|init"];
+    // this.clientService
+    //   .getClientKeywordHistory(
+    //     this.orgId,
+    //     this.keywordsPaginator.pageSize,
+    //     this.keywordOffsetKeys[this.keywordsPaginator.pageIndex]
+    //   )
+    //   .pipe(
+    //     map((data) => {
+    //       this.isLoadingResults = false;
+    //       this.keywordHistory = data["history"];
+    //       this.keywordOffsetKeys.push(
+    //         String(data["offset"]["org_id"]) +
+    //           "|" +
+    //           String(data["offset"]["keyword_id"]) +
+    //           "|" +
+    //           String(data["offset"]["date"])
+    //       );
+    //       this.keywordDataSource.data = this.keywordHistory;
+    //       this.keywordsPaginator.length = data["count"];
+    //       return data;
+    //     }),
+    //     catchError(() => {
+    //       this.isLoadingResults = false;
+    //       return [];
+    //     })
+    //   )
+    //   .subscribe();
   }
 
   resetDateForms() {
@@ -175,7 +310,7 @@ export class ReportingComponent implements AfterViewInit, OnInit {
     this.sort._stateChanges.next();
 
     this.clientService
-      .getClientHistory(this.orgId, 1000)
+      .getClientCostHistory(this.orgId, 1000)
       .pipe(
         map((data) => {
           this.cpiHistory = CostPerInstallDayObject.buildFromGetHistoryResponse(
@@ -204,7 +339,7 @@ export class ReportingComponent implements AfterViewInit, OnInit {
     const end: Date = this.endPickerInputControl.value;
 
     this.clientService
-      .getClientHistoryByTime(
+      .getClientCostHistoryByTime(
         this.orgId,
         start.toISOString().split("T")[0],
         end.toISOString().split("T")[0]
@@ -235,8 +370,12 @@ export class ReportingComponent implements AfterViewInit, OnInit {
     return true;
   }
 
-  download() {
-    this.appService.downloadFile(this.dataSource.data, "data");
+  downloadAggregateCsv() {
+    this.appService.downloadAggregateFile(this.dataSource.data, "aggregate");
+  }
+
+  downloadKeywordsCsv() {
+    this.appService.downloadKeywordFile(this.keywordDataSource.data, "keyword");
   }
 
   // addEvent(type: string, event: MatDatepickerInputEvent<Date>) {

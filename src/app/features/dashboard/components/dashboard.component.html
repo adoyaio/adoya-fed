@@ -6,7 +6,10 @@
       <span class="ml-2">Bid Optimizations</span>
     </ng-template>
     <div class="workbench__loading-shade" *ngIf="isLoadingResults">
-      <mat-spinner color="accent" *ngIf="isLoadingResults"></mat-spinner>
+      <mat-spinner color="accent"></mat-spinner>
+    </div>
+    <div class="workbench__sending" *ngIf="isSendingResults">
+      <mat-progress-bar color="accent" mode="indeterminate"></mat-progress-bar>
     </div>
     <div class="d-flex col-12 px-0">
       <mat-card class="workbench__card mat-elevation-z0 mt-3 w-100">
@@ -168,7 +171,10 @@
       <span class="ml-2">Preferences</span>
     </ng-template>
     <div class="workbench__loading-shade" *ngIf="isLoadingResults">
-      <mat-spinner color="accent" *ngIf="isLoadingResults"></mat-spinner>
+      <mat-spinner color="accent"></mat-spinner>
+    </div>
+    <div class="workbench__sending" *ngIf="isSendingResults">
+      <mat-progress-bar color="accent" mode="indeterminate"></mat-progress-bar>
     </div>
     <div class="d-flex col-12 px-0">
       <mat-card class="workbench__card mat-elevation-z0 mt-3 w-100">
