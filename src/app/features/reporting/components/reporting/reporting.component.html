@@ -120,7 +120,8 @@
 
       <!-- normal view -->
       <mat-paginator
-        *ngIf="!isAggregateDataVisMode"
+        [ngClass]="isAggregateDataVisMode ? 'd-none' : ''"
+        #aggregatePaginator
         [pageSizeOptions]="[25, 50, 100, 365]"
         showFirstLastButtons
         class="reporting__paginator"

@@ -73,9 +73,12 @@ export class ReportingComponent implements AfterViewInit, OnInit {
   isAggregateDataVisMode = false;
   isKeywordDataVisMode = false;
 
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-  @ViewChild("keywordsPaginator", { static: true })
+  @ViewChild("aggregatePaginator", { static: false })
+  aggregatePaginator: MatPaginator;
+
+  @ViewChild("keywordsPaginator", { static: false })
   keywordsPaginator: MatPaginator;
+
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   // @ViewChild(MatDatepicker, { static: false }) endpicker: MatDatepicker<number>;
   // @ViewChild(MatDatepicker, { static: false }) startpicker: MatDatepicker<
@@ -104,10 +107,10 @@ export class ReportingComponent implements AfterViewInit, OnInit {
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    // If the user changes the sort order, reset back to the first page.
-    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
+    //TODO
+    this.dataSource.paginator = this.aggregatePaginator;
 
+    // aggregate history load
     this.clientService
       .getClientCostHistory(this.orgId, 1000)
       .pipe(
@@ -117,8 +120,10 @@ export class ReportingComponent implements AfterViewInit, OnInit {
             data
           );
           this.dataSource.data = this.cpiHistory;
-          this.reportingService.costPerInstallDayObject$.next(this.cpiHistory);
-          this.paginator.length = this.cpiHistory.length;
+          this.reportingService.costPerInstallDayObject$.next({
+            ...this.cpiHistory,
+          });
+          this.aggregatePaginator.length = this.cpiHistory.length;
           return data;
         }),
         catchError(() => {
@@ -276,7 +281,6 @@ export class ReportingComponent implements AfterViewInit, OnInit {
   }
 
   onChipClicked(updated) {
-    console.log("updated" + updated.name);
     const updatedLineChartLabel = _cloneDeep(
       this.reportingService.activeLineChartLabel$.getValue()
     );
@@ -336,22 +340,24 @@ export class ReportingComponent implements AfterViewInit, OnInit {
     this.isLoadingResults = true;
     this.endPickerInputControl.reset();
     this.startPickerInputControl.reset();
-    this.paginator.pageIndex = 0;
+    this.aggregatePaginator.pageIndex = 0;
     this.sort.active = "timestamp";
     this.sort.direction = "desc";
     this.sort.sortChange.emit({ active: "timestamp", direction: "desc" });
     this.sort._stateChanges.next();
 
     this.clientService
-      .getClientCostHistory(this.orgId, 1000)
+      .getClientCostHistory(this.orgId, 2000)
       .pipe(
         map((data) => {
           this.cpiHistory = CostPerInstallDayObject.buildFromGetHistoryResponse(
             data
           );
           this.dataSource.data = this.cpiHistory;
-          this.paginator.length = this.cpiHistory.length;
-          this.reportingService.costPerInstallDayObject$.next(this.cpiHistory);
+          this.aggregatePaginator.length = this.cpiHistory.length;
+          this.reportingService.costPerInstallDayObject$.next({
+            ...this.cpiHistory,
+          });
           this.isLoadingResults = false;
           return data;
         }),
@@ -384,8 +390,10 @@ export class ReportingComponent implements AfterViewInit, OnInit {
             data
           );
           this.dataSource.data = this.cpiHistory;
-          this.reportingService.costPerInstallDayObject$.next(this.cpiHistory);
-          this.paginator.length = this.cpiHistory.length;
+          this.reportingService.costPerInstallDayObject$.next({
+            ...this.cpiHistory,
+          });
+          this.aggregatePaginator.length = this.cpiHistory.length;
           return data;
         }),
         tap((data) => {
