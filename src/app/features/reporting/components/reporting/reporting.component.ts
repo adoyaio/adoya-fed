@@ -1,7 +1,7 @@
-import { UserAccount } from "../../../shared/models/user-account";
+import { UserAccount } from "../../../../shared/models/user-account";
 import { FormBuilder, FormControl } from "@angular/forms";
-import { ClientService } from "./../../../core/services/client.service";
-import { CostPerInstallDayObject } from "./../models/cost-per-install-day-object";
+import { ClientService } from "../../../../core/services/client.service";
+import { CostPerInstallDayObject } from "../../models/cost-per-install-day-object";
 import { Component, OnInit, ViewChild, AfterViewInit } from "@angular/core";
 import {
   MatTableDataSource,
@@ -15,7 +15,8 @@ import { tap, switchMap, map, catchError, delay } from "rxjs/operators";
 import { combineLatest } from "rxjs";
 import { UserAccountService } from "src/app/core/services/user-account.service";
 import { AppService } from "src/app/core/services/app.service";
-import { KeywordDayObject } from "../models/keyword-day-object";
+import { KeywordDayObject } from "../../models/keyword-day-object";
+import { LineChartComponent } from "../line-chart/line-chart.component";
 
 @Component({
   selector: "app-reporting",
