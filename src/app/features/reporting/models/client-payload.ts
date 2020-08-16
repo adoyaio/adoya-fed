@@ -119,13 +119,13 @@ export class KeywordAdderParametersPayload {
 }
 
 export class BranchIntegrationParametersPayload {
-  branchKey: string;
-  branchSecret: string;
+  branch_key: string;
+  branch_secret: string;
 
   static buildFromClient(response: any) {
     const retVal = new BranchIntegrationParametersPayload();
-    retVal.branchKey = response.branch_key;
-    retVal.branchSecret = response.branch_secret;
+    retVal.branch_key = response.branchKey;
+    retVal.branch_secret = response.branchSecret;
     return retVal;
   }
 }
@@ -194,7 +194,6 @@ export class OrgDetailsPayload {
     retVal.campaignIds = response.campaignIds;
     retVal.disabled = response.disabled;
     retVal.currency = response.currency;
-    console.log("buildFromClient " + response.appID);
     retVal.appID = response.appID;
     retVal.emailAddresses = response.emailAddresses;
     retVal.keyFilename = response.keyFilename;
