@@ -79,7 +79,10 @@ export class ReportingComponent implements AfterViewInit, OnInit {
   @ViewChild("keywordsPaginator", { static: false })
   keywordsPaginator: MatPaginator;
 
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  // @ViewChild("aggregateSort", { static: false })
+  // aggregateSort: MatSort;
+
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
   // @ViewChild(MatDatepicker, { static: false }) endpicker: MatDatepicker<number>;
   // @ViewChild(MatDatepicker, { static: false }) startpicker: MatDatepicker<
   //   number
@@ -163,7 +166,6 @@ export class ReportingComponent implements AfterViewInit, OnInit {
 
     this.sort.sortChange
       .pipe(
-        delay(0),
         tap((val) => {
           this.cpiHistory.sort((a, b) => {
             if (val.active === "timestamp") {
