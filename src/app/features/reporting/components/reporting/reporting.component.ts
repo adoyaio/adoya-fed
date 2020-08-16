@@ -107,7 +107,6 @@ export class ReportingComponent implements AfterViewInit, OnInit {
   }
 
   ngAfterViewInit() {
-    //TODO
     this.dataSource.paginator = this.aggregatePaginator;
 
     // aggregate history load
@@ -342,8 +341,8 @@ export class ReportingComponent implements AfterViewInit, OnInit {
     this.startPickerInputControl.reset();
     this.aggregatePaginator.pageIndex = 0;
     this.sort.active = "timestamp";
-    this.sort.direction = "desc";
-    this.sort.sortChange.emit({ active: "timestamp", direction: "desc" });
+    this.sort.direction = "asc";
+    this.sort.sortChange.emit({ active: "timestamp", direction: "asc" });
     this.sort._stateChanges.next();
 
     this.clientService
@@ -355,9 +354,11 @@ export class ReportingComponent implements AfterViewInit, OnInit {
           );
           this.dataSource.data = this.cpiHistory;
           this.aggregatePaginator.length = this.cpiHistory.length;
+
           this.reportingService.costPerInstallDayObject$.next({
             ...this.cpiHistory,
           });
+
           this.isLoadingResults = false;
           return data;
         }),
@@ -372,8 +373,8 @@ export class ReportingComponent implements AfterViewInit, OnInit {
   filterByDate() {
     this.isLoadingResults = true;
     this.sort.active = "timestamp";
-    this.sort.direction = "desc";
-    this.sort.sortChange.emit({ active: "timestamp", direction: "desc" });
+    this.sort.direction = "asc";
+    this.sort.sortChange.emit({ active: "timestamp", direction: "asc" });
     this.sort._stateChanges.next();
     const start: Date = this.startPickerInputControl.value;
     const end: Date = this.endPickerInputControl.value;
@@ -389,10 +390,12 @@ export class ReportingComponent implements AfterViewInit, OnInit {
           this.cpiHistory = CostPerInstallDayObject.buildFromGetHistoryResponse(
             data
           );
+
           this.dataSource.data = this.cpiHistory;
           this.reportingService.costPerInstallDayObject$.next({
             ...this.cpiHistory,
           });
+
           this.aggregatePaginator.length = this.cpiHistory.length;
           return data;
         }),
