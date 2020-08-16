@@ -11,9 +11,10 @@ import { AmplifyAngularModule } from "aws-amplify-angular";
 import { MaterialModule } from "src/app/shared/material-design/material.module";
 import { ChartsModule } from "ng2-charts";
 import { LineChartComponent } from "./components/line-chart/line-chart.component";
+import { KeywordReportingComponent } from './components/keyword-reporting/keyword-reporting.component';
 
 @NgModule({
-  declarations: [ReportingComponent, LineChartComponent],
+  declarations: [ReportingComponent, LineChartComponent, KeywordReportingComponent],
   imports: [
     CommonModule,
     ReportingRoutingModule,

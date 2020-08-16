@@ -37,7 +37,6 @@ import { state } from "@angular/animations";
 })
 export class ReportingComponent implements AfterViewInit, OnInit {
   cpiHistory: CostPerInstallDayObject[] = [];
-  keywordHistory: KeywordDayObject[] = [];
   displayedColumns: string[] = [
     "timestamp",
     "spend",
@@ -49,44 +48,16 @@ export class ReportingComponent implements AfterViewInit, OnInit {
     "revenueOverCost",
   ];
 
-  displayedKeywordColumns: string[] = [
-    "date",
-    "keyword_id",
-    "keyword",
-    "matchType",
-    "keywordDisplayStatus",
-    "local_spend",
-    "installs",
-    "avg_cpa",
-  ];
   dataSource = new MatTableDataSource<CostPerInstallDayObject>(this.cpiHistory);
-  resultsLength = 0;
-  length = 365;
 
-  keywordDataSource = new MatTableDataSource<KeywordDayObject>(
-    this.keywordHistory
-  );
-
-  keywordOffsetKeys: string[] = ["init|init|init"]; // hack for dynamo paging by key
   isLoadingResults = true;
   orgId: string;
   isAggregateDataVisMode = false;
-  isKeywordDataVisMode = false;
 
   @ViewChild("aggregatePaginator", { static: false })
   aggregatePaginator: MatPaginator;
 
-  @ViewChild("keywordsPaginator", { static: false })
-  keywordsPaginator: MatPaginator;
-
-  // @ViewChild("aggregateSort", { static: false })
-  // aggregateSort: MatSort;
-
   @ViewChild(MatSort, { static: false }) sort: MatSort;
-  // @ViewChild(MatDatepicker, { static: false }) endpicker: MatDatepicker<number>;
-  // @ViewChild(MatDatepicker, { static: false }) startpicker: MatDatepicker<
-  //   number
-  // >;
   @ViewChild(MatChipList, { static: false })
   lineChartLabelChipList: MatChipList;
 
@@ -112,12 +83,11 @@ export class ReportingComponent implements AfterViewInit, OnInit {
   ngAfterViewInit() {
     this.dataSource.paginator = this.aggregatePaginator;
 
-    // aggregate history load
     this.clientService
       .getClientCostHistory(this.orgId, 1000)
       .pipe(
         map((data) => {
-          // this.isLoadingResults = false;
+          this.isLoadingResults = false;
           this.cpiHistory = CostPerInstallDayObject.buildFromGetHistoryResponse(
             data
           );
@@ -126,35 +96,6 @@ export class ReportingComponent implements AfterViewInit, OnInit {
             ...this.cpiHistory,
           });
           this.aggregatePaginator.length = this.cpiHistory.length;
-          return data;
-        }),
-        catchError(() => {
-          this.isLoadingResults = false;
-          return [];
-        })
-      )
-      .subscribe();
-
-    // keyword history load
-    this.clientService
-      .getClientKeywordHistory(
-        this.orgId,
-        this.keywordsPaginator.pageSize,
-        this.keywordOffsetKeys[this.keywordsPaginator.pageIndex]
-      )
-      .pipe(
-        map((data) => {
-          this.isLoadingResults = false;
-          this.keywordHistory = data["history"];
-          this.keywordOffsetKeys.push(
-            String(data["offset"]["org_id"]) +
-              "|" +
-              String(data["offset"]["keyword_id"]) +
-              "|" +
-              String(data["offset"]["date"])
-          );
-          this.keywordDataSource.data = this.keywordHistory;
-          this.keywordsPaginator.length = data["count"];
           return data;
         }),
         catchError(() => {
@@ -228,57 +169,6 @@ export class ReportingComponent implements AfterViewInit, OnInit {
         })
       )
       .subscribe();
-
-    this.keywordsPaginator.page
-      .pipe(
-        delay(0),
-        tap((val) => {
-          this.isLoadingResults = true;
-        }),
-        switchMap((val) => {
-          let keywordOffsetKey = this.keywordOffsetKeys[val.pageIndex];
-          return this.clientService
-            .getClientKeywordHistory(
-              this.orgId,
-              this.keywordsPaginator.pageSize,
-              keywordOffsetKey
-            )
-            .pipe(
-              map((data) => {
-                this.isLoadingResults = false;
-                this.keywordHistory = data["history"];
-
-                //
-                if (val.pageIndex > val.previousPageIndex) {
-                  this.keywordOffsetKeys.push(
-                    String(data["offset"]["org_id"]) +
-                      "|" +
-                      String(data["offset"]["keyword_id"]) +
-                      "|" +
-                      String(data["offset"]["date"])
-                  );
-                } else if (val.pageIndex == val.previousPageIndex) {
-                  this.keywordOffsetKeys = ["init|init|init"];
-                  this.keywordOffsetKeys.push(
-                    String(data["offset"]["org_id"]) +
-                      "|" +
-                      String(data["offset"]["keyword_id"]) +
-                      "|" +
-                      String(data["offset"]["date"])
-                  );
-                }
-                this.keywordDataSource.data = this.keywordHistory;
-                this.keywordsPaginator.length = data["count"];
-                return data;
-              }),
-              catchError(() => {
-                this.isLoadingResults = false;
-                return [];
-              })
-            );
-        })
-      )
-      .subscribe();
   }
 
   onChipClicked(updated) {
@@ -302,39 +192,6 @@ export class ReportingComponent implements AfterViewInit, OnInit {
 
   showAggregateTableView() {
     this.isAggregateDataVisMode = false;
-  }
-
-  resetKeywordFilters() {
-    // this.keywordsPaginator.pageIndex = 0;
-    // this.keywordsPaginator.pageSize = 100;
-    // this.keywordOffsetKeys = ["init|init|init"];
-    // this.clientService
-    //   .getClientKeywordHistory(
-    //     this.orgId,
-    //     this.keywordsPaginator.pageSize,
-    //     this.keywordOffsetKeys[this.keywordsPaginator.pageIndex]
-    //   )
-    //   .pipe(
-    //     map((data) => {
-    //       this.isLoadingResults = false;
-    //       this.keywordHistory = data["history"];
-    //       this.keywordOffsetKeys.push(
-    //         String(data["offset"]["org_id"]) +
-    //           "|" +
-    //           String(data["offset"]["keyword_id"]) +
-    //           "|" +
-    //           String(data["offset"]["date"])
-    //       );
-    //       this.keywordDataSource.data = this.keywordHistory;
-    //       this.keywordsPaginator.length = data["count"];
-    //       return data;
-    //     }),
-    //     catchError(() => {
-    //       this.isLoadingResults = false;
-    //       return [];
-    //     })
-    //   )
-    //   .subscribe();
   }
 
   resetDateForms() {
@@ -421,53 +278,4 @@ export class ReportingComponent implements AfterViewInit, OnInit {
   downloadAggregateCsv() {
     this.appService.downloadAggregateFile(this.dataSource.data, "aggregate");
   }
-
-  downloadKeywordsCsv() {
-    this.appService.downloadKeywordFile(this.keywordDataSource.data, "keyword");
-  }
-
-  // addEvent(type: string, event: MatDatepickerInputEvent<Date>) {
-  //   const date: Date = event.value;
-  //   date.setSeconds(0);
-  //   date.setMilliseconds(0);
-  //   date.setHours(0);
-  //   console.log(date.toISOString().split("T")[0]);
-  // }
-
-  // ngAfterViewInit() {
-  //   //this.setupDataModel();
-  //   this.clientService
-  //     .getClientHistory("1056410")
-  //     .pipe(
-  //       tap((response) => {
-  //         console.log("ngOnInit" + response);
-  //         this.cpiHistory = CostPerInstallDayObject.buildFromGetHistoryResponse(
-  //           response
-  //         );
-  //       })
-  //     )
-  //     .subscribe();
-  //   this.dataSource.paginator = this.paginator;
-
-  // this.dataSource
-  //   .connect()
-  //   .pipe(
-  //     map((data) => {
-  //       console.log("found data of length" + data.length);
-  //     })
-  //   )
-  //   .subscribe();
-  // }
-
-  // setupDataModel() {
-  //   for (let i = 0; i < 365; i++) {
-  //     const cpiObject = new CostPerInstallDayObject();
-  //     cpiObject.cpi = 0.35;
-  //     cpiObject.installs = 6;
-  //     cpiObject.org_id = "1105630";
-  //     cpiObject.spend = 2.1;
-  //     cpiObject.timestamp = new Date(Date.now()).toDateString();
-  //     this.cpiHistory.push(cpiObject);
-  //   }
-  // }
 }

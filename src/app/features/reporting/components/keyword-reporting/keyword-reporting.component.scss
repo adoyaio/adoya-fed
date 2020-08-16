@@ -1,4 +1,4 @@
-::ng-deep .reporting-component__table-container {
+::ng-deep .keyword-reporting-component__table-container {
   .mat-paginator-container {
     justify-content: left !important;
   }
@@ -10,11 +10,11 @@
   }
 }
 
-.reporting__paginator {
+.keyword-reporting__paginator {
   background-color: #dde5d4;
 }
 
-.reporting__loading-shade {
+.keyword-reporting__loading-shade {
   position: absolute;
   top: 0;
   left: 0;
@@ -28,6 +28,6 @@
   justify-content: center;
 }
 
-.reporting__buttons {
+.keyword-reporting__buttons {
   width: 125px;
 }
