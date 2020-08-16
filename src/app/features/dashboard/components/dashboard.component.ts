@@ -143,7 +143,7 @@ export class DashboardComponent implements OnInit {
 
   openSnackBar(message: string, action: string) {
     this.snackBar.open(message, action, {
-      duration: 8000,
+      duration: 10000,
       panelClass: "standard",
     });
   }
@@ -216,14 +216,14 @@ export class DashboardComponent implements OnInit {
           }),
           map((data) => {
             this.isSendingResults = false;
-            this.openSnackBar("we've updated your settings", "");
+            this.openSnackBar("successfully updated settings", "dismiss");
             return data;
           }),
           catchError(() => {
             this.isSendingResults = false;
             this.openSnackBar(
-              "we were unable to process changes to your preferences or settings at this time",
-              ""
+              "unable to process changes to preferences or settings at this time",
+              "dismiss"
             );
             return [];
           })
@@ -231,8 +231,8 @@ export class DashboardComponent implements OnInit {
         .subscribe();
     } else {
       this.openSnackBar(
-        "please double check the preferences and settings, something appears to be invalid",
-        ""
+        "please double check preferences and settings, something appears to be invalid",
+        "dismiss"
       );
     }
   }
@@ -265,14 +265,14 @@ export class DashboardComponent implements OnInit {
           }),
           map((data) => {
             this.isSendingResults = false;
-            this.openSnackBar("we've updated your preferences", "");
+            this.openSnackBar("successfully updated preferences", "dismiss");
             return data;
           }),
           catchError(() => {
             this.isSendingResults = false;
             this.openSnackBar(
-              "we were unable to process changes to your preferences or settings at this time",
-              "!"
+              "unable to process changes to preferences or settings at this time",
+              "dismiss"
             );
             return [];
           })
@@ -281,7 +281,7 @@ export class DashboardComponent implements OnInit {
     } else {
       this.openSnackBar(
         "please double check preferences and settings, something appears to be invalid",
-        "!"
+        "dismiss"
       );
     }
   }

@@ -9,7 +9,7 @@ import { AppComponent } from "./app.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { AmplifyAngularModule, AmplifyService } from "aws-amplify-angular";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
-import { NavLinksComponent } from "./layout/secure-layout/components/nav-links/nav-links.component";
+import { ChartsModule } from "ng2-charts";
 
 @NgModule({
   declarations: [AppComponent],
@@ -22,6 +22,7 @@ import { NavLinksComponent } from "./layout/secure-layout/components/nav-links/n
     MatProgressSpinnerModule,
     HttpClientModule,
     DynamicFormModule,
+    ChartsModule,
   ],
   providers: [AmplifyService],
   bootstrap: [AppComponent],

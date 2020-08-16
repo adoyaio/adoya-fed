@@ -102,12 +102,26 @@
 
       <!-- data view -->
       <div *ngIf="isAggregateDataVisMode">
-        chart here
+        <div>
+          <mat-chip-list>
+            <mat-chip
+              *ngFor="
+                let activeLineChartLabel of reportingService.activeLineChartLabel$.getValue()
+              "
+              [selected]="activeLineChartLabel.state"
+              (click)="onChipClicked(activeLineChartLabel)"
+            >
+              {{ activeLineChartLabel.name }}
+            </mat-chip>
+          </mat-chip-list>
+        </div>
+        <app-line-chart></app-line-chart>
       </div>
 
       <!-- normal view -->
       <mat-paginator
-        *ngIf="!isAggregateDataVisMode"
+        [ngClass]="isAggregateDataVisMode ? 'd-none' : ''"
+        #aggregatePaginator
         [pageSizeOptions]="[25, 50, 100, 365]"
         showFirstLastButtons
         class="reporting__paginator"
@@ -115,12 +129,12 @@
       </mat-paginator>
 
       <table
-        *ngIf="!isAggregateDataVisMode"
+        [ngClass]="isAggregateDataVisMode ? 'd-none' : ''"
         mat-table
         [dataSource]="dataSource"
         matSort
         matSortActive="timestamp"
-        matSortDirection="desc"
+        matSortDirection="asc"
       >
         <ng-container matColumnDef="timestamp">
           <th mat-header-cell mat-sort-header *matHeaderCellDef>
@@ -259,7 +273,7 @@
 
       <mat-paginator
         #keywordsPaginator
-        [pageSizeOptions]="[100, 250, 500, 1000, 10000]"
+        [pageSizeOptions]="[100, 250, 500, 1000, 5000, 10000]"
         class="reporting__paginator"
       >
       </mat-paginator>
@@ -339,24 +353,5 @@
         <tr mat-row *matRowDef="let row; columns: displayedKeywordColumns"></tr>
       </table>
     </div>
-    <!-- <div class="container px-2">
-      <mat-chip-list class="mat-chip-list-stacked pt-2">
-        <mat-chip>Papadum</mat-chip>
-        <mat-chip>Naan</mat-chip>
-        <mat-chip>Dal</mat-chip>
-        <mat-chip>Papadum</mat-chip>
-        <mat-chip>Naan</mat-chip>
-        <mat-chip>Dal</mat-chip>
-        <mat-chip>Papadum</mat-chip>
-        <mat-chip>Naan</mat-chip>
-        <mat-chip>Dal</mat-chip>
-        <mat-chip>Papadum</mat-chip>
-        <mat-chip>Naan</mat-chip>
-        <mat-chip>Dal</mat-chip>
-        <mat-chip>Papadum</mat-chip>
-        <mat-chip>Naan</mat-chip>
-        <mat-chip>Dal</mat-chip>
-      </mat-chip-list>
-    </div> -->
   </mat-tab>
 </mat-tab-group>

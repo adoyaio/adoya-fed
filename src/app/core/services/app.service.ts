@@ -23,10 +23,10 @@ export class AppService {
     let isSafariBrowser =
       navigator.userAgent.indexOf("Safari") != -1 &&
       navigator.userAgent.indexOf("Chrome") == -1;
-    if (isSafariBrowser) {
-      // if Safari open in new window to save file with random filename.
-      dwldLink.setAttribute("target", "_blank");
-    }
+    // if (isSafariBrowser) {
+    //   // if Safari open in new window to save file with random filename.
+    //   dwldLink.setAttribute("target", "_blank");
+    // }
     dwldLink.setAttribute("href", url);
     dwldLink.setAttribute("download", filename + ".csv");
     dwldLink.style.visibility = "hidden";

@@ -2,7 +2,7 @@ import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { AuthGuard } from "src/app/core/guards/auth.guard";
 import { SecureLayoutComponent } from "./components/secure-layout.component";
-import { ReportingComponent } from "src/app/features/reporting/components/reporting.component";
+import { ReportingComponent } from "src/app/features/reporting/components/reporting/reporting.component";
 import { AccountComponent } from "src/app/features/account/components/account.component";
 import { SupportComponent } from "src/app/features/support/components/support.component";
 import { DashboardComponent } from "src/app/features/dashboard/components/dashboard.component";

@@ -20,9 +20,9 @@ export class CostPerInstallDayObject {
         retVal.org_id = item.org_id;
         retVal.timestamp = item.timestamp;
         retVal.spend = item.spend;
+
         // branch data
         retVal.purchases = item.purchases;
-
         retVal.revenue = item.revenue;
         retVal.cpp = item.cpp;
         retVal.revenueOverCost = item.revenueOverCost;
