@@ -111,13 +111,21 @@ export class ClientService {
   public getClientKeywordHistory(
     orgId: string,
     pageSize: number,
-    offsetKey: string
+    offsetKey: string,
+    startDate: string,
+    endDate: string,
+    matchType: string,
+    keywordStatus: string
   ): Observable<[KeywordDayObject[], OffsetObject, number]> {
     let offsetIndexComposite = offsetKey.split("|");
     const offsetOrgId = offsetIndexComposite[0];
     const offsetKeywordId = offsetIndexComposite[1];
     const offsetDate = offsetIndexComposite[2];
-    const url = `${this.clientKeywordHistoryUrl}?org_id=${orgId}&total_recs=${pageSize}&offsetOrgId=${offsetOrgId}&offsetKeywordId=${offsetKeywordId}&offsetDate=${offsetDate}`;
+    const startDateParam = startDate.length > 0 ? startDate : "all";
+    const endDateParam = endDate.length > 0 ? endDate : "all";
+    const matchTypeParam = matchType.length > 0 ? matchType : "all";
+    const keywordStatusParam = keywordStatus.length > 0 ? keywordStatus : "all";
+    const url = `${this.clientKeywordHistoryUrl}?org_id=${orgId}&total_recs=${pageSize}&offsetOrgId=${offsetOrgId}&offsetKeywordId=${offsetKeywordId}&offsetDate=${offsetDate}&start_date=${startDateParam}&end_date=${endDateParam}&matchType=${matchTypeParam}&keywordStatus=${keywordStatusParam}`;
     let headers = new HttpHeaders();
 
     headers = headers.set("x-api-key", this.authKey);

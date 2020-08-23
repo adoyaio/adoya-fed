@@ -7,6 +7,7 @@ import { ReportingService } from "../../reporting.service";
 import { map, catchError, delay, tap, switchMap } from "rxjs/operators";
 import { MatTableDataSource, MatPaginator } from "@angular/material";
 import { KeywordDayObject } from "../../models/keyword-day-object";
+import { isNil, isEmpty } from "lodash";
 
 @Component({
   selector: "app-keyword-reporting",
@@ -21,6 +22,7 @@ export class KeywordReportingComponent implements OnInit {
     "keyword_id",
     "keyword",
     "matchType",
+    "keywordStatus",
     "keywordDisplayStatus",
     "local_spend",
     "installs",
@@ -35,8 +37,17 @@ export class KeywordReportingComponent implements OnInit {
   orgId: string;
   isKeywordDataVisMode = false;
 
-  startPickerInputControl: FormControl = this.fb.control("");
-  endPickerInputControl: FormControl = this.fb.control("");
+  // startPickerInputControl: FormControl = this.fb.control("");
+  // endPickerInputControl: FormControl = this.fb.control("");
+  // keywordStatusControl: FormControl = this.fb.control("");
+  // matchTypeControl: FormControl = this.fb.control("");
+  keywordFilterForm = this.fb.group({
+    start: [""],
+    end: [""],
+    keywordStatus: [""],
+    matchType: [""],
+  });
+
   @ViewChild("keywordsPaginator", { static: false })
   keywordsPaginator: MatPaginator;
 
@@ -61,7 +72,11 @@ export class KeywordReportingComponent implements OnInit {
       .getClientKeywordHistory(
         this.orgId,
         this.keywordsPaginator.pageSize,
-        this.keywordOffsetKeys[this.keywordsPaginator.pageIndex]
+        this.keywordOffsetKeys[this.keywordsPaginator.pageIndex],
+        "all",
+        "all",
+        "all",
+        "all"
       )
       .pipe(
         map((data) => {
@@ -97,7 +112,11 @@ export class KeywordReportingComponent implements OnInit {
             .getClientKeywordHistory(
               this.orgId,
               this.keywordsPaginator.pageSize,
-              keywordOffsetKey
+              keywordOffsetKey,
+              "all",
+              "all",
+              "all",
+              "all"
             )
             .pipe(
               map((data) => {
@@ -170,7 +189,67 @@ export class KeywordReportingComponent implements OnInit {
     //   .subscribe();
   }
 
-  filterByDate() {}
+  applyFilter() {
+    this.reportingService.isLoadingKeywords = true;
+    let start: Date = this.keywordFilterForm.get("start").value;
+    let end: Date = this.keywordFilterForm.get("end").value;
+
+    console.log("contro" + start.toISOString());
+
+    let startString = "all";
+
+    if (!isNil(start.toISOString())) {
+      console.log("found date" + startString);
+      startString = start.toISOString().split("T")[0];
+      console.log("setting to" + startString);
+    }
+
+    let endString = "all";
+    if (!isNil(end.toISOString())) {
+      endString = end.toISOString().split("T")[0];
+    }
+
+    const keywordStatus: string = this.keywordFilterForm.get("keywordStatus")
+      .value;
+    const matchType: string = this.keywordFilterForm.get("matchType").value;
+    console.log("matchType" + matchType);
+    console.log("keywordStatus" + keywordStatus);
+    this.clientService
+      .getClientKeywordHistory(
+        this.orgId,
+        this.keywordsPaginator.pageSize,
+        this.keywordOffsetKeys[this.keywordsPaginator.pageIndex],
+        startString,
+        endString,
+        matchType,
+        keywordStatus
+      )
+      .pipe(
+        map((data) => {
+          this.reportingService.isLoadingKeywords = false;
+          this.keywordHistory = data["history"];
+          this.keywordOffsetKeys.push(
+            String(data["offset"]["org_id"]) +
+              "|" +
+              String(data["offset"]["keyword_id"]) +
+              "|" +
+              String(data["offset"]["date"])
+          );
+          this.keywordDataSource.data = this.keywordHistory;
+          this.keywordsPaginator.length = data["count"];
+          return data;
+        }),
+        catchError(() => {
+          this.reportingService.isLoadingKeywords = false;
+          return [];
+        })
+      )
+      .subscribe();
+  }
+
+  applyFilterDisabled() {
+    return false;
+  }
 
   downloadKeywordsCsv() {
     this.appService.downloadKeywordFile(this.keywordDataSource.data, "keyword");
