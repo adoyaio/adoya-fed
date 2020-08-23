@@ -1,7 +1,12 @@
 <div class="mat-elevation-z8 mt-2 keyword-reporting-component__table-container">
-  <div class="d-flex justify-content-start">
-    <form [formGroup]="keywordFilterForm">
-      <mat-form-field class="mr-4">
+  <div
+    class="d-flex justify-content-start col-12 flex-wrap flex-row no-gutters px-0"
+  >
+    <form
+      [formGroup]="keywordFilterForm"
+      class="d-flex col-12 flex-wrap flex-col"
+    >
+      <mat-form-field class="mr-3">
         <mat-label>start date</mat-label>
         <input matInput formControlName="start" [matDatepicker]="startpicker" />
         <mat-datepicker-toggle
@@ -11,7 +16,7 @@
         <mat-datepicker #startpicker></mat-datepicker>
       </mat-form-field>
 
-      <mat-form-field class="mr-4">
+      <mat-form-field class="mr-3">
         <mat-label>end date</mat-label>
         <input matInput formControlName="end" [matDatepicker]="endpicker" />
         <mat-datepicker-toggle
@@ -21,23 +26,28 @@
         <mat-datepicker #endpicker></mat-datepicker>
       </mat-form-field>
 
-      <mat-form-field class="mr-4" color="accent">
+      <mat-form-field class="mr-3" color="accent">
         <mat-select formControlName="keywordStatus">
           <mat-option value="ACTIVE">ACTIVE</mat-option>
           <mat-option value="PAUSED">PAUSED</mat-option>
+          <mat-option value="all">ALL</mat-option>
         </mat-select>
         <mat-label>keyword status</mat-label>
       </mat-form-field>
 
-      <mat-form-field class="mr-4" color="accent">
+      <mat-form-field class="mr-3" color="accent">
         <mat-select formControlName="matchType">
           <mat-option value="BROAD">BROAD</mat-option>
           <mat-option value="EXACT">EXACT</mat-option>
+          <mat-option value="all">ALL</mat-option>
         </mat-select>
         <mat-label>match type</mat-label>
       </mat-form-field>
     </form>
-    <div>
+
+    <div
+      class="d-flex col-12 flex-wrap flex-col justify-content-left align-items-left no-gutters"
+    >
       <button
         [disabled]="applyFilterDisabled()"
         mat-icon-button
@@ -48,9 +58,7 @@
         <mat-icon aria-label="save">filter_alt</mat-icon>
         apply filters
       </button>
-    </div>
 
-    <div>
       <button
         mat-icon-button
         class="keyword-reporting__buttons"
@@ -60,20 +68,7 @@
         <mat-icon aria-label="clear">clear</mat-icon>
         clear filters
       </button>
-    </div>
 
-    <!-- <div>
-      <button
-        mat-icon-button
-        class="reporting__buttons ml-2"
-        mat-icon-button
-      >
-        <mat-icon class="ml-1" aria-label="download">show_chart</mat-icon>
-        visualization
-      </button>
-    </div> -->
-
-    <div>
       <button
         (click)="downloadKeywordsCsv()"
         mat-icon-button
@@ -82,6 +77,11 @@
       >
         <mat-icon class="ml-1" aria-label="download">save_alt</mat-icon>
         csv download
+      </button>
+
+      <button mat-icon-button class="reporting__buttons ml-2" mat-icon-button>
+        <mat-icon class="ml-1" aria-label="download">show_chart</mat-icon>
+        visualization
       </button>
     </div>
   </div>
