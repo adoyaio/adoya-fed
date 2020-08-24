@@ -184,7 +184,6 @@ export class DashboardComponent implements OnInit {
       this.branchForm.valid
     ) {
       this.isSendingResults = true;
-
       this.client.orgDetails.bidParameters.objective = this.appleForm.get(
         "objective"
       ).value;

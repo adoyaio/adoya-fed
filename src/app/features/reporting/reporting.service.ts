@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { CostPerInstallDayObject } from "./models/cost-per-install-day-object";
 import { BehaviorSubject } from "rxjs";
 import { ChartLabelObject } from "./models/chart-label-object";
+import { AppService } from "src/app/core/services/app.service";
 
 @Injectable({
   providedIn: "root",
@@ -19,5 +20,11 @@ export class ReportingService {
     { name: "Return On Ad Spend", state: false },
   ]);
 
-  constructor() {}
+  isLoadingKeywords = true;
+
+  constructor(public appService: AppService) {}
+
+  downloadKeywordsCsv() {
+    //this.appService.downloadKeywordFile(this.keywordDataSource.data, "keyword");
+  }
 }
