@@ -5,16 +5,30 @@ import { Injectable } from "@angular/core";
 })
 export class AppService {
   downloadAggregateFile(data, filename) {
-    let csvData = this.ConvertToCSV(data, [
-      "timestamp",
-      "spend",
+    let headerRow = [
+      "date",
+      "cost",
       "installs",
-      "cpi",
+      "cost per install",
       "purchases",
       "revenue",
-      "cpp",
-      "revenueOverCost",
-    ]);
+      "cost per purchase",
+      "return on ad spend",
+    ];
+    let csvData = this.ConvertToCSV(
+      data,
+      [
+        "timestamp",
+        "spend",
+        "installs",
+        "cpi",
+        "purchases",
+        "revenue",
+        "cpp",
+        "revenueOverCost",
+      ],
+      headerRow
+    );
     let blob = new Blob([csvData], {
       type: "text/csv;charset=utf-8;",
     });
@@ -36,16 +50,32 @@ export class AppService {
   }
 
   downloadKeywordFile(data, filename) {
-    let csvData = this.ConvertToCSV(data, [
+    let headerRow = [
       "date",
-      "keyword_id",
+      "keyword id",
       "keyword",
-      "matchType",
-      "keywordDisplayStatus",
-      "local_spend",
+      "match type",
+      "status",
+      "display status",
+      "cost",
       "installs",
-      "avg_cpa",
-    ]);
+      "cost per install",
+    ];
+    let csvData = this.ConvertToCSV(
+      data,
+      [
+        "date",
+        "keyword_id",
+        "keyword",
+        "matchType",
+        "keywordStatus",
+        "keywordDisplayStatus",
+        "local_spend",
+        "installs",
+        "avg_cpa",
+      ],
+      headerRow
+    );
     let blob = new Blob([csvData], {
       type: "text/csv;charset=utf-8;",
     });
@@ -66,13 +96,13 @@ export class AppService {
     document.body.removeChild(dwldLink);
   }
 
-  ConvertToCSV(objArray, headerList) {
+  ConvertToCSV(objArray, headerList, headerRow) {
     let array = typeof objArray != "object" ? JSON.parse(objArray) : objArray;
     let str = "";
     let row = "";
 
-    for (let index in headerList) {
-      row += headerList[index] + ",";
+    for (let index in headerRow) {
+      row += headerRow[index] + ",";
     }
     row = row.slice(0, -1);
     str += row + "\r\n";

@@ -79,14 +79,56 @@
         csv download
       </button>
 
-      <button mat-icon-button class="reporting__buttons ml-2" mat-icon-button>
+      <!-- <button mat-icon-button class="reporting__buttons ml-2" mat-icon-button>
         <mat-icon class="ml-1" aria-label="download">show_chart</mat-icon>
         visualization
+      </button> -->
+      <button
+        mat-icon-button
+        class="reporting__buttons"
+        (click)="showAggregateDataView()"
+        *ngIf="!isKeywordDataVisMode"
+        mat-icon-button
+      >
+        <mat-icon class="ml-2" aria-label="download">show_chart</mat-icon>
+        visualization
+      </button>
+
+      <button
+        mat-icon-button
+        class="reporting__buttons"
+        (click)="showAggregateTableView()"
+        *ngIf="isKeywordDataVisMode"
+        mat-icon-button
+      >
+        <mat-icon class="ml-2" aria-label="download">table_view</mat-icon>
+        table
       </button>
     </div>
   </div>
 
+  <!-- data view -->
+  <div *ngIf="isKeywordDataVisMode">
+    <div>
+      <!-- <mat-chip-list>
+              <mat-chip
+                *ngFor="
+                  let activeLineChartLabel of reportingService.activeLineChartLabel$.getValue()
+                "
+                [selected]="activeLineChartLabel.state"
+                (click)="onChipClicked(activeLineChartLabel)"
+              >
+                {{ activeLineChartLabel.name }}
+              </mat-chip>
+            </mat-chip-list> -->
+    </div>
+    Data visualization coming soon for keyword reporting!
+    <!-- <app-line-chart></app-line-chart> -->
+  </div>
+
+  <!-- normal view -->
   <mat-paginator
+    [ngClass]="isKeywordDataVisMode ? 'd-none' : ''"
     #keywordsPaginator
     [pageSizeOptions]="[100, 250, 500, 1000, 5000, 10000]"
     class="keyword-reporting__paginator"
@@ -94,11 +136,12 @@
   </mat-paginator>
 
   <table
+    [ngClass]="isKeywordDataVisMode ? 'd-none' : ''"
     mat-table
     [dataSource]="keywordDataSource"
     matSort
     matSortActive="date"
-    matSortDirection="desc"
+    matSortDirection="asc"
   >
     <ng-container matColumnDef="date">
       <th mat-header-cell mat-sort-header *matHeaderCellDef>

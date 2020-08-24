@@ -307,67 +307,19 @@ export class KeywordReportingComponent implements OnInit {
       .subscribe();
   }
 
-  //   this.keywordsPaginator.page
-  //     .pipe(
-  //       delay(0),
-  //       tap((val) => {
-  //         this.reportingService.isLoadingKeywords = true;
-  //       }),
-  //       switchMap((val) => {
-  //         let keywordOffsetKey = this.keywordOffsetKeys[val.pageIndex];
-  //         return this.clientService
-  //           .getClientKeywordHistory(
-  //             this.orgId,
-  //             this.keywordsPaginator.pageSize,
-  //             keywordOffsetKey,
-  //             "all",
-  //             "all",
-  //             "all",
-  //             "all"
-  //           )
-  //           .pipe(
-  //             map((data) => {
-  //               this.reportingService.isLoadingKeywords = false;
-  //               this.keywordHistory = data["history"];
-
-  //               //
-  //               if (val.pageIndex > val.previousPageIndex) {
-  //                 this.keywordOffsetKeys.push(
-  //                   String(data["offset"]["org_id"]) +
-  //                     "|" +
-  //                     String(data["offset"]["keyword_id"]) +
-  //                     "|" +
-  //                     String(data["offset"]["date"])
-  //                 );
-  //               } else if (val.pageIndex == val.previousPageIndex) {
-  //                 this.keywordOffsetKeys = ["init|init|init"];
-  //                 this.keywordOffsetKeys.push(
-  //                   String(data["offset"]["org_id"]) +
-  //                     "|" +
-  //                     String(data["offset"]["keyword_id"]) +
-  //                     "|" +
-  //                     String(data["offset"]["date"])
-  //                 );
-  //               }
-  //               this.keywordDataSource.data = this.keywordHistory;
-  //               this.keywordsPaginator.length = data["count"];
-  //               return data;
-  //             }),
-  //             catchError(() => {
-  //               this.reportingService.isLoadingKeywords = false;
-  //               return [];
-  //             })
-  //           );
-  //       })
-  //     )
-  //     .subscribe();
-  // }
-
   applyFilterDisabled() {
     return !this.keywordFilterForm.valid;
   }
 
   downloadKeywordsCsv() {
     this.appService.downloadKeywordFile(this.keywordDataSource.data, "keyword");
+  }
+
+  showAggregateDataView() {
+    this.isKeywordDataVisMode = true;
+  }
+
+  showAggregateTableView() {
+    this.isKeywordDataVisMode = false;
   }
 }
