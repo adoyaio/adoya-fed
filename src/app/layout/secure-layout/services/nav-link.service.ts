@@ -51,19 +51,19 @@ export class NavLinkService implements OnDestroy {
       )
     );
 
-    // this.navLinks.push(
-    //   LayoutNavLinks.build(
-    //     3,
-    //     "button",
-    //     "Notifications",
-    //     "/workbench/notifications",
-    //     "dynamic_feed",
-    //     undefined,
-    //     () => {
-    //       location.href = "/workbench/notifications";
-    //     }
-    //   )
-    // );
+    this.navLinks.push(
+      LayoutNavLinks.build(
+        3,
+        "button",
+        "Marketing Newsfeed",
+        "/workbench/newsfeed",
+        "dynamic_feed",
+        undefined,
+        () => {
+          location.href = "/workbench/newsfeed";
+        }
+      )
+    );
 
     this.navLinks.push(
       LayoutNavLinks.build(

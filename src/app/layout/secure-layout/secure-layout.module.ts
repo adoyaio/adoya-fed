@@ -12,6 +12,8 @@ import { DashboardModule } from "src/app/features/dashboard/dashboard.module";
 import { ReportingModule } from "src/app/features/reporting/reporting.module";
 import { AccountModule } from "src/app/features/account/account.module";
 import { SupportModule } from "src/app/features/support/support.module";
+import { NewsfeedModule } from "src/app/features/newsfeed/newsfeed.module";
+import { NewsfeedComponent } from "src/app/features/newsfeed/components/newsfeed.component";
 
 @NgModule({
   declarations: [
@@ -29,6 +31,7 @@ import { SupportModule } from "src/app/features/support/support.module";
     ReportingModule,
     AccountModule,
     SupportModule,
+    NewsfeedModule,
   ],
 })
 export class SecureLayoutModule {}

@@ -10,6 +10,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { AmplifyAngularModule, AmplifyService } from "aws-amplify-angular";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { ChartsModule } from "ng2-charts";
+import { SecureLayoutModule } from "./layout/secure-layout/secure-layout.module";
 
 @NgModule({
   declarations: [AppComponent],
