@@ -12,9 +12,10 @@ import { MaterialModule } from "src/app/shared/material-design/material.module";
 import { ChartsModule } from "ng2-charts";
 import { LineChartComponent } from "./components/line-chart/line-chart.component";
 import { KeywordReportingComponent } from './components/keyword-reporting/keyword-reporting.component';
+import { KeywordReportingLineChartComponent } from './components/keyword-reporting-line-chart/keyword-reporting-line-chart.component';
 
 @NgModule({
-  declarations: [ReportingComponent, LineChartComponent, KeywordReportingComponent],
+  declarations: [ReportingComponent, LineChartComponent, KeywordReportingComponent, KeywordReportingLineChartComponent],
   imports: [
     CommonModule,
     ReportingRoutingModule,

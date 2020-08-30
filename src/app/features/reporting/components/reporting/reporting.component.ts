@@ -250,6 +250,7 @@ export class ReportingComponent implements AfterViewInit, OnInit {
             data
           );
 
+          // JF todo combine these
           this.dataSource.data = this.cpiHistory;
           this.reportingService.costPerInstallDayObject$.next({
             ...this.cpiHistory,

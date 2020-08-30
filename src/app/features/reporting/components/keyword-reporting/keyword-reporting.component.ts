@@ -33,16 +33,11 @@ export class KeywordReportingComponent implements OnInit {
     this.keywordHistory
   );
 
-  keywordOffsetKeys: string[] = ["init|init|init"]; // hack for dynamo paging by key
+  keywordOffsetKeys: string[] = ["init|init|init"]; // dynamo paging by key
   orgId: string;
   isKeywordDataVisMode = false;
   currentDate: Date = new Date();
   minDate: Date = new Date();
-
-  // startPickerInputControl: FormControl = this.fb.control("");
-  // endPickerInputControl: FormControl = this.fb.control("");
-  // keywordStatusControl: FormControl = this.fb.control("");
-  // matchTypeControl: FormControl = this.fb.control("");
 
   keywordFilterForm = this.fb.group({
     start: [new Date().toISOString()],
@@ -63,8 +58,6 @@ export class KeywordReportingComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // const currentDate = new Date();
-    // const minDate = new Date();
     this.minDate.setDate(this.minDate.getDate() - 1);
 
     this.keywordFilterForm.get("start").setValue(this.minDate);
@@ -82,7 +75,6 @@ export class KeywordReportingComponent implements OnInit {
     let end: Date = this.keywordFilterForm.get("end").value;
     const startString = start.toISOString().split("T")[0];
     const endString = end.toISOString().split("T")[0];
-    // console.log("ngAfterViewInit:::" + this.keywordsPaginator.pageIndex);
 
     this.clientService
       .getClientKeywordHistory(
@@ -108,6 +100,12 @@ export class KeywordReportingComponent implements OnInit {
           );
           this.keywordDataSource.data = this.keywordHistory;
           this.keywordsPaginator.length = data["count"];
+
+          // set line graph
+          this.reportingService.keywordDayObject$.next({
+            ...this.keywordHistory,
+          });
+
           return data;
         }),
         catchError(() => {
@@ -124,7 +122,6 @@ export class KeywordReportingComponent implements OnInit {
           this.reportingService.isLoadingKeywords = true;
         }),
         switchMap((val) => {
-          // console.log("keywordsPaginator.page::" + val.pageIndex);
           let keywordOffsetKey = this.keywordOffsetKeys[val.pageIndex];
           let start: Date = this.keywordFilterForm.get("start").value;
           let end: Date = this.keywordFilterForm.get("end").value;
@@ -163,7 +160,6 @@ export class KeywordReportingComponent implements OnInit {
                   );
                   // items per page change
                 } else if (val.pageIndex == val.previousPageIndex) {
-                  // console.log("found a items per page change");
                   this.keywordOffsetKeys = ["init|init|init"];
                   this.keywordOffsetKeys.push(
                     String(data["offset"]["org_id"]) +
@@ -174,12 +170,13 @@ export class KeywordReportingComponent implements OnInit {
                   );
                 }
 
-                // this.keywordOffsetKeys.forEach((val) => {
-                //   console.log("value now " + val);
-                // });
-
                 this.keywordDataSource.data = this.keywordHistory;
                 this.keywordsPaginator.length = data["count"];
+
+                // set line graph
+                this.reportingService.keywordDayObject$.next({
+                  ...this.keywordHistory,
+                });
                 return data;
               }),
               catchError(() => {
@@ -197,10 +194,6 @@ export class KeywordReportingComponent implements OnInit {
     this.keywordsPaginator.pageIndex = 0;
     this.keywordOffsetKeys = ["init|init|init"];
 
-    // this.keywordOffsetKeys.forEach((val) => {
-    //   console.log("value now " + val);
-    // });
-
     let start: Date = this.keywordFilterForm.get("start").value;
     let end: Date = this.keywordFilterForm.get("end").value;
 
@@ -208,8 +201,6 @@ export class KeywordReportingComponent implements OnInit {
       .value;
     const matchType: string = this.keywordFilterForm.get("matchType").value;
 
-    // console.log("applyFilter:::keywordStatus" + keywordStatus);
-    // console.log("applyFilter:::matchType" + matchType);
     this.clientService
       .getClientKeywordHistory(
         this.orgId,
@@ -221,7 +212,6 @@ export class KeywordReportingComponent implements OnInit {
         keywordStatus
       )
       .pipe(
-        // take(1),
         map((data) => {
           this.reportingService.isLoadingKeywords = false;
           this.keywordHistory = data["history"];
@@ -234,12 +224,13 @@ export class KeywordReportingComponent implements OnInit {
               String(data["offset"]["date"])
           );
 
-          // this.keywordOffsetKeys.forEach((val) => {
-          //   console.log("value now " + val);
-          // });
-
           this.keywordDataSource.data = this.keywordHistory;
           this.keywordsPaginator.length = data["count"];
+
+          // set line graph
+          this.reportingService.keywordDayObject$.next({
+            ...this.keywordHistory,
+          });
           return data;
         }),
         catchError(() => {
@@ -278,7 +269,6 @@ export class KeywordReportingComponent implements OnInit {
         keywordStatus
       )
       .pipe(
-        // take(1),
         map((data) => {
           this.reportingService.isLoadingKeywords = false;
           this.keywordHistory = data["history"];
@@ -290,13 +280,12 @@ export class KeywordReportingComponent implements OnInit {
               "|" +
               String(data["offset"]["date"])
           );
-
-          // this.keywordOffsetKeys.forEach((val) => {
-          //   console.log("value now " + val);
-          // });
-
           this.keywordDataSource.data = this.keywordHistory;
           this.keywordsPaginator.length = data["count"];
+          // set line graph
+          this.reportingService.keywordDayObject$.next({
+            ...this.keywordHistory,
+          });
           return data;
         }),
         catchError(() => {
@@ -322,4 +311,6 @@ export class KeywordReportingComponent implements OnInit {
   showAggregateTableView() {
     this.isKeywordDataVisMode = false;
   }
+
+  onChipClicked(line: any) {}
 }
