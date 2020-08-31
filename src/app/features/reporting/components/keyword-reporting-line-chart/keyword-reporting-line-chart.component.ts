@@ -31,7 +31,7 @@ export class KeywordReportingLineChartComponent implements OnInit {
       backgroundColor: "rgba(255,0,0,0.3)",
     },
   ];
-  public lineChartLegend = true;
+  public lineChartLegend = false;
   public lineChartType: ChartType = "line";
   public lineChartPlugins = [];
 
@@ -43,9 +43,7 @@ export class KeywordReportingLineChartComponent implements OnInit {
       this.reportingService.activeKeywordLineChartMetric$,
     ])
       .pipe(
-        filter(([data, metrics]) => {
-          return !_isNil(data);
-        }),
+        filter(([data, metrics]) => !_isNil(data)),
         tap(([data, metrics]) => {
           // active metric
 
@@ -63,15 +61,28 @@ export class KeywordReportingLineChartComponent implements OnInit {
           // const keywordIdDataLine = { data: [], label: "Keyword" };
 
           // build datalines for the active metric
-          _each(data, (keyword) => {
-            if (!_includes(this.lineChartLabels, keyword.date)) {
+          data.forEach((val) => {
+            console.log(val.date);
+          });
+
+          _chain(data)
+            .uniqBy("date")
+            .each((keyword) => {
               this.lineChartLabels.push(keyword.date);
-            }
+              console.log("ADDING data" + keyword.date);
+            })
+            .value();
+
+          _each(data, (keyword) => {
+            // if (!_includes(this.lineChartLabels, keyword.date)) {
+            //   this.lineChartLabels.push(keyword.date);
+            //   console.log("ADDING data" + keyword.date);
+            // }
             const match = _find(this.lineChartData, (line) => {
               return line.label === keyword.keyword;
             });
 
-            const dataPoint = _get(keyword, `${activeMetric.value}`, 0);
+            const dataPoint = _get(keyword, activeMetric.value, 0);
 
             if (dataPoint > 0) {
               console.log("JAMES TEST:::" + dataPoint);
@@ -82,6 +93,8 @@ export class KeywordReportingLineChartComponent implements OnInit {
                 data: [dataPoint],
                 label: keyword.keyword,
               });
+
+              // console.log("added " + keyword.keyword);
             } else {
               match.data.push(dataPoint);
             }

@@ -7,7 +7,7 @@ import { ReportingService } from "../../reporting.service";
 import { map, catchError, delay, tap, switchMap, take } from "rxjs/operators";
 import { MatTableDataSource, MatPaginator } from "@angular/material";
 import { KeywordDayObject } from "../../models/keyword-day-object";
-import { isNil, isEmpty } from "lodash";
+import { get as _get, isEmpty } from "lodash";
 
 @Component({
   selector: "app-keyword-reporting",
@@ -90,7 +90,7 @@ export class KeywordReportingComponent implements OnInit {
         take(1),
         map((data) => {
           this.reportingService.isLoadingKeywords = false;
-          this.keywordHistory = data["history"];
+          //this.keywordHistory = data["history"];
           this.keywordOffsetKeys.push(
             String(data["offset"]["org_id"]) +
               "|" +
@@ -98,13 +98,11 @@ export class KeywordReportingComponent implements OnInit {
               "|" +
               String(data["offset"]["date"])
           );
-          this.keywordDataSource.data = this.keywordHistory;
+          this.keywordDataSource.data = data["history"];
           this.keywordsPaginator.length = data["count"];
 
           // set line graph
-          this.reportingService.keywordDayObject$.next({
-            ...this.keywordHistory,
-          });
+          this.reportingService.keywordDayObject$.next(data["history"]);
 
           return data;
         }),
@@ -147,7 +145,7 @@ export class KeywordReportingComponent implements OnInit {
             .pipe(
               map((data) => {
                 this.reportingService.isLoadingKeywords = false;
-                this.keywordHistory = data["history"];
+                //this.keywordHistory = data["history"];
 
                 // handle dynamo paging
                 if (val.pageIndex > val.previousPageIndex) {
@@ -170,12 +168,12 @@ export class KeywordReportingComponent implements OnInit {
                   );
                 }
 
-                this.keywordDataSource.data = this.keywordHistory;
+                this.keywordDataSource.data = data["history"];
                 this.keywordsPaginator.length = data["count"];
 
                 // set line graph
                 this.reportingService.keywordDayObject$.next({
-                  ...this.keywordHistory,
+                  ...data["history"],
                 });
                 return data;
               }),
@@ -214,7 +212,7 @@ export class KeywordReportingComponent implements OnInit {
       .pipe(
         map((data) => {
           this.reportingService.isLoadingKeywords = false;
-          this.keywordHistory = data["history"];
+          //this.keywordHistory = data["history"];
 
           this.keywordOffsetKeys.push(
             String(data["offset"]["org_id"]) +
@@ -224,13 +222,17 @@ export class KeywordReportingComponent implements OnInit {
               String(data["offset"]["date"])
           );
 
-          this.keywordDataSource.data = this.keywordHistory;
+          this.keywordDataSource.data = data["history"];
           this.keywordsPaginator.length = data["count"];
 
           // set line graph
-          this.reportingService.keywordDayObject$.next({
-            ...this.keywordHistory,
+          const history: KeywordDayObject[] = data["history"];
+
+          history.forEach((val) => {
+            console.log(val.date);
           });
+
+          this.reportingService.keywordDayObject$.next(history);
           return data;
         }),
         catchError(() => {
@@ -271,7 +273,7 @@ export class KeywordReportingComponent implements OnInit {
       .pipe(
         map((data) => {
           this.reportingService.isLoadingKeywords = false;
-          this.keywordHistory = data["history"];
+          // this.keywordHistory = data["history"];
 
           this.keywordOffsetKeys.push(
             String(data["offset"]["org_id"]) +
@@ -280,11 +282,11 @@ export class KeywordReportingComponent implements OnInit {
               "|" +
               String(data["offset"]["date"])
           );
-          this.keywordDataSource.data = this.keywordHistory;
+          this.keywordDataSource.data = data["history"];
           this.keywordsPaginator.length = data["count"];
           // set line graph
           this.reportingService.keywordDayObject$.next({
-            ...this.keywordHistory,
+            ...data["history"],
           });
           return data;
         }),
@@ -306,6 +308,51 @@ export class KeywordReportingComponent implements OnInit {
 
   showAggregateDataView() {
     this.isKeywordDataVisMode = true;
+    this.reportingService.isLoadingKeywords = true;
+    this.keywordsPaginator.pageIndex = 0;
+    this.keywordOffsetKeys = ["init|init|init"];
+
+    let start: Date = this.keywordFilterForm.get("start").value;
+    let end: Date = this.keywordFilterForm.get("end").value;
+
+    const keywordStatus: string = this.keywordFilterForm.get("keywordStatus")
+      .value;
+    const matchType: string = this.keywordFilterForm.get("matchType").value;
+
+    this.clientService
+      .getClientKeywordHistory(
+        this.orgId,
+        10000000,
+        this.keywordOffsetKeys[this.keywordsPaginator.pageIndex],
+        start.toISOString().split("T")[0],
+        end.toISOString().split("T")[0],
+        matchType,
+        keywordStatus
+      )
+      .pipe(
+        map((data) => {
+          this.reportingService.isLoadingKeywords = false;
+          // this.keywordHistory = data["history"];
+
+          this.keywordOffsetKeys.push(
+            String(data["offset"]["org_id"]) +
+              "|" +
+              String(data["offset"]["keyword_id"]) +
+              "|" +
+              String(data["offset"]["date"])
+          );
+          this.keywordDataSource.data = data["history"];
+          this.keywordsPaginator.length = data["count"];
+          // set line graph
+          this.reportingService.keywordDayObject$.next(data["history"]);
+          return data;
+        }),
+        catchError(() => {
+          this.reportingService.isLoadingKeywords = false;
+          return [];
+        })
+      )
+      .subscribe();
   }
 
   showAggregateTableView() {
