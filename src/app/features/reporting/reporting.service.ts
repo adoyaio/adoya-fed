@@ -12,8 +12,8 @@ import { KeywordDayObject } from "./models/keyword-day-object";
   providedIn: "root",
 })
 export class ReportingService {
+  isLoadingCPI = true; //TODO implement
   costPerInstallDayObject$ = new BehaviorSubject<CostPerInstallDayObject[]>([]);
-
   activeLineChartLabel$ = new BehaviorSubject<ChartLabelObject[]>([
     { name: "Installs", state: true },
     { name: "Cost Per Install", state: true },
@@ -25,7 +25,6 @@ export class ReportingService {
   ]);
 
   isLoadingKeywords = true;
-
   keywordDayObject$ = new BehaviorSubject<KeywordDayObject[]>([]);
   activeKeywordLineChartMetric$ = new BehaviorSubject<ChartMetricObject[]>([
     { name: "Installs", value: "installs", state: true },

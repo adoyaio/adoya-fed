@@ -1,6 +1,6 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { ChartDataSets, ChartOptions, ChartType } from "chart.js";
-import { Color, Label } from "ng2-charts";
+import { Color, Label, BaseChartDirective } from "ng2-charts";
 import { ReportingService } from "../../reporting.service";
 import { combineLatest } from "rxjs";
 import { tap, filter } from "rxjs/operators";
@@ -31,9 +31,17 @@ export class KeywordReportingLineChartComponent implements OnInit {
       backgroundColor: "rgba(255,0,0,0.3)",
     },
   ];
+  // public lineChartColors: Color[] = [
+  //   {
+  //     borderColor: "#7a975d",
+  //     backgroundColor: "rgba(255,0,0,0.3)",
+  //   },
+  // ];
   public lineChartLegend = false;
   public lineChartType: ChartType = "line";
   public lineChartPlugins = [];
+
+  @ViewChild(BaseChartDirective, { static: true }) chart: BaseChartDirective;
 
   constructor(private reportingService: ReportingService) {}
 
@@ -45,13 +53,9 @@ export class KeywordReportingLineChartComponent implements OnInit {
       .pipe(
         filter(([data, metrics]) => !_isNil(data)),
         tap(([data, metrics]) => {
-          // active metric
-
           const activeMetric = _find(metrics, (metric) => {
             return metric.state === true;
           });
-
-          console.log("JAMES TEST::" + activeMetric.value);
 
           // init chart
           this.lineChartData = [];
@@ -61,44 +65,40 @@ export class KeywordReportingLineChartComponent implements OnInit {
           // const keywordIdDataLine = { data: [], label: "Keyword" };
 
           // build datalines for the active metric
-          data.forEach((val) => {
-            console.log(val.date);
-          });
+          // data.forEach((val) => {
+          //   console.log(val.date);
+          // });
 
           _chain(data)
             .uniqBy("date")
             .each((keyword) => {
               this.lineChartLabels.push(keyword.date);
-              console.log("ADDING data" + keyword.date);
+              // console.log("ADDING data" + keyword.date);
             })
             .value();
 
           _each(data, (keyword) => {
-            // if (!_includes(this.lineChartLabels, keyword.date)) {
-            //   this.lineChartLabels.push(keyword.date);
-            //   console.log("ADDING data" + keyword.date);
-            // }
             const match = _find(this.lineChartData, (line) => {
               return line.label === keyword.keyword;
             });
 
             const dataPoint = _get(keyword, activeMetric.value, 0);
 
-            if (dataPoint > 0) {
-              console.log("JAMES TEST:::" + dataPoint);
-            }
+            // if (dataPoint > 0) {
+            //   console.log("JAMES TEST:::" + dataPoint);
+            // }
 
             if (_isNil(match)) {
               this.lineChartData.push({
                 data: [dataPoint],
                 label: keyword.keyword,
               });
-
-              // console.log("added " + keyword.keyword);
             } else {
               match.data.push(dataPoint);
             }
           });
+
+          this.chart.update();
 
           // _each(
           //   [

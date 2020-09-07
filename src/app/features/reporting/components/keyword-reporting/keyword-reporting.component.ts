@@ -7,7 +7,13 @@ import { ReportingService } from "../../reporting.service";
 import { map, catchError, delay, tap, switchMap, take } from "rxjs/operators";
 import { MatTableDataSource, MatPaginator } from "@angular/material";
 import { KeywordDayObject } from "../../models/keyword-day-object";
-import { get as _get, isEmpty } from "lodash";
+import {
+  get as _get,
+  isEmpty as _isEmpty,
+  cloneDeep as _cloneDeep,
+  chain as _chain,
+} from "lodash";
+import { ChartMetricObject } from "../../models/chart-label-object";
 
 @Component({
   selector: "app-keyword-reporting",
@@ -39,12 +45,6 @@ export class KeywordReportingComponent implements OnInit {
   currentDate: Date = new Date();
   minDate: Date = new Date();
 
-  // keywordFilterForm = this.fb.group({
-  //   start: [new Date().toISOString()],
-  //   end: [new Date().toISOString()],
-  //   keywordStatus: ["all"],
-  //   matchType: ["all"],
-  // });
   keywordFilterForm = this.fb.group({
     start: [""],
     end: [""],
@@ -421,5 +421,27 @@ export class KeywordReportingComponent implements OnInit {
       .subscribe();
   }
 
-  onChipClicked(line: any) {}
+  onChipClicked(updated: ChartMetricObject) {
+    const updatedLineChartMetric = _cloneDeep(
+      this.reportingService.activeKeywordLineChartMetric$.getValue()
+    );
+
+    _chain(updatedLineChartMetric)
+      .find((metric) => {
+        return metric.state === true;
+      })
+      .set("state", false)
+      .value();
+
+    _chain(updatedLineChartMetric)
+      .find((metric) => {
+        return metric.name === updated.name;
+      })
+      .set("state", !updated.state)
+      .value();
+
+    this.reportingService.activeKeywordLineChartMetric$.next(
+      updatedLineChartMetric
+    );
+  }
 }
