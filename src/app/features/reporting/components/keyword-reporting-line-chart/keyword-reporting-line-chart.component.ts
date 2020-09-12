@@ -12,7 +12,11 @@ import {
   find as _find,
   isNil as _isNil,
   get as _get,
+  filter as _filter,
+  reduce as _reduce,
 } from "lodash";
+import { KeywordDayObject } from "../../models/keyword-day-object";
+import { Z_FILTERED } from "zlib";
 
 @Component({
   selector: "app-keyword-reporting-line-chart",
@@ -62,71 +66,63 @@ export class KeywordReportingLineChartComponent implements OnInit {
           }
           // init chart
           this.lineChartData = [];
+          // { data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A' },
+          // { data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B' },
+
           this.lineChartLabels = [];
+          // ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
 
-          //init cost data lines
-          // const keywordIdDataLine = { data: [], label: "Keyword" };
-
-          // build datalines for the active metric
-          // data.forEach((val) => {
-          //   console.log(val.date);
-          // });
-
-          _chain(data)
+          this.lineChartLabels = _chain(data)
             .uniqBy("date")
-            .each((keyword) => {
-              this.lineChartLabels.push(keyword.date);
-              // console.log("ADDING data" + keyword.date);
+            .map((keyword) => {
+              return keyword.date;
             })
             .value();
 
-          _each(data, (keyword) => {
-            const match = _find(this.lineChartData, (line) => {
-              return line.label === keyword.keyword;
-            });
+          // build list of keywords
+          const kwList = _chain(data)
+            .uniqBy("keyword")
+            .map((keyword) => {
+              return keyword.keyword;
+            })
+            .value();
 
-            const dataPoint = _get(keyword, activeMetric.value, 0);
-
-            // if (dataPoint > 0) {
-            //   console.log("JAMES TEST:::" + dataPoint);
-            // }
-
-            if (_isNil(match)) {
-              this.lineChartData.push({
-                data: [dataPoint],
-                label: keyword.keyword,
+          _each(kwList, (keyword) => {
+            _each(this.lineChartLabels, (date) => {
+              // pul all kw's for the date and summarize for the dataline
+              const valuesForADay = _filter(data, (line) => {
+                if (line.date === date && line.keyword === keyword) {
+                  return true;
+                }
               });
-            } else {
-              match.data.push(dataPoint);
-            }
+
+              // const dataPoint = 0
+              const dataPoint = _reduce(
+                valuesForADay,
+                (acc, day) => {
+                  const val = _get(day, activeMetric.value);
+                  return val + acc;
+                },
+                0
+              );
+
+              //write the dataline
+              const match = _find(this.lineChartData, (line) => {
+                return line.label === keyword;
+              });
+
+              if (_isNil(match)) {
+                this.lineChartData.push({
+                  data: [dataPoint],
+                  label: keyword,
+                });
+              } else {
+                match.data.push(dataPoint);
+              }
+            });
           });
 
           this.chart.update();
-
-          // _each(
-          //   [
-          //     cpiDataLine,
-          //     installsDataLine,
-          //     spendDataLine,
-          //     purchasesDataLine,
-          //     cppDataLine,
-          //     revenueDataLine,
-          //     revenueOverCostDataLine,
-          //   ],
-          //   (dataline) => {
-          //     if (
-          //       _chain(labels)
-          //         .find((label) => {
-          //           return label.name === dataline.label;
-          //         })
-          //         .get("state")
-          //         .value() === true
-          //     ) {
-          //       this.lineChartData.push(dataline);
-          //       this.lineChartLabels.push(dataline.label);
-          //     }
-          //   }
-          // );
         })
       )
       .subscribe();
