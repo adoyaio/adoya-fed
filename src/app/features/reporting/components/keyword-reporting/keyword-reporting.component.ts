@@ -42,7 +42,7 @@ export class KeywordReportingComponent implements OnInit {
   keywordOffsetKeys: string[] = ["init|init|init"]; // dynamo paging by key
   orgId: string;
   isKeywordDataVisMode = false;
-  currentDate: Date = new Date();
+  maxDate: Date = new Date();
   minDate: Date = new Date();
 
   keywordFilterForm = this.fb.group({
@@ -64,10 +64,11 @@ export class KeywordReportingComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.minDate.setDate(this.minDate.getDate() - 1);
+    this.minDate.setDate(this.minDate.getDate() - 2);
+    this.maxDate.setDate(this.maxDate.getDate() - 1);
 
     this.keywordFilterForm.get("start").setValue(this.minDate);
-    this.keywordFilterForm.get("end").setValue(this.currentDate);
+    this.keywordFilterForm.get("end").setValue(this.maxDate);
 
     this.orgId = this.userAccountService
       .getCurrentUser()
@@ -254,7 +255,7 @@ export class KeywordReportingComponent implements OnInit {
     this.keywordsPaginator.pageSize = 100;
     this.keywordOffsetKeys = ["init|init|init"];
     this.keywordFilterForm.get("start").setValue(this.minDate);
-    this.keywordFilterForm.get("end").setValue(this.currentDate);
+    this.keywordFilterForm.get("end").setValue(this.maxDate);
     this.keywordFilterForm.get("keywordStatus").setValue("all");
     this.keywordFilterForm.get("matchType").setValue("all");
 
