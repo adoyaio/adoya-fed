@@ -92,7 +92,7 @@
 
       <button
         mat-icon-button
-        class="reporting__buttons mr-5"
+        class="reporting__buttons mr-4"
         (click)="showTableView()"
         *ngIf="isKeywordDataVisMode"
         mat-icon-button
@@ -100,6 +100,28 @@
         <mat-icon class="ml-2" aria-label="download">table_view</mat-icon>
         table
       </button>
+
+      <button
+        mat-icon-button
+        class="reporting__buttons mr-5"
+        (click)="showAggregateDateView()"
+        *ngIf="isKeywordDataVisMode"
+        mat-icon-button
+      >
+        <mat-icon class="ml-2" aria-label="download">merge_type</mat-icon>
+        rollup
+      </button>
+
+      <!-- <button
+        mat-icon-button
+        class="reporting__buttons mr-4"
+        (click)="hideLegend()"
+        *ngIf="isKeywordDataVisMode"
+        mat-icon-button
+      >
+        <mat-icon class="ml-2" aria-label="download">visibility_off</mat-icon>
+        hide legend
+      </button> -->
 
       <mat-chip-list *ngIf="isKeywordDataVisMode">
         <mat-chip

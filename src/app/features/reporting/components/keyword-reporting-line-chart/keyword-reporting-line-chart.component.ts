@@ -37,7 +37,7 @@ export class KeywordReportingLineChartComponent implements OnInit {
   //     backgroundColor: "rgba(255,0,0,0.3)",
   //   },
   // ];
-  public lineChartLegend = false;
+  public lineChartLegend = true;
   public lineChartType: ChartType = "line";
   public lineChartPlugins = [];
 
@@ -57,6 +57,9 @@ export class KeywordReportingLineChartComponent implements OnInit {
             return metric.state === true;
           });
 
+          if (_isNil(activeMetric)) {
+            return;
+          }
           // init chart
           this.lineChartData = [];
           this.lineChartLabels = [];

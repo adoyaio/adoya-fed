@@ -445,4 +445,8 @@ export class KeywordReportingComponent implements OnInit {
       updatedLineChartMetric
     );
   }
+
+  showAggregateDateView() {}
+
+  hideLegend() {}
 }
