@@ -36,7 +36,7 @@ import { state } from "@angular/animations";
   styleUrls: ["./reporting.component.scss"],
 })
 export class ReportingComponent implements AfterViewInit, OnInit {
-  cpiHistory: CostPerInstallDayObject[] = [];
+  cpiHistory: CostPerInstallDayObject[] = []; // TODO rm
   displayedColumns: string[] = [
     "timestamp",
     "spend",
@@ -250,7 +250,7 @@ export class ReportingComponent implements AfterViewInit, OnInit {
             data
           );
 
-          // JF todo combine these
+          // JF TODO combine these
           this.dataSource.data = this.cpiHistory;
           this.reportingService.costPerInstallDayObject$.next({
             ...this.cpiHistory,

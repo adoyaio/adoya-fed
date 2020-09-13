@@ -98,7 +98,7 @@ export class KeywordReportingComponent implements OnInit {
         take(1),
         map((data) => {
           this.reportingService.isLoadingKeywords = false;
-          //this.keywordHistory = data["history"];
+
           this.keywordOffsetKeys.push(
             String(data["offset"]["org_id"]) +
               "|" +
@@ -359,11 +359,6 @@ export class KeywordReportingComponent implements OnInit {
           this.keywordDataSource.data = data["history"];
           this.keywordsPaginator.length = data["count"];
           // set line graph
-
-          const history: KeywordDayObject[] = data["history"];
-          history.forEach((val) => {
-            console.log(val.date);
-          });
           this.reportingService.keywordDayObject$.next(data["history"]);
           return data;
         }),

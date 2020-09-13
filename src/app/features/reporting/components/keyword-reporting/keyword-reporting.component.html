@@ -8,7 +8,12 @@
     >
       <mat-form-field class="mr-3">
         <mat-label>start date</mat-label>
-        <input matInput formControlName="start" [matDatepicker]="startpicker" />
+        <input
+          matInput
+          [max]="minDate"
+          formControlName="start"
+          [matDatepicker]="startpicker"
+        />
         <mat-datepicker-toggle
           matSuffix
           [for]="startpicker"
@@ -18,7 +23,12 @@
 
       <mat-form-field class="mr-3">
         <mat-label>end date</mat-label>
-        <input matInput formControlName="end" [matDatepicker]="endpicker" />
+        <input
+          matInput
+          [max]="maxDate"
+          formControlName="end"
+          [matDatepicker]="endpicker"
+        />
         <mat-datepicker-toggle
           matSuffix
           [for]="endpicker"
@@ -50,74 +60,54 @@
     >
       <button
         [disabled]="applyFilterDisabled()"
-        mat-icon-button
-        class="keyword-reporting__buttons"
+        mat-button
         (click)="applyFilter()"
-        mat-icon-button
       >
         <mat-icon aria-label="save">filter_alt</mat-icon>
         apply filters
       </button>
 
-      <button
-        mat-icon-button
-        class="keyword-reporting__buttons"
-        (click)="resetKeywordFilters()"
-        mat-icon-button
-      >
+      <button mat-button (click)="resetKeywordFilters()">
         <mat-icon aria-label="clear">clear</mat-icon>
         clear filters
       </button>
 
-      <button
-        (click)="downloadKeywordsCsv()"
-        mat-icon-button
-        class="keyword-reporting__buttons"
-        mat-icon-button
-      >
+      <button (click)="downloadKeywordsCsv()" mat-button>
         <mat-icon class="ml-1" aria-label="download">save_alt</mat-icon>
         csv download
       </button>
 
       <button
-        mat-icon-button
-        class="reporting__buttons"
+        mat-button
         (click)="showDataView()"
         *ngIf="!isKeywordDataVisMode && !isKeywordAggDataVisMode"
-        mat-icon-button
       >
         <mat-icon class="ml-2" aria-label="download">show_chart</mat-icon>
         visualization
       </button>
 
       <button
-        mat-icon-button
-        class="reporting__buttons mr-4"
+        mat-button
         (click)="showTableView()"
         *ngIf="isKeywordDataVisMode || isKeywordAggDataVisMode"
-        mat-icon-button
       >
         <mat-icon class="ml-2" aria-label="download">table_view</mat-icon>
-        table
+        table view
       </button>
 
       <button
-        mat-icon-button
-        class="reporting__buttons mr-6"
+        mat-button
         (click)="showAggregateDataView()"
         *ngIf="isKeywordDataVisMode"
-        mat-icon-button
       >
         <mat-icon class="ml-2" aria-label="download">pie_chart</mat-icon>
         pie chart
       </button>
 
       <button
-        mat-icon-button
-        class="reporting__buttons mr-6"
+        mat-button
         (click)="showDataView()"
         *ngIf="isKeywordAggDataVisMode"
-        mat-icon-button
       >
         <mat-icon class="ml-2" aria-label="download"
           >stacked_line_chart</mat-icon
@@ -136,7 +126,10 @@
         hide legend
       </button> -->
 
-      <mat-chip-list *ngIf="isKeywordDataVisMode || isKeywordAggDataVisMode">
+      <mat-chip-list
+        *ngIf="isKeywordDataVisMode || isKeywordAggDataVisMode"
+        class="ml-1"
+      >
         <mat-chip
           *ngFor="
             let activeLineChartMetric of reportingService.activeKeywordLineChartMetric$.getValue()
