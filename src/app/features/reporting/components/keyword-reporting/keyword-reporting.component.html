@@ -83,7 +83,7 @@
         mat-icon-button
         class="reporting__buttons"
         (click)="showDataView()"
-        *ngIf="!isKeywordDataVisMode"
+        *ngIf="!isKeywordDataVisMode && !isKeywordAggDataVisMode"
         mat-icon-button
       >
         <mat-icon class="ml-2" aria-label="download">show_chart</mat-icon>
@@ -94,7 +94,7 @@
         mat-icon-button
         class="reporting__buttons mr-4"
         (click)="showTableView()"
-        *ngIf="isKeywordDataVisMode"
+        *ngIf="isKeywordDataVisMode || isKeywordAggDataVisMode"
         mat-icon-button
       >
         <mat-icon class="ml-2" aria-label="download">table_view</mat-icon>
@@ -103,13 +103,26 @@
 
       <button
         mat-icon-button
-        class="reporting__buttons mr-5"
-        (click)="showAggregateDateView()"
+        class="reporting__buttons mr-6"
+        (click)="showAggregateDataView()"
         *ngIf="isKeywordDataVisMode"
         mat-icon-button
       >
-        <mat-icon class="ml-2" aria-label="download">merge_type</mat-icon>
-        rollup
+        <mat-icon class="ml-2" aria-label="download">pie_chart</mat-icon>
+        pie chart
+      </button>
+
+      <button
+        mat-icon-button
+        class="reporting__buttons mr-6"
+        (click)="showDataView()"
+        *ngIf="isKeywordAggDataVisMode"
+        mat-icon-button
+      >
+        <mat-icon class="ml-2" aria-label="download"
+          >stacked_line_chart</mat-icon
+        >
+        line chart
       </button>
 
       <!-- <button
@@ -123,7 +136,7 @@
         hide legend
       </button> -->
 
-      <mat-chip-list *ngIf="isKeywordDataVisMode">
+      <mat-chip-list *ngIf="isKeywordDataVisMode || isKeywordAggDataVisMode">
         <mat-chip
           *ngFor="
             let activeLineChartMetric of reportingService.activeKeywordLineChartMetric$.getValue()
@@ -142,9 +155,14 @@
     <app-keyword-reporting-line-chart></app-keyword-reporting-line-chart>
   </div>
 
+  <!-- data view -->
+  <div *ngIf="isKeywordAggDataVisMode">
+    <app-keyword-reporting-pie-chart></app-keyword-reporting-pie-chart>
+  </div>
+
   <!-- table view -->
   <mat-paginator
-    [ngClass]="isKeywordDataVisMode ? 'd-none' : ''"
+    [ngClass]="isKeywordDataVisMode || isKeywordAggDataVisMode ? 'd-none' : ''"
     #keywordsPaginator
     [pageSizeOptions]="[100, 250, 500, 1000, 5000, 10000]"
     class="keyword-reporting__paginator"
@@ -152,7 +170,7 @@
   </mat-paginator>
 
   <table
-    [ngClass]="isKeywordDataVisMode ? 'd-none' : ''"
+    [ngClass]="isKeywordDataVisMode || isKeywordAggDataVisMode ? 'd-none' : ''"
     mat-table
     [dataSource]="keywordDataSource"
     matSort

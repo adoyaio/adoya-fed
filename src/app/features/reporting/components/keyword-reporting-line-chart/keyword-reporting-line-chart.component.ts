@@ -15,8 +15,6 @@ import {
   filter as _filter,
   reduce as _reduce,
 } from "lodash";
-import { KeywordDayObject } from "../../models/keyword-day-object";
-import { Z_FILTERED } from "zlib";
 
 @Component({
   selector: "app-keyword-reporting-line-chart",

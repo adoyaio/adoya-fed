@@ -42,6 +42,7 @@ export class KeywordReportingComponent implements OnInit {
   keywordOffsetKeys: string[] = ["init|init|init"]; // dynamo paging by key
   orgId: string;
   isKeywordDataVisMode = false;
+  isKeywordAggDataVisMode = false;
   maxDate: Date = new Date();
   minDate: Date = new Date();
 
@@ -314,8 +315,14 @@ export class KeywordReportingComponent implements OnInit {
     this.appService.downloadKeywordFile(this.keywordDataSource.data, "keyword");
   }
 
+  showAggregateDataView() {
+    this.isKeywordAggDataVisMode = true;
+    this.isKeywordDataVisMode = false;
+  }
+
   showDataView() {
     this.isKeywordDataVisMode = true;
+    this.isKeywordAggDataVisMode = false;
     this.reportingService.isLoadingKeywords = true;
     this.keywordsPaginator.pageIndex = 0;
     this.keywordOffsetKeys = ["init|init|init"];
@@ -370,6 +377,7 @@ export class KeywordReportingComponent implements OnInit {
 
   showTableView() {
     this.isKeywordDataVisMode = false;
+    this.isKeywordAggDataVisMode = false;
     this.reportingService.isLoadingKeywords = true;
     this.keywordsPaginator.pageIndex = 0;
     this.keywordsPaginator.pageSize = 100;
@@ -445,8 +453,6 @@ export class KeywordReportingComponent implements OnInit {
       updatedLineChartMetric
     );
   }
-
-  showAggregateDateView() {}
 
   hideLegend() {}
 }

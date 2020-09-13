@@ -13,9 +13,10 @@ import { ChartsModule } from "ng2-charts";
 import { LineChartComponent } from "./components/line-chart/line-chart.component";
 import { KeywordReportingComponent } from './components/keyword-reporting/keyword-reporting.component';
 import { KeywordReportingLineChartComponent } from './components/keyword-reporting-line-chart/keyword-reporting-line-chart.component';
+import { KeywordReportingPieChartComponent } from './components/keyword-reporting-pie-chart/keyword-reporting-pie-chart.component';
 
 @NgModule({
-  declarations: [ReportingComponent, LineChartComponent, KeywordReportingComponent, KeywordReportingLineChartComponent],
+  declarations: [ReportingComponent, LineChartComponent, KeywordReportingComponent, KeywordReportingLineChartComponent, KeywordReportingPieChartComponent],
   imports: [
     CommonModule,
     ReportingRoutingModule,
