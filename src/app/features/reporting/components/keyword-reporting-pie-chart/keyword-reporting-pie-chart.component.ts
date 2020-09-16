@@ -16,6 +16,8 @@ import {
   reduce as _reduce,
 } from "lodash";
 
+// import * as pluginDataLabels from 'chartjs-plugin-datalabels';
+
 @Component({
   selector: "app-keyword-reporting-pie-chart",
   templateUrl: "./keyword-reporting-pie-chart.component.html",
@@ -25,12 +27,8 @@ export class KeywordReportingPieChartComponent implements OnInit {
   public pieChartOptions: ChartOptions = {
     responsive: true,
   };
-  public pieChartLabels: Label[] = [
-    "Download Sales",
-    "In-Store Sales",
-    "Mail Sales",
-  ];
-  public pieChartData: SingleDataSet = [300, 500, 100];
+  public pieChartLabels: Label[] = [];
+  public pieChartData: SingleDataSet = [];
   public pieChartType: ChartType = "pie";
   public pieChartLegend = true;
   public pieChartPlugins = [];

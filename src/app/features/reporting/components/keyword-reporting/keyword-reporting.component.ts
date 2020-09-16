@@ -43,8 +43,9 @@ export class KeywordReportingComponent implements OnInit {
   orgId: string;
   isKeywordDataVisMode = false;
   isKeywordAggDataVisMode = false;
-  maxDate: Date = new Date();
-  minDate: Date = new Date();
+
+  maxDate: Date;
+  minDate: Date;
 
   keywordFilterForm = this.fb.group({
     start: [""],
@@ -65,6 +66,8 @@ export class KeywordReportingComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.minDate = new Date();
+    this.maxDate = new Date();
     this.minDate.setDate(this.minDate.getDate() - 2);
     this.maxDate.setDate(this.maxDate.getDate() - 1);
 
@@ -81,16 +84,13 @@ export class KeywordReportingComponent implements OnInit {
   ngAfterViewInit() {
     let start: Date = this.keywordFilterForm.get("start").value;
     let end: Date = this.keywordFilterForm.get("end").value;
-    const startString = start.toISOString().split("T")[0];
-    const endString = end.toISOString().split("T")[0];
-
     this.clientService
       .getClientKeywordHistory(
         this.orgId,
         this.keywordsPaginator.pageSize,
         this.keywordOffsetKeys[this.keywordsPaginator.pageIndex],
-        startString,
-        endString,
+        this.formatDate(start),
+        this.formatDate(end),
         "all",
         "all"
       )
@@ -131,9 +131,6 @@ export class KeywordReportingComponent implements OnInit {
           let keywordOffsetKey = this.keywordOffsetKeys[val.pageIndex];
           let start: Date = this.keywordFilterForm.get("start").value;
           let end: Date = this.keywordFilterForm.get("end").value;
-          const startString = start.toISOString().split("T")[0];
-          const endString = end.toISOString().split("T")[0];
-
           const keywordStatus: string = this.keywordFilterForm.get(
             "keywordStatus"
           ).value;
@@ -145,8 +142,8 @@ export class KeywordReportingComponent implements OnInit {
               this.orgId,
               this.keywordsPaginator.pageSize,
               keywordOffsetKey,
-              startString,
-              endString,
+              this.formatDate(start),
+              this.formatDate(end),
               matchType,
               keywordStatus
             )
@@ -195,7 +192,20 @@ export class KeywordReportingComponent implements OnInit {
       .subscribe();
   }
 
+  formatDate(date) {
+    let d = new Date(date),
+      month = "" + (d.getMonth() + 1),
+      day = "" + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2) month = "0" + month;
+    if (day.length < 2) day = "0" + day;
+
+    return [year, month, day].join("-");
+  }
+
   applyFilter() {
+    console.log("TEST");
     this.reportingService.isLoadingKeywords = true;
     this.keywordsPaginator.pageIndex = 0;
     this.keywordOffsetKeys = ["init|init|init"];
@@ -218,8 +228,8 @@ export class KeywordReportingComponent implements OnInit {
         this.orgId,
         numRecs,
         this.keywordOffsetKeys[this.keywordsPaginator.pageIndex],
-        start.toISOString().split("T")[0],
-        end.toISOString().split("T")[0],
+        this.formatDate(start),
+        this.formatDate(end),
         matchType,
         keywordStatus
       )
@@ -278,8 +288,8 @@ export class KeywordReportingComponent implements OnInit {
         this.orgId,
         numRecs,
         this.keywordOffsetKeys[this.keywordsPaginator.pageIndex],
-        start.toISOString().split("T")[0],
-        end.toISOString().split("T")[0],
+        this.formatDate(start),
+        this.formatDate(end),
         matchType,
         keywordStatus
       )
@@ -339,8 +349,8 @@ export class KeywordReportingComponent implements OnInit {
         this.orgId,
         1000000,
         this.keywordOffsetKeys[this.keywordsPaginator.pageIndex],
-        start.toISOString().split("T")[0],
-        end.toISOString().split("T")[0],
+        this.formatDate(start),
+        this.formatDate(end),
         matchType,
         keywordStatus
       )
@@ -396,8 +406,8 @@ export class KeywordReportingComponent implements OnInit {
         this.orgId,
         numRecs,
         this.keywordOffsetKeys[this.keywordsPaginator.pageIndex],
-        start.toISOString().split("T")[0],
-        end.toISOString().split("T")[0],
+        this.formatDate(start),
+        this.formatDate(end),
         matchType,
         keywordStatus
       )

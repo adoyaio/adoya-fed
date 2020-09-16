@@ -14,6 +14,7 @@
           <mat-label>start date</mat-label>
           <input
             matInput
+            [max]="minDate"
             [formControl]="startPickerInputControl"
             [matDatepicker]="startpicker"
           />
@@ -28,6 +29,7 @@
           <mat-label>end date</mat-label>
           <input
             matInput
+            [max]="maxDate"
             [formControl]="endPickerInputControl"
             [matDatepicker]="endpicker"
           />
