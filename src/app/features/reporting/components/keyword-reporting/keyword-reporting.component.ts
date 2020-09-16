@@ -7,7 +7,13 @@ import { ReportingService } from "../../reporting.service";
 import { map, catchError, delay, tap, switchMap, take } from "rxjs/operators";
 import { MatTableDataSource, MatPaginator } from "@angular/material";
 import { KeywordDayObject } from "../../models/keyword-day-object";
-import { isNil, isEmpty } from "lodash";
+import {
+  get as _get,
+  isEmpty as _isEmpty,
+  cloneDeep as _cloneDeep,
+  chain as _chain,
+} from "lodash";
+import { ChartMetricObject } from "../../models/chart-label-object";
 
 @Component({
   selector: "app-keyword-reporting",
@@ -33,20 +39,17 @@ export class KeywordReportingComponent implements OnInit {
     this.keywordHistory
   );
 
-  keywordOffsetKeys: string[] = ["init|init|init"]; // hack for dynamo paging by key
+  keywordOffsetKeys: string[] = ["init|init|init"]; // dynamo paging by key
   orgId: string;
   isKeywordDataVisMode = false;
-  currentDate: Date = new Date();
-  minDate: Date = new Date();
+  isKeywordAggDataVisMode = false;
 
-  // startPickerInputControl: FormControl = this.fb.control("");
-  // endPickerInputControl: FormControl = this.fb.control("");
-  // keywordStatusControl: FormControl = this.fb.control("");
-  // matchTypeControl: FormControl = this.fb.control("");
+  maxDate: Date;
+  minDate: Date;
 
   keywordFilterForm = this.fb.group({
-    start: [new Date().toISOString()],
-    end: [new Date().toISOString()],
+    start: [""],
+    end: [""],
     keywordStatus: ["all"],
     matchType: ["all"],
   });
@@ -63,12 +66,13 @@ export class KeywordReportingComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // const currentDate = new Date();
-    // const minDate = new Date();
-    this.minDate.setDate(this.minDate.getDate() - 1);
+    this.minDate = new Date();
+    this.maxDate = new Date();
+    this.minDate.setDate(this.minDate.getDate() - 2);
+    this.maxDate.setDate(this.maxDate.getDate() - 1);
 
     this.keywordFilterForm.get("start").setValue(this.minDate);
-    this.keywordFilterForm.get("end").setValue(this.currentDate);
+    this.keywordFilterForm.get("end").setValue(this.maxDate);
 
     this.orgId = this.userAccountService
       .getCurrentUser()
@@ -80,17 +84,13 @@ export class KeywordReportingComponent implements OnInit {
   ngAfterViewInit() {
     let start: Date = this.keywordFilterForm.get("start").value;
     let end: Date = this.keywordFilterForm.get("end").value;
-    const startString = start.toISOString().split("T")[0];
-    const endString = end.toISOString().split("T")[0];
-    // console.log("ngAfterViewInit:::" + this.keywordsPaginator.pageIndex);
-
     this.clientService
       .getClientKeywordHistory(
         this.orgId,
         this.keywordsPaginator.pageSize,
         this.keywordOffsetKeys[this.keywordsPaginator.pageIndex],
-        startString,
-        endString,
+        this.formatDate(start),
+        this.formatDate(end),
         "all",
         "all"
       )
@@ -98,7 +98,7 @@ export class KeywordReportingComponent implements OnInit {
         take(1),
         map((data) => {
           this.reportingService.isLoadingKeywords = false;
-          this.keywordHistory = data["history"];
+
           this.keywordOffsetKeys.push(
             String(data["offset"]["org_id"]) +
               "|" +
@@ -106,8 +106,12 @@ export class KeywordReportingComponent implements OnInit {
               "|" +
               String(data["offset"]["date"])
           );
-          this.keywordDataSource.data = this.keywordHistory;
+          this.keywordDataSource.data = data["history"];
           this.keywordsPaginator.length = data["count"];
+
+          // set line graph
+          this.reportingService.keywordDayObject$.next(data["history"]);
+
           return data;
         }),
         catchError(() => {
@@ -124,13 +128,9 @@ export class KeywordReportingComponent implements OnInit {
           this.reportingService.isLoadingKeywords = true;
         }),
         switchMap((val) => {
-          // console.log("keywordsPaginator.page::" + val.pageIndex);
           let keywordOffsetKey = this.keywordOffsetKeys[val.pageIndex];
           let start: Date = this.keywordFilterForm.get("start").value;
           let end: Date = this.keywordFilterForm.get("end").value;
-          const startString = start.toISOString().split("T")[0];
-          const endString = end.toISOString().split("T")[0];
-
           const keywordStatus: string = this.keywordFilterForm.get(
             "keywordStatus"
           ).value;
@@ -142,15 +142,14 @@ export class KeywordReportingComponent implements OnInit {
               this.orgId,
               this.keywordsPaginator.pageSize,
               keywordOffsetKey,
-              startString,
-              endString,
+              this.formatDate(start),
+              this.formatDate(end),
               matchType,
               keywordStatus
             )
             .pipe(
               map((data) => {
                 this.reportingService.isLoadingKeywords = false;
-                this.keywordHistory = data["history"];
 
                 // handle dynamo paging
                 if (val.pageIndex > val.previousPageIndex) {
@@ -161,9 +160,9 @@ export class KeywordReportingComponent implements OnInit {
                       "|" +
                       String(data["offset"]["date"])
                   );
+
                   // items per page change
                 } else if (val.pageIndex == val.previousPageIndex) {
-                  // console.log("found a items per page change");
                   this.keywordOffsetKeys = ["init|init|init"];
                   this.keywordOffsetKeys.push(
                     String(data["offset"]["org_id"]) +
@@ -174,12 +173,13 @@ export class KeywordReportingComponent implements OnInit {
                   );
                 }
 
-                // this.keywordOffsetKeys.forEach((val) => {
-                //   console.log("value now " + val);
-                // });
-
-                this.keywordDataSource.data = this.keywordHistory;
+                this.keywordDataSource.data = data["history"];
                 this.keywordsPaginator.length = data["count"];
+
+                // set line graph
+                this.reportingService.keywordDayObject$.next({
+                  ...data["history"],
+                });
                 return data;
               }),
               catchError(() => {
@@ -192,40 +192,50 @@ export class KeywordReportingComponent implements OnInit {
       .subscribe();
   }
 
+  formatDate(date) {
+    let d = new Date(date),
+      month = "" + (d.getMonth() + 1),
+      day = "" + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2) month = "0" + month;
+    if (day.length < 2) day = "0" + day;
+
+    return [year, month, day].join("-");
+  }
+
   applyFilter() {
+    console.log("TEST");
     this.reportingService.isLoadingKeywords = true;
     this.keywordsPaginator.pageIndex = 0;
     this.keywordOffsetKeys = ["init|init|init"];
 
-    // this.keywordOffsetKeys.forEach((val) => {
-    //   console.log("value now " + val);
-    // });
-
     let start: Date = this.keywordFilterForm.get("start").value;
     let end: Date = this.keywordFilterForm.get("end").value;
+    let numRecs = 0;
+    if (this.isKeywordDataVisMode) {
+      numRecs = 1000000;
+    } else {
+      numRecs = this.keywordsPaginator.pageSize;
+    }
 
     const keywordStatus: string = this.keywordFilterForm.get("keywordStatus")
       .value;
     const matchType: string = this.keywordFilterForm.get("matchType").value;
 
-    // console.log("applyFilter:::keywordStatus" + keywordStatus);
-    // console.log("applyFilter:::matchType" + matchType);
     this.clientService
       .getClientKeywordHistory(
         this.orgId,
-        this.keywordsPaginator.pageSize,
+        numRecs,
         this.keywordOffsetKeys[this.keywordsPaginator.pageIndex],
-        start.toISOString().split("T")[0],
-        end.toISOString().split("T")[0],
+        this.formatDate(start),
+        this.formatDate(end),
         matchType,
         keywordStatus
       )
       .pipe(
-        // take(1),
         map((data) => {
           this.reportingService.isLoadingKeywords = false;
-          this.keywordHistory = data["history"];
-
           this.keywordOffsetKeys.push(
             String(data["offset"]["org_id"]) +
               "|" +
@@ -234,12 +244,12 @@ export class KeywordReportingComponent implements OnInit {
               String(data["offset"]["date"])
           );
 
-          // this.keywordOffsetKeys.forEach((val) => {
-          //   console.log("value now " + val);
-          // });
-
-          this.keywordDataSource.data = this.keywordHistory;
+          this.keywordDataSource.data = data["history"];
           this.keywordsPaginator.length = data["count"];
+
+          // set line graph
+          const history: KeywordDayObject[] = data["history"];
+          this.reportingService.keywordDayObject$.next(history);
           return data;
         }),
         catchError(() => {
@@ -256,12 +266,18 @@ export class KeywordReportingComponent implements OnInit {
     this.keywordsPaginator.pageSize = 100;
     this.keywordOffsetKeys = ["init|init|init"];
     this.keywordFilterForm.get("start").setValue(this.minDate);
-    this.keywordFilterForm.get("end").setValue(this.currentDate);
+    this.keywordFilterForm.get("end").setValue(this.maxDate);
     this.keywordFilterForm.get("keywordStatus").setValue("all");
     this.keywordFilterForm.get("matchType").setValue("all");
 
     let start: Date = this.keywordFilterForm.get("start").value;
     let end: Date = this.keywordFilterForm.get("end").value;
+    let numRecs = 0;
+    if (this.isKeywordDataVisMode) {
+      numRecs = 10000000000000;
+    } else {
+      numRecs = this.keywordsPaginator.pageSize;
+    }
 
     const keywordStatus: string = this.keywordFilterForm.get("keywordStatus")
       .value;
@@ -270,19 +286,16 @@ export class KeywordReportingComponent implements OnInit {
     this.clientService
       .getClientKeywordHistory(
         this.orgId,
-        this.keywordsPaginator.pageSize,
+        numRecs,
         this.keywordOffsetKeys[this.keywordsPaginator.pageIndex],
-        start.toISOString().split("T")[0],
-        end.toISOString().split("T")[0],
+        this.formatDate(start),
+        this.formatDate(end),
         matchType,
         keywordStatus
       )
       .pipe(
-        // take(1),
         map((data) => {
           this.reportingService.isLoadingKeywords = false;
-          this.keywordHistory = data["history"];
-
           this.keywordOffsetKeys.push(
             String(data["offset"]["org_id"]) +
               "|" +
@@ -290,13 +303,10 @@ export class KeywordReportingComponent implements OnInit {
               "|" +
               String(data["offset"]["date"])
           );
-
-          // this.keywordOffsetKeys.forEach((val) => {
-          //   console.log("value now " + val);
-          // });
-
-          this.keywordDataSource.data = this.keywordHistory;
+          this.keywordDataSource.data = data["history"];
           this.keywordsPaginator.length = data["count"];
+          // set line graph
+          this.reportingService.keywordDayObject$.next(data["history"]);
           return data;
         }),
         catchError(() => {
@@ -316,10 +326,138 @@ export class KeywordReportingComponent implements OnInit {
   }
 
   showAggregateDataView() {
-    this.isKeywordDataVisMode = true;
-  }
-
-  showAggregateTableView() {
+    this.isKeywordAggDataVisMode = true;
     this.isKeywordDataVisMode = false;
   }
+
+  showDataView() {
+    this.isKeywordDataVisMode = true;
+    this.isKeywordAggDataVisMode = false;
+    this.reportingService.isLoadingKeywords = true;
+    this.keywordsPaginator.pageIndex = 0;
+    this.keywordOffsetKeys = ["init|init|init"];
+
+    let start: Date = this.keywordFilterForm.get("start").value;
+    let end: Date = this.keywordFilterForm.get("end").value;
+
+    const keywordStatus: string = this.keywordFilterForm.get("keywordStatus")
+      .value;
+    const matchType: string = this.keywordFilterForm.get("matchType").value;
+
+    this.clientService
+      .getClientKeywordHistory(
+        this.orgId,
+        1000000,
+        this.keywordOffsetKeys[this.keywordsPaginator.pageIndex],
+        this.formatDate(start),
+        this.formatDate(end),
+        matchType,
+        keywordStatus
+      )
+      .pipe(
+        map((data) => {
+          this.reportingService.isLoadingKeywords = false;
+          // this.keywordHistory = data["history"];
+
+          this.keywordOffsetKeys.push(
+            String(data["offset"]["org_id"]) +
+              "|" +
+              String(data["offset"]["keyword_id"]) +
+              "|" +
+              String(data["offset"]["date"])
+          );
+          this.keywordDataSource.data = data["history"];
+          this.keywordsPaginator.length = data["count"];
+          // set line graph
+          this.reportingService.keywordDayObject$.next(data["history"]);
+          return data;
+        }),
+        catchError(() => {
+          this.reportingService.isLoadingKeywords = false;
+          return [];
+        })
+      )
+      .subscribe();
+  }
+
+  showTableView() {
+    this.isKeywordDataVisMode = false;
+    this.isKeywordAggDataVisMode = false;
+    this.reportingService.isLoadingKeywords = true;
+    this.keywordsPaginator.pageIndex = 0;
+    this.keywordsPaginator.pageSize = 100;
+    this.keywordOffsetKeys = ["init|init|init"];
+
+    let start: Date = this.keywordFilterForm.get("start").value;
+    let end: Date = this.keywordFilterForm.get("end").value;
+    let numRecs = 0;
+    if (this.isKeywordDataVisMode) {
+      numRecs = 10000000000000;
+    } else {
+      numRecs = this.keywordsPaginator.pageSize;
+    }
+
+    const keywordStatus: string = this.keywordFilterForm.get("keywordStatus")
+      .value;
+    const matchType: string = this.keywordFilterForm.get("matchType").value;
+
+    this.clientService
+      .getClientKeywordHistory(
+        this.orgId,
+        numRecs,
+        this.keywordOffsetKeys[this.keywordsPaginator.pageIndex],
+        this.formatDate(start),
+        this.formatDate(end),
+        matchType,
+        keywordStatus
+      )
+      .pipe(
+        map((data) => {
+          this.reportingService.isLoadingKeywords = false;
+          this.keywordOffsetKeys.push(
+            String(data["offset"]["org_id"]) +
+              "|" +
+              String(data["offset"]["keyword_id"]) +
+              "|" +
+              String(data["offset"]["date"])
+          );
+          this.keywordDataSource.data = data["history"];
+          this.keywordsPaginator.length = data["count"];
+          // set line graph
+          this.reportingService.keywordDayObject$.next(data["history"]);
+          return data;
+        }),
+        catchError(() => {
+          this.reportingService.isLoadingKeywords = false;
+          return [];
+        })
+      )
+      .subscribe();
+  }
+
+  onChipClicked(updated: ChartMetricObject) {
+    const updatedLineChartMetric = _cloneDeep(
+      this.reportingService.activeKeywordLineChartMetric$.getValue()
+    );
+
+    _chain(updatedLineChartMetric)
+      .find((metric) => {
+        return metric.state === true;
+      })
+      .set("state", false)
+      .value();
+
+    _chain(updatedLineChartMetric)
+      .find((metric) => {
+        return metric.name === updated.name;
+      })
+      .set("state", !updated.state)
+      .value();
+
+    this.reportingService.activeKeywordLineChartMetric$.next(
+      updatedLineChartMetric
+    );
+  }
+
+  hideLegend() {}
 }

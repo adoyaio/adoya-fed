@@ -14,6 +14,7 @@
           <mat-label>start date</mat-label>
           <input
             matInput
+            [max]="minDate"
             [formControl]="startPickerInputControl"
             [matDatepicker]="startpicker"
           />
@@ -28,6 +29,7 @@
           <mat-label>end date</mat-label>
           <input
             matInput
+            [max]="maxDate"
             [formControl]="endPickerInputControl"
             [matDatepicker]="endpicker"
           />
@@ -40,11 +42,9 @@
 
         <div>
           <button
+            mat-button
             [disabled]="filterByDateDisabled()"
-            mat-icon-button
-            class="reporting__buttons"
             (click)="filterByDate()"
-            mat-icon-button
           >
             <mat-icon aria-label="save">filter_alt</mat-icon>
             filter by date
@@ -52,24 +52,14 @@
         </div>
 
         <div>
-          <button
-            mat-icon-button
-            class="reporting__buttons"
-            (click)="resetDateForms()"
-            mat-icon-button
-          >
+          <button mat-button (click)="resetDateForms()">
             <mat-icon aria-label="clear">clear</mat-icon>
             clear filters
           </button>
         </div>
 
         <div>
-          <button
-            (click)="downloadAggregateCsv()"
-            mat-icon-button
-            class="reporting__buttons ml-2"
-            mat-icon-button
-          >
+          <button mat-button (click)="downloadAggregateCsv()" class="ml-2">
             <mat-icon class="ml-2" aria-label="download">save_alt</mat-icon>
             csv download
           </button>
@@ -77,22 +67,18 @@
 
         <div>
           <button
-            mat-icon-button
-            class="reporting__buttons"
+            mat-button
             (click)="showAggregateDataView()"
             *ngIf="!isAggregateDataVisMode"
-            mat-icon-button
           >
             <mat-icon class="ml-2" aria-label="download">show_chart</mat-icon>
             visualization
           </button>
 
           <button
-            mat-icon-button
-            class="reporting__buttons"
+            mat-button
             (click)="showAggregateTableView()"
             *ngIf="isAggregateDataVisMode"
-            mat-icon-button
           >
             <mat-icon class="ml-2" aria-label="download">table_view</mat-icon>
             table
@@ -137,23 +123,17 @@
         matSortDirection="asc"
       >
         <ng-container matColumnDef="timestamp">
-          <th mat-header-cell mat-sort-header *matHeaderCellDef>
-            Date
-          </th>
+          <th mat-header-cell mat-sort-header *matHeaderCellDef>Date</th>
           <td mat-cell *matCellDef="let element">{{ element.timestamp }}</td>
         </ng-container>
 
         <ng-container matColumnDef="spend">
-          <th mat-header-cell mat-sort-header *matHeaderCellDef>
-            Cost
-          </th>
+          <th mat-header-cell mat-sort-header *matHeaderCellDef>Cost</th>
           <td mat-cell *matCellDef="let element">{{ element.spend }}</td>
         </ng-container>
 
         <ng-container matColumnDef="installs">
-          <th mat-header-cell mat-sort-header *matHeaderCellDef>
-            Installs
-          </th>
+          <th mat-header-cell mat-sort-header *matHeaderCellDef>Installs</th>
           <td mat-cell *matCellDef="let element">{{ element.installs }}</td>
         </ng-container>
 
@@ -165,16 +145,12 @@
         </ng-container>
 
         <ng-container matColumnDef="purchases">
-          <th mat-header-cell mat-sort-header *matHeaderCellDef>
-            Purchases
-          </th>
+          <th mat-header-cell mat-sort-header *matHeaderCellDef>Purchases</th>
           <td mat-cell *matCellDef="let element">{{ element.purchases }}</td>
         </ng-container>
 
         <ng-container matColumnDef="revenue">
-          <th mat-header-cell mat-sort-header *matHeaderCellDef>
-            Revenue
-          </th>
+          <th mat-header-cell mat-sort-header *matHeaderCellDef>Revenue</th>
           <td mat-cell *matCellDef="let element">{{ element.revenue }}</td>
         </ng-container>
 

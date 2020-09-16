@@ -1,0 +1,16 @@
+<div
+  matTooltip="Hover or click on pie slices for a more detailed breakdown of aggregated keyword performance."
+>
+  <canvas
+    baseChart
+    width="400"
+    height="190"
+    [data]="pieChartData"
+    [labels]="pieChartLabels"
+    [chartType]="pieChartType"
+    [options]="pieChartOptions"
+    [plugins]="pieChartPlugins"
+    [legend]="pieChartLegend"
+  >
+  </canvas>
+</div>

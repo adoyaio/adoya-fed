@@ -1,4 +1,3 @@
-import { UserAccount } from "../../../../shared/models/user-account";
 import { FormBuilder, FormControl } from "@angular/forms";
 import { ClientService } from "../../../../core/services/client.service";
 import { CostPerInstallDayObject } from "../../models/cost-per-install-day-object";
@@ -7,18 +6,11 @@ import {
   MatTableDataSource,
   MatPaginator,
   MatSort,
-  MatDatepickerInputEvent,
-  MatDatepickerInput,
-  MatDatepicker,
   MatChipList,
-  MatChipSelectionChange,
 } from "@angular/material";
-import { tap, switchMap, map, catchError, delay } from "rxjs/operators";
-import { combineLatest, Observable, of } from "rxjs";
+import { tap, map, catchError } from "rxjs/operators";
 import { UserAccountService } from "src/app/core/services/user-account.service";
 import { AppService } from "src/app/core/services/app.service";
-import { KeywordDayObject } from "../../models/keyword-day-object";
-import { LineChartComponent } from "../line-chart/line-chart.component";
 import { ReportingService } from "../../reporting.service";
 import {
   chain as _chain,
@@ -28,7 +20,6 @@ import {
   clone as _clone,
   cloneDeep as _cloneDeep,
 } from "lodash";
-import { state } from "@angular/animations";
 
 @Component({
   selector: "app-reporting",
@@ -36,7 +27,7 @@ import { state } from "@angular/animations";
   styleUrls: ["./reporting.component.scss"],
 })
 export class ReportingComponent implements AfterViewInit, OnInit {
-  cpiHistory: CostPerInstallDayObject[] = [];
+  cpiHistory: CostPerInstallDayObject[] = []; // TODO rm
   displayedColumns: string[] = [
     "timestamp",
     "spend",
@@ -53,6 +44,8 @@ export class ReportingComponent implements AfterViewInit, OnInit {
   isLoadingResults = true;
   orgId: string;
   isAggregateDataVisMode = false;
+  maxDate: Date = new Date();
+  minDate: Date = new Date();
 
   @ViewChild("aggregatePaginator", { static: false })
   aggregatePaginator: MatPaginator;
@@ -73,6 +66,9 @@ export class ReportingComponent implements AfterViewInit, OnInit {
   ) {}
 
   ngOnInit() {
+    this.minDate.setDate(this.minDate.getDate() - 2);
+    this.maxDate.setDate(this.maxDate.getDate() - 1);
+
     this.orgId = this.userAccountService
       .getCurrentUser()
       .UserAttributes.find((val) => {
@@ -250,6 +246,7 @@ export class ReportingComponent implements AfterViewInit, OnInit {
             data
           );
 
+          // JF TODO combine these
           this.dataSource.data = this.cpiHistory;
           this.reportingService.costPerInstallDayObject$.next({
             ...this.cpiHistory,
@@ -258,7 +255,7 @@ export class ReportingComponent implements AfterViewInit, OnInit {
           this.aggregatePaginator.length = this.cpiHistory.length;
           return data;
         }),
-        tap((data) => {
+        tap(() => {
           this.isLoadingResults = false;
         })
       )

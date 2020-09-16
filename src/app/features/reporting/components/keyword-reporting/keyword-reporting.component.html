@@ -8,7 +8,12 @@
     >
       <mat-form-field class="mr-3">
         <mat-label>start date</mat-label>
-        <input matInput formControlName="start" [matDatepicker]="startpicker" />
+        <input
+          matInput
+          [max]="minDate"
+          formControlName="start"
+          [matDatepicker]="startpicker"
+        />
         <mat-datepicker-toggle
           matSuffix
           [for]="startpicker"
@@ -18,7 +23,12 @@
 
       <mat-form-field class="mr-3">
         <mat-label>end date</mat-label>
-        <input matInput formControlName="end" [matDatepicker]="endpicker" />
+        <input
+          matInput
+          [max]="maxDate"
+          formControlName="end"
+          [matDatepicker]="endpicker"
+        />
         <mat-datepicker-toggle
           matSuffix
           [for]="endpicker"
@@ -26,14 +36,14 @@
         <mat-datepicker #endpicker></mat-datepicker>
       </mat-form-field>
 
-      <mat-form-field class="mr-3" color="accent">
+      <!-- <mat-form-field class="mr-3" color="accent">
         <mat-select formControlName="keywordStatus">
           <mat-option value="ACTIVE">ACTIVE</mat-option>
           <mat-option value="PAUSED">PAUSED</mat-option>
           <mat-option value="all">ALL</mat-option>
         </mat-select>
         <mat-label>keyword status</mat-label>
-      </mat-form-field>
+      </mat-form-field> -->
 
       <mat-form-field class="mr-3" color="accent">
         <mat-select formControlName="matchType">
@@ -50,85 +60,102 @@
     >
       <button
         [disabled]="applyFilterDisabled()"
-        mat-icon-button
-        class="keyword-reporting__buttons"
+        mat-button
         (click)="applyFilter()"
-        mat-icon-button
       >
         <mat-icon aria-label="save">filter_alt</mat-icon>
         apply filters
       </button>
 
-      <button
-        mat-icon-button
-        class="keyword-reporting__buttons"
-        (click)="resetKeywordFilters()"
-        mat-icon-button
-      >
+      <button mat-button (click)="resetKeywordFilters()">
         <mat-icon aria-label="clear">clear</mat-icon>
         clear filters
       </button>
 
-      <button
-        (click)="downloadKeywordsCsv()"
-        mat-icon-button
-        class="keyword-reporting__buttons ml-2"
-        mat-icon-button
-      >
+      <button (click)="downloadKeywordsCsv()" mat-button>
         <mat-icon class="ml-1" aria-label="download">save_alt</mat-icon>
         csv download
       </button>
 
-      <!-- <button mat-icon-button class="reporting__buttons ml-2" mat-icon-button>
-        <mat-icon class="ml-1" aria-label="download">show_chart</mat-icon>
-        visualization
-      </button> -->
       <button
-        mat-icon-button
-        class="reporting__buttons"
-        (click)="showAggregateDataView()"
-        *ngIf="!isKeywordDataVisMode"
-        mat-icon-button
+        mat-button
+        (click)="showDataView()"
+        *ngIf="!isKeywordDataVisMode && !isKeywordAggDataVisMode"
       >
         <mat-icon class="ml-2" aria-label="download">show_chart</mat-icon>
         visualization
       </button>
 
       <button
+        mat-button
+        (click)="showTableView()"
+        *ngIf="isKeywordDataVisMode || isKeywordAggDataVisMode"
+      >
+        <mat-icon class="ml-2" aria-label="download">table_view</mat-icon>
+        table view
+      </button>
+
+      <button
+        mat-button
+        (click)="showAggregateDataView()"
+        *ngIf="isKeywordDataVisMode"
+      >
+        <mat-icon class="ml-2" aria-label="download">pie_chart</mat-icon>
+        pie chart
+      </button>
+
+      <button
+        mat-button
+        (click)="showDataView()"
+        *ngIf="isKeywordAggDataVisMode"
+      >
+        <mat-icon class="ml-2" aria-label="download"
+          >stacked_line_chart</mat-icon
+        >
+        line chart
+      </button>
+
+      <!-- <button
         mat-icon-button
-        class="reporting__buttons"
-        (click)="showAggregateTableView()"
+        class="reporting__buttons mr-4"
+        (click)="hideLegend()"
         *ngIf="isKeywordDataVisMode"
         mat-icon-button
       >
-        <mat-icon class="ml-2" aria-label="download">table_view</mat-icon>
-        table
-      </button>
+        <mat-icon class="ml-2" aria-label="download">visibility_off</mat-icon>
+        hide legend
+      </button> -->
+
+      <mat-chip-list
+        *ngIf="isKeywordDataVisMode || isKeywordAggDataVisMode"
+        class="ml-1"
+      >
+        <mat-chip
+          *ngFor="
+            let activeLineChartMetric of reportingService.activeKeywordLineChartMetric$.getValue()
+          "
+          [selected]="activeLineChartMetric.state"
+          (click)="onChipClicked(activeLineChartMetric)"
+        >
+          {{ activeLineChartMetric.name }}
+        </mat-chip>
+      </mat-chip-list>
     </div>
   </div>
 
   <!-- data view -->
   <div *ngIf="isKeywordDataVisMode">
-    <div>
-      <!-- <mat-chip-list>
-              <mat-chip
-                *ngFor="
-                  let activeLineChartLabel of reportingService.activeLineChartLabel$.getValue()
-                "
-                [selected]="activeLineChartLabel.state"
-                (click)="onChipClicked(activeLineChartLabel)"
-              >
-                {{ activeLineChartLabel.name }}
-              </mat-chip>
-            </mat-chip-list> -->
-    </div>
-    Data visualization coming soon for keyword reporting!
-    <!-- <app-line-chart></app-line-chart> -->
+    <app-keyword-reporting-line-chart></app-keyword-reporting-line-chart>
   </div>
 
-  <!-- normal view -->
+  <!-- data view -->
+  <div *ngIf="isKeywordAggDataVisMode">
+    <app-keyword-reporting-pie-chart></app-keyword-reporting-pie-chart>
+  </div>
+
+  <!-- table view -->
   <mat-paginator
-    [ngClass]="isKeywordDataVisMode ? 'd-none' : ''"
+    [ngClass]="isKeywordDataVisMode || isKeywordAggDataVisMode ? 'd-none' : ''"
     #keywordsPaginator
     [pageSizeOptions]="[100, 250, 500, 1000, 5000, 10000]"
     class="keyword-reporting__paginator"
@@ -136,7 +163,7 @@
   </mat-paginator>
 
   <table
-    [ngClass]="isKeywordDataVisMode ? 'd-none' : ''"
+    [ngClass]="isKeywordDataVisMode || isKeywordAggDataVisMode ? 'd-none' : ''"
     mat-table
     [dataSource]="keywordDataSource"
     matSort
@@ -144,64 +171,48 @@
     matSortDirection="asc"
   >
     <ng-container matColumnDef="date">
-      <th mat-header-cell mat-sort-header *matHeaderCellDef>
-        Date
-      </th>
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Date</th>
       <td mat-cell *matCellDef="let element">{{ element.date }}</td>
     </ng-container>
 
     <ng-container matColumnDef="keyword_id">
-      <th mat-header-cell mat-sort-header *matHeaderCellDef>
-        Keyword ID
-      </th>
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Keyword ID</th>
       <td mat-cell *matCellDef="let element">{{ element.keyword_id }}</td>
     </ng-container>
 
     <ng-container matColumnDef="keyword">
-      <th mat-header-cell mat-sort-header *matHeaderCellDef>
-        Keyword
-      </th>
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Keyword</th>
       <td mat-cell *matCellDef="let element">{{ element.keyword }}</td>
     </ng-container>
 
     <ng-container matColumnDef="matchType">
-      <th mat-header-cell mat-sort-header *matHeaderCellDef>
-        Match Type
-      </th>
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Match Type</th>
       <td mat-cell *matCellDef="let element">{{ element.matchType }}</td>
     </ng-container>
 
     <ng-container matColumnDef="keywordDisplayStatus">
-      <th mat-header-cell mat-sort-header *matHeaderCellDef>
-        Display Status
-      </th>
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Display Status</th>
       <td mat-cell *matCellDef="let element">
         {{ element.keywordDisplayStatus }}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="keywordStatus">
-      <th mat-header-cell mat-sort-header *matHeaderCellDef>
-        Status
-      </th>
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Status</th>
       <td mat-cell *matCellDef="let element">
         {{ element.keywordStatus }}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="local_spend">
-      <th mat-header-cell mat-sort-header *matHeaderCellDef>
-        Cost
-      </th>
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Cost</th>
       <td mat-cell *matCellDef="let element">
         {{ element.local_spend }}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="installs">
-      <th mat-header-cell mat-sort-header *matHeaderCellDef>
-        Installs
-      </th>
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Installs</th>
       <td mat-cell *matCellDef="let element">
         {{ element.installs }}
       </td>
