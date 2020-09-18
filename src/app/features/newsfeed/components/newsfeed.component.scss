@@ -1,0 +1,22 @@
+// ::ng-deep {
+//   .feed-card-container {
+//     height: 100px;
+//   }
+// }
+
+.newsfeed__frame {
+  width: 100%;
+}
+
+/* Tablet Screen */
+@media only screen and (min-width: 768px) {
+  .newsfeed__frame {
+    width: 75%;
+  }
+}
+
+@media only screen and (min-width: 1000px) {
+  .newsfeed__frame {
+    width: 75%;
+  }
+}
