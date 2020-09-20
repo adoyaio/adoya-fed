@@ -53,7 +53,7 @@ export class KeywordReportingLineChartComponent implements OnInit {
       this.reportingService.activeKeywordLineChartMetric$,
     ])
       .pipe(
-        filter(([data, metrics]) => !_isNil(data)),
+        filter(([data, metrics]) => !_isNil(data) && !_isNil(metrics)),
         tap(([data, metrics]) => {
           const activeMetric = _find(metrics, (metric) => {
             return metric.state === true;

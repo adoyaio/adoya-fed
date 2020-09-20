@@ -231,12 +231,13 @@
     <tr mat-row *matRowDef="let row; columns: displayedKeywordColumns"></tr>
   </table>
 
+  <!-- aggregate table -->
   <table
     [ngClass]="!isKeywordAggDataVisMode ? 'd-none' : ''"
     mat-table
     matSort
-    matSortActive="date"
-    matSortDirection="asc"
+    matSortActive="installs"
+    matSortDirection="desc"
     [dataSource]="keywordAggregatedDataSource"
   >
     <ng-container matColumnDef="keyword">

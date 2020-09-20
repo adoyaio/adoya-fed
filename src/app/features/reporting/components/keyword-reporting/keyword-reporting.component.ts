@@ -4,7 +4,15 @@ import { FormBuilder, FormControl } from "@angular/forms";
 import { UserAccountService } from "src/app/core/services/user-account.service";
 import { AppService } from "src/app/core/services/app.service";
 import { ReportingService } from "../../reporting.service";
-import { map, catchError, delay, tap, switchMap, take } from "rxjs/operators";
+import {
+  map,
+  catchError,
+  delay,
+  tap,
+  switchMap,
+  take,
+  finalize,
+} from "rxjs/operators";
 import { MatTableDataSource, MatPaginator } from "@angular/material";
 import { KeywordDayObject } from "../../models/keyword-day-object";
 import {
@@ -259,6 +267,12 @@ export class KeywordReportingComponent implements OnInit {
           // set line graph
           const history: KeywordDayObject[] = data["history"];
           this.reportingService.keywordDayObject$.next(history);
+
+          // set table
+          this.keywordAggregatedDataSource.data = this.getAggregateDataForTable(
+            data["history"]
+          );
+
           return data;
         }),
         catchError(() => {
@@ -314,8 +328,15 @@ export class KeywordReportingComponent implements OnInit {
           );
           this.keywordDataSource.data = data["history"];
           this.keywordsPaginator.length = data["count"];
+
           // set line graph
           this.reportingService.keywordDayObject$.next(data["history"]);
+
+          // set table
+          this.keywordAggregatedDataSource.data = this.getAggregateDataForTable(
+            data["history"]
+          );
+
           return data;
         }),
         catchError(() => {
@@ -334,15 +355,12 @@ export class KeywordReportingComponent implements OnInit {
     this.appService.downloadKeywordFile(this.keywordDataSource.data, "keyword");
   }
 
-  showAggregateDataView() {
-    this.isKeywordAggDataVisMode = true;
-    this.isKeywordDataVisMode = false;
-
+  getAggregateDataForTable(
+    currentData: KeywordDayObject[]
+  ): KeywordAggregatedObject[] {
+    // build list of keywords
     const history: KeywordAggregatedObject[] = [];
     let kws = [];
-    let currentData = this.reportingService.keywordDayObject$.getValue();
-
-    // build list of keywords
     kws = _chain(currentData)
       .uniqBy("keyword")
       .map((keyword) => {
@@ -387,8 +405,15 @@ export class KeywordReportingComponent implements OnInit {
 
       history.push(kw);
     });
+    return history;
+  }
 
-    this.keywordAggregatedDataSource.data = history;
+  showAggregateDataView() {
+    this.isKeywordAggDataVisMode = true;
+    this.isKeywordDataVisMode = false;
+    this.keywordAggregatedDataSource.data = this.getAggregateDataForTable(
+      this.reportingService.keywordDayObject$.getValue()
+    );
   }
 
   showDataView() {

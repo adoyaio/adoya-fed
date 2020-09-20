@@ -1,6 +1,6 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { ChartOptions, ChartType } from "chart.js";
-import { Label, SingleDataSet } from "ng2-charts";
+import { Label, SingleDataSet, BaseChartDirective } from "ng2-charts";
 import { ReportingService } from "../../reporting.service";
 import { combineLatest } from "rxjs";
 import { filter, tap } from "rxjs/operators";
@@ -32,6 +32,8 @@ export class KeywordReportingPieChartComponent implements OnInit {
   public pieChartType: ChartType = "pie";
   public pieChartLegend = true;
   public pieChartPlugins = [];
+
+  @ViewChild(BaseChartDirective, { static: true }) chart: BaseChartDirective;
 
   constructor(private reportingService: ReportingService) {}
 
@@ -82,7 +84,7 @@ export class KeywordReportingPieChartComponent implements OnInit {
             this.pieChartData.push(dataPoint);
           });
 
-          // this.chart.update();
+          this.chart.update();
         })
       )
       .subscribe();
