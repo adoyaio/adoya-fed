@@ -4,16 +4,8 @@ import { FormBuilder, FormControl } from "@angular/forms";
 import { UserAccountService } from "src/app/core/services/user-account.service";
 import { AppService } from "src/app/core/services/app.service";
 import { ReportingService } from "../../reporting.service";
-import {
-  map,
-  catchError,
-  delay,
-  tap,
-  switchMap,
-  take,
-  finalize,
-} from "rxjs/operators";
-import { MatTableDataSource, MatPaginator } from "@angular/material";
+import { map, catchError, delay, tap, switchMap, take } from "rxjs/operators";
+import { MatTableDataSource, MatPaginator, MatSort } from "@angular/material";
 import { KeywordDayObject } from "../../models/keyword-day-object";
 import {
   get as _get,
@@ -23,6 +15,7 @@ import {
   each as _each,
   reduce as _reduce,
   filter as _filter,
+  sortBy as _sortBy,
 } from "lodash";
 import { ChartMetricObject } from "../../models/chart-label-object";
 import { KeywordAggregatedObject } from "../../models/keyword-aggregated-object";
@@ -74,6 +67,8 @@ export class KeywordReportingComponent implements OnInit {
 
   @ViewChild("keywordsPaginator", { static: false })
   keywordsPaginator: MatPaginator;
+
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
 
   constructor(
     private clientService: ClientService,
@@ -129,6 +124,11 @@ export class KeywordReportingComponent implements OnInit {
 
           // set line graph
           this.reportingService.keywordDayObject$.next(data["history"]);
+
+          // set table
+          this.keywordAggregatedDataSource.data = this.getAggregateDataForTable(
+            data["history"]
+          );
 
           return data;
         }),
@@ -208,6 +208,8 @@ export class KeywordReportingComponent implements OnInit {
         })
       )
       .subscribe();
+
+    this.keywordAggregatedDataSource.sort = this.sort;
   }
 
   formatDate(date) {
@@ -394,7 +396,7 @@ export class KeywordReportingComponent implements OnInit {
         0
       );
 
-      const cpi = +installs / +local_spend;
+      const cpi = +local_spend / +installs;
 
       const kw: KeywordAggregatedObject = {
         keyword: keyword,

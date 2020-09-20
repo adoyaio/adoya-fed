@@ -162,7 +162,7 @@
   >
   </mat-paginator>
 
-  <table
+  <!-- <table
     [ngClass]="isKeywordAggDataVisMode ? 'd-none' : ''"
     mat-table
     [dataSource]="keywordDataSource"
@@ -222,6 +222,70 @@
       <th mat-header-cell mat-sort-header *matHeaderCellDef>
         Cost Per Install
       </th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.avg_cpa }}
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedKeywordColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedKeywordColumns"></tr>
+  </table> -->
+
+  <table
+    [ngClass]="isKeywordAggDataVisMode ? 'd-none' : ''"
+    mat-table
+    [dataSource]="keywordDataSource"
+  >
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef>Date</th>
+      <td mat-cell *matCellDef="let element">{{ element.date }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="keyword_id">
+      <th mat-header-cell *matHeaderCellDef>Keyword ID</th>
+      <td mat-cell *matCellDef="let element">{{ element.keyword_id }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="keyword">
+      <th mat-header-cell *matHeaderCellDef>Keyword</th>
+      <td mat-cell *matCellDef="let element">{{ element.keyword }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="matchType">
+      <th mat-header-cell *matHeaderCellDef>Match Type</th>
+      <td mat-cell *matCellDef="let element">{{ element.matchType }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="keywordDisplayStatus">
+      <th mat-header-cell *matHeaderCellDef>Display Status</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.keywordDisplayStatus }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="keywordStatus">
+      <th mat-header-cell *matHeaderCellDef>Status</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.keywordStatus }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="local_spend">
+      <th mat-header-cell *matHeaderCellDef>Cost</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.local_spend }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="installs">
+      <th mat-header-cell *matHeaderCellDef>Installs</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.installs }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="avg_cpa">
+      <th mat-header-cell *matHeaderCellDef>Cost Per Install</th>
       <td mat-cell *matCellDef="let element">
         {{ element.avg_cpa }}
       </td>
