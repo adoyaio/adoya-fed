@@ -29,8 +29,12 @@
     <mat-icon color="accent" aria-label="menu">face</mat-icon>
   </button>
   <mat-menu #menu="matMenu">
-    <button (click)="onProfileClicked()" mat-menu-item>Account</button>
-    <button (click)="onLogoutClicked()" mat-menu-item>Log Out</button>
+    <button (click)="onProfileClicked()" mat-menu-item>
+      <mat-icon color="accent">account_circle</mat-icon> Account
+    </button>
+    <button (click)="onLogoutClicked()" mat-menu-item>
+      <mat-icon color="accent">exit_to_app</mat-icon> Log Out
+    </button>
   </mat-menu>
   <div class="top-bar-panel d-flex">
     <div class="page-title col-6">

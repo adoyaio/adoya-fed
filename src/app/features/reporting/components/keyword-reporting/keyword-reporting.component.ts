@@ -12,8 +12,12 @@ import {
   isEmpty as _isEmpty,
   cloneDeep as _cloneDeep,
   chain as _chain,
+  each as _each,
+  reduce as _reduce,
+  filter as _filter,
 } from "lodash";
 import { ChartMetricObject } from "../../models/chart-label-object";
+import { KeywordAggregatedObject } from "../../models/keyword-aggregated-object";
 
 @Component({
   selector: "app-keyword-reporting",
@@ -21,8 +25,6 @@ import { ChartMetricObject } from "../../models/chart-label-object";
   styleUrls: ["./keyword-reporting.component.scss"],
 })
 export class KeywordReportingComponent implements OnInit {
-  keywordHistory: KeywordDayObject[] = [];
-
   displayedKeywordColumns: string[] = [
     "date",
     "keyword_id",
@@ -35,8 +37,16 @@ export class KeywordReportingComponent implements OnInit {
     "avg_cpa",
   ];
 
-  keywordDataSource = new MatTableDataSource<KeywordDayObject>(
-    this.keywordHistory
+  displayedAggregatedKeywordColumns: string[] = [
+    "keyword",
+    "installs",
+    "avg_cpa",
+    "local_spend",
+  ];
+
+  keywordDataSource = new MatTableDataSource<KeywordDayObject>([]);
+  keywordAggregatedDataSource = new MatTableDataSource<KeywordAggregatedObject>(
+    []
   );
 
   keywordOffsetKeys: string[] = ["init|init|init"]; // dynamo paging by key
@@ -205,7 +215,6 @@ export class KeywordReportingComponent implements OnInit {
   }
 
   applyFilter() {
-    console.log("TEST");
     this.reportingService.isLoadingKeywords = true;
     this.keywordsPaginator.pageIndex = 0;
     this.keywordOffsetKeys = ["init|init|init"];
@@ -328,6 +337,58 @@ export class KeywordReportingComponent implements OnInit {
   showAggregateDataView() {
     this.isKeywordAggDataVisMode = true;
     this.isKeywordDataVisMode = false;
+
+    const history: KeywordAggregatedObject[] = [];
+    let kws = [];
+    let currentData = this.reportingService.keywordDayObject$.getValue();
+
+    // build list of keywords
+    kws = _chain(currentData)
+      .uniqBy("keyword")
+      .map((keyword) => {
+        return keyword.keyword;
+      })
+      .value();
+
+    _each(kws, (keyword) => {
+      // pull all kw's for the date and summarize for the dataline
+      const valuesForADay = _filter(currentData, (line) => {
+        if (line.keyword === keyword) {
+          return true;
+        }
+      });
+
+      const local_spend = _reduce(
+        valuesForADay,
+        (acc, day) => {
+          const val = _get(day, "local_spend");
+          return +val + acc;
+        },
+        0
+      );
+
+      const installs = _reduce(
+        valuesForADay,
+        (acc, day) => {
+          const val = _get(day, "installs");
+          return +val + acc;
+        },
+        0
+      );
+
+      const cpi = +installs / +local_spend;
+
+      const kw: KeywordAggregatedObject = {
+        keyword: keyword,
+        avg_cpa: cpi,
+        local_spend: local_spend,
+        installs: installs,
+      };
+
+      history.push(kw);
+    });
+
+    this.keywordAggregatedDataSource.data = history;
   }
 
   showDataView() {

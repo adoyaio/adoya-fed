@@ -74,7 +74,7 @@ export class KeywordReportingPieChartComponent implements OnInit {
               valuesForADay,
               (acc, day) => {
                 const val = _get(day, activeMetric.value);
-                return val + acc;
+                return +val + acc;
               },
               0
             );

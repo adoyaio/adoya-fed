@@ -104,9 +104,17 @@
         <app-line-chart></app-line-chart>
       </div>
 
-      <!-- normal view -->
-      <mat-paginator
+      <!-- table view -->
+      <!-- <mat-paginator
         [ngClass]="isAggregateDataVisMode ? 'd-none' : ''"
+        #aggregatePaginator
+        [pageSizeOptions]="[25, 50, 100, 365]"
+        showFirstLastButtons
+        class="reporting__paginator"
+      >
+      </mat-paginator> -->
+
+      <mat-paginator
         #aggregatePaginator
         [pageSizeOptions]="[25, 50, 100, 365]"
         showFirstLastButtons
@@ -115,7 +123,6 @@
       </mat-paginator>
 
       <table
-        [ngClass]="isAggregateDataVisMode ? 'd-none' : ''"
         mat-table
         [dataSource]="dataSource"
         matSort
