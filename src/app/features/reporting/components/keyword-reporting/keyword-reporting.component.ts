@@ -190,15 +190,8 @@ export class KeywordReportingComponent implements OnInit {
                       String(data["offset"]["date"])
                   );
                 }
-
                 this.keywordDataSource.data = data["history"];
                 this.keywordsPaginator.length = data["count"];
-
-                // set line graph
-                this.reportingService.keywordDayObject$.next({
-                  ...data["history"],
-                });
-                return data;
               }),
               catchError(() => {
                 this.reportingService.isLoadingKeywords = false;
@@ -231,21 +224,16 @@ export class KeywordReportingComponent implements OnInit {
 
     let start: Date = this.keywordFilterForm.get("start").value;
     let end: Date = this.keywordFilterForm.get("end").value;
-    let numRecs = 0;
-    if (this.isKeywordDataVisMode) {
-      numRecs = 1000000;
-    } else {
-      numRecs = this.keywordsPaginator.pageSize;
-    }
 
     const keywordStatus: string = this.keywordFilterForm.get("keywordStatus")
       .value;
     const matchType: string = this.keywordFilterForm.get("matchType").value;
 
+    // get table view data with page of records
     this.clientService
       .getClientKeywordHistory(
         this.orgId,
-        numRecs,
+        this.keywordsPaginator.pageSize,
         this.keywordOffsetKeys[this.keywordsPaginator.pageIndex],
         this.formatDate(start),
         this.formatDate(end),
@@ -253,8 +241,7 @@ export class KeywordReportingComponent implements OnInit {
         keywordStatus
       )
       .pipe(
-        map((data) => {
-          this.reportingService.isLoadingKeywords = false;
+        switchMap((data) => {
           this.keywordOffsetKeys.push(
             String(data["offset"]["org_id"]) +
               "|" +
@@ -262,21 +249,37 @@ export class KeywordReportingComponent implements OnInit {
               "|" +
               String(data["offset"]["date"])
           );
-
           this.keywordDataSource.data = data["history"];
           this.keywordsPaginator.length = data["count"];
 
-          // set line graph
-          const history: KeywordDayObject[] = data["history"];
-          this.reportingService.keywordDayObject$.next(history);
+          return this.clientService
+            .getClientKeywordHistory(
+              this.orgId,
+              1000000000,
+              this.keywordOffsetKeys[0],
+              this.formatDate(start),
+              this.formatDate(end),
+              matchType,
+              keywordStatus
+            )
+            .pipe(
+              map((data) => {
+                this.reportingService.isLoadingKeywords = false;
 
-          // set table
-          this.keywordAggregatedDataSource.data = this.getAggregateDataForTable(
-            data["history"]
-          );
+                // set line graph
+                const history: KeywordDayObject[] = data["history"];
+                this.reportingService.keywordDayObject$.next(history);
 
-          return data;
+                // set table
+                this.keywordAggregatedDataSource.data = this.getAggregateDataForTable(
+                  data["history"]
+                );
+
+                return data;
+              })
+            );
         }),
+        take(1),
         catchError(() => {
           this.reportingService.isLoadingKeywords = false;
           return [];
@@ -297,21 +300,16 @@ export class KeywordReportingComponent implements OnInit {
 
     let start: Date = this.keywordFilterForm.get("start").value;
     let end: Date = this.keywordFilterForm.get("end").value;
-    let numRecs = 0;
-    if (this.isKeywordDataVisMode) {
-      numRecs = 10000000000000;
-    } else {
-      numRecs = this.keywordsPaginator.pageSize;
-    }
 
     const keywordStatus: string = this.keywordFilterForm.get("keywordStatus")
       .value;
     const matchType: string = this.keywordFilterForm.get("matchType").value;
 
+    // get table view data with page of records
     this.clientService
       .getClientKeywordHistory(
         this.orgId,
-        numRecs,
+        this.keywordsPaginator.pageSize,
         this.keywordOffsetKeys[this.keywordsPaginator.pageIndex],
         this.formatDate(start),
         this.formatDate(end),
@@ -319,8 +317,7 @@ export class KeywordReportingComponent implements OnInit {
         keywordStatus
       )
       .pipe(
-        map((data) => {
-          this.reportingService.isLoadingKeywords = false;
+        switchMap((data) => {
           this.keywordOffsetKeys.push(
             String(data["offset"]["org_id"]) +
               "|" +
@@ -331,16 +328,34 @@ export class KeywordReportingComponent implements OnInit {
           this.keywordDataSource.data = data["history"];
           this.keywordsPaginator.length = data["count"];
 
-          // set line graph
-          this.reportingService.keywordDayObject$.next(data["history"]);
+          return this.clientService
+            .getClientKeywordHistory(
+              this.orgId,
+              1000000000,
+              this.keywordOffsetKeys[0],
+              this.formatDate(start),
+              this.formatDate(end),
+              matchType,
+              keywordStatus
+            )
+            .pipe(
+              map((data) => {
+                this.reportingService.isLoadingKeywords = false;
 
-          // set table
-          this.keywordAggregatedDataSource.data = this.getAggregateDataForTable(
-            data["history"]
-          );
+                // set line graph
+                const history: KeywordDayObject[] = data["history"];
+                this.reportingService.keywordDayObject$.next(history);
 
-          return data;
+                // set table
+                this.keywordAggregatedDataSource.data = this.getAggregateDataForTable(
+                  data["history"]
+                );
+
+                return data;
+              })
+            );
         }),
+        take(1),
         catchError(() => {
           this.reportingService.isLoadingKeywords = false;
           return [];
@@ -384,7 +399,7 @@ export class KeywordReportingComponent implements OnInit {
           const val = _get(day, "local_spend");
           return +val + acc;
         },
-        0
+        0.0
       );
 
       const installs = _reduce(
@@ -393,7 +408,7 @@ export class KeywordReportingComponent implements OnInit {
           const val = _get(day, "installs");
           return +val + acc;
         },
-        0
+        0.0
       );
 
       const cpi = +local_spend / +installs;
