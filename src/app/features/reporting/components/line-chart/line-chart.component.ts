@@ -90,7 +90,6 @@ export class LineChartComponent implements OnInit {
                   .value() === true
               ) {
                 this.lineChartData.push(dataline);
-                this.lineChartLabels.push(dataline.label);
               }
             }
           );
