@@ -305,6 +305,8 @@ $altTheme: mat-dark-theme($theme-primary, $theme-accent, $theme-warn);
 .mat-tooltip {
   font-size: 0.9rem;
   white-space: pre-line !important;
+  min-width: 400px;
+  padding: 10px;
 }
 
 // Handle buttons appropriately, with respect to line-height
