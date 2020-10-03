@@ -13,9 +13,9 @@ import { UserAccountService } from "src/app/core/services/user-account.service";
 import { ClientService } from "src/app/core/services/client.service";
 import { Client } from "../../reporting/models/client";
 import { CustomFormValidators } from "src/app/shared/dynamic-form/validators/CustomFormValidators";
-import { EMPTY } from "rxjs";
 import { ClientPayload } from "../../reporting/models/client-payload";
 import { MatSnackBar } from "@angular/material";
+import { each as _each, map as _map } from "lodash";
 
 @Component({
   selector: "app-dashboard",
@@ -54,21 +54,38 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.appleForm
       .get("highCPI")
-      .setValidators([Validators.min(0.1), Validators.max(1000)]);
+      .setValidators([
+        Validators.min(0.1),
+        Validators.max(1000),
+        Validators.minLength(1),
+        Validators.required,
+      ]);
 
     this.branchForm
       .get("cppThreshold")
-      .setValidators([Validators.min(0.1), Validators.max(1000)]);
+      .setValidators([
+        Validators.min(0.1),
+        Validators.max(1000),
+        Validators.minLength(1),
+        Validators.required,
+      ]);
 
     this.branchForm
       .get("revenueOverSpend")
-      .setValidators([Validators.min(0.1), Validators.max(1000)]);
+      .setValidators([
+        Validators.min(0.1),
+        Validators.max(1000),
+        Validators.minLength(1),
+        Validators.required,
+      ]);
 
     this.preferencesForm
       .get("emailAddresses")
-      .setValidators([CustomFormValidators.emailListValidator]);
-
-    // this.appleForm.get("objective").setValidators([Validators.required]);
+      .setValidators([
+        CustomFormValidators.emailListValidator,
+        Validators.minLength(1),
+        Validators.required,
+      ]);
 
     this.amplifyService
       .authState()
@@ -215,7 +232,7 @@ export class DashboardComponent implements OnInit {
           }),
           map((data) => {
             this.isSendingResults = false;
-            this.openSnackBar("successfully updated settings", "dismiss");
+            this.openSnackBar("successfully updated settings!", "dismiss");
             return data;
           }),
           catchError(() => {
@@ -244,17 +261,12 @@ export class DashboardComponent implements OnInit {
     ) {
       this.isSendingResults = true;
 
-      if (
-        String(this.preferencesForm.get("emailAddresses").value).includes(",")
-      ) {
-        this.client.orgDetails.emailAddresses = String(
-          this.preferencesForm.get("emailAddresses").value
-        ).split(",");
-      } else {
-        this.client.orgDetails.emailAddresses = [
-          this.preferencesForm.get("emailAddresses").value,
-        ];
-      }
+      this.client.orgDetails.emailAddresses = _map(
+        String(this.preferencesForm.get("emailAddresses").value).split(","),
+        (val) => {
+          return val.trim();
+        }
+      );
 
       this.clientService
         .postClient(ClientPayload.buildFromClient(this.client))
@@ -264,7 +276,7 @@ export class DashboardComponent implements OnInit {
           }),
           map((data) => {
             this.isSendingResults = false;
-            this.openSnackBar("successfully updated preferences", "dismiss");
+            this.openSnackBar("successfully updated preferences!", "dismiss");
             return data;
           }),
           catchError(() => {

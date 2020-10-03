@@ -44,7 +44,6 @@ export class ClientService {
       )
       .pipe(
         map((response) => {
-          console.log("putClient");
           return response;
         }),
         catchError((error: HttpErrorResponse) => {
