@@ -32,9 +32,8 @@
 }
 
 .nav-links__container {
-  // height: 100vh !important;
-  // height: calc(100vh) !important;
   width: 200px;
+  min-height: calc(100vh - 100px) !important;
   // background-color: #dde5d4;
 }
 
