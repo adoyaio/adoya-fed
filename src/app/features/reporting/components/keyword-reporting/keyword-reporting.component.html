@@ -82,8 +82,8 @@
         (click)="showDataView()"
         *ngIf="!isKeywordDataVisMode && !isKeywordAggDataVisMode"
       >
-        <mat-icon class="ml-2" aria-label="download">show_chart</mat-icon>
-        visualization
+        <mat-icon class="ml-2" aria-label="graph">show_chart</mat-icon>
+        data visualization
       </button>
 
       <button
@@ -91,7 +91,7 @@
         (click)="showTableView()"
         *ngIf="isKeywordDataVisMode || isKeywordAggDataVisMode"
       >
-        <mat-icon class="ml-2" aria-label="download">table_view</mat-icon>
+        <mat-icon class="ml-2" aria-label="table">table_view</mat-icon>
         table view
       </button>
 
@@ -100,7 +100,7 @@
         (click)="showAggregateDataView()"
         *ngIf="isKeywordDataVisMode"
       >
-        <mat-icon class="ml-2" aria-label="download">pie_chart</mat-icon>
+        <mat-icon class="ml-2" aria-label="pie chart">pie_chart</mat-icon>
         pie chart
       </button>
 
@@ -109,7 +109,7 @@
         (click)="showDataView()"
         *ngIf="isKeywordAggDataVisMode"
       >
-        <mat-icon class="ml-2" aria-label="download"
+        <mat-icon class="ml-2" aria-label="line chart"
           >stacked_line_chart</mat-icon
         >
         line chart
@@ -155,15 +155,15 @@
 
   <!-- table view -->
   <mat-paginator
-    [ngClass]="isKeywordDataVisMode || isKeywordAggDataVisMode ? 'd-none' : ''"
+    [ngClass]="isKeywordAggDataVisMode ? 'd-none' : ''"
     #keywordsPaginator
     [pageSizeOptions]="[100, 250, 500, 1000, 5000, 10000]"
     class="keyword-reporting__paginator"
   >
   </mat-paginator>
 
-  <table
-    [ngClass]="isKeywordDataVisMode || isKeywordAggDataVisMode ? 'd-none' : ''"
+  <!-- <table
+    [ngClass]="isKeywordAggDataVisMode ? 'd-none' : ''"
     mat-table
     [dataSource]="keywordDataSource"
     matSort
@@ -229,5 +229,116 @@
 
     <tr mat-header-row *matHeaderRowDef="displayedKeywordColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedKeywordColumns"></tr>
+  </table> -->
+
+  <table
+    [ngClass]="isKeywordAggDataVisMode ? 'd-none' : ''"
+    mat-table
+    [dataSource]="keywordDataSource"
+  >
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef>Date</th>
+      <td mat-cell *matCellDef="let element">{{ element.date }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="keyword_id">
+      <th mat-header-cell *matHeaderCellDef>Keyword ID</th>
+      <td mat-cell *matCellDef="let element">{{ element.keyword_id }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="keyword">
+      <th mat-header-cell *matHeaderCellDef>Keyword</th>
+      <td mat-cell *matCellDef="let element">{{ element.keyword }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="matchType">
+      <th mat-header-cell *matHeaderCellDef>Match Type</th>
+      <td mat-cell *matCellDef="let element">{{ element.matchType }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="keywordDisplayStatus">
+      <th mat-header-cell *matHeaderCellDef>Display Status</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.keywordDisplayStatus }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="keywordStatus">
+      <th mat-header-cell *matHeaderCellDef>Status</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.keywordStatus }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="local_spend">
+      <th mat-header-cell *matHeaderCellDef>Cost</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.local_spend }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="installs">
+      <th mat-header-cell *matHeaderCellDef>Installs</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.installs }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="avg_cpa">
+      <th mat-header-cell *matHeaderCellDef>Cost Per Install</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.avg_cpa }}
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedKeywordColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedKeywordColumns"></tr>
+  </table>
+
+  <!-- aggregate table -->
+  <table
+    [ngClass]="!isKeywordAggDataVisMode ? 'd-none' : ''"
+    mat-table
+    matSort
+    matSortActive="installs"
+    matSortDirection="desc"
+    [dataSource]="keywordAggregatedDataSource"
+  >
+    <ng-container matColumnDef="keyword">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Keyword</th>
+      <td mat-cell *matCellDef="let element">{{ element.keyword }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="installs">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Installs</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.installs }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="avg_cpa">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>
+        Cost Per Install
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.avg_cpa }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="local_spend">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Cost</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.local_spend }}
+      </td>
+    </ng-container>
+
+    <tr
+      mat-header-row
+      *matHeaderRowDef="displayedAggregatedKeywordColumns"
+    ></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: displayedAggregatedKeywordColumns"
+    ></tr>
   </table>
 </div>

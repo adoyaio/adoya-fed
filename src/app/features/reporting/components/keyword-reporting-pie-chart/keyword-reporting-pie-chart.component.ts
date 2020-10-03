@@ -1,6 +1,6 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { ChartOptions, ChartType } from "chart.js";
-import { Label, SingleDataSet } from "ng2-charts";
+import { Label, SingleDataSet, BaseChartDirective } from "ng2-charts";
 import { ReportingService } from "../../reporting.service";
 import { combineLatest } from "rxjs";
 import { filter, tap } from "rxjs/operators";
@@ -33,6 +33,8 @@ export class KeywordReportingPieChartComponent implements OnInit {
   public pieChartLegend = true;
   public pieChartPlugins = [];
 
+  @ViewChild(BaseChartDirective, { static: true }) chart: BaseChartDirective;
+
   constructor(private reportingService: ReportingService) {}
 
   ngOnInit() {
@@ -50,6 +52,7 @@ export class KeywordReportingPieChartComponent implements OnInit {
           if (_isNil(activeMetric)) {
             return;
           }
+
           // init chart
           this.pieChartData = [];
           this.pieChartLabels = [];
@@ -70,19 +73,32 @@ export class KeywordReportingPieChartComponent implements OnInit {
               }
             });
 
-            const dataPoint = _reduce(
-              valuesForADay,
-              (acc, day) => {
-                const val = _get(day, activeMetric.value);
-                return val + acc;
-              },
-              0
-            );
+            let dataPoint = 0;
+            if (activeMetric.value === "avg_cpa") {
+              dataPoint =
+                _reduce(
+                  valuesForADay,
+                  (acc, day) => {
+                    const val = _get(day, activeMetric.value);
+                    return +val + acc;
+                  },
+                  0
+                ) / valuesForADay.length;
+            } else {
+              dataPoint = _reduce(
+                valuesForADay,
+                (acc, day) => {
+                  const val = _get(day, activeMetric.value);
+                  return +val + acc;
+                },
+                0
+              );
+            }
 
             this.pieChartData.push(dataPoint);
           });
 
-          // this.chart.update();
+          this.chart.update();
         })
       )
       .subscribe();

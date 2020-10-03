@@ -223,7 +223,7 @@ $mat-primary: (
   darker: #8da870,
   200: #8da870,
   // For slide toggle,
-    contrast:
+  contrast:
     (
       main: $dark-primary-text,
       lighter: $dark-primary-text,
@@ -247,7 +247,7 @@ $mat-accent: (
   darker: #708d53,
   200: #8da870,
   // For slide toggle,
-    contrast:
+  contrast:
     (
       main: $dark-primary-text,
       lighter: $dark-primary-text,
@@ -267,15 +267,15 @@ body {
 
 $mat-warn: (
   // main: #ffb3b3,
-    // lighter: #ffe8e8,
-    // darker: #ff9a9a,
-    // 200: #ffb3b3,
-    main: #ff9a9a,
+  // lighter: #ffe8e8,
+  // darker: #ff9a9a,
+  // 200: #ffb3b3,
+  main: #ff9a9a,
   lighter: #ff9a9a,
   darker: #ff9a9a,
   200: #ffb3b3,
   // For slide toggle,
-    contrast:
+  contrast:
     (
       main: $dark-primary-text,
       lighter: $dark-primary-text,
@@ -300,6 +300,13 @@ $altTheme: mat-dark-theme($theme-primary, $theme-accent, $theme-warn);
   color: #708d53;
   text-decoration: none !important;
   cursor: pointer;
+}
+
+.mat-tooltip {
+  font-size: 0.9rem;
+  white-space: pre-line !important;
+  min-width: 400px;
+  padding: 10px;
 }
 
 // Handle buttons appropriately, with respect to line-height
