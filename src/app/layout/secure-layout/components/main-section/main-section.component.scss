@@ -11,12 +11,12 @@
 
 .main-section__buttons-text {
   color: mat-color($adoya-web-accent);
-  //#5d7d41
 }
 
 .main-section-wrapper {
   margin-left: 5%;
   margin-right: 5%;
+  min-height: calc(100vh - 100px);
   .top-bar-panel {
     height: 50px;
     display: flex;
