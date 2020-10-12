@@ -19,73 +19,53 @@
     <mat-progress-bar color="accent" mode="indeterminate"></mat-progress-bar>
   </div>
   <div class="d-flex col-12 px-0">
-    <mat-card class="workbench__card mat-elevation-z0 mt-3 w-100">
+    <mat-card class="adoya__card mat-elevation-z0 mt-3 w-100">
       <mat-card-title class="pb-2">
         Having Issues? Enter a description of your issue we'll respond within
         24-48 hours.
       </mat-card-title>
 
       <mat-card-content>
-        <div class="example-container w-100">
+        <div class="w-100">
           <mat-card-subtitle class="mt-2 mb-2"> </mat-card-subtitle>
 
           <form
             [formGroup]="supportForm"
             class="font-weight-bold font-size-larger"
           >
-            <mat-form-field
-              appearance="outline"
-              class="w-100 pt-1 pb-1"
-              color="primary"
-            >
+            <mat-form-field appearance="fill" class="w-100">
               <mat-label>Subject</mat-label>
               <input
-                class="pt-2 pb-2"
+                readonly="true"
                 formControlName="subject"
                 required
                 matInput
                 placeholder="Subject"
               />
             </mat-form-field>
-            <mat-form-field
-              appearance="outline"
-              class="w-100 pt-1 pb-1"
-              color="primary"
-            >
+            <mat-form-field appearance="fill" class="w-100">
               <mat-label>Organization ID</mat-label>
               <input
-                class="pt-2 pb-2"
+                readonly="true"
                 formControlName="orgId"
                 required
                 matInput
                 placeholder="Organization ID"
               />
             </mat-form-field>
-            <mat-form-field
-              appearance="outline"
-              class="w-100 pt-1 pb-1"
-              color="primary"
-            >
+            <mat-form-field appearance="fill" class="w-100">
               <mat-label>Username</mat-label>
               <input
-                class="pt-2 pb-2"
+                readonly="true"
                 formControlName="username"
                 required
                 matInput
                 placeholder="Username"
               />
             </mat-form-field>
-            <mat-form-field
-              appearance="outline"
-              class="w-100 pt-1 pb-1"
-              color="accent"
-            >
+            <mat-form-field appearance="outline" class="w-100" color="accent">
               <mat-label>Description of Issue</mat-label>
-              <textarea
-                matInput
-                formControlName="description"
-                class="pt-1 pb-1"
-              >
+              <textarea matInput formControlName="description" class="">
               </textarea>
             </mat-form-field>
           </form>
@@ -102,9 +82,9 @@
             <mat-icon class="text-white" aria-label="submit">done</mat-icon>
             <span class="text-white pl-1">submit</span>
           </button>
-          <mat-checkbox class="float-right"
+          <!-- <mat-checkbox class="float-right"
             >premium support member</mat-checkbox
-          >
+          > -->
         </mat-action-row>
       </div>
     </mat-card>

@@ -1,9 +1,11 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
+import { MatSnackBar } from "@angular/material";
 import { Router } from "@angular/router";
 import { AmplifyService } from "aws-amplify-angular";
-import { tap } from "rxjs/operators";
+import { catchError, map, tap } from "rxjs/operators";
 import { ClientService } from "src/app/core/services/client.service";
+import { SupportService } from "src/app/core/services/support.service";
 import { UserAccountService } from "src/app/core/services/user-account.service";
 import { SupportItem } from "../models/support-item";
 
@@ -17,7 +19,9 @@ export class SupportComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private userAccountService: UserAccountService,
-    private amplifyService: AmplifyService
+    private amplifyService: AmplifyService,
+    private supportService: SupportService,
+    private snackBar: MatSnackBar
   ) {}
 
   supportForm = this.fb.group({
@@ -27,7 +31,7 @@ export class SupportComponent implements OnInit {
     orgId: [""],
   });
 
-  client: SupportItem = new SupportItem();
+  supportItem: SupportItem = new SupportItem();
   isLoadingResults = true;
   isSendingResults;
   orgId: string;
@@ -60,19 +64,61 @@ export class SupportComponent implements OnInit {
 
     this.subject = "10/15/25: Adoya support ticket";
     this.username = "jakub@weareher.com";
-    this.supportForm.get("subject").disable();
     this.supportForm.get("subject").setValue(this.subject);
-
-    this.supportForm.get("username").disable();
     this.supportForm.get("username").setValue(this.username);
-
-    this.supportForm.get("orgId").disable();
     this.supportForm.get("orgId").setValue(this.orgId);
 
     this.supportForm
       .get("description")
       .setValidators([Validators.minLength(1), Validators.required]);
   }
-  onSupportSubmit() {}
-  onResetForm() {}
+  onSupportSubmit() {
+    if (this.supportForm.valid) {
+      this.isSendingResults = true;
+      this.supportItem.Description = this.supportForm.get("description").value;
+
+      this.supportItem.Username = this.supportForm.get("username").value;
+
+      this.supportService
+        .postSupportItem(this.supportItem)
+        .pipe(
+          tap((_) => {
+            this.isSendingResults = true;
+          }),
+          map((data) => {
+            this.isSendingResults = false;
+            this.openSnackBar(
+              "successfully sumbitted your support ticket!",
+              "dismiss"
+            );
+            return data;
+          }),
+          catchError(() => {
+            this.isSendingResults = false;
+            this.openSnackBar(
+              "unable to submit your support ticket, please enter required fields.",
+              "dismiss"
+            );
+            return [];
+          })
+        )
+        .subscribe();
+    } else {
+      this.openSnackBar(
+        "please double check preferences and settings, something appears to be invalid",
+        "dismiss"
+      );
+    }
+  }
+
+  // openSnackBar(arg0: string, arg1: string) {
+  //   throw new Error("Method not implemented.");
+  // }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 10000,
+      panelClass: "standard",
+    });
+  }
 }

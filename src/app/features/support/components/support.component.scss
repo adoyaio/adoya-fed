@@ -1,0 +1,8 @@
+@import "variables.scss";
+.adoya__card {
+  width: 100%;
+  border-style: solid;
+  border-color: mat-color($adoya-web-accent);
+  border-radius: 0.5;
+  border-width: 1px;
+}
