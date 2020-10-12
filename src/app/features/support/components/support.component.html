@@ -20,10 +20,15 @@
   </div>
   <div class="d-flex col-12 px-0">
     <mat-card class="adoya__card mat-elevation-z0 mt-3 w-100">
-      <mat-card-title class="pb-2">
+      <!-- <mat-card-title class="pb-2">
         Having Issues? Enter a description of your issue we'll respond within
         24-48 hours.
-      </mat-card-title>
+      </mat-card-title> -->
+
+      <mat-card-subtitle class="pb-1 font-weight-bold">
+        Having Issues? Enter a description of it in the text field and then
+        click the button below. We'll respond within 24-48 hours.
+      </mat-card-subtitle>
 
       <mat-card-content>
         <div class="w-100">
@@ -64,29 +69,29 @@
               />
             </mat-form-field>
             <mat-form-field appearance="outline" class="w-100" color="accent">
-              <mat-label>Description of Issue</mat-label>
+              <mat-label>Description</mat-label>
               <textarea matInput formControlName="description" class="">
               </textarea>
             </mat-form-field>
           </form>
         </div>
       </mat-card-content>
-      <div class="d-flex justify-content-start w-100">
-        <mat-action-row class="text-white w-100">
-          <button
-            (click)="onSupportSubmit()"
-            mat-raised-button
-            color="accent"
-            class="text-white float-left"
-          >
-            <mat-icon class="text-white" aria-label="submit">done</mat-icon>
-            <span class="text-white pl-1">submit</span>
-          </button>
-          <!-- <mat-checkbox class="float-right"
+      <!-- <div class="d-flex justify-content-start w-100"> -->
+      <mat-action-row class="w-100">
+        <button
+          (click)="onSupportSubmit()"
+          mat-raised-button
+          color="accent"
+          class="float-left"
+        >
+          <mat-icon class="text-white" aria-label="submit">done</mat-icon>
+          <span class="text-white pl-1">submit</span>
+        </button>
+        <!-- <mat-checkbox class="float-right"
             >premium support member</mat-checkbox
           > -->
-        </mat-action-row>
-      </div>
+      </mat-action-row>
+      <!-- </div> -->
     </mat-card>
   </div>
 </div>

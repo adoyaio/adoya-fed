@@ -37,6 +37,7 @@ export class SupportComponent implements OnInit {
   orgId: string;
   subject: string;
   username: string;
+  today: Date;
 
   ngOnInit() {
     this.amplifyService
@@ -62,8 +63,9 @@ export class SupportComponent implements OnInit {
         return val.Name === "email";
       }).Value;
 
-    this.subject = "10/15/25: Adoya support ticket";
-    this.username = "jakub@weareher.com";
+    this.today = new Date();
+    this.subject =
+      this.today.toLocaleDateString().toString() + " Adoya support ticket";
     this.supportForm.get("subject").setValue(this.subject);
     this.supportForm.get("username").setValue(this.username);
     this.supportForm.get("orgId").setValue(this.orgId);
