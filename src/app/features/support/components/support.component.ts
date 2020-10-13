@@ -77,9 +77,10 @@ export class SupportComponent implements OnInit {
   onSupportSubmit() {
     if (this.supportForm.valid) {
       this.isSendingResults = true;
-      this.supportItem.Description = this.supportForm.get("description").value;
-
-      this.supportItem.Username = this.supportForm.get("username").value;
+      this.supportItem.description = this.supportForm.get("description").value;
+      this.supportItem.username = this.supportForm.get("username").value;
+      this.supportItem.subject = this.supportForm.get("subject").value;
+      this.supportItem.orgId = this.supportForm.get("orgId").value;
 
       this.supportService
         .postSupportItem(this.supportItem)
@@ -90,7 +91,7 @@ export class SupportComponent implements OnInit {
           map((data) => {
             this.isSendingResults = false;
             this.openSnackBar(
-              "successfully sumbitted your support ticket!",
+              "successfully sumbitted your support ticket. thank you for contacting adoya support!",
               "dismiss"
             );
             return data;
@@ -107,7 +108,7 @@ export class SupportComponent implements OnInit {
         .subscribe();
     } else {
       this.openSnackBar(
-        "please double check preferences and settings, something appears to be invalid",
+        "unable to submit your support ticket, please enter required fields.",
         "dismiss"
       );
     }
