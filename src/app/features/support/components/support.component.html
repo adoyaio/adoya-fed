@@ -1,5 +1,5 @@
-<div class="d-flex col-12 px-0">
-  <mat-card class="account__card mat-elevation-z0 mt-3 w-100">
+<div class="d-flex flex-column col-12 px-0">
+  <!-- <mat-card class="account__card mat-elevation-z0 mt-3 w-100">
     <mat-card-content>
       <div class="example-container w-100">
         <mat-card-subtitle class="pb-1">
@@ -13,5 +13,85 @@
         </mat-card-subtitle>
       </div>
     </mat-card-content>
-  </mat-card>
+  </mat-card> -->
+
+  <div class="d-flex col-12 w-100 px-0" *ngIf="isSendingResults">
+    <mat-progress-bar color="accent" mode="indeterminate"></mat-progress-bar>
+  </div>
+  <div class="d-flex col-12 px-0">
+    <mat-card class="adoya__card mat-elevation-z0 mt-3 w-100">
+      <!-- <mat-card-title class="pb-2">
+        Having Issues? Enter a description of your issue we'll respond within
+        24-48 hours.
+      </mat-card-title> -->
+
+      <mat-card-subtitle class="pb-1 font-weight-bold">
+        Having Issues? Enter a description of it in the text field and then
+        click the button below. We'll respond within 24-48 hours.
+      </mat-card-subtitle>
+
+      <mat-card-content>
+        <div class="w-100">
+          <mat-card-subtitle class="mt-2 mb-2"> </mat-card-subtitle>
+
+          <form
+            [formGroup]="supportForm"
+            class="font-weight-bold font-size-larger"
+          >
+            <mat-form-field appearance="fill" class="w-100">
+              <mat-label>Subject</mat-label>
+              <input
+                readonly="true"
+                formControlName="subject"
+                required
+                matInput
+                placeholder="Subject"
+              />
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="w-100">
+              <mat-label>Organization ID</mat-label>
+              <input
+                readonly="true"
+                formControlName="orgId"
+                required
+                matInput
+                placeholder="Organization ID"
+              />
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="w-100">
+              <mat-label>Username</mat-label>
+              <input
+                readonly="true"
+                formControlName="username"
+                required
+                matInput
+                placeholder="Username"
+              />
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w-100" color="accent">
+              <mat-label>Description</mat-label>
+              <textarea matInput formControlName="description" class="">
+              </textarea>
+            </mat-form-field>
+          </form>
+        </div>
+      </mat-card-content>
+      <!-- <div class="d-flex justify-content-start w-100"> -->
+      <mat-action-row class="w-100">
+        <button
+          (click)="onSupportSubmit()"
+          mat-raised-button
+          color="accent"
+          class="float-left"
+        >
+          <mat-icon class="text-light" aria-label="submit">done</mat-icon>
+          <span class="text-light pl-1">submit</span>
+        </button>
+        <!-- <mat-checkbox class="float-right"
+            >premium support member</mat-checkbox
+          > -->
+      </mat-action-row>
+      <!-- </div> -->
+    </mat-card>
+  </div>
 </div>
