@@ -257,9 +257,9 @@ $mat-accent: (
 $theme-accent: mat-palette($mat-accent, main, lighter, darker);
 
 body {
-  --warn-color: #ff9a9a;
-  --warn-lighter-color: #ffb3b3;
-  --warn-darker-color: #ff9a9a;
+  --warn-color: #e76e6e;
+  --warn-lighter-color: #e76e6e;
+  --warn-darker-color: #e76e6e;
   --text-warn-color: #{$dark-primary-text};
   --text-warn-lighter-color: #{$dark-primary-text};
   --text-warn-darker-color: #{$dark-primary-text};
@@ -270,10 +270,10 @@ $mat-warn: (
   // lighter: #ffe8e8,
   // darker: #ff9a9a,
   // 200: #ffb3b3,
-  main: #ff9a9a,
-  lighter: #ff9a9a,
-  darker: #ff9a9a,
-  200: #ffb3b3,
+  main: #e76e6e,
+  lighter: #e76e6e,
+  darker: #e76e6e,
+  200: #e76e6e,
   // For slide toggle,
   contrast:
     (

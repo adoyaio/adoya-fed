@@ -1,4 +1,4 @@
-import { Client } from "./../../features/reporting/models/client";
+import { Client } from "../models/client";
 import { Injectable } from "@angular/core";
 import {
   HttpClient,
@@ -8,10 +8,11 @@ import {
 import { Observable } from "rxjs";
 import { CostPerInstallDayObject } from "src/app/features/reporting/models/cost-per-install-day-object";
 import { map, catchError } from "rxjs/operators";
-import { ClientPayload } from "src/app/features/reporting/models/client-payload";
+
 import { environment } from "src/environments/environment";
 import { KeywordDayObject } from "src/app/features/reporting/models/keyword-day-object";
 import { OffsetObject } from "src/app/features/reporting/models/offset-object";
+import { ClientPayload } from "../models/client-payload";
 
 @Injectable({
   providedIn: "root",

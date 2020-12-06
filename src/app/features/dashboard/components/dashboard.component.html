@@ -12,6 +12,8 @@
       <mat-progress-bar color="accent" mode="indeterminate"></mat-progress-bar>
     </div>
     <div class="d-flex col-12 px-0">
+
+      <!-- bid optimizaitons card -->
       <mat-card class="workbench__card mat-elevation-z0 mt-3 w-100">
         <mat-card-title class="pb-2">
           Bid Optimization Settings
@@ -28,6 +30,7 @@
             (click)="onAppleSubmit()"
             mat-button
             class="workbench__buttons float-right"
+
           >
             <mat-icon aria-label="clear">cloud_done</mat-icon>
             save changes
@@ -40,7 +43,9 @@
               Apple Search Ads Settings
             </mat-card-subtitle>
 
+            <!-- apple form -->
             <form [formGroup]="appleForm">
+
               <mat-form-field
                 appearance="fill"
                 [hideRequiredMarker]="false"
@@ -69,6 +74,8 @@
                   ><mat-icon>settings</mat-icon>&nbsp;Objective</mat-label
                 >
               </mat-form-field>
+
+              <!--- Max CPI -->
               <mat-form-field
                 matTooltip="Maximum Cost Per Install: &#13;  Enter the most you’re willing to spend for an install. &#13; &#13; Be realistic. Setting target too low will severely restrict your volume.  &#13; &#13; Keep changes +/- 20% of the previous value (if applicable). This prevents volatility. &#13; &#13; Also, try to allow for 7 days of performance before making adjustments."
                 appearance="fill"
@@ -86,18 +93,33 @@
                   type="number"
                   placeholder="Maximum Cost Per Install"
                 />
+                <mat-error>
+                  Must enter a number between .1 and 1,000
+                </mat-error>
               </mat-form-field>
             </form>
           </div>
+
+          <!-- Branch/MMP -->
           <div class="w-100">
             <mat-card-subtitle class="mt-2 mb-2">
               MMP Settings
             </mat-card-subtitle>
 
             <form [formGroup]="branchForm">
+
+              <!-- checkbox -->
+              <div class="mb-3" matTooltip="When enabling this feature, Adoya will use your MMP data when making bid adjustments.">
+                <mat-checkbox formControlName="branchBidAdjusterEnabled" (change)="handleBranchCheckboxChange($event)">
+                  Enable Bid Adjustments by Post-Install Data
+                </mat-checkbox>
+              </div>
+
+              <!-- MMP Objective -->
               <mat-form-field
                 appearance="fill"
-                class="w-100 workbench__accent-field mb-1"
+                class="w-100 mb-1"
+                [ngClass]="isControlDisabled('branchObjective') ? 'workbench__disabled-field' : 'workbench__accent-field'"
                 matTooltip="MMP Objective: &#13; Use this option if you want our system to also optimize for in-app purchases. &#13; &#13; This will be a secondary objective as our system optimizes primarily for cost per install. &#13; &#13; If you have MMP enabled, we strongly recommend you select either Cost Per Purchase or Return On Ad Spend (ROAS). &#13; &#13; Mouse over options for more detailed information on each strategy."
               >
                 <mat-select formControlName="branchObjective">
@@ -122,15 +144,19 @@
                   Objective</mat-label
                 >
               </mat-form-field>
+
+              <!-- Target Cost Per Purchase -->
               <mat-form-field
                 appearance="fill"
-                class="w-100 workbench__accent-field mb-1"
+                class="w-100 mb-1"
+                [ngClass]="isBranchFormDisabled() ? 'workbench__disabled-field' : 'workbench__accent-field'"
               >
-                <mat-label
-                  ><mat-icon>attach_money</mat-icon>&nbsp;Target Cost Per
-                  Purchase</mat-label
-                >
+                <mat-label>
+                  <mat-icon>attach_money</mat-icon>&nbsp;Target Cost Per
+                  Purchase
+                </mat-label>
                 <input
+                  [ngClass]="isControlDisabled('cppThreshold') ? 'workbench__disabled-field' : 'workbench__accent-field'"
                   formControlName="cppThreshold"
                   matInput
                   type="number"
@@ -138,16 +164,23 @@
                   matTooltip="Enter the most you’re willing to spend for a purchase. &#13; &#13; Be realistic. Setting a target too low will severely restrict your volume. &#13; &#13; Keep changes within +/- 20% of the previous value (if applicable). This prevents volatility. Also, try to allow for 7 days of performance before making adjustments. &#13; &#13;
                   Important: This factors in mobile measurement partner (MMP) data. &#13; &#13; Apple limits data passed through MMPs due to their privacy policies. Therefore, MMP data is often understated. &#13; &#13; Sometimes by 20% or more. Factor in that 20% when using this option. &#13; &#13; For example, if your target cost per purchase is $10, give it a 20% buffer and set the target to $12."
                 />
+                <mat-error>
+                  Must enter a number between .1 and 1,000
+                </mat-error>
               </mat-form-field>
+
+              <!-- Return on Ad spend -->
               <mat-form-field
                 appearance="fill"
-                class="w-100 workbench__accent-field mb-1"
+                class="w-100 mb-1"
+                [ngClass]="isBranchFormDisabled() ? 'workbench__disabled-field' : 'workbench__accent-field'"
               >
                 <mat-label
                   ><mat-icon>attach_money</mat-icon>&nbsp;Return On Ad
                   Spend</mat-label
                 >
                 <input
+                [ngClass]="isControlDisabled('revenueOverSpend') ? 'workbench__disabled-field' : 'workbench__accent-field'"
                   formControlName="revenueOverSpend"
                   matInput
                   type="number"
@@ -155,6 +188,9 @@
                   matTooltip="Enter your target ROAS. ROAS formula = revenue / cost. &#13; &#13; Be realistic. Setting a target too high will severely restrict your volume. &#13; &#13; Keep changes within +/- 20% of the previous value (if applicable). This prevents volatility. &#13; &#13; Also, try to allow for 7 days of performance before making adjustments. &#13; &#13;
                   Important: This factors in mobile measurement partner (MMP) data. &#13; &#13; Apple limits data passed through MMPs due to their privacy policies. Therefore, MMP data is often understated. &#13; &#13; Sometimes by 20% or more. Factor in that 20% when using this option. &#13; &#13; For example, if your target ROAS is $2.00, give it a 20% discount and set it to $1.60. Formula for ROAS discount = (100% - 20%) x ROAS target."
                 />
+                <mat-error>
+                  Must enter a number between .1 and 1,000
+                </mat-error>
               </mat-form-field>
             </form>
           </div>

@@ -11,11 +11,12 @@ import {
 } from "@angular/forms";
 import { UserAccountService } from "src/app/core/services/user-account.service";
 import { ClientService } from "src/app/core/services/client.service";
-import { Client } from "../../reporting/models/client";
+import { Client } from "../../../core/models/client";
 import { CustomFormValidators } from "src/app/shared/dynamic-form/validators/CustomFormValidators";
-import { ClientPayload } from "../../reporting/models/client-payload";
-import { MatSnackBar } from "@angular/material";
-import { each as _each, map as _map } from "lodash";
+
+import { MatCheckboxChange, MatSnackBar } from "@angular/material";
+import { each as _each, isNil, map as _map } from "lodash";
+import { ClientPayload } from "src/app/core/models/client-payload";
 
 @Component({
   selector: "app-dashboard",
@@ -40,6 +41,7 @@ export class DashboardComponent implements OnInit {
     branchObjective: [""],
     cppThreshold: [""],
     revenueOverSpend: [""],
+    branchBidAdjusterEnabled: false,
   });
 
   preferencesForm = this.fb.group({
@@ -143,9 +145,25 @@ export class DashboardComponent implements OnInit {
                 .revenueOverAdSpendThreshold
             );
 
+          this.branchForm
+            .get("branchBidAdjusterEnabled")
+            .setValue(
+              this.client.orgDetails.branchIntegrationParameters
+                .branchBidAdjusterEnabled
+            );
+
           this.preferencesForm
             .get("emailAddresses")
             .setValue(this.client.orgDetails.emailAddresses);
+
+          if (
+            !this.client.orgDetails.branchIntegrationParameters
+              .branchBidAdjusterEnabled
+          ) {
+            this.branchForm.get("cppThreshold").disable();
+            this.branchForm.get("revenueOverSpend").disable();
+            this.branchForm.get("branchObjective").disable();
+          }
 
           this.isLoadingResults = false;
           return data;
@@ -153,6 +171,29 @@ export class DashboardComponent implements OnInit {
         catchError(() => {
           this.isLoadingResults = false;
           return [];
+        })
+      )
+      .subscribe();
+  }
+
+  ngAfterViewInit() {
+    this.branchForm
+      .get("branchObjective")
+      .valueChanges.pipe(
+        tap((value) => {
+          if (value === "revenue_over_ad_spend") {
+            this.branchForm.get("cppThreshold").disable();
+            this.branchForm.get("revenueOverSpend").enable();
+          }
+          if (value === "cost_per_purchase") {
+            this.branchForm.get("cppThreshold").enable();
+            this.branchForm.get("revenueOverSpend").disable();
+          }
+
+          if (value === "none") {
+            this.branchForm.get("cppThreshold").disable();
+            this.branchForm.get("revenueOverSpend").disable();
+          }
         })
       )
       .subscribe();
@@ -189,6 +230,13 @@ export class DashboardComponent implements OnInit {
       .setValue(
         this.client.orgDetails.branchBidParameters.revenueOverAdSpendThreshold
       );
+    this.branchForm
+      .get("branchBidAdjusterEnabled")
+      .setValue(
+        this.client.orgDetails.branchIntegrationParameters
+          .branchBidAdjusterEnabled
+      );
+
     this.preferencesForm
       .get("emailAddresses")
       .setValue(this.client.orgDetails.emailAddresses);
@@ -222,6 +270,9 @@ export class DashboardComponent implements OnInit {
       ).value;
       this.client.orgDetails.branchBidParameters.revenueOverAdSpendThreshold = this.branchForm.get(
         "revenueOverSpend"
+      ).value;
+      this.client.orgDetails.branchIntegrationParameters.branchBidAdjusterEnabled = this.branchForm.get(
+        "branchBidAdjusterEnabled"
       ).value;
 
       this.clientService
@@ -294,6 +345,46 @@ export class DashboardComponent implements OnInit {
         "please double check preferences and settings, something appears to be invalid",
         "dismiss"
       );
+    }
+  }
+
+  isBranchFormDisabled(): boolean {
+    if (isNil(this.client.orgDetails)) {
+      return true;
+    }
+    return !this.branchForm.get("branchBidAdjusterEnabled").value;
+  }
+
+  isControlDisabled(name: string): boolean {
+    if (isNil(this.client.orgDetails)) {
+      return true;
+    }
+    if (!this.branchForm.get("branchBidAdjusterEnabled").value) {
+      return true;
+    }
+
+    return this.branchForm.get(name).disabled;
+  }
+
+  handleBranchCheckboxChange($event: MatCheckboxChange) {
+    if ($event.checked) {
+      this.branchForm.get("branchObjective").enable();
+
+      if (
+        this.branchForm.get("branchObjective").value === "revenue_over_ad_spend"
+      ) {
+        this.branchForm.get("revenueOverSpend").enable();
+      }
+
+      if (
+        this.branchForm.get("branchObjective").value === "cost_per_purchase"
+      ) {
+        this.branchForm.get("cppThreshold").enable();
+      }
+    } else {
+      this.branchForm.get("cppThreshold").disable();
+      this.branchForm.get("branchObjective").disable();
+      this.branchForm.get("revenueOverSpend").disable();
     }
   }
 }

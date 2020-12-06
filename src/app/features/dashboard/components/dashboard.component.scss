@@ -16,6 +16,14 @@
   background-color: mat-color($adoya-web-accent);
 }
 
+.workbench__disabled-field {
+  background-color: gray;
+}
+
+// .workbench__disabled-control {
+//   background-color: gray;
+// }
+
 .workbench__buttons {
   width: 125px;
 }
