@@ -42,6 +42,8 @@ export class DashboardComponent implements OnInit {
     cppThreshold: [""],
     revenueOverSpend: [""],
     branchBidAdjusterEnabled: false,
+    branchKey: [""],
+    branchSecret: [""],
   });
 
   preferencesForm = this.fb.group({
@@ -150,6 +152,18 @@ export class DashboardComponent implements OnInit {
             .setValue(
               this.client.orgDetails.branchIntegrationParameters
                 .branchBidAdjusterEnabled
+            );
+
+          this.branchForm
+            .get("branchKey")
+            .setValue(
+              this.client.orgDetails.branchIntegrationParameters.branchKey
+            );
+
+          this.branchForm
+            .get("branchSecret")
+            .setValue(
+              this.client.orgDetails.branchIntegrationParameters.branchSecret
             );
 
           this.preferencesForm
@@ -274,6 +288,8 @@ export class DashboardComponent implements OnInit {
       this.client.orgDetails.branchIntegrationParameters.branchBidAdjusterEnabled = this.branchForm.get(
         "branchBidAdjusterEnabled"
       ).value;
+
+      // TODO branch key and secret
 
       this.clientService
         .postClient(ClientPayload.buildFromClient(this.client))
