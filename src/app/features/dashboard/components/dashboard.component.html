@@ -12,7 +12,6 @@
       <mat-progress-bar color="accent" mode="indeterminate"></mat-progress-bar>
     </div>
     <div class="d-flex col-12 px-0">
-
       <!-- bid optimizaitons card -->
       <mat-card class="workbench__card mat-elevation-z0 mt-3 w-100">
         <mat-card-title class="pb-2">
@@ -30,7 +29,6 @@
             (click)="onAppleSubmit()"
             mat-button
             class="workbench__buttons float-right"
-
           >
             <mat-icon aria-label="clear">cloud_done</mat-icon>
             save changes
@@ -45,7 +43,6 @@
 
             <!-- apple form -->
             <form [formGroup]="appleForm">
-
               <mat-form-field
                 appearance="fill"
                 [hideRequiredMarker]="false"
@@ -107,10 +104,15 @@
             </mat-card-subtitle>
 
             <form [formGroup]="branchForm">
-
               <!-- enable branch checkbox -->
-              <div class="mb-3" matTooltip="When enabling this feature, Adoya will use your MMP data when making bid adjustments. Reach out to us via Adoya Support for more.">
-                <mat-checkbox formControlName="branchBidAdjusterEnabled" (change)="handleBranchCheckboxChange($event)">
+              <div
+                class="mb-3"
+                matTooltip="When enabling this feature, Adoya will use your MMP data when making bid adjustments. Reach out to us via Adoya Support for more."
+              >
+                <mat-checkbox
+                  formControlName="branchBidAdjusterEnabled"
+                  (change)="handleBranchCheckboxChange($event)"
+                >
                   Enable Bid Adjustments by Post-Install Data
                 </mat-checkbox>
               </div>
@@ -151,7 +153,11 @@
                   Purchase
                 </mat-label>
                 <input
-                  [ngClass]="isControlDisabled('cppThreshold') ? 'bg-med' : 'workbench__accent-field'"
+                  [ngClass]="
+                    isControlDisabled('cppThreshold')
+                      ? 'bg-med'
+                      : 'workbench__accent-field'
+                  "
                   class="p-2"
                   formControlName="cppThreshold"
                   matInput
@@ -176,9 +182,13 @@
                   Spend</mat-label
                 >
                 <input
-                [ngClass]="isControlDisabled('revenueOverSpend') ? 'bg-med' : 'workbench__accent-field'"
-                class="p-2"
-                formControlName="revenueOverSpend"
+                  [ngClass]="
+                    isControlDisabled('revenueOverSpend')
+                      ? 'bg-med'
+                      : 'workbench__accent-field'
+                  "
+                  class="p-2"
+                  formControlName="revenueOverSpend"
                   matInput
                   type="number"
                   placeholder="Return On Ad Spend"
@@ -190,47 +200,42 @@
                 </mat-error>
               </mat-form-field>
 
-                                        <!-- -->
-                                        <mat-card-subtitle class="mt-2 mb-2">
-                                          Branch Integration Parameters
-                                        </mat-card-subtitle>
+              <!-- -->
+              <mat-card-subtitle class="mt-2 mb-2">
+                Branch Integration Parameters
+              </mat-card-subtitle>
 
-                                        <!-- branch key -->
-                                         <mat-form-field
-                                            appearance="fill"
-                                            class="w-100 mb-1"
-                                            [ngClass]="isBranchFormDisabled() ? 'bg-med' : ''"
-                                          >
-                                            <mat-label>
-                                            Branch Key
-                                              </mat-label>
-                                              <input
-                                                [ngClass]="isBranchFormDisabled() ? 'bg-med' : ''"
-                                                formControlName="branchKey"
-                                                matInput
-                                                type="text"
-                                                placeholder=""
-                                                >
-                                          </mat-form-field>
+              <!-- branch key -->
+              <mat-form-field
+                appearance="fill"
+                class="w-100 mb-1"
+                [ngClass]="isBranchFormDisabled() ? 'bg-med' : ''"
+              >
+                <mat-label> Branch Key </mat-label>
+                <input
+                  [ngClass]="isBranchFormDisabled() ? 'bg-med' : ''"
+                  formControlName="branchKey"
+                  matInput
+                  type="text"
+                  placeholder=""
+                />
+              </mat-form-field>
 
-
-                                        <!-- branch secret -->
-                                         <mat-form-field
-                                         appearance="fill"
-                                         class="w-100 mb-1"
-                                         [ngClass]="isBranchFormDisabled() ? 'bg-med' : ''"
-                                       >
-                                         <mat-label>
-                                         Branch Secret
-                                           </mat-label>
-                                           <input
-                                             [ngClass]="isBranchFormDisabled() ? 'bg-med' : ''"
-                                             formControlName="branchSecret"
-                                             matInput
-                                             type="text"
-                                             placeholder=""
-                                             >
-                                       </mat-form-field>
+              <!-- branch secret -->
+              <mat-form-field
+                appearance="fill"
+                class="w-100 mb-1"
+                [ngClass]="isBranchFormDisabled() ? 'bg-med' : ''"
+              >
+                <mat-label> Branch Secret </mat-label>
+                <input
+                  [ngClass]="isBranchFormDisabled() ? 'bg-med' : ''"
+                  formControlName="branchSecret"
+                  matInput
+                  type="text"
+                  placeholder=""
+                />
+              </mat-form-field>
             </form>
           </div>
         </mat-card-content>

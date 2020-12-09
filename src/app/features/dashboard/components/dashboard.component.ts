@@ -203,11 +203,6 @@ export class DashboardComponent implements OnInit {
             this.branchForm.get("cppThreshold").enable();
             this.branchForm.get("revenueOverSpend").disable();
           }
-
-          if (value === "none") {
-            this.branchForm.get("cppThreshold").disable();
-            this.branchForm.get("revenueOverSpend").disable();
-          }
         })
       )
       .subscribe();
@@ -250,6 +245,14 @@ export class DashboardComponent implements OnInit {
         this.client.orgDetails.branchIntegrationParameters
           .branchBidAdjusterEnabled
       );
+    this.branchForm
+      .get("branchKey")
+      .setValue(this.client.orgDetails.branchIntegrationParameters.branchKey);
+    this.branchForm
+      .get("branchSecret")
+      .setValue(
+        this.client.orgDetails.branchIntegrationParameters.branchSecret
+      );
 
     this.preferencesForm
       .get("emailAddresses")
@@ -289,7 +292,12 @@ export class DashboardComponent implements OnInit {
         "branchBidAdjusterEnabled"
       ).value;
 
-      // TODO branch key and secret
+      this.client.orgDetails.branchIntegrationParameters.branchKey = this.branchForm.get(
+        "branchKey"
+      ).value;
+      this.client.orgDetails.branchIntegrationParameters.branchSecret = this.branchForm.get(
+        "branchSecret"
+      ).value;
 
       this.clientService
         .postClient(ClientPayload.buildFromClient(this.client))
@@ -385,6 +393,8 @@ export class DashboardComponent implements OnInit {
   handleBranchCheckboxChange($event: MatCheckboxChange) {
     if ($event.checked) {
       this.branchForm.get("branchObjective").enable();
+      this.branchForm.get("branchKey").enable();
+      this.branchForm.get("branchSecret").enable();
 
       if (
         this.branchForm.get("branchObjective").value === "revenue_over_ad_spend"
@@ -401,6 +411,8 @@ export class DashboardComponent implements OnInit {
       this.branchForm.get("cppThreshold").disable();
       this.branchForm.get("branchObjective").disable();
       this.branchForm.get("revenueOverSpend").disable();
+      this.branchForm.get("branchKey").disable();
+      this.branchForm.get("branchSecret").disable();
     }
   }
 }
