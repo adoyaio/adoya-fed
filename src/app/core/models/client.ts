@@ -3,6 +3,7 @@ export class BranchBidParameters {
   branchOptimizationGoal: string;
   minAppleInstalls: number;
   branchMinBid: number;
+  branchMaxBid: number;
   revenueOverAdSpendThreshold: number;
   revenueOverAdSpendThresholdBuffer: number;
   costPerPurchaseThreshold: number;
@@ -16,6 +17,7 @@ export class BranchBidParameters {
     retVal.branchOptimizationGoal = response.branch_optimization_goal;
     retVal.minAppleInstalls = response.min_apple_installs;
     retVal.branchMinBid = response.branch_min_bid;
+    retVal.branchMaxBid = response.branch_max_bid;
     retVal.revenueOverAdSpendThreshold =
       response.revenue_over_ad_spend_threshold;
     retVal.revenueOverAdSpendThresholdBuffer =

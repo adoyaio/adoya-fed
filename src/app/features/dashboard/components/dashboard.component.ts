@@ -257,6 +257,22 @@ export class DashboardComponent implements OnInit {
     this.preferencesForm
       .get("emailAddresses")
       .setValue(this.client.orgDetails.emailAddresses);
+
+    if (
+      this.client.orgDetails.branchBidParameters.branchOptimizationGoal ===
+      "revenue_over_ad_spend"
+    ) {
+      this.branchForm.get("cppThreshold").disable();
+      this.branchForm.get("revenueOverSpend").enable();
+    }
+
+    if (
+      this.client.orgDetails.branchBidParameters.branchOptimizationGoal ===
+      "cost_per_purchase"
+    ) {
+      this.branchForm.get("cppThreshold").enable();
+      this.branchForm.get("revenueOverSpend").disable();
+    }
   }
 
   onAppleSubmit() {

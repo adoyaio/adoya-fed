@@ -213,7 +213,12 @@
               >
                 <mat-label> Branch Key </mat-label>
                 <input
-                  [ngClass]="isBranchFormDisabled() ? 'bg-med' : ''"
+                  class="p-2"
+                  [ngClass]="
+                    isBranchFormDisabled()
+                      ? 'bg-med'
+                      : 'workbench__accent-field'
+                  "
                   formControlName="branchKey"
                   matInput
                   type="text"
@@ -229,7 +234,12 @@
               >
                 <mat-label> Branch Secret </mat-label>
                 <input
-                  [ngClass]="isBranchFormDisabled() ? 'bg-med' : ''"
+                  class="p-2"
+                  [ngClass]="
+                    isBranchFormDisabled()
+                      ? 'bg-med'
+                      : 'workbench__accent-field'
+                  "
                   formControlName="branchSecret"
                   matInput
                   type="text"
