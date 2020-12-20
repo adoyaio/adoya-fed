@@ -13,9 +13,14 @@ export class BranchBidParametersPayload {
   min_apple_installs: number;
   branch_min_bid: number;
   branch_max_bid: number;
-  revenue_over_ad_spend_threshold: number;
+  revenue_over_ad_spend_threshold_exact: number;
+  revenue_over_ad_spend_threshold_broad: number;
+  revenue_over_ad_spend_threshold_brand: number;
   revenue_over_ad_spend_threshold_buffer: number;
-  cost_per_purchase_threshold: number;
+  cost_per_purchase_threshold_exact: number;
+  cost_per_purchase_threshold_broad: number;
+  cost_per_purchase_threshold_brand: number;
+
   cost_per_purchase_threshold_buffer: number;
   objective: string;
 
@@ -26,10 +31,20 @@ export class BranchBidParametersPayload {
     retVal.min_apple_installs = params.minAppleInstalls;
     retVal.branch_min_bid = params.branchMinBid;
     retVal.branch_max_bid = params.branchMaxBid;
-    retVal.revenue_over_ad_spend_threshold = params.revenueOverAdSpendThreshold;
+    retVal.revenue_over_ad_spend_threshold_exact =
+      params.revenueOverAdSpendThresholdExact;
+    retVal.revenue_over_ad_spend_threshold_broad =
+      params.revenueOverAdSpendThresholdBroad;
+    retVal.revenue_over_ad_spend_threshold_brand =
+      params.revenueOverAdSpendThresholdBrand;
     retVal.revenue_over_ad_spend_threshold_buffer =
       params.revenueOverAdSpendThresholdBuffer;
-    retVal.cost_per_purchase_threshold = params.costPerPurchaseThreshold;
+    retVal.cost_per_purchase_threshold_exact =
+      params.costPerPurchaseThresholdExact;
+    retVal.cost_per_purchase_threshold_broad =
+      params.costPerPurchaseThresholdBroad;
+    retVal.cost_per_purchase_threshold_brand =
+      params.costPerPurchaseThresholdBrand;
     retVal.cost_per_purchase_threshold_buffer =
       params.costPerPurchaseThresholdBuffer;
     retVal.objective = params.objective;
@@ -73,7 +88,9 @@ export class BidParametersPayload {
   OBJECTIVE: string;
   MIN_BID: number;
   NO_INSTALL_BID_DECREASE_THRESH: number;
-  HIGH_CPI_BID_DECREASE_THRESH: number;
+  HIGH_CPI_BID_DECREASE_THRESH_EXACT: number;
+  HIGH_CPI_BID_DECREASE_THRESH_BROAD: number;
+  HIGH_CPI_BID_DECREASE_THRESH_BRAND: number;
   LOW_CPA_BID_BOOST: number;
   MAX_BID: number;
   STALE_RAISE_BID_BOOST: string;
@@ -86,7 +103,13 @@ export class BidParametersPayload {
     response.OBJECTIVE = params.objective;
     response.MIN_BID = params.minBid;
     response.NO_INSTALL_BID_DECREASE_THRESH = params.noInstallBidDecreaseThresh;
-    response.HIGH_CPI_BID_DECREASE_THRESH = params.highCPIBidDecreaseThresh;
+    response.HIGH_CPI_BID_DECREASE_THRESH_EXACT =
+      params.highCPIBidDecreaseThreshExact;
+    response.HIGH_CPI_BID_DECREASE_THRESH_BROAD =
+      params.highCPIBidDecreaseThreshBroad;
+    response.HIGH_CPI_BID_DECREASE_THRESH_BRAND =
+      params.highCPIBidDecreaseThreshBrand;
+
     response.LOW_CPA_BID_BOOST = params.lowCPABidBoost;
     response.MAX_BID = params.maxBid;
     response.STALE_RAISE_BID_BOOST = params.staleRaiseBidBoost;
