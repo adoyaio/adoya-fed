@@ -161,11 +161,13 @@ export class AdGroupIdPayload {
   broad: string;
   exact: string;
   search: string;
+  brand: string;
   static buildFromClient(ids: any) {
     const retVal = new AdGroupIdPayload();
     retVal.broad = ids.broad;
     retVal.exact = ids.exact;
     retVal.search = ids.search;
+    retVal.brand = ids.brand;
     return retVal;
   }
 }
@@ -174,12 +176,13 @@ export class CampaignIdPayload {
   broad: string;
   exact: string;
   search: string;
-
+  brand: string;
   static buildFromClient(ids: any) {
     const retVal = new CampaignIdPayload();
     retVal.broad = ids.broad;
     retVal.exact = ids.exact;
     retVal.search = ids.search;
+    retVal.brand = ids.brand;
     return retVal;
   }
 }

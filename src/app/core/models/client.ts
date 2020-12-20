@@ -151,11 +151,13 @@ export class AdGroupId {
   broad: string;
   exact: string;
   search: string;
+  brand: string;
   static buildFromResponse(response: any) {
     const retVal = new AdGroupId();
     retVal.broad = response.broad;
     retVal.exact = response.exact;
     retVal.search = response.search;
+    retVal.brand = response.brand;
     return retVal;
   }
 }
@@ -164,12 +166,14 @@ export class CampaignId {
   broad: string;
   exact: string;
   search: string;
+  brand: string;
 
   static buildFromResponse(response: any) {
     const retVal = new CampaignId();
     retVal.broad = response.broad;
     retVal.exact = response.exact;
     retVal.search = response.search;
+    retVal.brand = response.brand;
     return retVal;
   }
 }
