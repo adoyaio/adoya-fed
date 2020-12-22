@@ -30,19 +30,22 @@ export class OptimizationsComponent implements OnInit {
   appleForm = this.fb.group({
     objective: [""],
     highCPI: [""],
+    highCPIBrand: [""],
   });
   branchForm = this.fb.group({
     branchObjective: [""],
     cppThreshold: [""],
+    cppThresholdBrand: [""],
     revenueOverSpend: [""],
+    revenueOverSpendBrand: [""],
     branchBidAdjusterEnabled: false,
     branchKey: [""],
     branchSecret: [""],
   });
 
-  preferencesForm = this.fb.group({
-    emailAddresses: [""],
-  });
+  // preferencesForm = this.fb.group({
+  //   emailAddresses: [""],
+  // });
 
   client: Client = new Client();
   isLoadingResults = true;
@@ -52,6 +55,15 @@ export class OptimizationsComponent implements OnInit {
   ngOnInit() {
     this.appleForm
       .get("highCPI")
+      .setValidators([
+        Validators.min(0.1),
+        Validators.max(1000),
+        Validators.minLength(1),
+        Validators.required,
+      ]);
+
+    this.appleForm
+      .get("highCPIBrand")
       .setValidators([
         Validators.min(0.1),
         Validators.max(1000),
@@ -69,6 +81,15 @@ export class OptimizationsComponent implements OnInit {
       ]);
 
     this.branchForm
+      .get("cppThresholdBrand")
+      .setValidators([
+        Validators.min(0.1),
+        Validators.max(1000),
+        Validators.minLength(1),
+        Validators.required,
+      ]);
+
+    this.branchForm
       .get("revenueOverSpend")
       .setValidators([
         Validators.min(0.1),
@@ -77,13 +98,22 @@ export class OptimizationsComponent implements OnInit {
         Validators.required,
       ]);
 
-    this.preferencesForm
-      .get("emailAddresses")
+    this.branchForm
+      .get("revenueOverSpendBrand")
       .setValidators([
-        CustomFormValidators.emailListValidator,
+        Validators.min(0.1),
+        Validators.max(1000),
         Validators.minLength(1),
         Validators.required,
       ]);
+
+    // this.preferencesForm
+    //   .get("emailAddresses")
+    //   .setValidators([
+    //     CustomFormValidators.emailListValidator,
+    //     Validators.minLength(1),
+    //     Validators.required,
+    //   ]);
 
     this.amplifyService
       .authState()
@@ -121,6 +151,12 @@ export class OptimizationsComponent implements OnInit {
               this.client.orgDetails.bidParameters.highCPIBidDecreaseThreshExact
             );
 
+          this.appleForm
+            .get("highCPIBrand")
+            .setValue(
+              this.client.orgDetails.bidParameters.highCPIBidDecreaseThreshBrand
+            );
+
           this.branchForm
             .get("branchObjective")
             .setValue(
@@ -135,10 +171,24 @@ export class OptimizationsComponent implements OnInit {
             );
 
           this.branchForm
+            .get("cppThresholdBrand")
+            .setValue(
+              this.client.orgDetails.branchBidParameters
+                .costPerPurchaseThresholdBrand
+            );
+
+          this.branchForm
             .get("revenueOverSpend")
             .setValue(
               this.client.orgDetails.branchBidParameters
                 .revenueOverAdSpendThresholdExact
+            );
+
+          this.branchForm
+            .get("revenueOverSpendBrand")
+            .setValue(
+              this.client.orgDetails.branchBidParameters
+                .revenueOverAdSpendThresholdBrand
             );
 
           this.branchForm
@@ -160,17 +210,20 @@ export class OptimizationsComponent implements OnInit {
               this.client.orgDetails.branchIntegrationParameters.branchSecret
             );
 
-          this.preferencesForm
-            .get("emailAddresses")
-            .setValue(this.client.orgDetails.emailAddresses);
+          // this.preferencesForm
+          //   .get("emailAddresses")
+          //   .setValue(this.client.orgDetails.emailAddresses);
 
           if (
             !this.client.orgDetails.branchIntegrationParameters
               .branchBidAdjusterEnabled
           ) {
             this.branchForm.get("cppThreshold").disable();
+            this.branchForm.get("cppThresholdBrand").disable();
             this.branchForm.get("revenueOverSpend").disable();
+            this.branchForm.get("revenueOverSpendBrand").disable();
             this.branchForm.get("branchObjective").disable();
+            this.branchForm.get("branchObjectiveBrand").disable();
           }
 
           this.isLoadingResults = false;
@@ -191,11 +244,15 @@ export class OptimizationsComponent implements OnInit {
         tap((value) => {
           if (value === "revenue_over_ad_spend") {
             this.branchForm.get("cppThreshold").disable();
+            this.branchForm.get("cppThresholdBrand").disable();
             this.branchForm.get("revenueOverSpend").enable();
+            this.branchForm.get("revenueOverSpendBrand").enable();
           }
           if (value === "cost_per_purchase") {
             this.branchForm.get("cppThreshold").enable();
+            this.branchForm.get("cppThresholdBrand").enable();
             this.branchForm.get("revenueOverSpend").disable();
+            this.branchForm.get("revenueOverSpendBrand").disable();
           }
         })
       )
@@ -220,22 +277,44 @@ export class OptimizationsComponent implements OnInit {
         this.client.orgDetails.bidParameters.highCPIBidDecreaseThreshExact
       );
 
+    this.appleForm
+      .get("highCPIBrand")
+      .setValue(
+        this.client.orgDetails.bidParameters.highCPIBidDecreaseThreshBrand
+      );
+
     this.branchForm
       .get("branchObjective")
       .setValue(
         this.client.orgDetails.branchBidParameters.branchOptimizationGoal
       );
+
     this.branchForm
       .get("cppThreshold")
       .setValue(
         this.client.orgDetails.branchBidParameters.costPerPurchaseThresholdExact
       );
+
+    this.branchForm
+      .get("cppThresholdBrand")
+      .setValue(
+        this.client.orgDetails.branchBidParameters.costPerPurchaseThresholdBrand
+      );
+
     this.branchForm
       .get("revenueOverSpend")
       .setValue(
         this.client.orgDetails.branchBidParameters
           .revenueOverAdSpendThresholdExact
       );
+
+    this.branchForm
+      .get("revenueOverSpendBrand")
+      .setValue(
+        this.client.orgDetails.branchBidParameters
+          .revenueOverAdSpendThresholdBrand
+      );
+
     this.branchForm
       .get("branchBidAdjusterEnabled")
       .setValue(
@@ -251,9 +330,9 @@ export class OptimizationsComponent implements OnInit {
         this.client.orgDetails.branchIntegrationParameters.branchSecret
       );
 
-    this.preferencesForm
-      .get("emailAddresses")
-      .setValue(this.client.orgDetails.emailAddresses);
+    // this.preferencesForm
+    //   .get("emailAddresses")
+    //   .setValue(this.client.orgDetails.emailAddresses);
 
     if (
       this.client.orgDetails.branchBidParameters.branchOptimizationGoal ===
@@ -274,7 +353,7 @@ export class OptimizationsComponent implements OnInit {
 
   onAppleSubmit() {
     if (
-      this.preferencesForm.valid &&
+      // this.preferencesForm.valid &&
       this.appleForm.valid &&
       this.branchForm.valid
     ) {
@@ -295,16 +374,16 @@ export class OptimizationsComponent implements OnInit {
         "highCPI"
       ).value;
 
-      //TODO brand
-      this.client.orgDetails.bidParameters.highCPIBidDecreaseThreshBrand = this.appleForm.get(
-        "highCPI"
-      ).value;
-
       this.client.orgDetails.adgroupBidParameters.highCPIBidDecreaseThresh = this.appleForm.get(
         "highCPI"
       ).value;
 
-      // Branch field
+      // brand
+      this.client.orgDetails.bidParameters.highCPIBidDecreaseThreshBrand = this.appleForm.get(
+        "highCPIBrand"
+      ).value;
+
+      // Branch fields
       this.client.orgDetails.branchBidParameters.branchOptimizationGoal = this.branchForm.get(
         "branchObjective"
       ).value;
@@ -319,7 +398,7 @@ export class OptimizationsComponent implements OnInit {
       ).value;
 
       this.client.orgDetails.branchBidParameters.costPerPurchaseThresholdBrand = this.branchForm.get(
-        "cppThreshold"
+        "cppThresholdBrand"
       ).value;
 
       // campaign specific fields use one control for exact, broad, search; and one for brand
@@ -332,7 +411,7 @@ export class OptimizationsComponent implements OnInit {
       ).value;
 
       this.client.orgDetails.branchBidParameters.revenueOverAdSpendThresholdBrand = this.branchForm.get(
-        "revenueOverSpend"
+        "revenueOverSpendBrand"
       ).value;
 
       this.client.orgDetails.branchIntegrationParameters.branchBidAdjusterEnabled = this.branchForm.get(
@@ -375,49 +454,49 @@ export class OptimizationsComponent implements OnInit {
     }
   }
 
-  onPreferencesSubmit() {
-    if (
-      this.preferencesForm.valid &&
-      this.appleForm.valid &&
-      this.branchForm.valid
-    ) {
-      this.isSendingResults = true;
+  // onPreferencesSubmit() {
+  //   if (
+  //     this.preferencesForm.valid &&
+  //     this.appleForm.valid &&
+  //     this.branchForm.valid
+  //   ) {
+  //     this.isSendingResults = true;
 
-      this.client.orgDetails.emailAddresses = _map(
-        String(this.preferencesForm.get("emailAddresses").value).split(","),
-        (val) => {
-          return val.trim();
-        }
-      );
+  //     this.client.orgDetails.emailAddresses = _map(
+  //       String(this.preferencesForm.get("emailAddresses").value).split(","),
+  //       (val) => {
+  //         return val.trim();
+  //       }
+  //     );
 
-      this.clientService
-        .postClient(ClientPayload.buildFromClient(this.client))
-        .pipe(
-          tap((_) => {
-            this.isSendingResults = true;
-          }),
-          map((data) => {
-            this.isSendingResults = false;
-            this.openSnackBar("successfully updated preferences!", "dismiss");
-            return data;
-          }),
-          catchError(() => {
-            this.isSendingResults = false;
-            this.openSnackBar(
-              "unable to process changes to preferences or settings at this time",
-              "dismiss"
-            );
-            return [];
-          })
-        )
-        .subscribe();
-    } else {
-      this.openSnackBar(
-        "please double check preferences and settings, something appears to be invalid",
-        "dismiss"
-      );
-    }
-  }
+  //     this.clientService
+  //       .postClient(ClientPayload.buildFromClient(this.client))
+  //       .pipe(
+  //         tap((_) => {
+  //           this.isSendingResults = true;
+  //         }),
+  //         map((data) => {
+  //           this.isSendingResults = false;
+  //           this.openSnackBar("successfully updated preferences!", "dismiss");
+  //           return data;
+  //         }),
+  //         catchError(() => {
+  //           this.isSendingResults = false;
+  //           this.openSnackBar(
+  //             "unable to process changes to preferences or settings at this time",
+  //             "dismiss"
+  //           );
+  //           return [];
+  //         })
+  //       )
+  //       .subscribe();
+  //   } else {
+  //     this.openSnackBar(
+  //       "please double check preferences and settings, something appears to be invalid",
+  //       "dismiss"
+  //     );
+  //   }
+  // }
 
   isBranchFormDisabled(): boolean {
     if (isNil(this.client.orgDetails)) {
