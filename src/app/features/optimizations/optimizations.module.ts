@@ -4,16 +4,16 @@ import { CommonModule } from "@angular/common";
 import { AmplifyAngularModule, AmplifyService } from "aws-amplify-angular";
 import { MaterialModule } from "src/app/shared/material-design/material.module";
 import { DynamicFormModule } from "src/app/shared/dynamic-form/dynamic-form.module";
-import { DashboardRoutingModule } from "./dashboard-routing.module";
-import { DashboardComponent } from "./components/dashboard.component";
+import { OptimizationsRoutingModule } from "./optimizations-routing.module";
+import { OptimizationsComponent } from "./components/optimizations.component";
 
 @NgModule({
-  declarations: [DashboardComponent],
+  declarations: [OptimizationsComponent],
   imports: [
     CommonModule,
-    DashboardRoutingModule,
+    OptimizationsRoutingModule,
     MaterialModule,
     DynamicFormModule,
   ],
 })
-export class DashboardModule {}
+export class OptimizationsModule {}

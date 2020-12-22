@@ -5,9 +5,10 @@ import { SecureLayoutComponent } from "./components/secure-layout.component";
 
 import { AccountComponent } from "src/app/features/account/components/account.component";
 import { SupportComponent } from "src/app/features/support/components/support.component";
-import { DashboardComponent } from "src/app/features/dashboard/components/dashboard.component";
+
 import { NewsfeedComponent } from "src/app/features/newsfeed/components/newsfeed.component";
 import { ReportingComponent } from "src/app/features/reporting/components/reporting/reporting.component";
+import { OptimizationsComponent } from "src/app/features/optimizations/components/optimizations.component";
 
 const routes: Routes = [
   {
@@ -16,18 +17,18 @@ const routes: Routes = [
     children: [
       {
         path: "",
-        redirectTo: "dashboard",
+        redirectTo: "optimizations",
         pathMatch: "full",
       },
       {
-        path: "dashboard",
-        component: DashboardComponent,
+        path: "optimizations",
+        component: OptimizationsComponent,
         // loadChildren: () =>
         //   import("../../features/workbench/workbench.module").then(
         //     (m) => m.WorkbenchModule
         //   ),
         // canActivate: [AuthGuard],
-        data: { title: "Dashboard" },
+        data: { title: "Optimizations" },
       },
       {
         path: "reporting",

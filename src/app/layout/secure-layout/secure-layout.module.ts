@@ -8,12 +8,12 @@ import { MaterialModule } from "../../shared/material-design/material.module";
 import { SecureLayoutRoutingModule } from "./secure-layout-routing.module";
 import { SecureLayoutComponent } from "./components/secure-layout.component";
 import { AmplifyAngularModule } from "aws-amplify-angular";
-import { DashboardModule } from "src/app/features/dashboard/dashboard.module";
 import { ReportingModule } from "src/app/features/reporting/reporting.module";
 import { AccountModule } from "src/app/features/account/account.module";
 import { SupportModule } from "src/app/features/support/support.module";
 import { NewsfeedModule } from "src/app/features/newsfeed/newsfeed.module";
 import { NewsfeedComponent } from "src/app/features/newsfeed/components/newsfeed.component";
+import { OptimizationsModule } from "src/app/features/optimizations/optimizations.module";
 
 @NgModule({
   declarations: [
@@ -27,7 +27,7 @@ import { NewsfeedComponent } from "src/app/features/newsfeed/components/newsfeed
     SecureLayoutRoutingModule,
     MaterialModule,
     AmplifyAngularModule,
-    DashboardModule,
+    OptimizationsModule,
     ReportingModule,
     AccountModule,
     SupportModule,

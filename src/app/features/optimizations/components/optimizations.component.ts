@@ -1,14 +1,8 @@
-import { Validator } from "./../../../shared/dynamic-form/interfaces/validator.interface";
 import { Router } from "@angular/router";
 import { Component, OnInit } from "@angular/core";
 import { AmplifyService } from "aws-amplify-angular";
 import { map, tap, catchError } from "rxjs/operators";
-import {
-  FormBuilder,
-  FormGroup,
-  FormControl,
-  Validators,
-} from "@angular/forms";
+import { FormBuilder, Validators } from "@angular/forms";
 import { UserAccountService } from "src/app/core/services/user-account.service";
 import { ClientService } from "src/app/core/services/client.service";
 import { Client } from "../../../core/models/client";
@@ -19,11 +13,11 @@ import { each as _each, isNil, map as _map } from "lodash";
 import { ClientPayload } from "src/app/core/models/client-payload";
 
 @Component({
-  selector: "app-dashboard",
-  templateUrl: "./dashboard.component.html",
-  styleUrls: ["./dashboard.component.scss"],
+  selector: "app-optimizations",
+  templateUrl: "./optimizations.component.html",
+  styleUrls: ["./optimizations.component.scss"],
 })
-export class DashboardComponent implements OnInit {
+export class OptimizationsComponent implements OnInit {
   constructor(
     private amplifyService: AmplifyService,
     private router: Router,
