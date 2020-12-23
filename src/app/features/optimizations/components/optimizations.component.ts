@@ -439,7 +439,7 @@ export class OptimizationsComponent implements OnInit {
           catchError(() => {
             this.isSendingResults = false;
             this.openSnackBar(
-              "unable to process changes to preferences or settings at this time",
+              "unable to process changes to settings at this time",
               "dismiss"
             );
             return [];
@@ -448,7 +448,7 @@ export class OptimizationsComponent implements OnInit {
         .subscribe();
     } else {
       this.openSnackBar(
-        "please double check preferences and settings, something appears to be invalid",
+        "please double check settings, something appears to be invalid",
         "dismiss"
       );
     }

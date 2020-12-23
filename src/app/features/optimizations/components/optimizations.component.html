@@ -3,7 +3,7 @@
   <mat-tab>
     <ng-template mat-tab-label>
       <mat-icon>tune</mat-icon>
-      <span class="ml-2">Apple Search Ads Settings</span>
+      <span class="ml-2">Install Optimizations</span>
     </ng-template>
     <div class="workbench__loading-shade" *ngIf="isLoadingResults">
       <mat-spinner color="accent"></mat-spinner>
@@ -37,9 +37,9 @@
 
         <mat-card-content>
           <div class="w-100">
-            <!-- <mat-card-subtitle class="mt-2 mb-2">
+            <mat-card-subtitle class="mt-2 mb-2">
               Apple Search Ads Settings
-            </mat-card-subtitle> -->
+            </mat-card-subtitle>
 
             <!-- apple form -->
             <form [formGroup]="appleForm">
@@ -107,7 +107,7 @@
                   Cost Per Install</mat-label
                 >
                 <input
-                  formControlName="highCPI"
+                  formControlName="highCPIBrand"
                   required
                   matInput
                   type="number"
@@ -127,7 +127,7 @@
   <mat-tab>
     <ng-template mat-tab-label>
       <mat-icon>tune</mat-icon>
-      <span class="ml-2">MMP Settings</span>
+      <span class="ml-2">Post-Install Optimizations</span>
     </ng-template>
     <div class="workbench__loading-shade" *ngIf="isLoadingResults">
       <mat-spinner color="accent"></mat-spinner>
@@ -136,7 +136,7 @@
       <mat-progress-bar color="accent" mode="indeterminate"></mat-progress-bar>
     </div>
     <div class="d-flex col-12 px-0">
-      <!-- mmp optimizaitons card -->
+      <!-- mmp optimizations card -->
       <mat-card class="workbench__card mat-elevation-z0 mt-3 w-100">
         <mat-card-title class="pb-2">
           Bid Optimization Settings For Post-Install Events
@@ -165,7 +165,7 @@
             <form [formGroup]="branchForm">
               <!-- enable branch checkbox -->
               <div
-                class="mb-3"
+                class="mb-2"
                 matTooltip="When enabling this feature, Adoya will use your MMP data when making bid adjustments. Reach out to us via Adoya Support for more."
               >
                 <mat-checkbox
@@ -179,7 +179,7 @@
               <!-- MMP Objective -->
               <mat-form-field
                 appearance="fill"
-                class="w-100 mb-1"
+                class="w-100"
                 [ngClass]="isControlDisabled('branchObjective') ? 'bg-med' : ''"
                 matTooltip="MMP Objective: &#13; Use this option if you want our system to also optimize for in-app purchases. &#13; &#13; This will be a secondary objective as our system optimizes primarily for cost per install. &#13; &#13; If you have MMP enabled, we strongly recommend you select either Cost Per Purchase or Return On Ad Spend (ROAS). &#13; &#13; Mouse over options for more detailed information on each strategy."
               >
@@ -204,7 +204,7 @@
               <!-- Target Cost Per Purchase -->
               <mat-form-field
                 appearance="fill"
-                class="w-100 mb-1"
+                class="w-100"
                 [ngClass]="isBranchFormDisabled() ? 'bg-med' : ''"
               >
                 <mat-label>
@@ -212,12 +212,7 @@
                   Purchase
                 </mat-label>
                 <input
-                  [ngClass]="
-                    isControlDisabled('cppThreshold')
-                      ? ''
-                      : 'workbench__accent-field'
-                  "
-                  class="p-2"
+                  class="p-1"
                   formControlName="cppThreshold"
                   matInput
                   type="number"
@@ -233,7 +228,7 @@
               <!-- Brand Target Cost Per Purchase -->
               <mat-form-field
                 appearance="fill"
-                class="w-100 mb-1"
+                class="w-100"
                 [ngClass]="isBranchFormDisabled() ? 'bg-med' : ''"
               >
                 <mat-label>
@@ -241,13 +236,8 @@
                   Cost Per Purchase
                 </mat-label>
                 <input
-                  [ngClass]="
-                    isControlDisabled('cppThreshold')
-                      ? ''
-                      : 'workbench__accent-field'
-                  "
-                  class="p-2"
-                  formControlName="cppThreshold"
+                  class="p-1"
+                  formControlName="cppThresholdBrand"
                   matInput
                   type="number"
                   placeholder="Target Cost Per Purchase"
@@ -262,7 +252,7 @@
               <!-- Return on Ad spend -->
               <mat-form-field
                 appearance="fill"
-                class="w-100 mb-1"
+                class="w-100"
                 [ngClass]="isBranchFormDisabled() ? 'bg-med' : ''"
               >
                 <mat-label
@@ -270,12 +260,7 @@
                   Spend</mat-label
                 >
                 <input
-                  [ngClass]="
-                    isControlDisabled('revenueOverSpend')
-                      ? ''
-                      : 'workbench__accent-field'
-                  "
-                  class="p-2"
+                  class="p-1"
                   formControlName="revenueOverSpend"
                   matInput
                   type="number"
@@ -299,13 +284,8 @@
                   On Ad Spend</mat-label
                 >
                 <input
-                  [ngClass]="
-                    isControlDisabled('revenueOverSpend')
-                      ? ''
-                      : 'workbench__accent-field'
-                  "
-                  class="p-2"
-                  formControlName="revenueOverSpend"
+                  class="p-1"
+                  formControlName="revenueOverSpendBrand"
                   matInput
                   type="number"
                   placeholder="Return On Ad Spend"
@@ -330,7 +310,7 @@
               >
                 <mat-label> Branch Key </mat-label>
                 <input
-                  class="p-2"
+                  class="p-1"
                   [ngClass]="isBranchFormDisabled() ? 'bg-med' : ''"
                   formControlName="branchKey"
                   matInput
@@ -347,7 +327,7 @@
               >
                 <mat-label> Branch Secret </mat-label>
                 <input
-                  class="p-2"
+                  class="p-1"
                   [ngClass]="isBranchFormDisabled() ? 'bg-med' : ''"
                   formControlName="branchSecret"
                   matInput
