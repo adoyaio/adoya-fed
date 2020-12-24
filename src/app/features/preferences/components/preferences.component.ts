@@ -8,6 +8,8 @@ import { Client } from "src/app/core/models/client";
 import { ClientService } from "src/app/core/services/client.service";
 import { UserAccountService } from "src/app/core/services/user-account.service";
 import { CustomFormValidators } from "src/app/shared/dynamic-form/validators/CustomFormValidators";
+import { map as _map } from "lodash";
+import { ClientPayload } from "src/app/core/models/client-payload";
 
 @Component({
   selector: "app-preferences",
@@ -81,5 +83,58 @@ export class PreferencesComponent implements OnInit {
         })
       )
       .subscribe();
+  }
+
+  onResetForm() {
+    this.preferencesForm
+      .get("emailAddresses")
+      .setValue(this.client.orgDetails.emailAddresses);
+  }
+
+  onPreferencesSubmit() {
+    if (this.preferencesForm.valid) {
+      this.isSendingResults = true;
+
+      this.client.orgDetails.emailAddresses = _map(
+        String(this.preferencesForm.get("emailAddresses").value).split(","),
+        (val) => {
+          return val.trim();
+        }
+      );
+
+      this.clientService
+        .postClient(ClientPayload.buildFromClient(this.client))
+        .pipe(
+          tap((_) => {
+            this.isSendingResults = true;
+          }),
+          map((data) => {
+            this.isSendingResults = false;
+            this.openSnackBar("successfully updated preferences!", "dismiss");
+            return data;
+          }),
+          catchError(() => {
+            this.isSendingResults = false;
+            this.openSnackBar(
+              "unable to process changes to preferences or settings at this time",
+              "dismiss"
+            );
+            return [];
+          })
+        )
+        .subscribe();
+    } else {
+      this.openSnackBar(
+        "please double check preferences and settings, something appears to be invalid",
+        "dismiss"
+      );
+    }
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 10000,
+      panelClass: "standard",
+    });
   }
 }
