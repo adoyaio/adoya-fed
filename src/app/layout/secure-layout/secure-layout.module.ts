@@ -12,8 +12,8 @@ import { ReportingModule } from "src/app/features/reporting/reporting.module";
 import { AccountModule } from "src/app/features/account/account.module";
 import { SupportModule } from "src/app/features/support/support.module";
 import { NewsfeedModule } from "src/app/features/newsfeed/newsfeed.module";
-import { NewsfeedComponent } from "src/app/features/newsfeed/components/newsfeed.component";
 import { OptimizationsModule } from "src/app/features/optimizations/optimizations.module";
+import { PreferencesModule } from "src/app/features/preferences/preferences.module";
 
 @NgModule({
   declarations: [
@@ -32,6 +32,7 @@ import { OptimizationsModule } from "src/app/features/optimizations/optimization
     AccountModule,
     SupportModule,
     NewsfeedModule,
+    PreferencesModule,
   ],
 })
 export class SecureLayoutModule {}

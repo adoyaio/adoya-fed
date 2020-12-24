@@ -1,0 +1,43 @@
+@import "variables.scss";
+
+.workbench__card {
+  //background-color: mat-color($adoya-web-accent);
+  // background-color: #f1f5ee;
+  //background-color: #dde5d4;
+  // color: mat-color($adoya-web-primary);
+  width: 100%;
+  border-style: solid;
+  border-color: mat-color($adoya-web-accent);
+  border-radius: 0.5;
+  border-width: 1px;
+}
+
+.workbench__accent-field {
+  background-color: mat-color($adoya-web-accent);
+}
+
+.workbench__disabled-field {
+  background-color: gray;
+}
+
+// .workbench__disabled-control {
+//   background-color: gray;
+// }
+
+.workbench__buttons {
+  width: 125px;
+}
+
+.workbench__loading-shade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0px;
+  right: 0;
+  background: rgba(0, 0, 0, 0.05);
+  // background: #5d7d41, 0.15;
+  z-index: 5;
+  display: flex;
+  align-items: top;
+  justify-content: center;
+}

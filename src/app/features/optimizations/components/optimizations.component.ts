@@ -1,7 +1,8 @@
 import { Router } from "@angular/router";
 import { Component, OnInit } from "@angular/core";
 import { AmplifyService } from "aws-amplify-angular";
-import { map, tap, catchError } from "rxjs/operators";
+import { map, tap, catchError, filter } from "rxjs/operators";
+import { combineLatest } from "rxjs";
 import { FormBuilder, Validators } from "@angular/forms";
 import { UserAccountService } from "src/app/core/services/user-account.service";
 import { ClientService } from "src/app/core/services/client.service";
@@ -224,6 +225,8 @@ export class OptimizationsComponent implements OnInit {
             this.branchForm.get("revenueOverSpendBrand").disable();
             this.branchForm.get("branchObjective").disable();
             this.branchForm.get("branchObjectiveBrand").disable();
+            this.branchForm.get("branchKey").disable();
+            this.branchForm.get("branchSecret").disable();
           }
 
           this.isLoadingResults = false;
@@ -238,17 +241,31 @@ export class OptimizationsComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.branchForm
-      .get("branchObjective")
-      .valueChanges.pipe(
-        tap((value) => {
-          if (value === "revenue_over_ad_spend") {
+    combineLatest([
+      this.branchForm.get("branchBidAdjusterEnabled").valueChanges,
+      this.branchForm.get("branchObjective").valueChanges,
+    ])
+      .pipe(
+        filter(([enabled, objective]) => !isNil(enabled) && !isNil(objective)),
+        tap(([enabled, objective]) => {
+          if (!enabled) {
+            this.branchForm.get("cppThreshold").disable();
+            this.branchForm.get("cppThresholdBrand").disable();
+            this.branchForm.get("revenueOverSpend").disable();
+            this.branchForm.get("revenueOverSpendBrand").disable();
+            this.branchForm.get("revenueOverSpendBrand").disable();
+            this.branchForm.get("branchKey").disable();
+            this.branchForm.get("branchSecret").disable();
+            return;
+          }
+
+          if (objective === "revenue_over_ad_spend") {
             this.branchForm.get("cppThreshold").disable();
             this.branchForm.get("cppThresholdBrand").disable();
             this.branchForm.get("revenueOverSpend").enable();
             this.branchForm.get("revenueOverSpendBrand").enable();
           }
-          if (value === "cost_per_purchase") {
+          if (objective === "cost_per_purchase") {
             this.branchForm.get("cppThreshold").enable();
             this.branchForm.get("cppThresholdBrand").enable();
             this.branchForm.get("revenueOverSpend").disable();

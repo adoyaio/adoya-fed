@@ -9,6 +9,7 @@ import { SupportComponent } from "src/app/features/support/components/support.co
 import { NewsfeedComponent } from "src/app/features/newsfeed/components/newsfeed.component";
 import { ReportingComponent } from "src/app/features/reporting/components/reporting/reporting.component";
 import { OptimizationsComponent } from "src/app/features/optimizations/components/optimizations.component";
+import { PreferencesComponent } from "src/app/features/preferences/components/preferences.component";
 
 const routes: Routes = [
   {
@@ -29,6 +30,16 @@ const routes: Routes = [
         //   ),
         // canActivate: [AuthGuard],
         data: { title: "Optimizations" },
+      },
+      {
+        path: "preferences",
+        component: PreferencesComponent,
+        // loadChildren: () =>
+        //   import("../../features/workbench/workbench.module").then(
+        //     (m) => m.WorkbenchModule
+        //   ),
+        // canActivate: [AuthGuard],
+        data: { title: "Preferences" },
       },
       {
         path: "reporting",
