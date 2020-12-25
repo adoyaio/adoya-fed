@@ -7,8 +7,6 @@ import { FormBuilder, Validators } from "@angular/forms";
 import { UserAccountService } from "src/app/core/services/user-account.service";
 import { ClientService } from "src/app/core/services/client.service";
 import { Client } from "../../../core/models/client";
-import { CustomFormValidators } from "src/app/shared/dynamic-form/validators/CustomFormValidators";
-
 import { MatCheckboxChange, MatSnackBar } from "@angular/material";
 import { each as _each, isNil, map as _map } from "lodash";
 import { ClientPayload } from "src/app/core/models/client-payload";
@@ -43,10 +41,6 @@ export class OptimizationsComponent implements OnInit {
     branchKey: [""],
     branchSecret: [""],
   });
-
-  // preferencesForm = this.fb.group({
-  //   emailAddresses: [""],
-  // });
 
   client: Client = new Client();
   isLoadingResults = true;
@@ -107,14 +101,6 @@ export class OptimizationsComponent implements OnInit {
         Validators.minLength(1),
         Validators.required,
       ]);
-
-    // this.preferencesForm
-    //   .get("emailAddresses")
-    //   .setValidators([
-    //     CustomFormValidators.emailListValidator,
-    //     Validators.minLength(1),
-    //     Validators.required,
-    //   ]);
 
     this.amplifyService
       .authState()
@@ -210,10 +196,6 @@ export class OptimizationsComponent implements OnInit {
             .setValue(
               this.client.orgDetails.branchIntegrationParameters.branchSecret
             );
-
-          // this.preferencesForm
-          //   .get("emailAddresses")
-          //   .setValue(this.client.orgDetails.emailAddresses);
 
           if (
             !this.client.orgDetails.branchIntegrationParameters
@@ -347,10 +329,6 @@ export class OptimizationsComponent implements OnInit {
         this.client.orgDetails.branchIntegrationParameters.branchSecret
       );
 
-    // this.preferencesForm
-    //   .get("emailAddresses")
-    //   .setValue(this.client.orgDetails.emailAddresses);
-
     if (
       this.client.orgDetails.branchBidParameters.branchOptimizationGoal ===
       "revenue_over_ad_spend"
@@ -369,11 +347,7 @@ export class OptimizationsComponent implements OnInit {
   }
 
   onAppleSubmit() {
-    if (
-      // this.preferencesForm.valid &&
-      this.appleForm.valid &&
-      this.branchForm.valid
-    ) {
+    if (this.appleForm.valid && this.branchForm.valid) {
       this.isSendingResults = true;
       this.client.orgDetails.bidParameters.objective = this.appleForm.get(
         "objective"
@@ -470,50 +444,6 @@ export class OptimizationsComponent implements OnInit {
       );
     }
   }
-
-  // onPreferencesSubmit() {
-  //   if (
-  //     this.preferencesForm.valid &&
-  //     this.appleForm.valid &&
-  //     this.branchForm.valid
-  //   ) {
-  //     this.isSendingResults = true;
-
-  //     this.client.orgDetails.emailAddresses = _map(
-  //       String(this.preferencesForm.get("emailAddresses").value).split(","),
-  //       (val) => {
-  //         return val.trim();
-  //       }
-  //     );
-
-  //     this.clientService
-  //       .postClient(ClientPayload.buildFromClient(this.client))
-  //       .pipe(
-  //         tap((_) => {
-  //           this.isSendingResults = true;
-  //         }),
-  //         map((data) => {
-  //           this.isSendingResults = false;
-  //           this.openSnackBar("successfully updated preferences!", "dismiss");
-  //           return data;
-  //         }),
-  //         catchError(() => {
-  //           this.isSendingResults = false;
-  //           this.openSnackBar(
-  //             "unable to process changes to preferences or settings at this time",
-  //             "dismiss"
-  //           );
-  //           return [];
-  //         })
-  //       )
-  //       .subscribe();
-  //   } else {
-  //     this.openSnackBar(
-  //       "please double check preferences and settings, something appears to be invalid",
-  //       "dismiss"
-  //     );
-  //   }
-  // }
 
   isBranchFormDisabled(): boolean {
     if (isNil(this.client.orgDetails)) {
