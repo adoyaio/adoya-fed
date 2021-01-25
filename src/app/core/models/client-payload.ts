@@ -203,7 +203,6 @@ export class OrgDetailsPayload {
   adgroupBidParameters: AdgroupBidParametersPayload;
   keywordAdderParameters: KeywordAdderParametersPayload;
   bidParameters: BidParametersPayload;
-  keywordAdderIds: KeywordAdderIdsPayload;
   branchIntegrationParameters: BranchIntegrationParametersPayload;
   branchBidParameters: BranchBidParametersPayload;
   clientName: string;
@@ -215,13 +214,13 @@ export class OrgDetailsPayload {
   appID: string;
   currency: string;
   disabled: boolean;
-  campaignIds: string[];
+  appleCampaigns: any[];
   campaignName: string;
 
   static buildFromClient(response: OrgDetails) {
     const retVal = new OrgDetailsPayload();
     retVal.campaignName = response.campaignName;
-    retVal.campaignIds = response.campaignIds;
+    retVal.appleCampaigns = response.appleCampaigns;
     retVal.disabled = response.disabled;
     retVal.currency = response.currency;
     retVal.appID = response.appID;
@@ -236,9 +235,6 @@ export class OrgDetailsPayload {
     );
     retVal.branchIntegrationParameters = BranchIntegrationParametersPayload.buildFromClient(
       response.branchIntegrationParameters
-    );
-    retVal.keywordAdderIds = KeywordAdderIdsPayload.buildFromClient(
-      response.keywordAdderIds
     );
     retVal.branchIntegrationParameters = BranchIntegrationParametersPayload.buildFromClient(
       response.branchIntegrationParameters

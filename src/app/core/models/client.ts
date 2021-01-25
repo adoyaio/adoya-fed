@@ -147,54 +147,10 @@ export class BranchIntegrationParameters {
   }
 }
 
-export class AdGroupId {
-  broad: string;
-  exact: string;
-  search: string;
-  brand: string;
-  static buildFromResponse(response: any) {
-    const retVal = new AdGroupId();
-    retVal.broad = response.broad;
-    retVal.exact = response.exact;
-    retVal.search = response.search;
-    retVal.brand = response.brand;
-    return retVal;
-  }
-}
-
-export class CampaignId {
-  broad: string;
-  exact: string;
-  search: string;
-  brand: string;
-
-  static buildFromResponse(response: any) {
-    const retVal = new CampaignId();
-    retVal.broad = response.broad;
-    retVal.exact = response.exact;
-    retVal.search = response.search;
-    retVal.brand = response.brand;
-    return retVal;
-  }
-}
-
-export class KeywordAdderIds {
-  campaignId: CampaignId;
-  adGroupId: AdGroupId;
-
-  static buildFromResponse(response: any) {
-    const retVal = new KeywordAdderIds();
-    retVal.adGroupId = AdGroupId.buildFromResponse(response.adGroupId);
-    retVal.campaignId = AdGroupId.buildFromResponse(response.campaignId);
-    return retVal;
-  }
-}
-
 export class OrgDetails {
   adgroupBidParameters: AdgroupBidParameters;
   keywordAdderParameters: KeywordAdderParameters;
   bidParameters: BidParameters;
-  keywordAdderIds: KeywordAdderIds;
   branchIntegrationParameters: BranchIntegrationParameters;
   branchBidParameters: BranchBidParameters;
   clientName: string;
@@ -206,13 +162,13 @@ export class OrgDetails {
   appID: string;
   currency: string;
   disabled: boolean;
-  campaignIds: string[];
+  appleCampaigns: any[];
   campaignName: string;
 
   static buildFromResponse(response: any) {
     const retVal = new OrgDetails();
     retVal.campaignName = response.campaignName;
-    retVal.campaignIds = response.campaignIds;
+    retVal.appleCampaigns = response.appleCampaigns;
     retVal.disabled = response.disabled;
     retVal.currency = response.currency;
     retVal.appID = response.appID;
@@ -227,9 +183,6 @@ export class OrgDetails {
     );
     retVal.branchIntegrationParameters = BranchIntegrationParameters.buildFromResponse(
       response.branchIntegrationParameters
-    );
-    retVal.keywordAdderIds = KeywordAdderIds.buildFromResponse(
-      response.keywordAdderIds
     );
     retVal.branchIntegrationParameters = BranchIntegrationParameters.buildFromResponse(
       response.branchIntegrationParameters
