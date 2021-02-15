@@ -29,14 +29,11 @@ export class OptimizationsComponent implements OnInit {
   appleForm = this.fb.group({
     objective: [""],
     highCPI: [""],
-    highCPIBrand: [""],
   });
   branchForm = this.fb.group({
     branchObjective: [""],
     cppThreshold: [""],
-    cppThresholdBrand: [""],
     revenueOverSpend: [""],
-    revenueOverSpendBrand: [""],
     branchBidAdjusterEnabled: false,
     branchKey: [""],
     branchSecret: [""],
@@ -57,15 +54,6 @@ export class OptimizationsComponent implements OnInit {
         Validators.required,
       ]);
 
-    this.appleForm
-      .get("highCPIBrand")
-      .setValidators([
-        Validators.min(0.1),
-        Validators.max(1000),
-        Validators.minLength(1),
-        Validators.required,
-      ]);
-
     this.branchForm
       .get("cppThreshold")
       .setValidators([
@@ -76,25 +64,7 @@ export class OptimizationsComponent implements OnInit {
       ]);
 
     this.branchForm
-      .get("cppThresholdBrand")
-      .setValidators([
-        Validators.min(0.1),
-        Validators.max(1000),
-        Validators.minLength(1),
-        Validators.required,
-      ]);
-
-    this.branchForm
       .get("revenueOverSpend")
-      .setValidators([
-        Validators.min(0.1),
-        Validators.max(1000),
-        Validators.minLength(1),
-        Validators.required,
-      ]);
-
-    this.branchForm
-      .get("revenueOverSpendBrand")
       .setValidators([
         Validators.min(0.1),
         Validators.max(1000),
@@ -135,13 +105,7 @@ export class OptimizationsComponent implements OnInit {
           this.appleForm
             .get("highCPI")
             .setValue(
-              this.client.orgDetails.bidParameters.highCPIBidDecreaseThreshExact
-            );
-
-          this.appleForm
-            .get("highCPIBrand")
-            .setValue(
-              this.client.orgDetails.bidParameters.highCPIBidDecreaseThreshBrand
+              this.client.orgDetails.bidParameters.highCPIBidDecreaseThresh
             );
 
           this.branchForm
@@ -154,28 +118,14 @@ export class OptimizationsComponent implements OnInit {
             .get("cppThreshold")
             .setValue(
               this.client.orgDetails.branchBidParameters
-                .costPerPurchaseThresholdExact
-            );
-
-          this.branchForm
-            .get("cppThresholdBrand")
-            .setValue(
-              this.client.orgDetails.branchBidParameters
-                .costPerPurchaseThresholdBrand
+                .costPerPurchaseThreshold
             );
 
           this.branchForm
             .get("revenueOverSpend")
             .setValue(
               this.client.orgDetails.branchBidParameters
-                .revenueOverAdSpendThresholdExact
-            );
-
-          this.branchForm
-            .get("revenueOverSpendBrand")
-            .setValue(
-              this.client.orgDetails.branchBidParameters
-                .revenueOverAdSpendThresholdBrand
+                .revenueOverAdSpendThreshold
             );
 
           this.branchForm
@@ -202,11 +152,8 @@ export class OptimizationsComponent implements OnInit {
               .branchBidAdjusterEnabled
           ) {
             this.branchForm.get("cppThreshold").disable();
-            this.branchForm.get("cppThresholdBrand").disable();
             this.branchForm.get("revenueOverSpend").disable();
-            this.branchForm.get("revenueOverSpendBrand").disable();
             this.branchForm.get("branchObjective").disable();
-            this.branchForm.get("branchObjectiveBrand").disable();
             this.branchForm.get("branchKey").disable();
             this.branchForm.get("branchSecret").disable();
           }
@@ -232,10 +179,7 @@ export class OptimizationsComponent implements OnInit {
         tap(([enabled, objective]) => {
           if (!enabled) {
             this.branchForm.get("cppThreshold").disable();
-            this.branchForm.get("cppThresholdBrand").disable();
             this.branchForm.get("revenueOverSpend").disable();
-            this.branchForm.get("revenueOverSpendBrand").disable();
-            this.branchForm.get("revenueOverSpendBrand").disable();
             this.branchForm.get("branchKey").disable();
             this.branchForm.get("branchSecret").disable();
             return;
@@ -243,15 +187,11 @@ export class OptimizationsComponent implements OnInit {
 
           if (objective === "revenue_over_ad_spend") {
             this.branchForm.get("cppThreshold").disable();
-            this.branchForm.get("cppThresholdBrand").disable();
             this.branchForm.get("revenueOverSpend").enable();
-            this.branchForm.get("revenueOverSpendBrand").enable();
           }
           if (objective === "cost_per_purchase") {
             this.branchForm.get("cppThreshold").enable();
-            this.branchForm.get("cppThresholdBrand").enable();
             this.branchForm.get("revenueOverSpend").disable();
-            this.branchForm.get("revenueOverSpendBrand").disable();
           }
         })
       )
@@ -272,15 +212,7 @@ export class OptimizationsComponent implements OnInit {
 
     this.appleForm
       .get("highCPI")
-      .setValue(
-        this.client.orgDetails.bidParameters.highCPIBidDecreaseThreshExact
-      );
-
-    this.appleForm
-      .get("highCPIBrand")
-      .setValue(
-        this.client.orgDetails.bidParameters.highCPIBidDecreaseThreshBrand
-      );
+      .setValue(this.client.orgDetails.bidParameters.highCPIBidDecreaseThresh);
 
     this.branchForm
       .get("branchObjective")
@@ -291,27 +223,13 @@ export class OptimizationsComponent implements OnInit {
     this.branchForm
       .get("cppThreshold")
       .setValue(
-        this.client.orgDetails.branchBidParameters.costPerPurchaseThresholdExact
-      );
-
-    this.branchForm
-      .get("cppThresholdBrand")
-      .setValue(
-        this.client.orgDetails.branchBidParameters.costPerPurchaseThresholdBrand
+        this.client.orgDetails.branchBidParameters.costPerPurchaseThreshold
       );
 
     this.branchForm
       .get("revenueOverSpend")
       .setValue(
-        this.client.orgDetails.branchBidParameters
-          .revenueOverAdSpendThresholdExact
-      );
-
-    this.branchForm
-      .get("revenueOverSpendBrand")
-      .setValue(
-        this.client.orgDetails.branchBidParameters
-          .revenueOverAdSpendThresholdBrand
+        this.client.orgDetails.branchBidParameters.revenueOverAdSpendThreshold
       );
 
     this.branchForm
@@ -356,12 +274,7 @@ export class OptimizationsComponent implements OnInit {
         "objective"
       ).value;
 
-      // campaign specific fields use one control for exact, broad, search; and one for brand
-      this.client.orgDetails.bidParameters.highCPIBidDecreaseThreshExact = this.appleForm.get(
-        "highCPI"
-      ).value;
-
-      this.client.orgDetails.bidParameters.highCPIBidDecreaseThreshBroad = this.appleForm.get(
+      this.client.orgDetails.bidParameters.highCPIBidDecreaseThresh = this.appleForm.get(
         "highCPI"
       ).value;
 
@@ -369,40 +282,17 @@ export class OptimizationsComponent implements OnInit {
         "highCPI"
       ).value;
 
-      // brand
-      this.client.orgDetails.bidParameters.highCPIBidDecreaseThreshBrand = this.appleForm.get(
-        "highCPIBrand"
-      ).value;
-
       // Branch fields
       this.client.orgDetails.branchBidParameters.branchOptimizationGoal = this.branchForm.get(
         "branchObjective"
       ).value;
 
-      // campaign specific fields use one control for exact, broad, search; and one for brand
-      this.client.orgDetails.branchBidParameters.costPerPurchaseThresholdExact = this.branchForm.get(
+      this.client.orgDetails.branchBidParameters.costPerPurchaseThreshold = this.branchForm.get(
         "cppThreshold"
       ).value;
 
-      this.client.orgDetails.branchBidParameters.costPerPurchaseThresholdBroad = this.branchForm.get(
-        "cppThreshold"
-      ).value;
-
-      this.client.orgDetails.branchBidParameters.costPerPurchaseThresholdBrand = this.branchForm.get(
-        "cppThresholdBrand"
-      ).value;
-
-      // campaign specific fields use one control for exact, broad, search; and one for brand
-      this.client.orgDetails.branchBidParameters.revenueOverAdSpendThresholdExact = this.branchForm.get(
+      this.client.orgDetails.branchBidParameters.revenueOverAdSpendThreshold = this.branchForm.get(
         "revenueOverSpend"
-      ).value;
-
-      this.client.orgDetails.branchBidParameters.revenueOverAdSpendThresholdBroad = this.branchForm.get(
-        "revenueOverSpend"
-      ).value;
-
-      this.client.orgDetails.branchBidParameters.revenueOverAdSpendThresholdBrand = this.branchForm.get(
-        "revenueOverSpendBrand"
       ).value;
 
       this.client.orgDetails.branchIntegrationParameters.branchBidAdjusterEnabled = this.branchForm.get(
