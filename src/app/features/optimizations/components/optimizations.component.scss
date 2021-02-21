@@ -19,6 +19,10 @@
   border-color: mat-color($adoya-web-accent);
   border-radius: 0.5;
   border-width: 1px;
+
+  &-active {
+    background-color: #f1f5ee;
+  }
 }
 
 .workbench_campaign__card:hover {

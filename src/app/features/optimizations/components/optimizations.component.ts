@@ -12,7 +12,7 @@ import {
   MatCheckboxChange,
   MatSnackBar,
 } from "@angular/material";
-import { chain, each as _each, get, isNil, map as _map } from "lodash";
+import { chain, each as _each, get, has, isNil, map as _map } from "lodash";
 import { ClientPayload } from "src/app/core/models/client-payload";
 
 @Component({
@@ -218,6 +218,10 @@ export class OptimizationsComponent implements OnInit {
         })
       )
       .subscribe();
+  }
+
+  hasBidParameters(campaign: any) {
+    return has(campaign, "bidParameters");
   }
 
   openSnackBar(message: string, action: string) {
