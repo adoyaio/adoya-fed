@@ -96,6 +96,22 @@
               </mat-form-field>
             </form>
           </div>
+
+          <!-- campaigns -->
+          <mat-card-subtitle class="mt-2 mb-2">
+            Campaign Settings
+          </mat-card-subtitle>
+          <div class="d-flex flex-row flex-wrap w-100">
+            <ng-container
+              *ngFor="let campaign of client?.orgDetails?.appleCampaigns"
+            >
+              <mat-card
+                class="workbench_campaign__card mat-elevation-z0 mt-1 m-2 col-2"
+              >
+                {{ campaign.campaignId }}
+              </mat-card>
+            </ng-container>
+          </div>
         </mat-card-content>
       </mat-card>
     </div>

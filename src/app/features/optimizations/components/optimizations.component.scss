@@ -5,7 +5,17 @@
   // background-color: #f1f5ee;
   //background-color: #dde5d4;
   // color: mat-color($adoya-web-primary);
-  width: 100%;
+  border-style: solid;
+  border-color: mat-color($adoya-web-accent);
+  border-radius: 0.5;
+  border-width: 1px;
+}
+
+.workbench_campaign__card {
+  //background-color: mat-color($adoya-web-accent);
+  background-color: #f1f5ee;
+  //background-color: #dde5d4;
+  // color: mat-color($adoya-web-primary);
   border-style: solid;
   border-color: mat-color($adoya-web-accent);
   border-radius: 0.5;
