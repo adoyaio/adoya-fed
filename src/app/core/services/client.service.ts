@@ -53,7 +53,7 @@ export class ClientService {
       );
   }
 
-  public getClient(orgId: string): Observable<Client[]> {
+  public getClient(orgId: string): Observable<Client> {
     const url = `${this.clientGetUrl}?org_id=${orgId}`;
     let headers = new HttpHeaders();
     headers = headers.set("x-api-key", this.authKey);

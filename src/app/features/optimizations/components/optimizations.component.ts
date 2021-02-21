@@ -1,14 +1,18 @@
 import { Router } from "@angular/router";
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { AmplifyService } from "aws-amplify-angular";
 import { map, tap, catchError, filter } from "rxjs/operators";
-import { combineLatest } from "rxjs";
-import { FormBuilder, Validators } from "@angular/forms";
+import { combineLatest, EMPTY } from "rxjs";
+import { FormBuilder, FormControl, Validators } from "@angular/forms";
 import { UserAccountService } from "src/app/core/services/user-account.service";
 import { ClientService } from "src/app/core/services/client.service";
 import { Client } from "../../../core/models/client";
-import { MatCheckboxChange, MatSnackBar } from "@angular/material";
-import { each as _each, isNil, map as _map } from "lodash";
+import {
+  MatAccordion,
+  MatCheckboxChange,
+  MatSnackBar,
+} from "@angular/material";
+import { chain, each as _each, get, isNil, map as _map } from "lodash";
 import { ClientPayload } from "src/app/core/models/client-payload";
 
 @Component({
@@ -17,6 +21,8 @@ import { ClientPayload } from "src/app/core/models/client-payload";
   styleUrls: ["./optimizations.component.scss"],
 })
 export class OptimizationsComponent implements OnInit {
+  @ViewChild(MatAccordion, { static: false }) accordion: MatAccordion;
+
   constructor(
     private amplifyService: AmplifyService,
     private router: Router,
@@ -92,11 +98,28 @@ export class OptimizationsComponent implements OnInit {
     this.clientService
       .getClient(this.orgId)
       .pipe(
-        tap((_) => {
+        tap(() => {
           this.isLoadingResults = true;
         }),
-        map((data) => {
+        tap((data: Client) => {
           this.client = Client.buildFromGetClientResponse(data);
+
+          chain(data)
+            .get("orgDetails")
+            .get("appleCampaigns")
+            .each((campaign) => {
+              // this.appleForm.add(campaign.campaignId, new );
+              if (get(campaign, "bidParameters")) {
+                const ctrl = new FormControl(
+                  get(campaign.bidParameters, "HIGH_CPI_BID_DECREASE_THRESH")
+                );
+                this.appleForm.addControl(
+                  campaign.campaignId_ + "highCPI",
+                  ctrl
+                );
+              }
+            })
+            .value();
 
           this.appleForm
             .get("objective")
@@ -159,11 +182,10 @@ export class OptimizationsComponent implements OnInit {
           }
 
           this.isLoadingResults = false;
-          return data;
         }),
         catchError(() => {
           this.isLoadingResults = false;
-          return [];
+          return EMPTY;
         })
       )
       .subscribe();
