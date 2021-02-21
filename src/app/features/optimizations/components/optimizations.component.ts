@@ -12,7 +12,15 @@ import {
   MatCheckboxChange,
   MatSnackBar,
 } from "@angular/material";
-import { chain, each as _each, get, has, isNil, map as _map } from "lodash";
+import {
+  chain,
+  each as _each,
+  get,
+  has,
+  isNil,
+  map as _map,
+  set,
+} from "lodash";
 import { ClientPayload } from "src/app/core/models/client-payload";
 
 @Component({
@@ -125,7 +133,20 @@ export class OptimizationsComponent implements OnInit {
                 new FormControl(true)
               );
 
-              if (!get(campaign, "bidParameters", false)) {
+              this.appleForm
+                .get("highCPI_" + campaign.campaignId)
+                .setValidators([
+                  Validators.min(0.1),
+                  Validators.max(1000),
+                  Validators.minLength(1),
+                ]);
+
+              const hasNoParamOverrides = chain(campaign)
+                .get("bidParameters", false)
+                .isEmpty()
+                .value();
+
+              if (hasNoParamOverrides) {
                 this.appleForm.get("highCPI_" + campaign.campaignId).disable();
                 this.appleForm
                   .get("objective_" + campaign.campaignId)
@@ -239,7 +260,7 @@ export class OptimizationsComponent implements OnInit {
   }
 
   hasBidParameters(campaign: any) {
-    return has(campaign, "bidParameters");
+    return !chain(campaign).get("bidParameters", false).isEmpty().value();
   }
 
   openSnackBar(message: string, action: string) {
@@ -349,6 +370,36 @@ export class OptimizationsComponent implements OnInit {
       this.client.orgDetails.branchIntegrationParameters.branchSecret = this.branchForm.get(
         "branchSecret"
       ).value;
+
+      // campaign level fields
+      // const appleCampaigns: any[] = chain(Object.keys(this.appleForm.controls))
+      // .each(control)
+
+      chain(this.client)
+        .get("orgDetails")
+        .get("appleCampaigns")
+        .each((campaign) => {
+          // get the checkbox value to see if bid params overridden
+          const hasOverrides = this.appleForm.get(
+            "checkbox_" + campaign.campaignId
+          ).value;
+
+          if (hasOverrides) {
+            const cpi = this.appleForm.get("highCPI_" + campaign.campaignId)
+              .value;
+
+            const objective = this.appleForm.get(
+              "objective_" + campaign.campaignId
+            ).value;
+
+            set(campaign, "bidParameters", [
+              { HIGH_CPI_BID_DECREASE_THRESH: cpi, OBJECTIVE: objective },
+            ]);
+          } else {
+            set(campaign, "bidParameters", []);
+          }
+        })
+        .value();
 
       this.clientService
         .postClient(ClientPayload.buildFromClient(this.client))
