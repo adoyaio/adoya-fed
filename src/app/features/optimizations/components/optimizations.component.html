@@ -109,14 +109,14 @@
                 mat-button
                 (click)="accordion.openAll()"
               >
-                Expand All
+                <mat-icon>expand_more</mat-icon>Expand All
               </button>
               <button
                 class="float-right"
                 mat-button
                 (click)="accordion.closeAll()"
               >
-                Collapse All
+                <mat-icon>expand_less</mat-icon>Collapse All
               </button>
             </mat-card-subtitle>
 
@@ -126,7 +126,6 @@
 
             <div class="w-100">
               <mat-accordion multi class="col-2">
-                <!-- <div class="d-flex flex-row flex-wrap w-100"> -->
                 <ng-container
                   *ngFor="let campaign of client?.orgDetails?.appleCampaigns"
                 >
@@ -144,8 +143,13 @@
                         {{ campaign.campaignId }}
                       </div>
                     </mat-expansion-panel-header>
-                    <div class="text-left mb-2">
-                      <mat-checkbox [checked]="hasBidParameters(campaign)">
+                    <div class="text-left mb-2 p-0">
+                      <mat-checkbox
+                        (change)="
+                          handleCampaignCheckboxChange($event, campaign)
+                        "
+                        [formControlName]="'checkbox_' + campaign.campaignId"
+                      >
                       </mat-checkbox>
                       Enable Campaign Level Overrides for Bid Optimizations
                     </div>
@@ -163,8 +167,7 @@
                           Per Install</mat-label
                         >
                         <input
-                          formControlName="highCPI"
-                          required
+                          [formControlName]="'highCPI_' + campaign.campaignId"
                           matInput
                           type="number"
                           placeholder="Target Cost Per Install"
@@ -177,11 +180,12 @@
                       <mat-form-field
                         class="float-left mr-2"
                         appearance="fill"
-                        [hideRequiredMarker]="false"
                         color="accent"
                         matTooltip="Objective: &#13; Determines how aggressive our system will bid to your cost per install target. &#13; &#13; We recommend allowing for 7 days of performance before changing your objective. &#13; &#13; Mouse over options for more detailed information on each strategy."
                       >
-                        <mat-select required formControlName="objective">
+                        <mat-select
+                          [formControlName]="'objective_' + campaign.campaignId"
+                        >
                           <mat-option
                             matTooltip="Standard: &#13; Finds a balance between growth and efficiency goals and is recommended for most advertisers."
                             value="standard"
@@ -206,7 +210,6 @@
                     </div>
                   </mat-expansion-panel>
                 </ng-container>
-                <!-- </div> -->
               </mat-accordion>
             </div>
           </mat-card-content>

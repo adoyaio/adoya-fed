@@ -104,23 +104,41 @@ export class OptimizationsComponent implements OnInit {
         tap((data: Client) => {
           this.client = Client.buildFromGetClientResponse(data);
 
+          // create the campaign level controls
           chain(data)
             .get("orgDetails")
             .get("appleCampaigns")
             .each((campaign) => {
-              // this.appleForm.add(campaign.campaignId, new );
-              if (get(campaign, "bidParameters")) {
-                const ctrl = new FormControl(
-                  get(campaign.bidParameters, "HIGH_CPI_BID_DECREASE_THRESH")
-                );
-                this.appleForm.addControl(
-                  campaign.campaignId_ + "highCPI",
-                  ctrl
-                );
+              const cpi = new FormControl(
+                get(campaign.bidParameters, "HIGH_CPI_BID_DECREASE_THRESH")
+              );
+              const objective = new FormControl(
+                get(campaign.bidParameters, "OBJECTIVE")
+              );
+              this.appleForm.addControl("highCPI_" + campaign.campaignId, cpi);
+              this.appleForm.addControl(
+                "objective_" + campaign.campaignId,
+                objective
+              );
+              this.appleForm.addControl(
+                "checkbox_" + campaign.campaignId,
+                new FormControl(true)
+              );
+
+              if (!get(campaign, "bidParameters", false)) {
+                this.appleForm.get("highCPI_" + campaign.campaignId).disable();
+                this.appleForm
+                  .get("objective_" + campaign.campaignId)
+                  .disable();
+
+                this.appleForm
+                  .get("checkbox_" + campaign.campaignId)
+                  .setValue(false);
               }
             })
             .value();
 
+          // client level controls
           this.appleForm
             .get("objective")
             .setValue(this.client.orgDetails.bidParameters.objective);
@@ -402,6 +420,16 @@ export class OptimizationsComponent implements OnInit {
       this.branchForm.get("revenueOverSpend").disable();
       this.branchForm.get("branchKey").disable();
       this.branchForm.get("branchSecret").disable();
+    }
+  }
+
+  handleCampaignCheckboxChange($event: MatCheckboxChange, campaign: any) {
+    if ($event.checked) {
+      this.appleForm.get("highCPI_" + campaign.campaignId).enable();
+      this.appleForm.get("objective_" + campaign.campaignId).enable();
+    } else {
+      this.appleForm.get("highCPI_" + campaign.campaignId).disable();
+      this.appleForm.get("objective_" + campaign.campaignId).disable();
     }
   }
 }
