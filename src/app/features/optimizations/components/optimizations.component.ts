@@ -1,8 +1,8 @@
 import { Router } from "@angular/router";
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { AmplifyService } from "aws-amplify-angular";
-import { map, tap, catchError, filter, take } from "rxjs/operators";
-import { combineLatest, EMPTY } from "rxjs";
+import { map, tap, catchError, filter, take, takeUntil } from "rxjs/operators";
+import { combineLatest, EMPTY, Subject } from "rxjs";
 import { FormBuilder, FormControl, Validators } from "@angular/forms";
 import { UserAccountService } from "src/app/core/services/user-account.service";
 import { ClientService } from "src/app/core/services/client.service";
@@ -30,6 +30,7 @@ import { ClientPayload } from "src/app/core/models/client-payload";
 })
 export class OptimizationsComponent implements OnInit {
   @ViewChild(MatAccordion, { static: false }) accordion: MatAccordion;
+  private _destroyed$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     private amplifyService: AmplifyService,
@@ -93,7 +94,8 @@ export class OptimizationsComponent implements OnInit {
           if (!(authState.state === "signedIn")) {
             this.router.navigateByUrl("/portal");
           }
-        })
+        }),
+        takeUntil(this._destroyed$)
       )
       .subscribe();
 
@@ -103,131 +105,7 @@ export class OptimizationsComponent implements OnInit {
         return val.Name === "custom:org_id";
       }).Value;
 
-    this.clientService
-      .getClient(this.orgId)
-      .pipe(
-        tap(() => {
-          this.isLoadingResults = true;
-        }),
-        tap((data: Client) => {
-          this.client = Client.buildFromGetClientResponse(data);
-
-          // create the campaign level controls
-          chain(data)
-            .get("orgDetails")
-            .get("appleCampaigns")
-            .each((campaign) => {
-              const cpi = new FormControl(
-                get(campaign.bidParameters, "HIGH_CPI_BID_DECREASE_THRESH")
-              );
-              const objective = new FormControl(
-                get(campaign.bidParameters, "OBJECTIVE")
-              );
-              this.appleForm.addControl("highCPI_" + campaign.campaignId, cpi);
-              this.appleForm.addControl(
-                "objective_" + campaign.campaignId,
-                objective
-              );
-              this.appleForm.addControl(
-                "checkbox_" + campaign.campaignId,
-                new FormControl(true)
-              );
-
-              this.appleForm
-                .get("highCPI_" + campaign.campaignId)
-                .setValidators([
-                  Validators.min(0.1),
-                  Validators.max(1000),
-                  Validators.minLength(1),
-                ]);
-
-              const hasNoParamOverrides = chain(campaign)
-                .get("bidParameters", false)
-                .isEmpty()
-                .value();
-
-              if (hasNoParamOverrides) {
-                this.appleForm.get("highCPI_" + campaign.campaignId).disable();
-                this.appleForm
-                  .get("objective_" + campaign.campaignId)
-                  .disable();
-
-                this.appleForm
-                  .get("checkbox_" + campaign.campaignId)
-                  .setValue(false);
-              }
-            })
-            .value();
-
-          // client level controls
-          this.appleForm
-            .get("objective")
-            .setValue(this.client.orgDetails.bidParameters.objective);
-
-          this.appleForm
-            .get("highCPI")
-            .setValue(
-              this.client.orgDetails.bidParameters.highCPIBidDecreaseThresh
-            );
-
-          this.branchForm
-            .get("branchObjective")
-            .setValue(
-              this.client.orgDetails.branchBidParameters.branchOptimizationGoal
-            );
-
-          this.branchForm
-            .get("cppThreshold")
-            .setValue(
-              this.client.orgDetails.branchBidParameters
-                .costPerPurchaseThreshold
-            );
-
-          this.branchForm
-            .get("revenueOverSpend")
-            .setValue(
-              this.client.orgDetails.branchBidParameters
-                .revenueOverAdSpendThreshold
-            );
-
-          this.branchForm
-            .get("branchBidAdjusterEnabled")
-            .setValue(
-              this.client.orgDetails.branchIntegrationParameters
-                .branchBidAdjusterEnabled
-            );
-
-          this.branchForm
-            .get("branchKey")
-            .setValue(
-              this.client.orgDetails.branchIntegrationParameters.branchKey
-            );
-
-          this.branchForm
-            .get("branchSecret")
-            .setValue(
-              this.client.orgDetails.branchIntegrationParameters.branchSecret
-            );
-
-          if (
-            !this.client.orgDetails.branchIntegrationParameters
-              .branchBidAdjusterEnabled
-          ) {
-            this.branchForm.get("cppThreshold").disable();
-            this.branchForm.get("revenueOverSpend").disable();
-            this.branchForm.get("branchObjective").disable();
-            this.branchForm.get("branchKey").disable();
-            this.branchForm.get("branchSecret").disable();
-          }
-
-          this.isLoadingResults = false;
-        }),
-        catchError(() => {
-          this.isLoadingResults = false;
-          return EMPTY;
-        })
-      )
-      .subscribe();
+    this.getClient();
   }
 
   ngAfterViewInit() {
@@ -254,23 +132,40 @@ export class OptimizationsComponent implements OnInit {
             this.branchForm.get("cppThreshold").enable();
             this.branchForm.get("revenueOverSpend").disable();
           }
+        }),
+        takeUntil(this._destroyed$)
+      )
+      .subscribe();
+  }
+
+  ngOnDestroy(): void {
+    this._destroyed$.next(true);
+  }
+
+  getClient(): void {
+    this.clientService
+      .getClient(this.orgId)
+      .pipe(
+        tap(() => {
+          this.isLoadingResults = true;
+        }),
+        tap((data: Client) => {
+          this.client = Client.buildFromGetClientResponse(data);
+          this.buildCampaignForm(data);
+          this.setAppleFormValues();
+          this.isLoadingResults = false;
+        }),
+        take(1),
+        catchError(() => {
+          this.isLoadingResults = false;
+          return EMPTY;
         })
       )
       .subscribe();
   }
 
-  hasBidParameters(campaign: any) {
-    return !chain(campaign).get("bidParameters", false).isEmpty().value();
-  }
-
-  openSnackBar(message: string, action: string) {
-    this.snackBar.open(message, action, {
-      duration: 10000,
-      panelClass: "standard",
-    });
-  }
-
-  onResetForm() {
+  setAppleFormValues() {
+    // client level controls
     this.appleForm
       .get("objective")
       .setValue(this.client.orgDetails.bidParameters.objective);
@@ -303,9 +198,11 @@ export class OptimizationsComponent implements OnInit {
         this.client.orgDetails.branchIntegrationParameters
           .branchBidAdjusterEnabled
       );
+
     this.branchForm
       .get("branchKey")
       .setValue(this.client.orgDetails.branchIntegrationParameters.branchKey);
+
     this.branchForm
       .get("branchSecret")
       .setValue(
@@ -313,20 +210,74 @@ export class OptimizationsComponent implements OnInit {
       );
 
     if (
-      this.client.orgDetails.branchBidParameters.branchOptimizationGoal ===
-      "revenue_over_ad_spend"
+      !this.client.orgDetails.branchIntegrationParameters
+        .branchBidAdjusterEnabled
     ) {
       this.branchForm.get("cppThreshold").disable();
-      this.branchForm.get("revenueOverSpend").enable();
-    }
-
-    if (
-      this.client.orgDetails.branchBidParameters.branchOptimizationGoal ===
-      "cost_per_purchase"
-    ) {
-      this.branchForm.get("cppThreshold").enable();
       this.branchForm.get("revenueOverSpend").disable();
+      this.branchForm.get("branchObjective").disable();
+      this.branchForm.get("branchKey").disable();
+      this.branchForm.get("branchSecret").disable();
     }
+  }
+
+  buildCampaignForm(data: Client) {
+    chain(data)
+      .get("orgDetails")
+      .get("appleCampaigns")
+      .each((campaign) => {
+        const cpi = new FormControl(
+          get(campaign.bidParameters, "HIGH_CPI_BID_DECREASE_THRESH")
+        );
+        const objective = new FormControl(
+          get(campaign.bidParameters, "OBJECTIVE")
+        );
+        this.appleForm.addControl("highCPI_" + campaign.campaignId, cpi);
+        this.appleForm.addControl(
+          "objective_" + campaign.campaignId,
+          objective
+        );
+        this.appleForm.addControl(
+          "checkbox_" + campaign.campaignId,
+          new FormControl(true)
+        );
+
+        this.appleForm
+          .get("highCPI_" + campaign.campaignId)
+          .setValidators([
+            Validators.min(0.1),
+            Validators.max(1000),
+            Validators.minLength(1),
+          ]);
+
+        const hasNoParamOverrides = chain(campaign)
+          .get("bidParameters", false)
+          .isEmpty()
+          .value();
+
+        if (hasNoParamOverrides) {
+          this.appleForm.get("highCPI_" + campaign.campaignId).disable();
+          this.appleForm.get("objective_" + campaign.campaignId).disable();
+          this.appleForm.get("checkbox_" + campaign.campaignId).setValue(false);
+        }
+      })
+      .value();
+  }
+
+  hasBidParameters(campaign: any) {
+    return !chain(campaign).get("bidParameters", false).isEmpty().value();
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 10000,
+      panelClass: "standard",
+    });
+  }
+
+  onResetForm() {
+    this.isLoadingResults = true;
+    this.getClient();
   }
 
   onAppleSubmit() {
@@ -408,7 +359,7 @@ export class OptimizationsComponent implements OnInit {
       this.clientService
         .postClient(ClientPayload.buildFromClient(this.client))
         .pipe(
-          tap((_) => {
+          tap(() => {
             this.isSendingResults = true;
           }),
           map((data) => {
