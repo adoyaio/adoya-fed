@@ -1,7 +1,7 @@
 import { Router } from "@angular/router";
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { AmplifyService } from "aws-amplify-angular";
-import { map, tap, catchError, filter } from "rxjs/operators";
+import { map, tap, catchError, filter, take } from "rxjs/operators";
 import { combineLatest, EMPTY } from "rxjs";
 import { FormBuilder, FormControl, Validators } from "@angular/forms";
 import { UserAccountService } from "src/app/core/services/user-account.service";
@@ -371,10 +371,7 @@ export class OptimizationsComponent implements OnInit {
         "branchSecret"
       ).value;
 
-      // campaign level fields
-      // const appleCampaigns: any[] = chain(Object.keys(this.appleForm.controls))
-      // .each(control)
-
+      // build campaigns
       chain(this.client)
         .get("orgDetails")
         .get("appleCampaigns")
@@ -385,6 +382,7 @@ export class OptimizationsComponent implements OnInit {
           ).value;
 
           if (hasOverrides) {
+            const bidParameters = {};
             const cpi = this.appleForm.get("highCPI_" + campaign.campaignId)
               .value;
 
@@ -392,11 +390,17 @@ export class OptimizationsComponent implements OnInit {
               "objective_" + campaign.campaignId
             ).value;
 
-            set(campaign, "bidParameters", [
-              { HIGH_CPI_BID_DECREASE_THRESH: cpi, OBJECTIVE: objective },
-            ]);
+            if (!isNil(cpi)) {
+              set(bidParameters, "HIGH_CPI_BID_DECREASE_THRESH", cpi);
+            }
+
+            if (!isNil(objective)) {
+              set(bidParameters, "OBJECTIVE", objective);
+            }
+
+            set(campaign, "bidParameters", bidParameters);
           } else {
-            set(campaign, "bidParameters", []);
+            set(campaign, "bidParameters", {});
           }
         })
         .value();
@@ -412,6 +416,7 @@ export class OptimizationsComponent implements OnInit {
             this.openSnackBar("successfully updated settings!", "dismiss");
             return data;
           }),
+          take(1),
           catchError(() => {
             this.isSendingResults = false;
             this.openSnackBar(
