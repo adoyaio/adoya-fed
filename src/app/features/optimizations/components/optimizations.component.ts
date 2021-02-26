@@ -17,6 +17,7 @@ import {
   each as _each,
   get,
   has,
+  isEmpty,
   isNil,
   map as _map,
   set,
@@ -105,7 +106,25 @@ export class OptimizationsComponent implements OnInit {
         return val.Name === "custom:org_id";
       }).Value;
 
-    this.getClient();
+    this.clientService
+      .getClient(this.orgId)
+      .pipe(
+        tap(() => {
+          this.appleForm.markAsPristine();
+        }),
+        tap((data: Client) => {
+          this.client = Client.buildFromGetClientResponse(data);
+          this.buildCampaignForm(data);
+          this.setAppleFormValues();
+          this.isLoadingResults = false;
+        }),
+        take(1),
+        catchError(() => {
+          this.isLoadingResults = false;
+          return EMPTY;
+        })
+      )
+      .subscribe();
   }
 
   ngAfterViewInit() {
@@ -143,15 +162,15 @@ export class OptimizationsComponent implements OnInit {
   }
 
   getClient(): void {
+    this.isLoadingResults = true;
     this.clientService
       .getClient(this.orgId)
       .pipe(
         tap(() => {
-          this.isLoadingResults = true;
+          this.appleForm.markAsPristine();
         }),
         tap((data: Client) => {
           this.client = Client.buildFromGetClientResponse(data);
-          this.buildCampaignForm(data);
           this.setAppleFormValues();
           this.isLoadingResults = false;
         }),
@@ -219,6 +238,33 @@ export class OptimizationsComponent implements OnInit {
       this.branchForm.get("branchKey").disable();
       this.branchForm.get("branchSecret").disable();
     }
+
+    // campaign controls
+    chain(this.client)
+      .get("orgDetails")
+      .get("appleCampaigns")
+      .each((campaign) => {
+        const cpi = get(campaign.bidParameters, "HIGH_CPI_BID_DECREASE_THRESH");
+        const objective = get(campaign.bidParameters, "OBJECTIVE");
+        const bidOverrides = !isEmpty(get(campaign, "bidParameters"));
+
+        this.appleForm.get("highCPI_" + campaign.campaignId).setValue(cpi);
+        this.appleForm
+          .get("objective_" + campaign.campaignId)
+          .setValue(objective);
+        this.appleForm
+          .get("checkbox_" + campaign.campaignId)
+          .setValue(bidOverrides);
+
+        if (!bidOverrides) {
+          this.appleForm.get("highCPI_" + campaign.campaignId).disable();
+          this.appleForm.get("objective_" + campaign.campaignId).disable();
+        } else {
+          this.appleForm.get("highCPI_" + campaign.campaignId).enable();
+          this.appleForm.get("objective_" + campaign.campaignId).enable();
+        }
+      })
+      .value();
   }
 
   buildCampaignForm(data: Client) {
@@ -226,12 +272,10 @@ export class OptimizationsComponent implements OnInit {
       .get("orgDetails")
       .get("appleCampaigns")
       .each((campaign) => {
-        const cpi = new FormControl(
-          get(campaign.bidParameters, "HIGH_CPI_BID_DECREASE_THRESH")
-        );
-        const objective = new FormControl(
-          get(campaign.bidParameters, "OBJECTIVE")
-        );
+        const cpi = new FormControl();
+        const objective = new FormControl();
+        const bidOverrides = new FormControl();
+
         this.appleForm.addControl("highCPI_" + campaign.campaignId, cpi);
         this.appleForm.addControl(
           "objective_" + campaign.campaignId,
@@ -239,7 +283,7 @@ export class OptimizationsComponent implements OnInit {
         );
         this.appleForm.addControl(
           "checkbox_" + campaign.campaignId,
-          new FormControl(true)
+          bidOverrides
         );
 
         this.appleForm
@@ -248,24 +292,22 @@ export class OptimizationsComponent implements OnInit {
             Validators.min(0.1),
             Validators.max(1000),
             Validators.minLength(1),
+            Validators.required,
           ]);
-
-        const hasNoParamOverrides = chain(campaign)
-          .get("bidParameters", false)
-          .isEmpty()
-          .value();
-
-        if (hasNoParamOverrides) {
-          this.appleForm.get("highCPI_" + campaign.campaignId).disable();
-          this.appleForm.get("objective_" + campaign.campaignId).disable();
-          this.appleForm.get("checkbox_" + campaign.campaignId).setValue(false);
-        }
       })
       .value();
   }
 
   hasBidParameters(campaign: any) {
     return !chain(campaign).get("bidParameters", false).isEmpty().value();
+  }
+
+  isDirty(campaign: any): boolean {
+    return (
+      this.appleForm.get("highCPI_" + campaign.campaignId).dirty ||
+      this.appleForm.get("objective_" + campaign.campaignId).dirty ||
+      this.appleForm.get("checkbox_" + campaign.campaignId).dirty
+    );
   }
 
   openSnackBar(message: string, action: string) {
@@ -276,13 +318,15 @@ export class OptimizationsComponent implements OnInit {
   }
 
   onResetForm() {
-    this.isLoadingResults = true;
+    this.appleForm.markAsPristine();
     this.getClient();
   }
 
   onAppleSubmit() {
     if (this.appleForm.valid && this.branchForm.valid) {
       this.isSendingResults = true;
+
+      // Update client model TODO replace with cqrs pattern
       this.client.orgDetails.bidParameters.objective = this.appleForm.get(
         "objective"
       ).value;
@@ -364,6 +408,7 @@ export class OptimizationsComponent implements OnInit {
           }),
           map((data) => {
             this.isSendingResults = false;
+            this.appleForm.markAsPristine();
             this.openSnackBar("successfully updated settings!", "dismiss");
             return data;
           }),

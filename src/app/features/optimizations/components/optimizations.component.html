@@ -132,11 +132,12 @@
                   <mat-expansion-panel
                     [expanded]="hasBidParameters(campaign)"
                     class="mat-elevation-z0 mt-1 m-2 text-center"
-                    [ngClass]="
+                    [ngClass]="[
                       hasBidParameters(campaign)
                         ? 'workbench_campaign__card-active'
-                        : 'workbench_campaign__card'
-                    "
+                        : 'workbench_campaign__card',
+                      isDirty(campaign) ? 'workbench_campaign__card-dirty' : ''
+                    ]"
                   >
                     <mat-expansion-panel-header>
                       <div>

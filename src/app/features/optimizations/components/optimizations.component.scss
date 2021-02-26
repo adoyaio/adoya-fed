@@ -27,11 +27,25 @@
     border-width: 1px;
     background-color: #f1f5ee;
   }
+
+  &-dirty {
+    // background-color: #a3ff54;
+    // background-color: #b0ff6e;
+    background-color: #ccffa1;
+  }
 }
 
-.workbench_campaign__card:hover {
+// .workbench_campaign__card:hover {
+//   background-color: #f1f5ee;
+// }
+
+.workbench_campaign__card:hover:not(.workbench_campaign__card-dirty) {
   background-color: #f1f5ee;
 }
+
+// .workbench_campaign__card-dirty {
+//   background-color: red;
+// }
 
 .workbench__accent-field {
   background-color: mat-color($adoya-web-accent);
