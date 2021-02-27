@@ -19,11 +19,18 @@
           Bid Optimization Settings For Installs
           <button
             (click)="onResetForm()"
+            [disabled]="appleSubmitDisabled()"
             mat-button
             class="workbench__buttons float-right"
           >
-            <mat-icon aria-label="reset">refresh</mat-icon>
-            undo changes
+            <mat-icon
+              [ngClass]="appleSubmitDisabled() ? '' : 'adoya-web-primary'"
+              aria-label="reset"
+              >refresh</mat-icon
+            >
+            <span [ngClass]="appleSubmitDisabled() ? '' : 'adoya-web-primary'"
+              >undo changes</span
+            >
           </button>
 
           <button
@@ -32,8 +39,14 @@
             mat-button
             class="workbench__buttons float-right"
           >
-            <mat-icon color="accent" aria-label="save">cloud_done</mat-icon>
-            <span class="adoya-web-primary"> save changes</span>
+            <mat-icon
+              [ngClass]="appleSubmitDisabled() ? '' : 'adoya-web-primary'"
+              aria-label="save"
+              >cloud_done</mat-icon
+            >
+            <span [ngClass]="appleSubmitDisabled() ? '' : 'adoya-web-primary'">
+              save changes</span
+            >
           </button>
         </mat-card-title>
 
@@ -237,7 +250,7 @@
       <mat-card class="workbench__card mat-elevation-z0 mt-3 w-100">
         <mat-card-title class="pb-2">
           Bid Optimization Settings For Post-Install Events
-          <button
+          <!-- <button
             (click)="onResetForm()"
             mat-button
             class="workbench__buttons float-right"
@@ -254,6 +267,37 @@
           >
             <mat-icon color="accent" aria-label="save">cloud_done</mat-icon>
             <span class="adoya-web-primary">save changes</span>
+          </button> -->
+          <button
+            (click)="onResetForm()"
+            [disabled]="branchSubmitDisabled()"
+            mat-button
+            class="workbench__buttons float-right"
+          >
+            <mat-icon
+              [ngClass]="branchSubmitDisabled() ? '' : 'adoya-web-primary'"
+              aria-label="reset"
+              >refresh</mat-icon
+            >
+            <span [ngClass]="branchSubmitDisabled() ? '' : 'adoya-web-primary'"
+              >undo changes</span
+            >
+          </button>
+
+          <button
+            (click)="onAppleSubmit()"
+            [disabled]="branchSubmitDisabled()"
+            mat-button
+            class="workbench__buttons float-right"
+          >
+            <mat-icon
+              [ngClass]="branchSubmitDisabled() ? '' : 'adoya-web-primary'"
+              aria-label="save"
+              >cloud_done</mat-icon
+            >
+            <span [ngClass]="branchSubmitDisabled() ? '' : 'adoya-web-primary'">
+              save changes</span
+            >
           </button>
         </mat-card-title>
 

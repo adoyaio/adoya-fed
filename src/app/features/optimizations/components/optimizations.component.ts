@@ -168,6 +168,7 @@ export class OptimizationsComponent implements OnInit {
       .pipe(
         tap(() => {
           this.appleForm.markAsPristine();
+          this.branchForm.markAsPristine();
         }),
         tap((data: Client) => {
           this.client = Client.buildFromGetClientResponse(data);
@@ -319,6 +320,7 @@ export class OptimizationsComponent implements OnInit {
 
   onResetForm() {
     this.appleForm.markAsPristine();
+    this.branchForm.markAsPristine();
     this.getClient();
   }
 
@@ -409,6 +411,7 @@ export class OptimizationsComponent implements OnInit {
           map((data) => {
             this.isSendingResults = false;
             this.appleForm.markAsPristine();
+            this.branchForm.markAsPristine();
             this.openSnackBar("successfully updated settings!", "dismiss");
             return data;
           }),
