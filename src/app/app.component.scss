@@ -7,3 +7,9 @@
 ::ng-deep snack-bar-container.standard simple-snack-bar span {
   color: black;
 }
+
+::ng-deep {
+  input:disabled {
+    background-color: inherit !important;
+  }
+}

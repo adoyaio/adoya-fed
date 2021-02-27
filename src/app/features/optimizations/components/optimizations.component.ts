@@ -449,6 +449,14 @@ export class OptimizationsComponent implements OnInit {
     return this.branchForm.get(name).disabled;
   }
 
+  appleSubmitDisabled(): boolean {
+    return this.appleForm.pristine || this.appleForm.invalid;
+  }
+
+  branchSubmitDisabled(): boolean {
+    return this.branchForm.pristine || this.branchForm.invalid;
+  }
+
   handleBranchCheckboxChange($event: MatCheckboxChange) {
     if ($event.checked) {
       this.branchForm.get("branchObjective").enable();

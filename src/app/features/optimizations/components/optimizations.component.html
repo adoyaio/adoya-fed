@@ -5,6 +5,7 @@
       <mat-icon>tune</mat-icon>
       <span class="ml-2">Install Optimizations</span>
     </ng-template>
+
     <div class="workbench__loading-shade" *ngIf="isLoadingResults">
       <mat-spinner color="accent"></mat-spinner>
     </div>
@@ -27,11 +28,12 @@
 
           <button
             (click)="onAppleSubmit()"
+            [disabled]="appleSubmitDisabled()"
             mat-button
             class="workbench__buttons float-right"
           >
-            <mat-icon aria-label="clear">cloud_done</mat-icon>
-            save changes
+            <mat-icon color="accent" aria-label="save">cloud_done</mat-icon>
+            <span class="adoya-web-primary"> save changes</span>
           </button>
         </mat-card-title>
 
@@ -246,11 +248,12 @@
 
           <button
             (click)="onAppleSubmit()"
+            [disabled]="branchSubmitDisabled()"
             mat-button
             class="workbench__buttons float-right"
           >
-            <mat-icon aria-label="clear">cloud_done</mat-icon>
-            save changes
+            <mat-icon color="accent" aria-label="save">cloud_done</mat-icon>
+            <span class="adoya-web-primary">save changes</span>
           </button>
         </mat-card-title>
 
