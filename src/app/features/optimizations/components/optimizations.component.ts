@@ -302,10 +302,8 @@ export class OptimizationsComponent implements OnInit {
       );
 
     if (
-      !isNil(
-        this.client.orgDetails.branchIntegrationParameters
-          .branchBidAdjusterEnabled
-      )
+      !this.client.orgDetails.branchIntegrationParameters
+        .branchBidAdjusterEnabled
     ) {
       this.branchForm.get("cpp").disable();
       this.branchForm.get("roas").disable();
@@ -353,10 +351,7 @@ export class OptimizationsComponent implements OnInit {
           campaign,
           "branchBidParameters.branch_optimization_goal"
         );
-        const mmpOverrides = !isEmpty(
-          get(campaign, "branchBidParameters") &&
-            !isNil(campaign.branchBidParameters)
-        );
+        const mmpOverrides = !isEmpty(get(campaign, "branchBidParameters"));
 
         this.appleForm.get("cpp_" + campaign.campaignId).setValue(cpp);
         this.appleForm.get("roas_" + campaign.campaignId).setValue(roas);
