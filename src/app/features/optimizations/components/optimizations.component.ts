@@ -10,6 +10,7 @@ import { Client } from "../../../core/models/client";
 import {
   MatAccordion,
   MatCheckboxChange,
+  MatSelectChange,
   MatSnackBar,
 } from "@angular/material";
 import {
@@ -291,6 +292,10 @@ export class OptimizationsComponent implements OnInit {
         );
 
         this.appleForm
+          .get("mmpObjective_" + campaign.campaignId)
+          .setValidators([Validators.required]);
+
+        this.appleForm
           .get("cpp_" + campaign.campaignId)
           .setValidators([
             Validators.min(0.1),
@@ -422,6 +427,7 @@ export class OptimizationsComponent implements OnInit {
           this.appleForm.get("roas_" + campaign.campaignId).disable();
           this.appleForm.get("mmpObjective_" + campaign.campaignId).disable();
         } else {
+          this.appleForm.get("mmpObjective_" + campaign.campaignId).enable();
           if (mmpObjective === "revenue_over_ad_spend") {
             this.appleForm.get("roas_" + campaign.campaignId).enable();
             this.appleForm.get("cpp_" + campaign.campaignId).disable();
@@ -548,24 +554,34 @@ export class OptimizationsComponent implements OnInit {
 
           if (hasBranchOverrides) {
             const branchBidParameters = {};
-            // const cpi = this.appleForm.get("highCPI_" + campaign.campaignId)
-            //   .value;
 
-            // const objective = this.appleForm.get(
-            //   "objective_" + campaign.campaignId
-            // ).value;
+            const mmpObjective = this.appleForm.get(
+              "mmpObjective_" + campaign.campaignId
+            ).value;
 
-            // if (!isNil(cpi)) {
-            //   set(bidParameters, "HIGH_CPI_BID_DECREASE_THRESH", cpi);
-            // }
+            if (mmpObjective === "revenue_over_ad_spend") {
+              const roas = this.appleForm.get("roas_" + campaign.campaignId)
+                .value;
 
-            // if (!isNil(objective)) {
-            //   set(bidParameters, "OBJECTIVE", objective);
-            // }
-
-            // set(campaign, "bidParameters", bidParameters);
+              set(branchBidParameters, "revenue_over_ad_spend_threshold", roas);
+              set(
+                branchBidParameters,
+                "branch_optimization_goal",
+                mmpObjective
+              );
+            } else {
+              const cpp = this.appleForm.get("cpp_" + campaign.campaignId)
+                .value;
+              set(branchBidParameters, "cost_per_purchase_threshold", cpp);
+              set(
+                branchBidParameters,
+                "branch_optimization_goal",
+                mmpObjective
+              );
+            }
+            set(campaign, "branchBidParameters", branchBidParameters);
           } else {
-            // set(campaign, "bidParameters", {});
+            set(campaign, "branchBidParameters", {});
           }
         })
         .value();
@@ -624,6 +640,10 @@ export class OptimizationsComponent implements OnInit {
     return this.appleForm.pristine || this.appleForm.invalid;
   }
 
+  undoDisabled(): boolean {
+    return this.appleForm.pristine && this.branchForm.pristine;
+  }
+
   branchSubmitDisabled(): boolean {
     return this.branchForm.pristine || this.branchForm.invalid;
   }
@@ -664,13 +684,22 @@ export class OptimizationsComponent implements OnInit {
 
   handleCampaignMmpCheckboxChange($event: MatCheckboxChange, campaign: any) {
     if ($event.checked) {
-      this.appleForm.get("cpp_" + campaign.campaignId).enable();
-      this.appleForm.get("roas_" + campaign.campaignId).enable();
       this.appleForm.get("mmpObjective_" + campaign.campaignId).enable();
     } else {
       this.appleForm.get("cpp_" + campaign.campaignId).disable();
       this.appleForm.get("roas_" + campaign.campaignId).disable();
       this.appleForm.get("mmpObjective_" + campaign.campaignId).disable();
+    }
+  }
+
+  handleCampaignMmpObjectiveChange($event: MatSelectChange, campaign: any) {
+    console.log("JAMES TEST");
+    if ($event.value === "revenue_over_ad_spend") {
+      this.appleForm.get("cpp_" + campaign.campaignId).disable();
+      this.appleForm.get("roas_" + campaign.campaignId).enable();
+    } else {
+      this.appleForm.get("cpp_" + campaign.campaignId).enable();
+      this.appleForm.get("roas_" + campaign.campaignId).disable();
     }
   }
 }

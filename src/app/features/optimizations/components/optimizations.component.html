@@ -19,16 +19,16 @@
           Bid Optimization Settings For Installs
           <button
             (click)="onResetForm()"
-            [disabled]="appleSubmitDisabled()"
+            [disabled]="undoDisabled()"
             mat-button
             class="workbench__buttons float-right"
           >
             <mat-icon
-              [ngClass]="appleSubmitDisabled() ? '' : 'adoya-web-primary'"
+              [ngClass]="undoDisabled() ? '' : 'adoya-web-primary'"
               aria-label="reset"
               >refresh</mat-icon
             >
-            <span [ngClass]="appleSubmitDisabled() ? '' : 'adoya-web-primary'"
+            <span [ngClass]="undoDisabled() ? '' : 'adoya-web-primary'"
               >undo changes</span
             >
           </button>
@@ -261,7 +261,13 @@
                               [formControlName]="
                                 'mmpObjective_' + campaign.campaignId
                               "
-                              class="p-2"
+                              (selectionChange)="
+                                handleCampaignMmpObjectiveChange(
+                                  $event,
+                                  campaign
+                                )
+                              "
+                              class="p-1"
                             >
                               <mat-option
                                 matTooltip="Cost Per Purchase: &#13;  Use this option if you’re looking to acquire/retain paying customers and less focused on the revenue amount. &#13; &#13; This option works best if you’re taking a longer-term strategy with a focus on customer lifetime value (LTV)."
@@ -358,16 +364,16 @@
 
           <button
             (click)="onResetForm()"
-            [disabled]="branchSubmitDisabled()"
+            [disabled]="undoDisabled()"
             mat-button
             class="workbench__buttons float-right"
           >
             <mat-icon
-              [ngClass]="branchSubmitDisabled() ? '' : 'adoya-web-primary'"
+              [ngClass]="undoDisabled() ? '' : 'adoya-web-primary'"
               aria-label="reset"
               >refresh</mat-icon
             >
-            <span [ngClass]="branchSubmitDisabled() ? '' : 'adoya-web-primary'"
+            <span [ngClass]="undoDisabled() ? '' : 'adoya-web-primary'"
               >undo changes</span
             >
           </button>
@@ -413,7 +419,7 @@
                 [ngClass]="isControlDisabled('mmpObjective') ? '' : ''"
                 matTooltip="MMP Objective: &#13; Use this option if you want our system to also optimize for in-app purchases. &#13; &#13; This will be a secondary objective as our system optimizes primarily for cost per install. &#13; &#13; If you have MMP enabled, we strongly recommend you select either Cost Per Purchase or Return On Ad Spend (ROAS). &#13; &#13; Mouse over options for more detailed information on each strategy."
               >
-                <mat-select formControlName="mmpObjective" class="p-2">
+                <mat-select formControlName="mmpObjective" class="p-1">
                   <mat-option
                     matTooltip="Cost Per Purchase: &#13;  Use this option if you’re looking to acquire/retain paying customers and less focused on the revenue amount. &#13; &#13; This option works best if you’re taking a longer-term strategy with a focus on customer lifetime value (LTV)."
                     value="cost_per_purchase"
