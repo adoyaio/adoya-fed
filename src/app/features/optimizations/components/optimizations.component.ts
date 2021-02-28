@@ -567,6 +567,10 @@ export class OptimizationsComponent implements OnInit {
     return !this.branchForm.get("branchBidAdjusterEnabled").value;
   }
 
+  isControlDisabled(control: string): boolean {
+    return this.appleForm.get(control).disabled;
+  }
+
   appleSubmitDisabled(): boolean {
     return this.appleForm.pristine || this.appleForm.invalid;
   }
