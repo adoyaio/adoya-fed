@@ -155,6 +155,7 @@
                         ? 'workbench_campaign__card-dirty'
                         : ''
                     ]"
+                    *ngIf="!isSearchCampaign(campaign)"
                   >
                     <mat-expansion-panel-header>
                       <div>
@@ -235,7 +236,7 @@
                           </mat-form-field>
                         </div>
                       </div>
-                      <div class="col-6 p-0">
+                      <div *ngIf="!isBranchFormDisabled()" class="col-6 p-0">
                         <div class="text-left mb-2 p-0">
                           <mat-checkbox
                             (change)="
@@ -416,7 +417,6 @@
               <mat-form-field
                 appearance="fill"
                 class="w-100"
-                [ngClass]="isControlDisabled('mmpObjective') ? '' : ''"
                 matTooltip="MMP Objective: &#13; Use this option if you want our system to also optimize for in-app purchases. &#13; &#13; This will be a secondary objective as our system optimizes primarily for cost per install. &#13; &#13; If you have MMP enabled, we strongly recommend you select either Cost Per Purchase or Return On Ad Spend (ROAS). &#13; &#13; Mouse over options for more detailed information on each strategy."
               >
                 <mat-select formControlName="mmpObjective" class="p-1">

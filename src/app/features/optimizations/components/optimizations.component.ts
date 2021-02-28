@@ -41,7 +41,27 @@ export class OptimizationsComponent implements OnInit {
     private userAccountService: UserAccountService,
     private clientService: ClientService,
     private snackBar: MatSnackBar
-  ) {
+  ) {}
+
+  appleForm = this.fb.group({
+    objective: [""],
+    cpi: [""],
+  });
+  branchForm = this.fb.group({
+    mmpObjective: [""],
+    cpp: [""],
+    roas: [""],
+    branchBidAdjusterEnabled: false,
+    branchKey: [""],
+    branchSecret: [""],
+  });
+
+  client: Client = new Client();
+  isLoadingResults = true;
+  isSendingResults;
+  orgId: string;
+
+  ngOnInit() {
     this.appleForm
       .get("cpi")
       .setValidators([
@@ -50,7 +70,6 @@ export class OptimizationsComponent implements OnInit {
         Validators.minLength(1),
         Validators.required,
       ]);
-
     this.branchForm
       .get("cpp")
       .setValidators([
@@ -59,7 +78,6 @@ export class OptimizationsComponent implements OnInit {
         Validators.minLength(1),
         Validators.required,
       ]);
-
     this.branchForm
       .get("roas")
       .setValidators([
@@ -106,86 +124,6 @@ export class OptimizationsComponent implements OnInit {
         })
       )
       .subscribe();
-  }
-
-  appleForm = this.fb.group({
-    objective: [""],
-    cpi: [""],
-  });
-  branchForm = this.fb.group({
-    mmpObjective: [""],
-    cpp: [""],
-    roas: [""],
-    branchBidAdjusterEnabled: false,
-    branchKey: [""],
-    branchSecret: [""],
-  });
-
-  client: Client = new Client();
-  isLoadingResults = true;
-  isSendingResults;
-  orgId: string;
-
-  ngOnInit() {
-    // this.appleForm
-    //   .get("cpi")
-    //   .setValidators([
-    //     Validators.min(0.1),
-    //     Validators.max(1000),
-    //     Validators.minLength(1),
-    //     Validators.required,
-    //   ]);
-    // this.branchForm
-    //   .get("cpp")
-    //   .setValidators([
-    //     Validators.min(0.1),
-    //     Validators.max(1000),
-    //     Validators.minLength(1),
-    //     Validators.required,
-    //   ]);
-    // this.branchForm
-    //   .get("roas")
-    //   .setValidators([
-    //     Validators.min(0.1),
-    //     Validators.max(1000),
-    //     Validators.minLength(1),
-    //     Validators.required,
-    //   ]);
-    // this.amplifyService
-    //   .authState()
-    //   .pipe(
-    //     tap((authState) => {
-    //       if (!(authState.state === "signedIn")) {
-    //         this.router.navigateByUrl("/portal");
-    //       }
-    //     }),
-    //     takeUntil(this._destroyed$)
-    //   )
-    //   .subscribe();
-    // this.orgId = this.userAccountService
-    //   .getCurrentUser()
-    //   .UserAttributes.find((val) => {
-    //     return val.Name === "custom:org_id";
-    //   }).Value;
-    // this.clientService
-    //   .getClient(this.orgId)
-    //   .pipe(
-    //     tap(() => {
-    //       this.appleForm.markAsPristine();
-    //     }),
-    //     tap((data: Client) => {
-    //       this.client = Client.buildFromGetClientResponse(data);
-    //       this.buildCampaignForm(data);
-    //       this.setFormValues();
-    //       this.isLoadingResults = false;
-    //     }),
-    //     take(1),
-    //     catchError(() => {
-    //       this.isLoadingResults = false;
-    //       return EMPTY;
-    //     })
-    //   )
-    //   .subscribe();
   }
 
   ngAfterViewInit() {
@@ -618,22 +556,15 @@ export class OptimizationsComponent implements OnInit {
     }
   }
 
+  isSearchCampaign(campaign: any): boolean {
+    return get(campaign, "campaignType") === "search";
+  }
+
   isBranchFormDisabled(): boolean {
     if (isNil(this.client.orgDetails)) {
       return true;
     }
     return !this.branchForm.get("branchBidAdjusterEnabled").value;
-  }
-
-  isControlDisabled(name: string): boolean {
-    if (isNil(this.client.orgDetails)) {
-      return true;
-    }
-    if (!this.branchForm.get("branchBidAdjusterEnabled").value) {
-      return true;
-    }
-
-    return this.branchForm.get(name).disabled;
   }
 
   appleSubmitDisabled(): boolean {
@@ -693,7 +624,6 @@ export class OptimizationsComponent implements OnInit {
   }
 
   handleCampaignMmpObjectiveChange($event: MatSelectChange, campaign: any) {
-    console.log("JAMES TEST");
     if ($event.value === "revenue_over_ad_spend") {
       this.appleForm.get("cpp_" + campaign.campaignId).disable();
       this.appleForm.get("roas_" + campaign.campaignId).enable();
