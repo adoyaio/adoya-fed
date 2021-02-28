@@ -16,7 +16,7 @@
       <!-- bid optimizaitons card -->
       <mat-card class="workbench__card mat-elevation-z0 mt-3 w-100">
         <mat-card-title class="pb-2">
-          Bid Optimization Settings For Installs
+          <!-- Bid Optimization Settings For Installs -->
           <button
             (click)="onResetForm()"
             [disabled]="undoDisabled()"
@@ -115,7 +115,7 @@
               </mat-form-field>
             </div>
 
-            <!-- campaigns -->
+            <!-- campaigns title -->
             <mat-card-subtitle class="mt-2 mb-2">
               Campaign Settings
 
@@ -135,17 +135,19 @@
               </button>
             </mat-card-subtitle>
 
+            <!-- campaigns subtitle  -->
             <mat-label class="d-block">
               Set Campaign specific Objective and Target CPI
             </mat-label>
 
+            <!-- campaigns  -->
             <div class="w-100">
               <mat-accordion multi class="col-2">
                 <ng-container
                   *ngFor="let campaign of client?.orgDetails?.appleCampaigns"
                 >
+                  <!-- campaigns panels -->
                   <mat-expansion-panel
-                    [expanded]="hasBidParameters(campaign)"
                     class="mat-elevation-z0 mt-1 m-2 text-center"
                     [ngClass]="[
                       hasBidParameters(campaign)
@@ -162,10 +164,12 @@
                         {{ campaign.campaignName }} ({{ campaign.campaignId }})
                       </div>
                     </mat-expansion-panel-header>
+
                     <div
                       class="d-flex flex-row flex-wrap no-gutters justify-content-start"
                     >
                       <div class="col-4 p-0">
+                        <!--checkbox div asa -->
                         <div class="text-left mb-2 p-0">
                           <mat-checkbox
                             (change)="
@@ -179,8 +183,8 @@
                           Enable Campaign Level Overrides for Bid Optimizations
                         </div>
 
+                        <!--form div asa -->
                         <div class="p-0">
-                          <!--- Max CPI -->
                           <mat-form-field
                             class="float-left mr-2"
                             matTooltip="Target Cost Per Install: &#13;  Enter the most you’re willing to spend for an install. &#13; &#13; Be realistic. Setting target too low will severely restrict your volume.  &#13; &#13; Keep changes +/- 20% of the previous value (if applicable). This prevents volatility. &#13; &#13; Also, try to allow for 7 days of performance before making adjustments."
@@ -201,7 +205,6 @@
                               Must enter a number between .1 and 1,000
                             </mat-error>
                           </mat-form-field>
-
                           <mat-form-field
                             class="float-left mr-2"
                             appearance="fill"
@@ -236,7 +239,10 @@
                           </mat-form-field>
                         </div>
                       </div>
+
+                      <!--campaign mmp -->
                       <div *ngIf="!isBranchFormDisabled()" class="col-6 p-0">
+                        <!-- checkbox mmmp -->
                         <div class="text-left mb-2 p-0">
                           <mat-checkbox
                             (change)="
@@ -251,8 +257,8 @@
                           Optimizations
                         </div>
 
+                        <!--form mmp -->
                         <div class="p-0">
-                          <!-- MMP Objective -->
                           <mat-form-field
                             class="float-left mr-2"
                             appearance="fill"
@@ -286,8 +292,6 @@
                               Optimization Objective</mat-label
                             >
                           </mat-form-field>
-
-                          <!-- Target Cost Per Purchase -->
                           <mat-form-field
                             class="float-left mr-2"
                             appearance="fill"
@@ -309,8 +313,6 @@
                               Must enter a number between .1 and 1,000
                             </mat-error>
                           </mat-form-field>
-
-                          <!-- Return on Ad spend -->
                           <mat-form-field
                             class="float-left mr-2"
                             appearance="fill"
@@ -361,7 +363,7 @@
       <!-- mmp optimizations card -->
       <mat-card class="workbench__card mat-elevation-z0 mt-3 w-100">
         <mat-card-title class="pb-2">
-          Bid Optimization Settings For Post-Install Events
+          <!-- Bid Optimization Settings For Post-Install Events -->
 
           <button
             (click)="onResetForm()"

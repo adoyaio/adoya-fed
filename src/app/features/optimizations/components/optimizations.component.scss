@@ -25,13 +25,18 @@
     border-color: mat-color($adoya-web-accent);
     border-radius: 0.5;
     border-width: 1px;
-    background-color: #f1f5ee;
+    // background-color: #f1f5ee;
+    background-color: #dde5d4;
   }
 
   &-dirty {
     // background-color: #a3ff54;
     // background-color: #b0ff6e;
-    background-color: #ccffa1;
+
+    // background-color: #c6d4b8;
+    // background-color: #dde5d4;
+    // background-color: #ccffa1;
+    background-color: #f1f5ee;
   }
 }
 
