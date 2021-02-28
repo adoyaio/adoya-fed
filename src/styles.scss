@@ -323,3 +323,8 @@ $altTheme: mat-dark-theme($theme-primary, $theme-accent, $theme-warn);
   padding: 0.5em 0.85em;
   min-height: 2.5em;
 }
+
+.mat-tab-label-active {
+  color: #5d7d41;
+  font-weight: bold;
+}

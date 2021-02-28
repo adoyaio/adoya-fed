@@ -15,6 +15,7 @@ import {
 } from "@angular/material";
 import {
   chain,
+  cloneDeep,
   each as _each,
   get,
   has,
@@ -110,6 +111,7 @@ export class OptimizationsComponent implements OnInit {
       .pipe(
         tap(() => {
           this.appleForm.markAsPristine();
+          this.branchForm.markAsPristine();
         }),
         tap((data: Client) => {
           this.client = Client.buildFromGetClientResponse(data);
@@ -218,15 +220,15 @@ export class OptimizationsComponent implements OnInit {
         const mmpObjective = new FormControl();
         const mmpBidOverrides = new FormControl();
 
+        this.appleForm.addControl(
+          "mmpCheckbox_" + campaign.campaignId,
+          mmpBidOverrides
+        );
         this.appleForm.addControl("cpp_" + campaign.campaignId, cpp);
         this.appleForm.addControl("roas_" + campaign.campaignId, roas);
         this.appleForm.addControl(
           "mmpObjective_" + campaign.campaignId,
           mmpObjective
-        );
-        this.appleForm.addControl(
-          "mmpCheckbox_" + campaign.campaignId,
-          mmpBidOverrides
         );
 
         this.appleForm
@@ -300,12 +302,14 @@ export class OptimizationsComponent implements OnInit {
       );
 
     if (
-      !this.client.orgDetails.branchIntegrationParameters
-        .branchBidAdjusterEnabled
+      !isNil(
+        this.client.orgDetails.branchIntegrationParameters
+          .branchBidAdjusterEnabled
+      )
     ) {
       this.branchForm.get("cpp").disable();
       this.branchForm.get("roas").disable();
-      this.branchForm.get("branchObjective").disable();
+      this.branchForm.get("mmpObjective").disable();
       this.branchForm.get("branchKey").disable();
       this.branchForm.get("branchSecret").disable();
     }
@@ -316,8 +320,8 @@ export class OptimizationsComponent implements OnInit {
       .get("appleCampaigns")
       .each((campaign) => {
         // bid param overrides
-        const cpi = get(campaign.bidParameters, "HIGH_CPI_BID_DECREASE_THRESH");
-        const objective = get(campaign.bidParameters, "OBJECTIVE");
+        const cpi = get(campaign, "bidParameters.HIGH_CPI_BID_DECREASE_THRESH");
+        const objective = get(campaign, "bidParameters.OBJECTIVE");
         const bidOverrides = !isEmpty(get(campaign, "bidParameters"));
 
         this.appleForm.get("cpi_" + campaign.campaignId).setValue(cpi);
@@ -338,18 +342,21 @@ export class OptimizationsComponent implements OnInit {
 
         // mmp bid param overrides
         const cpp = get(
-          campaign.branchBidParameters,
-          "cost_per_purchase_threshold"
+          campaign,
+          "branchBidParameters.cost_per_purchase_threshold"
         );
         const roas = get(
-          campaign.branchBidParameters,
-          "revenue_over_ad_spend_threshold"
+          campaign,
+          "branchBidParameters.revenue_over_ad_spend_threshold"
         );
         const mmpObjective = get(
-          campaign.branchBidParameters,
-          "branch_optimization_goal"
+          campaign,
+          "branchBidParameters.branch_optimization_goal"
         );
-        const mmpOverrides = !isEmpty(get(campaign, "branchBidParameters"));
+        const mmpOverrides = !isEmpty(
+          get(campaign, "branchBidParameters") &&
+            !isNil(campaign.branchBidParameters)
+        );
 
         this.appleForm.get("cpp_" + campaign.campaignId).setValue(cpp);
         this.appleForm.get("roas_" + campaign.campaignId).setValue(roas);
