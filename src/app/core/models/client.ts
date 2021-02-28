@@ -21,9 +21,10 @@ export class BranchBidParameters {
     retVal.revenueOverAdSpendThreshold =
       response.revenue_over_ad_spend_threshold;
     retVal.costPerPurchaseThresholdBuffer =
-      response.revenue_over_ad_spend_threshold_buffer;
+      response.cost_per_purchase_threshold_buffer;
     retVal.costPerPurchaseThreshold = response.cost_per_purchase_threshold;
-    response.cost_per_purchase_threshold_buffer;
+    retVal.revenueOverAdSpendThresholdBuffer =
+      response.revenue_over_ad_spend_threshold_buffer;
     retVal.objective = response.objective;
 
     return retVal;
