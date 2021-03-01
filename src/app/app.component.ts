@@ -16,7 +16,7 @@ import {
   NavigationCancel,
   NavigationEnd,
   NavigationStart,
-  Router
+  Router,
 } from "@angular/router";
 import { Subject } from "rxjs";
 import { filter, map, mergeMap, takeUntil } from "rxjs/operators";
@@ -24,7 +24,7 @@ import { filter, map, mergeMap, takeUntil } from "rxjs/operators";
 @Component({
   selector: "app-root",
   templateUrl: "./app.component.html",
-  styleUrls: ["./app.component.scss"]
+  styleUrls: ["./app.component.scss"],
 })
 export class AppComponent implements AfterViewInit, OnDestroy {
   isAppLoading = true;
@@ -36,36 +36,36 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     private titleService: Title,
     private activatedRoute: ActivatedRoute
   ) {
-    this.titleService.setTitle("Adoya Workbench");
+    this.titleService.setTitle("adoya client portal");
     this.router.events
       .pipe(
-        filter(event => event instanceof NavigationStart),
+        filter((event) => event instanceof NavigationStart),
         takeUntil(this.destroyed$)
       )
       .subscribe();
 
     this.router.events
       .pipe(
-        filter(event => event instanceof NavigationCancel),
+        filter((event) => event instanceof NavigationCancel),
         takeUntil(this.destroyed$)
       )
       .subscribe();
 
     this.router.events
       .pipe(
-        filter(event => event instanceof NavigationEnd),
+        filter((event) => event instanceof NavigationEnd),
         map(() => {
           return this.activatedRoute;
         }),
-        map(r => {
+        map((r) => {
           while (r.firstChild) {
             r = r.firstChild;
           }
           return r;
         }),
-        filter(r => r.outlet === "primary"),
-        mergeMap(r => r.data),
-        map(event => this.titleService.setTitle(event["title"])),
+        filter((r) => r.outlet === "primary"),
+        mergeMap((r) => r.data),
+        map((event) => this.titleService.setTitle(event["title"])),
         takeUntil(this.destroyed$)
       )
       .subscribe();

@@ -12,7 +12,7 @@ const routes: Routes = [
   {
     path: "portal",
     component: PortalComponent,
-    data: { title: "Adoya portal" },
+    data: { title: "adoya" },
   },
   {
     path: "workbench",
@@ -21,7 +21,7 @@ const routes: Routes = [
         (m) => m.SecureLayoutModule
       ),
     canActivate: [AuthGuard],
-    data: { title: "Workbench" },
+    data: { title: "workbench" },
   },
 ];
 

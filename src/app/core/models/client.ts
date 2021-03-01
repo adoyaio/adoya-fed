@@ -20,9 +20,11 @@ export class BranchBidParameters {
     retVal.branchMaxBid = response.branch_max_bid;
     retVal.revenueOverAdSpendThreshold =
       response.revenue_over_ad_spend_threshold;
-    response.revenue_over_ad_spend_threshold_buffer;
+    retVal.costPerPurchaseThresholdBuffer =
+      response.cost_per_purchase_threshold_buffer;
     retVal.costPerPurchaseThreshold = response.cost_per_purchase_threshold;
-    response.cost_per_purchase_threshold_buffer;
+    retVal.revenueOverAdSpendThresholdBuffer =
+      response.revenue_over_ad_spend_threshold_buffer;
     retVal.objective = response.objective;
 
     return retVal;
@@ -158,9 +160,6 @@ export class OrgDetails {
     retVal.clientName = response.clientName;
     retVal.branchBidParameters = BranchBidParameters.buildFromResponse(
       response.branchBidParameters
-    );
-    retVal.branchIntegrationParameters = BranchIntegrationParameters.buildFromResponse(
-      response.branchIntegrationParameters
     );
     retVal.branchIntegrationParameters = BranchIntegrationParameters.buildFromResponse(
       response.branchIntegrationParameters
