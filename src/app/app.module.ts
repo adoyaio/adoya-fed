@@ -11,6 +11,7 @@ import { AmplifyAngularModule, AmplifyService } from "aws-amplify-angular";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { ChartsModule } from "ng2-charts";
 import { SecureLayoutModule } from "./layout/secure-layout/secure-layout.module";
+import { RegistrationModule } from "./features/registration/registration.module";
 
 @NgModule({
   declarations: [AppComponent],
@@ -24,6 +25,7 @@ import { SecureLayoutModule } from "./layout/secure-layout/secure-layout.module"
     HttpClientModule,
     DynamicFormModule,
     ChartsModule,
+    RegistrationModule,
   ],
   providers: [AmplifyService],
   bootstrap: [AppComponent],

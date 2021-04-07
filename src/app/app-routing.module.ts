@@ -2,6 +2,7 @@ import { PortalComponent } from "./features/portal/components/portal.component";
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule, PreloadAllModules } from "@angular/router";
 import { AuthGuard } from "./core/guards/auth.guard";
+import { RegistrationComponent } from "./features/registration/components/registration.component";
 
 const routes: Routes = [
   {
@@ -22,6 +23,12 @@ const routes: Routes = [
       ),
     canActivate: [AuthGuard],
     data: { title: "workbench" },
+  },
+  {
+    path: "registration",
+    component: RegistrationComponent,
+    canActivate: [AuthGuard],
+    data: { title: "Registration" },
   },
 ];
 
