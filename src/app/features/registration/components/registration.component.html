@@ -11,32 +11,64 @@
           <ng-template matStepLabel
             >Tell us about your Apple Search Ads Account</ng-template
           >
-          <div class="w-100 mt-2">
-            <mat-form-field appearance="fill" color="accent" class="col-6">
-              <mat-label>Client Id</mat-label>
-              <input matInput placeholder="client id" required />
-            </mat-form-field>
-          </div>
+          <div class="w-100 mt-2 d-flex flex-row">
+            <div class="col-6">
+              <mat-form-field appearance="fill" color="accent" class="w-100">
+                <mat-label>Client Id</mat-label>
+                <input matInput placeholder="client id" required />
+              </mat-form-field>
 
-          <div class="w-100">
-            <mat-form-field appearance="fill" color="accent" class="col-6">
-              <mat-label>Client Secret</mat-label>
-              <input matInput placeholder="client secret" required />
-            </mat-form-field>
-          </div>
+              <mat-form-field appearance="fill" color="accent" class="w-100">
+                <mat-label>Client Secret</mat-label>
+                <input matInput placeholder="client secret" required />
+              </mat-form-field>
 
-          <div class="w-100">
-            <mat-form-field appearance="fill" color="accent" class="col-6">
-              <mat-label>Username</mat-label>
-              <input matInput placeholder="user name" required />
-            </mat-form-field>
-          </div>
+              <mat-form-field appearance="fill" color="accent" class="w-100">
+                <mat-label>Username</mat-label>
+                <input matInput placeholder="user name" required />
+              </mat-form-field>
 
-          <div class="w-100">
-            <mat-form-field appearance="fill" color="accent" class="col-6">
-              <mat-label>Password</mat-label>
-              <input matInput placeholder="password" required />
-            </mat-form-field>
+              <mat-form-field appearance="fill" color="accent" class="w-100">
+                <mat-label>Password</mat-label>
+                <input matInput placeholder="password" required />
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" color="accent" class="w-100">
+                <mat-label>Organization Id</mat-label>
+                <input matInput placeholder="organization id" required />
+              </mat-form-field>
+            </div>
+
+            <div class="col-6">
+              <mat-list>
+                <mat-list-item>
+                  <mat-icon color="accent" class="align-text-top mr-2"
+                    >done</mat-icon
+                  >
+                  <mat-label
+                    >We need to gather some details about your Apple Search Ads
+                    account, this allows our system to optimize bids for you
+                  </mat-label>
+                </mat-list-item>
+                <mat-list-item>
+                  <mat-icon color="accent" class="align-text-top mr-2"
+                    >done</mat-icon
+                  >
+                  <mat-label>
+                    Hover over fields for more information
+                  </mat-label>
+                </mat-list-item>
+                <mat-list-item>
+                  <mat-icon color="accent" class="align-text-top mr-2"
+                    >done</mat-icon
+                  >
+                  <mat-label>
+                    More on this later, we'll get your campaign strategies on
+                    the next step!
+                  </mat-label>
+                </mat-list-item>
+              </mat-list>
+            </div>
           </div>
 
           <button
