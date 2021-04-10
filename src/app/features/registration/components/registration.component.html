@@ -11,7 +11,7 @@
           <ng-template matStepLabel
             >Tell us about your Apple Search Ads Account</ng-template
           >
-          <div class="w-100">
+          <div class="w-100 mt-2">
             <mat-form-field appearance="fill" color="accent" class="col-6">
               <mat-label>Client Id</mat-label>
               <input matInput placeholder="client id" required />
@@ -52,19 +52,38 @@
       </mat-step>
       <mat-step>
         <ng-template matStepLabel>Create and Import your campaigns</ng-template>
-        <!-- <mat-form-field>
-          <mat-label>Address</mat-label>
-          <input
-            matInput
-            formControlName="secondCtrl"
-            placeholder="Ex. 1 Main St, New York, NY"
-            required
-          />
-        </mat-form-field> -->
-        <div>
-          <!-- <button mat-button matStepperPrevious>Back</button>
-          <button mat-button matStepperNext>Next</button> -->
 
+        <!-- TODO create or import -->
+
+        <!-- Select app, select country-->
+        <div class="w-100 mt-2">
+          <mat-form-field class="col-6" appearance="fill" color="accent">
+            <mat-select>
+              <ng-container *ngFor="let app of apps">
+                <mat-option value="standard">{{ app }}</mat-option>
+              </ng-container>
+            </mat-select>
+            <mat-label>&nbsp;Select Application</mat-label>
+          </mat-form-field>
+        </div>
+
+        <div class="w-100 mt-2">
+          <mat-form-field class="col-6" appearance="fill" color="accent">
+            <mat-select>
+              <ng-container *ngFor="let country of countries">
+                <mat-option value="standard">{{ country }}</mat-option>
+              </ng-container>
+            </mat-select>
+            <mat-label>Select Country</mat-label>
+          </mat-form-field>
+        </div>
+
+        <!-- Objective, CPI, -->
+
+        <!-- post-install -->
+
+        <!-- button panel-->
+        <div>
           <button
             mat-flat-button
             matStepperPrevious
