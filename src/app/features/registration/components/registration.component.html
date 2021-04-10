@@ -88,37 +88,93 @@
         <!-- TODO create or import -->
 
         <!-- Select app, select country-->
-        <div class="w-100 mt-2">
-          <mat-form-field class="col-6" appearance="fill" color="accent">
-            <mat-select>
-              <ng-container *ngFor="let app of apps">
-                <mat-option value="standard">{{ app }}</mat-option>
-              </ng-container>
-            </mat-select>
-            <mat-label>&nbsp;Select Application</mat-label>
-          </mat-form-field>
-        </div>
+        <div class="w-100 mt-2" *ngIf="isOrdinalActive(1)">
+          <div class="col-6">
+            <mat-form-field class="w-100" appearance="fill" color="accent">
+              <mat-select>
+                <ng-container *ngFor="let app of apps">
+                  <mat-option value="standard">{{ app }}</mat-option>
+                </ng-container>
+              </mat-select>
+              <mat-label>&nbsp;Select Application</mat-label>
+            </mat-form-field>
 
-        <div class="w-100 mt-2">
-          <mat-form-field class="col-6" appearance="fill" color="accent">
-            <mat-select>
-              <ng-container *ngFor="let country of countries">
-                <mat-option value="standard">{{ country }}</mat-option>
-              </ng-container>
-            </mat-select>
-            <mat-label>Select Country</mat-label>
-          </mat-form-field>
+            <mat-form-field class="w-100" appearance="fill" color="accent">
+              <mat-select>
+                <ng-container *ngFor="let country of countries">
+                  <mat-option value="standard">{{ country }}</mat-option>
+                </ng-container>
+              </mat-select>
+              <mat-label>Select Country</mat-label>
+            </mat-form-field>
+          </div>
+
+          <button
+            mat-flat-button
+            matStepperPrevious
+            class="float-left ml-2 border rounded"
+          >
+            <span class="pl-1">back</span>
+          </button>
+          <button
+            mat-flat-button
+            color="accent"
+            class="float-left ml-2"
+            (click)="submitStep(1)"
+          >
+            <mat-icon class="text-light" aria-label="submit">done</mat-icon>
+            <span class="text-light pl-1">next</span>
+          </button>
         </div>
 
         <!-- Objective, CPI, -->
 
+        <div class="w-100 mt-2" *ngIf="isOrdinalActive(2)">
+          <div class="col-6">
+            <mat-form-field class="w-100" appearance="fill" color="accent">
+              <mat-select>
+                <ng-container *ngFor="let app of apps">
+                  <mat-option value="standard">{{ app }}</mat-option>
+                </ng-container>
+              </mat-select>
+              <mat-label>&nbsp;Select Application</mat-label>
+            </mat-form-field>
+
+            <mat-form-field class="w-100" appearance="fill" color="accent">
+              <mat-select>
+                <ng-container *ngFor="let country of countries">
+                  <mat-option value="standard">{{ country }}</mat-option>
+                </ng-container>
+              </mat-select>
+              <mat-label>Select Country</mat-label>
+            </mat-form-field>
+          </div>
+
+          <button
+            mat-flat-button
+            (click)="goBack(2)"
+            class="float-left ml-2 border rounded"
+          >
+            <span class="pl-1">back</span>
+          </button>
+          <button
+            mat-flat-button
+            color="accent"
+            class="float-left ml-2"
+            (click)="submitStep(2)"
+          >
+            <mat-icon class="text-light" aria-label="submit">done</mat-icon>
+            <span class="text-light pl-1">next</span>
+          </button>
+        </div>
+
         <!-- post-install -->
 
         <!-- button panel-->
-        <div>
+        <div *ngIf="isOrdinalActive(3)">
           <button
             mat-flat-button
-            matStepperPrevious
+            (click)="goBack(3)"
             class="float-left ml-2 border rounded"
           >
             <span class="pl-1">back</span>
