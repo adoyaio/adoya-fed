@@ -13,6 +13,7 @@ export class RegistrationComponent implements OnInit {
     { ordinal: 1, complete: false, active: true },
     { ordinal: 2, complete: false, active: false },
     { ordinal: 3, complete: false, active: false },
+    { ordinal: 4, complete: false, active: false },
   ];
   constructor() {}
 
