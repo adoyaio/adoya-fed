@@ -15,7 +15,16 @@ import { UserAccountService } from "src/app/core/services/user-account.service";
 })
 export class RegistrationComponent implements OnInit {
   countries = ["United States", "Canada", "Japan"];
-  apps = ["App ABC", "App ABC", "App ABC"]; // TODO load from api
+  apps = ["Acme", "Beta", "Delta"]; // TODO load from api
+  campaigns = [
+    "Acme - US - Discovery - Broad Match",
+    "Acme - US - Discovery - Exact Match",
+    "Acme - US - Discovery - Search Match",
+    "Acme - US - Competitor - Exact Match",
+    "Acme - US - Non-Brand - Exact Match",
+    "Acme - US - Brand - Exact Match",
+  ]; // TODO load from api
+
   step2: any[] = [
     {
       ordinal: 1,
