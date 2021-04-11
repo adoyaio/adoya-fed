@@ -87,7 +87,7 @@
 
         <!-- TODO create or import -->
 
-        <!-- 1) Select app, select country-->
+        <!-- 2.1 Select app, select country-->
         <div class="w-100 mt-2" *ngIf="isOrdinalActive(1)">
           <div class="col-6">
             <mat-form-field class="w-100" appearance="fill" color="accent">
@@ -127,9 +127,10 @@
           </button>
         </div>
 
-        <!-- 2) Objective, CPI, Ordinal -->
+        <!-- 2.2 Objective, CPI -->
         <div class="w-100 mt-2" *ngIf="isOrdinalActive(2)">
           <div class="col-6">
+            <!-- objective -->
             <mat-form-field
               appearance="fill"
               [hideRequiredMarker]="false"
@@ -159,7 +160,7 @@
               >
             </mat-form-field>
 
-            <!--- Max CPI -->
+            <!--- max cpi  -->
             <mat-form-field
               matTooltip="Target Cost Per Install: &#13;  Enter the most you’re willing to spend for an install. &#13; &#13; Be realistic. Setting target too low will severely restrict your volume.  &#13; &#13; Keep changes +/- 20% of the previous value (if applicable). This prevents volatility. &#13; &#13; Also, try to allow for 7 days of performance before making adjustments."
               appearance="fill"
@@ -198,7 +199,7 @@
           </button>
         </div>
 
-        <!-- 3) budget -->
+        <!-- 2.3 budget -->
         <div class="w-100 mt-2" *ngIf="isOrdinalActive(3)">
           <div class="col-6">
             <!--- daily Budget -->
@@ -250,28 +251,241 @@
           </button>
         </div>
 
-        <!-- 4) post-install/optional -->
+        <!-- 2.4 competitors and brands -->
+        <div class="w-100 mt-2" *ngIf="isOrdinalActive(4)">
+          <div class="col-6">
+            <mat-form-field
+              appearance="outline"
+              class="w-100"
+              color="accent"
+              matTooltip="Many app store searches are branded. &#13; &#13; Therefore, we reccomend you bid on most, if not all, competitor terms. &#13; Try to include competitor name variants, acronyms and synonyms. &#13; &#13; You should also use top-performing keywords from your existing Apple Search Ads campaigns."
+            >
+              <mat-label>List your competitor's names</mat-label>
+              <textarea matInput> </textarea>
+            </mat-form-field>
+            <mat-form-field
+              appearance="outline"
+              class="w-100"
+              color="accent"
+              matTooltip="Try to keep the phrases between 1-4 words. &#13; &#13; Example: &#13; Say you have an automotive app. use terms like: automotive, car, automotive app, car app, etc. &#13; Do NOT include your brand name. You'll include that on the step below. &#13; &#13; You should also use top-performing keywords from your existing Apple Search Ads campaigns."
+            >
+              <mat-label
+                >List words and phrases that best describe your app and
+                business</mat-label
+              >
+              <textarea matInput> </textarea>
+            </mat-form-field>
 
-        <!-- button panel-->
-        <div *ngIf="isOrdinalActive(4)">
-          <button
-            mat-flat-button
-            (click)="goBack(4)"
-            class="float-left ml-2 border rounded"
-          >
-            <span class="pl-1">back</span>
-          </button>
-          <button
-            mat-flat-button
-            matStepperNext
-            color="accent"
-            class="float-left ml-2"
-          >
-            <mat-icon class="text-light" aria-label="submit">done</mat-icon>
-            <span class="text-light pl-1">next</span>
-          </button>
+            <mat-form-field
+              appearance="outline"
+              class="w-100"
+              color="accent"
+              matTooltip="List variants of your brand name. &#13; &#13; Tip: Keep each phrase between 1-4 words. example: &#13; Let's say your brand is acme. Include phrases ike ACME, ACME App, and Download Acme App. &#13; &#13; You should also use top-performing keywords from your existing Apple Search Ads campaigns."
+            >
+              <mat-label
+                >List words and phrases that best describe your brand</mat-label
+              >
+              <textarea matInput> </textarea>
+            </mat-form-field>
+            <button
+              mat-flat-button
+              (click)="goBack(4)"
+              class="float-left ml-2 border rounded"
+            >
+              <span class="pl-1">back</span>
+            </button>
+            <button
+              mat-flat-button
+              color="accent"
+              class="float-left ml-2"
+              (click)="submitStep(4)"
+            >
+              <mat-icon class="text-light" aria-label="submit">done</mat-icon>
+              <span class="text-light pl-1">next</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 2.5 genders and age groups -->
+        <div class="w-100 mt-2" *ngIf="isOrdinalActive(5)">
+          <div class="col-6">
+            <mat-form-field appearance="fill" class="w-100">
+              <mat-select class="p-1">
+                <mat-option value="all">All (recommended)</mat-option>
+                <mat-option value="female">Female</mat-option>
+                <mat-option value="male">Male</mat-option>
+              </mat-select>
+              <mat-label
+                ><mat-icon>settings</mat-icon>&nbsp;Which gender's do you want
+                to target?</mat-label
+              >
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="w-100">
+              <mat-select class="p-1">
+                <mat-option value="all">All (recommended)</mat-option>
+                <mat-option value="18">18 +</mat-option>
+                <mat-option value="21">21 +</mat-option>
+              </mat-select>
+              <mat-label
+                ><mat-icon>settings</mat-icon>&nbsp;What's your app's minimum
+                age requirement?</mat-label
+              >
+            </mat-form-field>
+            <button
+              mat-flat-button
+              (click)="goBack(5)"
+              class="float-left ml-2 border rounded"
+            >
+              <span class="pl-1">back</span>
+            </button>
+            <button
+              mat-flat-button
+              color="accent"
+              class="float-left ml-2"
+              (click)="submitStep(5)"
+            >
+              <mat-icon class="text-light" aria-label="submit">done</mat-icon>
+              <span class="text-light pl-1">next</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 2.6 post-install/optional -->
+        <div class="w-100 mt-2" *ngIf="isOrdinalActive(6)">
+          <form [formGroup]="branchForm">
+            <div class="col-6">
+              <div
+                class="mb-2"
+                matTooltip="When enabling this feature, Adoya will use your MMP data when making bid adjustments. Reach out to us via Adoya Support for more information."
+              >
+                <mat-checkbox
+                  formControlName="branchBidAdjusterEnabled"
+                  (change)="handleBranchCheckboxChange($event)"
+                >
+                  Enable Bid Optimizations For Post-Install Events (optional)
+                </mat-checkbox>
+              </div>
+
+              <!-- MMP Objective -->
+              <mat-form-field
+                appearance="fill"
+                class="w-100"
+                matTooltip="MMP Objective: &#13; Use this option if you want our system to also optimize for in-app purchases. &#13; &#13; This will be a secondary objective as our system optimizes primarily for cost per install. &#13; &#13; If you have MMP enabled, we strongly recommend you select either Cost Per Purchase or Return On Ad Spend (ROAS). &#13; &#13; Mouse over options for more detailed information on each strategy."
+              >
+                <mat-select formControlName="mmpObjective" class="p-1">
+                  <mat-option
+                    matTooltip="Cost Per Purchase: &#13;  Use this option if you’re looking to acquire/retain paying customers and less focused on the revenue amount. &#13; &#13; This option works best if you’re taking a longer-term strategy with a focus on customer lifetime value (LTV)."
+                    value="cost_per_purchase"
+                    >Cost Per Purchase</mat-option
+                  >
+                  <mat-option
+                    matTooltip="Return On Ad Spend (ROAS): &#13;  Use this option if you’re looking to generate immediate revenue. &#13; &#13; ROAS is calculated by dividing revenue by cost."
+                    value="revenue_over_ad_spend"
+                    >Revenue/Cost</mat-option
+                  >
+                </mat-select>
+                <mat-label
+                  ><mat-icon>settings</mat-icon>&nbsp;MMP Optimization
+                  Objective</mat-label
+                >
+              </mat-form-field>
+
+              <!-- Target Cost Per Purchase -->
+              <mat-form-field appearance="fill" class="w-100">
+                <mat-label>
+                  <mat-icon>attach_money</mat-icon>&nbsp;Target Cost Per
+                  Purchase
+                </mat-label>
+                <input
+                  class="p-1"
+                  formControlName="cpp"
+                  matInput
+                  type="number"
+                  placeholder="Target Cost Per Purchase"
+                  matTooltip="Enter the most you’re willing to spend for a purchase. &#13; &#13; Be realistic. Setting a target too low will severely restrict your volume. &#13; &#13; Keep changes within +/- 20% of the previous value (if applicable). This prevents volatility. Also, try to allow for 7 days of performance before making adjustments. &#13; &#13;
+                  Important: This factors in mobile measurement partner (MMP) data. &#13; &#13; Apple limits data passed through MMPs due to their privacy policies. Therefore, MMP data is often understated. &#13; &#13; Sometimes by 20% or more. Factor in that 20% when using this option. &#13; &#13; For example, if your target cost per purchase is $10, give it a 20% buffer and set the target to $12."
+                />
+                <mat-error>
+                  Must enter a number between .1 and 1,000
+                </mat-error>
+              </mat-form-field>
+
+              <!-- Return on Ad spend -->
+              <mat-form-field appearance="fill" class="w-100">
+                <mat-label
+                  ><mat-icon>attach_money</mat-icon>&nbsp;Target Return On Ad
+                  Spend</mat-label
+                >
+                <input
+                  class="p-1"
+                  formControlName="roas"
+                  matInput
+                  type="number"
+                  placeholder="Target Return On Ad Spend"
+                  matTooltip="Enter your target ROAS. ROAS formula = revenue / cost. &#13; &#13; Be realistic. Setting a target too high will severely restrict your volume. &#13; &#13; Keep changes within +/- 20% of the previous value (if applicable). This prevents volatility. &#13; &#13; Also, try to allow for 7 days of performance before making adjustments. &#13; &#13;
+                  Important: This factors in mobile measurement partner (MMP) data. &#13; &#13; Apple limits data passed through MMPs due to their privacy policies. Therefore, MMP data is often understated. &#13; &#13; Sometimes by 20% or more. Factor in that 20% when using this option. &#13; &#13; For example, if your target ROAS is $2.00, give it a 20% discount and set it to $1.60. Formula for ROAS discount = (100% - 20%) x ROAS target."
+                />
+                <mat-error>
+                  Must enter a number between .1 and 1,000
+                </mat-error>
+              </mat-form-field>
+
+              <!-- branch -->
+              <mat-card-subtitle class="mt-2 mb-2">
+                Branch Integration Parameters
+              </mat-card-subtitle>
+
+              <!-- branch key -->
+              <mat-form-field appearance="fill" class="w-100 mb-1">
+                <mat-label> Branch Key </mat-label>
+                <input
+                  class="p-1"
+                  formControlName="branchKey"
+                  matInput
+                  type="text"
+                  placeholder=""
+                />
+              </mat-form-field>
+
+              <!-- branch secret -->
+              <mat-form-field appearance="fill" class="w-100 mb-1">
+                <mat-label> Branch Secret </mat-label>
+                <input
+                  class="p-1"
+                  formControlName="branchSecret"
+                  matInput
+                  type="text"
+                  placeholder=""
+                />
+              </mat-form-field>
+
+              <!-- button panel-->
+              <div *ngIf="isOrdinalActive(6)">
+                <button
+                  mat-flat-button
+                  (click)="goBack(6)"
+                  class="float-left ml-2 border rounded"
+                >
+                  <span class="pl-1">back</span>
+                </button>
+                <button
+                  mat-flat-button
+                  matStepperNext
+                  color="accent"
+                  class="float-left ml-2"
+                >
+                  <mat-icon class="text-light" aria-label="submit"
+                    >done</mat-icon
+                  >
+                  <span class="text-light pl-1">next</span>
+                </button>
+              </div>
+            </div>
+          </form>
         </div>
       </mat-step>
+
       <mat-step>
         <ng-template matStepLabel>Done</ng-template>
         <p>You are now done.</p>
