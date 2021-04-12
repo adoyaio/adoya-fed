@@ -6,83 +6,111 @@
   </div>
   <div class="row">
     <mat-vertical-stepper [linear]="true" #stepper>
-      <mat-step>
-        <div class="row">
-          <ng-template matStepLabel
-            >Tell us about your Apple Search Ads Account</ng-template
-          >
-          <div class="w-100 mt-2 d-flex flex-row">
-            <div class="col-6">
-              <mat-form-field appearance="fill" color="accent" class="w-100">
-                <mat-label>Client Id</mat-label>
-                <input matInput placeholder="client id" required />
-              </mat-form-field>
+      <mat-step [stepControl]="step1Form">
+        <form [formGroup]="step1Form">
+          <div class="row">
+            <ng-template matStepLabel
+              >Tell us about your Apple Search Ads Account</ng-template
+            >
+            <div class="w-100 mt-2 d-flex flex-row">
+              <div class="col-6">
+                <mat-form-field appearance="fill" color="accent" class="w-100">
+                  <mat-label>Client Id</mat-label>
+                  <input
+                    matInput
+                    placeholder="client id"
+                    required
+                    formControlName="clientId"
+                  />
+                </mat-form-field>
 
-              <mat-form-field appearance="fill" color="accent" class="w-100">
-                <mat-label>Client Secret</mat-label>
-                <input matInput placeholder="client secret" required />
-              </mat-form-field>
+                <mat-form-field appearance="fill" color="accent" class="w-100">
+                  <mat-label>Client Secret</mat-label>
+                  <input
+                    matInput
+                    placeholder="client secret"
+                    required
+                    formControlName="clientSecret"
+                  />
+                </mat-form-field>
 
-              <mat-form-field appearance="fill" color="accent" class="w-100">
-                <mat-label>Username</mat-label>
-                <input matInput placeholder="user name" required />
-              </mat-form-field>
+                <mat-form-field appearance="fill" color="accent" class="w-100">
+                  <mat-label>OAuth Username</mat-label>
+                  <input
+                    matInput
+                    placeholder="user name"
+                    required
+                    formControlName="oauthUsername"
+                  />
+                </mat-form-field>
 
-              <mat-form-field appearance="fill" color="accent" class="w-100">
-                <mat-label>Password</mat-label>
-                <input matInput placeholder="password" required />
-              </mat-form-field>
+                <mat-form-field appearance="fill" color="accent" class="w-100">
+                  <mat-label>OAuth Password</mat-label>
+                  <input
+                    matInput
+                    placeholder="password"
+                    required
+                    formControlName="oauthPassword"
+                  />
+                </mat-form-field>
 
-              <mat-form-field appearance="fill" color="accent" class="w-100">
-                <mat-label>Organization Id</mat-label>
-                <input matInput placeholder="organization id" required />
-              </mat-form-field>
+                <mat-form-field appearance="fill" color="accent" class="w-100">
+                  <mat-label>Organization Id</mat-label>
+                  <input
+                    matInput
+                    placeholder="organization id"
+                    required
+                    formControlName="orgId"
+                  />
+                </mat-form-field>
+              </div>
+
+              <div class="col-6">
+                <mat-list>
+                  <mat-list-item>
+                    <mat-icon color="accent" class="align-text-top mr-2"
+                      >done</mat-icon
+                    >
+                    <mat-label
+                      >We need to gather some details about your Apple Search
+                      Ads account, this allows our system to optimize bids for
+                      you
+                    </mat-label>
+                  </mat-list-item>
+                  <mat-list-item>
+                    <mat-icon color="accent" class="align-text-top mr-2"
+                      >done</mat-icon
+                    >
+                    <mat-label>
+                      Hover over fields for more information
+                    </mat-label>
+                  </mat-list-item>
+                  <mat-list-item>
+                    <mat-icon color="accent" class="align-text-top mr-2"
+                      >done</mat-icon
+                    >
+                    <mat-label>
+                      More on this later, we'll get your campaign strategies on
+                      the next step!
+                    </mat-label>
+                  </mat-list-item>
+                </mat-list>
+              </div>
             </div>
 
-            <div class="col-6">
-              <mat-list>
-                <mat-list-item>
-                  <mat-icon color="accent" class="align-text-top mr-2"
-                    >done</mat-icon
-                  >
-                  <mat-label
-                    >We need to gather some details about your Apple Search Ads
-                    account, this allows our system to optimize bids for you
-                  </mat-label>
-                </mat-list-item>
-                <mat-list-item>
-                  <mat-icon color="accent" class="align-text-top mr-2"
-                    >done</mat-icon
-                  >
-                  <mat-label>
-                    Hover over fields for more information
-                  </mat-label>
-                </mat-list-item>
-                <mat-list-item>
-                  <mat-icon color="accent" class="align-text-top mr-2"
-                    >done</mat-icon
-                  >
-                  <mat-label>
-                    More on this later, we'll get your campaign strategies on
-                    the next step!
-                  </mat-label>
-                </mat-list-item>
-              </mat-list>
-            </div>
+            <button
+              mat-flat-button
+              matStepperNext
+              color="accent"
+              class="float-left ml-3"
+            >
+              <mat-icon class="text-light" aria-label="submit">done</mat-icon>
+              <span class="text-light pl-1">next</span>
+            </button>
           </div>
-
-          <button
-            mat-flat-button
-            matStepperNext
-            color="accent"
-            class="float-left ml-3"
-          >
-            <mat-icon class="text-light" aria-label="submit">done</mat-icon>
-            <span class="text-light pl-1">next</span>
-          </button>
-        </div>
+        </form>
       </mat-step>
-      <mat-step>
+      <mat-step [formGroup]="step2Form">
         <ng-template matStepLabel>Create and Import your campaigns</ng-template>
 
         <!-- TODO create or import -->
@@ -371,136 +399,127 @@
 
         <!-- 2.6 post-install/optional -->
         <div class="w-100 mt-2" *ngIf="isOrdinalActive(6)">
-          <form [formGroup]="branchForm">
-            <div class="col-6">
-              <div
-                class="mb-2"
-                matTooltip="When enabling this feature, Adoya will use your MMP data when making bid adjustments. Reach out to us via Adoya Support for more information."
+          <div class="col-6">
+            <div
+              class="mb-2"
+              matTooltip="When enabling this feature, Adoya will use your MMP data when making bid adjustments. Reach out to us via Adoya Support for more information."
+            >
+              <mat-checkbox
+                formControlName="branchBidAdjusterEnabled"
+                (change)="handleBranchCheckboxChange($event)"
               >
-                <mat-checkbox
-                  formControlName="branchBidAdjusterEnabled"
-                  (change)="handleBranchCheckboxChange($event)"
-                >
-                  Enable Bid Optimizations For Post-Install Events (optional)
-                </mat-checkbox>
-              </div>
-
-              <!-- MMP Objective -->
-              <mat-form-field
-                appearance="fill"
-                class="w-100"
-                matTooltip="MMP Objective: &#13; Use this option if you want our system to also optimize for in-app purchases. &#13; &#13; This will be a secondary objective as our system optimizes primarily for cost per install. &#13; &#13; If you have MMP enabled, we strongly recommend you select either Cost Per Purchase or Return On Ad Spend (ROAS). &#13; &#13; Mouse over options for more detailed information on each strategy."
-              >
-                <mat-select formControlName="mmpObjective" class="p-1">
-                  <mat-option
-                    matTooltip="Cost Per Purchase: &#13;  Use this option if you’re looking to acquire/retain paying customers and less focused on the revenue amount. &#13; &#13; This option works best if you’re taking a longer-term strategy with a focus on customer lifetime value (LTV)."
-                    value="cost_per_purchase"
-                    >Cost Per Purchase</mat-option
-                  >
-                  <mat-option
-                    matTooltip="Return On Ad Spend (ROAS): &#13;  Use this option if you’re looking to generate immediate revenue. &#13; &#13; ROAS is calculated by dividing revenue by cost."
-                    value="revenue_over_ad_spend"
-                    >Revenue/Cost</mat-option
-                  >
-                </mat-select>
-                <mat-label
-                  ><mat-icon>settings</mat-icon>&nbsp;MMP Optimization
-                  Objective</mat-label
-                >
-              </mat-form-field>
-
-              <!-- Target Cost Per Purchase -->
-              <mat-form-field appearance="fill" class="w-100">
-                <mat-label>
-                  <mat-icon>attach_money</mat-icon>&nbsp;Target Cost Per
-                  Purchase
-                </mat-label>
-                <input
-                  class="p-1"
-                  formControlName="cpp"
-                  matInput
-                  type="number"
-                  placeholder="Target Cost Per Purchase"
-                  matTooltip="Enter the most you’re willing to spend for a purchase. &#13; &#13; Be realistic. Setting a target too low will severely restrict your volume. &#13; &#13; Keep changes within +/- 20% of the previous value (if applicable). This prevents volatility. Also, try to allow for 7 days of performance before making adjustments. &#13; &#13;
-                  Important: This factors in mobile measurement partner (MMP) data. &#13; &#13; Apple limits data passed through MMPs due to their privacy policies. Therefore, MMP data is often understated. &#13; &#13; Sometimes by 20% or more. Factor in that 20% when using this option. &#13; &#13; For example, if your target cost per purchase is $10, give it a 20% buffer and set the target to $12."
-                />
-                <mat-error>
-                  Must enter a number between .1 and 1,000
-                </mat-error>
-              </mat-form-field>
-
-              <!-- Return on Ad spend -->
-              <mat-form-field appearance="fill" class="w-100">
-                <mat-label
-                  ><mat-icon>attach_money</mat-icon>&nbsp;Target Return On Ad
-                  Spend</mat-label
-                >
-                <input
-                  class="p-1"
-                  formControlName="roas"
-                  matInput
-                  type="number"
-                  placeholder="Target Return On Ad Spend"
-                  matTooltip="Enter your target ROAS. ROAS formula = revenue / cost. &#13; &#13; Be realistic. Setting a target too high will severely restrict your volume. &#13; &#13; Keep changes within +/- 20% of the previous value (if applicable). This prevents volatility. &#13; &#13; Also, try to allow for 7 days of performance before making adjustments. &#13; &#13;
-                  Important: This factors in mobile measurement partner (MMP) data. &#13; &#13; Apple limits data passed through MMPs due to their privacy policies. Therefore, MMP data is often understated. &#13; &#13; Sometimes by 20% or more. Factor in that 20% when using this option. &#13; &#13; For example, if your target ROAS is $2.00, give it a 20% discount and set it to $1.60. Formula for ROAS discount = (100% - 20%) x ROAS target."
-                />
-                <mat-error>
-                  Must enter a number between .1 and 1,000
-                </mat-error>
-              </mat-form-field>
-
-              <!-- branch -->
-              <mat-card-subtitle class="mt-2 mb-2">
-                Branch Integration Parameters
-              </mat-card-subtitle>
-
-              <!-- branch key -->
-              <mat-form-field appearance="fill" class="w-100 mb-1">
-                <mat-label> Branch Key </mat-label>
-                <input
-                  class="p-1"
-                  formControlName="branchKey"
-                  matInput
-                  type="text"
-                  placeholder=""
-                />
-              </mat-form-field>
-
-              <!-- branch secret -->
-              <mat-form-field appearance="fill" class="w-100 mb-1">
-                <mat-label> Branch Secret </mat-label>
-                <input
-                  class="p-1"
-                  formControlName="branchSecret"
-                  matInput
-                  type="text"
-                  placeholder=""
-                />
-              </mat-form-field>
-
-              <!-- button panel-->
-              <div *ngIf="isOrdinalActive(6)">
-                <button
-                  mat-flat-button
-                  (click)="goBack(6)"
-                  class="float-left ml-2 border rounded"
-                >
-                  <span class="pl-1">back</span>
-                </button>
-                <button
-                  mat-flat-button
-                  matStepperNext
-                  color="accent"
-                  class="float-left ml-2"
-                >
-                  <mat-icon class="text-light" aria-label="submit"
-                    >done</mat-icon
-                  >
-                  <span class="text-light pl-1">next</span>
-                </button>
-              </div>
+                Enable Bid Optimizations For Post-Install Events (optional)
+              </mat-checkbox>
             </div>
-          </form>
+
+            <!-- MMP Objective -->
+            <mat-form-field
+              appearance="fill"
+              class="w-100"
+              matTooltip="MMP Objective: &#13; Use this option if you want our system to also optimize for in-app purchases. &#13; &#13; This will be a secondary objective as our system optimizes primarily for cost per install. &#13; &#13; If you have MMP enabled, we strongly recommend you select either Cost Per Purchase or Return On Ad Spend (ROAS). &#13; &#13; Mouse over options for more detailed information on each strategy."
+            >
+              <mat-select formControlName="mmpObjective" class="p-1">
+                <mat-option
+                  matTooltip="Cost Per Purchase: &#13;  Use this option if you’re looking to acquire/retain paying customers and less focused on the revenue amount. &#13; &#13; This option works best if you’re taking a longer-term strategy with a focus on customer lifetime value (LTV)."
+                  value="cost_per_purchase"
+                  >Cost Per Purchase</mat-option
+                >
+                <mat-option
+                  matTooltip="Return On Ad Spend (ROAS): &#13;  Use this option if you’re looking to generate immediate revenue. &#13; &#13; ROAS is calculated by dividing revenue by cost."
+                  value="revenue_over_ad_spend"
+                  >Revenue/Cost</mat-option
+                >
+              </mat-select>
+              <mat-label
+                ><mat-icon>settings</mat-icon>&nbsp;MMP Optimization
+                Objective</mat-label
+              >
+            </mat-form-field>
+
+            <!-- Target Cost Per Purchase -->
+            <mat-form-field appearance="fill" class="w-100">
+              <mat-label>
+                <mat-icon>attach_money</mat-icon>&nbsp;Target Cost Per Purchase
+              </mat-label>
+              <input
+                class="p-1"
+                formControlName="cpp"
+                matInput
+                type="number"
+                placeholder="Target Cost Per Purchase"
+                matTooltip="Enter the most you’re willing to spend for a purchase. &#13; &#13; Be realistic. Setting a target too low will severely restrict your volume. &#13; &#13; Keep changes within +/- 20% of the previous value (if applicable). This prevents volatility. Also, try to allow for 7 days of performance before making adjustments. &#13; &#13;
+                  Important: This factors in mobile measurement partner (MMP) data. &#13; &#13; Apple limits data passed through MMPs due to their privacy policies. Therefore, MMP data is often understated. &#13; &#13; Sometimes by 20% or more. Factor in that 20% when using this option. &#13; &#13; For example, if your target cost per purchase is $10, give it a 20% buffer and set the target to $12."
+              />
+              <mat-error> Must enter a number between .1 and 1,000 </mat-error>
+            </mat-form-field>
+
+            <!-- Return on Ad spend -->
+            <mat-form-field appearance="fill" class="w-100">
+              <mat-label
+                ><mat-icon>attach_money</mat-icon>&nbsp;Target Return On Ad
+                Spend</mat-label
+              >
+              <input
+                class="p-1"
+                formControlName="roas"
+                matInput
+                type="number"
+                placeholder="Target Return On Ad Spend"
+                matTooltip="Enter your target ROAS. ROAS formula = revenue / cost. &#13; &#13; Be realistic. Setting a target too high will severely restrict your volume. &#13; &#13; Keep changes within +/- 20% of the previous value (if applicable). This prevents volatility. &#13; &#13; Also, try to allow for 7 days of performance before making adjustments. &#13; &#13;
+                  Important: This factors in mobile measurement partner (MMP) data. &#13; &#13; Apple limits data passed through MMPs due to their privacy policies. Therefore, MMP data is often understated. &#13; &#13; Sometimes by 20% or more. Factor in that 20% when using this option. &#13; &#13; For example, if your target ROAS is $2.00, give it a 20% discount and set it to $1.60. Formula for ROAS discount = (100% - 20%) x ROAS target."
+              />
+              <mat-error> Must enter a number between .1 and 1,000 </mat-error>
+            </mat-form-field>
+
+            <!-- branch -->
+            <mat-card-subtitle class="mt-2 mb-2">
+              Branch Integration Parameters
+            </mat-card-subtitle>
+
+            <!-- branch key -->
+            <mat-form-field appearance="fill" class="w-100 mb-1">
+              <mat-label> Branch Key </mat-label>
+              <input
+                class="p-1"
+                formControlName="branchKey"
+                matInput
+                type="text"
+                placeholder=""
+              />
+            </mat-form-field>
+
+            <!-- branch secret -->
+            <mat-form-field appearance="fill" class="w-100 mb-1">
+              <mat-label> Branch Secret </mat-label>
+              <input
+                class="p-1"
+                formControlName="branchSecret"
+                matInput
+                type="text"
+                placeholder=""
+              />
+            </mat-form-field>
+
+            <!-- button panel-->
+            <div *ngIf="isOrdinalActive(6)">
+              <button
+                mat-flat-button
+                (click)="goBack(6)"
+                class="float-left ml-2 border rounded"
+              >
+                <span class="pl-1">back</span>
+              </button>
+              <button
+                mat-flat-button
+                matStepperNext
+                color="accent"
+                class="float-left ml-2"
+              >
+                <mat-icon class="text-light" aria-label="submit">done</mat-icon>
+                <span class="text-light pl-1">next</span>
+              </button>
+            </div>
+          </div>
         </div>
       </mat-step>
 

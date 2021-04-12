@@ -72,11 +72,30 @@ export class RegistrationComponent implements OnInit {
     private snackBar: MatSnackBar
   ) {}
 
-  appleForm = this.fb.group({
+  // appleForm = this.fb.group({
+  //   objective: [""],
+  //   cpi: [""],
+  // });
+  // branchForm = this.fb.group({
+  //   mmpObjective: [""],
+  //   cpp: [""],
+  //   roas: [""],
+  //   branchBidAdjusterEnabled: false,
+  //   branchKey: [""],
+  //   branchSecret: [""],
+  // });
+
+  step1Form = this.fb.group({
+    clientId: [""],
+    clientSecret: [""],
+    oauthUsername: [""],
+    oauthPassword: [""],
+    orgId: [""],
+  });
+
+  step2Form = this.fb.group({
     objective: [""],
     cpi: [""],
-  });
-  branchForm = this.fb.group({
     mmpObjective: [""],
     cpp: [""],
     roas: [""],
