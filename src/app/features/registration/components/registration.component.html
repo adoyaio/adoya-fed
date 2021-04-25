@@ -29,7 +29,10 @@
                     />
                   </mat-form-field>
 
-                  <button mat-icon-button (click)="handleTooltipClick()">
+                  <button
+                    mat-icon-button
+                    (click)="handleTooltipClick('OAuth Client ID')"
+                  >
                     <mat-icon
                       class="float-right"
                       color="accent"
@@ -54,7 +57,10 @@
                     />
                   </mat-form-field>
 
-                  <button mat-icon-button (click)="handleTooltipClick()">
+                  <button
+                    mat-icon-button
+                    (click)="handleTooltipClick('OAuth Client Secret')"
+                  >
                     <mat-icon
                       class="float-right"
                       color="accent"
@@ -81,7 +87,10 @@
                     />
                   </mat-form-field>
 
-                  <button mat-icon-button (click)="handleTooltipClick()">
+                  <button
+                    mat-icon-button
+                    (click)="handleTooltipClick('OAuth Username')"
+                  >
                     <mat-icon
                       class="float-right"
                       color="accent"
@@ -108,7 +117,10 @@
                     />
                   </mat-form-field>
 
-                  <button mat-icon-button (click)="handleTooltipClick()">
+                  <button
+                    mat-icon-button
+                    (click)="handleTooltipClick('OAuth Client Password')"
+                  >
                     <mat-icon
                       class="float-right"
                       color="accent"
@@ -134,7 +146,12 @@
                       formControlName="orgId"
                     />
                   </mat-form-field>
-                  <button mat-icon-button (click)="handleTooltipClick()">
+                  <button
+                    mat-icon-button
+                    (click)="
+                      handleTooltipClick('Apple Search Ads Organiztion ID')
+                    "
+                  >
                     <mat-icon
                       class="float-right"
                       color="accent"
@@ -168,15 +185,6 @@
                       where to find these details in Apple Search Ads
                     </mat-label>
                   </mat-list-item>
-                  <!-- <mat-list-item class="mb-4">
-                    <mat-icon color="accent" class="align-text-top mr-2"
-                      >done</mat-icon
-                    >
-                    <mat-label>
-                      More on this later, we'll get your campaign strategies on
-                      the next step!
-                    </mat-label>
-                  </mat-list-item> -->
                 </mat-list>
               </div>
             </div>
@@ -208,62 +216,100 @@
             class="w-100 mt-2"
             *ngIf="isOrdinalActive(1)"
           >
-            <div class="col-6">
-              <div class="w-100 no-gutters">
-                <mat-form-field class="col-11" appearance="fill" color="accent">
-                  <mat-select formControlName="application">
-                    <ng-container *ngFor="let app of apps">
-                      <mat-option value="standard">{{ app }}</mat-option>
-                    </ng-container>
-                  </mat-select>
-                  <mat-label>&nbsp;Select Application </mat-label>
-                </mat-form-field>
+            <div class="w-100 row">
+              <!-- form -->
+              <div class="col-6">
+                <!-- field and icon -->
+                <div class="w-100 no-gutters">
+                  <mat-form-field
+                    class="col-11"
+                    appearance="fill"
+                    color="accent"
+                  >
+                    <mat-select formControlName="application">
+                      <ng-container *ngFor="let app of apps">
+                        <mat-option value="standard">{{ app }}</mat-option>
+                      </ng-container>
+                    </mat-select>
+                    <mat-label>&nbsp;Select Application </mat-label>
+                  </mat-form-field>
 
-                <mat-icon
-                  class="float-right"
-                  color="accent"
-                  matTooltip="Select the app you want to promote. &#13; &#13; If you have more than one app, you'll have a chance to create campaigns for those later."
-                  >help</mat-icon
-                >
+                  <mat-icon
+                    class="float-right"
+                    color="accent"
+                    matTooltip="Select the app you want to promote. &#13; &#13; If you have more than one app, you'll have a chance to create campaigns for those later."
+                    >help</mat-icon
+                  >
+                </div>
+
+                <!-- field and icon -->
+                <div class="w-100 no-gutters">
+                  <mat-form-field
+                    class="col-11"
+                    appearance="fill"
+                    color="accent"
+                  >
+                    <mat-select formControlName="country">
+                      <ng-container *ngFor="let country of countries">
+                        <mat-option value="standard">{{ country }}</mat-option>
+                      </ng-container>
+                    </mat-select>
+                    <mat-label>Select Country</mat-label>
+                  </mat-form-field>
+
+                  <mat-icon
+                    class="float-right"
+                    color="accent"
+                    matTooltip="Select the country where you want to promote your app. &#13; &#13; If you want to target additional countries, you'll have a chance to create country-specific campaigns later"
+                    >help</mat-icon
+                  >
+                </div>
               </div>
 
-              <div class="w-100 no-gutters">
-                <mat-form-field class="col-11" appearance="fill" color="accent">
-                  <mat-select formControlName="country">
-                    <ng-container *ngFor="let country of countries">
-                      <mat-option value="standard">{{ country }}</mat-option>
-                    </ng-container>
-                  </mat-select>
-                  <mat-label>Select Country</mat-label>
-                </mat-form-field>
-
-                <mat-icon
-                  class="float-right"
-                  color="accent"
-                  matTooltip="Select the country where you want to promote your app. &#13; &#13; If you want to target additional countries, you'll have a chance to create country-specific campaigns later"
-                  >help</mat-icon
-                >
+              <!-- explainer text -->
+              <div class="col-6">
+                <mat-list class="p-0 m-0">
+                  <mat-list-item class="mb-1">
+                    <mat-icon color="accent" class="align-text-top mr-2"
+                      >done</mat-icon
+                    >
+                    <mat-label
+                      >To create campaigns we need the country and app name
+                    </mat-label>
+                  </mat-list-item>
+                  <mat-list-item class="mb-1">
+                    <mat-icon color="accent" class="align-text-top mr-2"
+                      >done</mat-icon
+                    >
+                    <mat-label>
+                      Hover on the help icons for more information
+                    </mat-label>
+                  </mat-list-item>
+                </mat-list>
               </div>
             </div>
 
-            <button
-              mat-flat-button
-              matStepperPrevious
-              class="float-left ml-2 border rounded"
-            >
-              <span class="pl-1">back</span>
-            </button>
+            <!-- buttons -->
+            <div class="w-100 row">
+              <button
+                mat-flat-button
+                matStepperPrevious
+                class="float-left ml-2 border rounded"
+              >
+                <span class="pl-1">back</span>
+              </button>
 
-            <button
-              mat-flat-button
-              color="accent"
-              class="float-left ml-2"
-              (click)="submitStep(1)"
-              [disabled]="substepDisabled()"
-            >
-              <mat-icon class="text-light" aria-label="submit">done</mat-icon>
-              <span class="text-light pl-1">next</span>
-            </button>
+              <button
+                mat-flat-button
+                color="accent"
+                class="float-left ml-2"
+                (click)="submitStep(1)"
+                [disabled]="substepDisabled()"
+              >
+                <mat-icon class="text-light" aria-label="submit">done</mat-icon>
+                <span class="text-light pl-1">next</span>
+              </button>
+            </div>
           </div>
 
           <!-- 2.2 Objective, CPI -->
@@ -272,77 +318,134 @@
             class="w-100 mt-2"
             *ngIf="isOrdinalActive(2)"
           >
-            <div class="col-6">
-              <!-- objective -->
-              <mat-form-field
-                appearance="fill"
-                [hideRequiredMarker]="false"
-                class="w-100"
-                color="accent"
-                matTooltip="Objective: &#13; Determines how aggressive our system will bid to your cost per install target. &#13; &#13; We recommend allowing for 7 days of performance before changing your objective. &#13; &#13; Mouse over options for more detailed information on each strategy."
-              >
-                <mat-select formControlName="objective">
-                  <mat-option
-                    matTooltip="Standard: &#13; Finds a balance between growth and efficiency goals and is recommended for most advertisers."
-                    value="standard"
-                    >Standard</mat-option
+            <div class="w-100 row">
+              <!-- form -->
+              <div class="col-6">
+                <!-- field and icon -->
+                <div class="w-100 no-gutters">
+                  <!-- objective -->
+                  <mat-form-field
+                    appearance="fill"
+                    [hideRequiredMarker]="false"
+                    class="col-11"
+                    color="accent"
                   >
-                  <mat-option
-                    matTooltip="Growth: &#13; You’ll be more likely to spend your daily budget but could exceed your cost per install target."
-                    value="aggressive"
-                    >Growth</mat-option
-                  >
-                  <mat-option
-                    matTooltip="Efficiency: &#13;  You’re more likely to stay within your cost per install target but you may not hit your daily budget."
-                    value="conservative"
-                    >Efficiency</mat-option
-                  >
-                </mat-select>
-                <mat-label
-                  ><mat-icon>settings</mat-icon>&nbsp;Objective</mat-label
-                >
-              </mat-form-field>
+                    <mat-select formControlName="objective">
+                      <mat-option
+                        matTooltip="Standard: &#13; Finds a balance between growth and efficiency goals and is recommended for most advertisers."
+                        value="standard"
+                        >Standard</mat-option
+                      >
+                      <mat-option
+                        matTooltip="Growth: &#13; You’ll be more likely to spend your daily budget but could exceed your cost per install target."
+                        value="aggressive"
+                        >Growth</mat-option
+                      >
+                      <mat-option
+                        matTooltip="Efficiency: &#13;  You’re more likely to stay within your cost per install target but you may not hit your daily budget."
+                        value="conservative"
+                        >Efficiency</mat-option
+                      >
+                    </mat-select>
+                    <mat-label
+                      ><mat-icon>settings</mat-icon>&nbsp;Objective</mat-label
+                    >
+                  </mat-form-field>
 
-              <!--- max cpi  -->
-              <mat-form-field
-                matTooltip="Target Cost Per Install: &#13;  Enter the most you’re willing to spend for an install. &#13; &#13; Be realistic. Setting target too low will severely restrict your volume.  &#13; &#13; Keep changes +/- 20% of the previous value (if applicable). This prevents volatility. &#13; &#13; Also, try to allow for 7 days of performance before making adjustments."
-                appearance="fill"
-                class="w-100"
-                color="accent"
-              >
-                <mat-label
-                  ><mat-icon>attach_money</mat-icon>&nbsp;Target Cost Per
-                  Install</mat-label
+                  <mat-icon
+                    class="float-right"
+                    color="accent"
+                    matTooltip="Objective: &#13; Determines how aggressive our system will bid to your cost per install target. &#13; &#13; We recommend allowing for 7 days of performance before changing your objective. &#13; &#13; Mouse over options for more detailed information on each strategy."
+                    >help</mat-icon
+                  >
+                </div>
+
+                <!-- field and icon -->
+                <div class="w-100 no-gutters">
+                  <!--- max cpi  -->
+                  <mat-form-field
+                    appearance="fill"
+                    class="col-11"
+                    color="accent"
+                  >
+                    <mat-label
+                      ><mat-icon>attach_money</mat-icon>&nbsp;Target Cost Per
+                      Install</mat-label
+                    >
+                    <input
+                      matInput
+                      type="number"
+                      formControlName="cpi"
+                      placeholder="Target Cost Per Install"
+                    />
+                    <mat-error>
+                      Must enter a number between .1 and 1,000
+                    </mat-error>
+                  </mat-form-field>
+
+                  <mat-icon
+                    class="float-right"
+                    color="accent"
+                    matTooltip="Target Cost Per Install: &#13;  Enter the most you’re willing to spend for an install. &#13; &#13; Be realistic. Setting target too low will severely restrict your volume.  &#13; &#13; Keep changes +/- 20% of the previous value (if applicable). This prevents volatility. &#13; &#13; Also, try to allow for 7 days of performance before making adjustments."
+                    >help</mat-icon
+                  >
+                </div>
+              </div>
+
+              <!-- explainer text -->
+              <div class="col-6">
+                <mat-list class="p-0 m-0">
+                  <mat-list-item class="mb-1">
+                    <mat-icon color="accent" class="align-text-top mr-2"
+                      >done</mat-icon
+                    >
+                    <mat-label
+                      >Set your objective and target cost per install
+                    </mat-label>
+                  </mat-list-item>
+                  <mat-list-item class="mb-1">
+                    <mat-icon color="accent" class="align-text-top mr-2"
+                      >done</mat-icon
+                    >
+                    <mat-label>
+                      These values will determine the optimization strategy on
+                      this campaign
+                    </mat-label>
+                  </mat-list-item>
+                  <mat-list-item class="mb-1">
+                    <mat-icon color="accent" class="align-text-top mr-2"
+                      >done</mat-icon
+                    >
+                    <mat-label>
+                      Hover on the help icons for more information
+                    </mat-label>
+                  </mat-list-item>
+                </mat-list>
+              </div>
+
+              <!-- buttons -->
+              <div class="w-100 row">
+                <button
+                  mat-flat-button
+                  (click)="goBack(2)"
+                  class="float-left ml-2 border rounded"
                 >
-                <input
-                  matInput
-                  type="number"
-                  formControlName="cpi"
-                  placeholder="Target Cost Per Install"
-                />
-                <mat-error>
-                  Must enter a number between .1 and 1,000
-                </mat-error>
-              </mat-form-field>
+                  <span class="pl-1">back</span>
+                </button>
+                <button
+                  mat-flat-button
+                  color="accent"
+                  class="float-left ml-2"
+                  (click)="submitStep(2)"
+                  [disabled]="substepDisabled()"
+                >
+                  <mat-icon class="text-light" aria-label="submit"
+                    >done</mat-icon
+                  >
+                  <span class="text-light pl-1">next</span>
+                </button>
+              </div>
             </div>
-
-            <button
-              mat-flat-button
-              (click)="goBack(2)"
-              class="float-left ml-2 border rounded"
-            >
-              <span class="pl-1">back</span>
-            </button>
-            <button
-              mat-flat-button
-              color="accent"
-              class="float-left ml-2"
-              (click)="submitStep(2)"
-              [disabled]="substepDisabled()"
-            >
-              <mat-icon class="text-light" aria-label="submit">done</mat-icon>
-              <span class="text-light pl-1">next</span>
-            </button>
           </div>
 
           <!-- 2.3 budget -->
@@ -351,69 +454,118 @@
             class="w-100 mt-2"
             *ngIf="isOrdinalActive(3)"
           >
-            <div class="col-6">
-              <!--- daily Budget -->
-              <mat-form-field
-                matTooltip="Daily Budget Cap: &#13; Enter the amount you're willing to spend per day. &#13; &#13; You know your business so you should enter what you feel is best. But if you need a guide, we suggest the following approach: &#13; # of installs you want to get per day x maximum cost per install x 10-20% buffer. Let's say you're targeting 100 installs at a $2 maximum cost per install. Your budget should be $220-$240 (100 x $2 x 120%-140%). &#13; &#13; Don't worry! You can change your daily budget cap at any time."
-                appearance="fill"
-                class="w-100"
-                color="accent"
-              >
-                <mat-label
-                  ><mat-icon>attach_money</mat-icon>&nbsp;Daily Budget
-                  Cap</mat-label
-                >
-                <input
-                  formControlName="dailyBudget"
-                  matInput
-                  type="number"
-                  placeholder=""
-                />
-                <mat-error>
-                  Must enter a number between .1 and 1,000
-                </mat-error>
-              </mat-form-field>
+            <div class="w-100 row">
+              <!-- form -->
+              <div class="col-6">
+                <!-- field and icon -->
+                <div class="w-100 no-gutters">
+                  <!--- daily Budget -->
+                  <mat-form-field
+                    appearance="fill"
+                    class="col-11"
+                    color="accent"
+                  >
+                    <mat-label
+                      ><mat-icon>attach_money</mat-icon>&nbsp;Daily Budget
+                      Cap</mat-label
+                    >
+                    <input
+                      formControlName="dailyBudget"
+                      matInput
+                      type="number"
+                      placeholder=""
+                    />
+                    <mat-error>
+                      Must enter a number between .1 and 1,000
+                    </mat-error>
+                  </mat-form-field>
 
-              <!--- Lifetime Budget -->
-              <mat-form-field
-                matTooltip="Lifetime Budget: &#13; Enter the amount you're willing to spend for the life of your Apple Search Ads campaigns. When starting, set it sufficiently high enough so it can run for a total of 30 days. This gives the system enough data and time to optimize. A simple formula, take your daily budget and multiply it by 30. So if your daily budget is $100, your lifetime budget should be $3,000. &#13; &#13; After your campaign has been running for some time you should raise your lifetime budget significantly higher. &#13; &#13; Don't worry! You can change your lifetime budget cap at any time. &#13; &#13; IMPORTANT: Your lifetime budget must be higher than your daily budget cap."
-                appearance="fill"
-                class="w-100"
-                color="accent"
-              >
-                <mat-label
-                  ><mat-icon>attach_money</mat-icon>&nbsp;Lifetime Budget
-                  Cap</mat-label
+                  <mat-icon
+                    class="float-right"
+                    color="accent"
+                    matTooltip="Daily Budget Cap: &#13; Enter the amount you're willing to spend per day. &#13; &#13; You know your business so you should enter what you feel is best. But if you need a guide, we suggest the following approach: &#13; # of installs you want to get per day x maximum cost per install x 10-20% buffer. Let's say you're targeting 100 installs at a $2 maximum cost per install. Your budget should be $220-$240 (100 x $2 x 120%-140%). &#13; &#13; Don't worry! You can change your daily budget cap at any time."
+                    >help</mat-icon
+                  >
+                </div>
+
+                <!-- field and icon -->
+                <div class="w-100 no-gutters">
+                  <!--- Lifetime Budget -->
+                  <mat-form-field
+                    appearance="fill"
+                    class="col-11"
+                    color="accent"
+                  >
+                    <mat-label
+                      ><mat-icon>attach_money</mat-icon>&nbsp;Lifetime Budget
+                      Cap</mat-label
+                    >
+                    <input
+                      formControlName="lifetimeBudget"
+                      matInput
+                      type="number"
+                      placeholder=""
+                    />
+                    <mat-error>
+                      Must enter a number between .1 and 1,000
+                    </mat-error>
+                  </mat-form-field>
+
+                  <mat-icon
+                    class="float-right"
+                    color="accent"
+                    matTooltip="Lifetime Budget: &#13; Enter the amount you're willing to spend for the life of your Apple Search Ads campaigns. When starting, set it sufficiently high enough so it can run for a total of 30 days. This gives the system enough data and time to optimize. A simple formula, take your daily budget and multiply it by 30. So if your daily budget is $100, your lifetime budget should be $3,000. &#13; &#13; After your campaign has been running for some time you should raise your lifetime budget significantly higher. &#13; &#13; Don't worry! You can change your lifetime budget cap at any time. &#13; &#13; IMPORTANT: Your lifetime budget must be higher than your daily budget cap."
+                    >help</mat-icon
+                  >
+                </div>
+              </div>
+
+              <!-- explainer text -->
+              <div class="col-6">
+                <mat-list class="p-0 m-0">
+                  <mat-list-item class="mb-1">
+                    <mat-icon color="accent" class="align-text-top mr-2"
+                      >done</mat-icon
+                    >
+                    <mat-label
+                      >Enter the lifetime and daily budget amounts for this
+                      campaign
+                    </mat-label>
+                  </mat-list-item>
+                  <mat-list-item class="mb-1">
+                    <mat-icon color="accent" class="align-text-top mr-2"
+                      >done</mat-icon
+                    >
+                    <mat-label>
+                      Hover on the help icons for more information
+                    </mat-label>
+                  </mat-list-item>
+                </mat-list>
+              </div>
+
+              <!-- buttons -->
+              <div class="w-100 row">
+                <button
+                  mat-flat-button
+                  (click)="goBack(3)"
+                  class="float-left ml-2 border rounded"
                 >
-                <input
-                  formControlName="lifetimeBudget"
-                  matInput
-                  type="number"
-                  placeholder=""
-                />
-                <mat-error>
-                  Must enter a number between .1 and 1,000
-                </mat-error>
-              </mat-form-field>
+                  <span class="pl-1">back</span>
+                </button>
+                <button
+                  mat-flat-button
+                  color="accent"
+                  class="float-left ml-2"
+                  (click)="submitStep(3)"
+                  [disabled]="substepDisabled()"
+                >
+                  <mat-icon class="text-light" aria-label="submit"
+                    >done</mat-icon
+                  >
+                  <span class="text-light pl-1">next</span>
+                </button>
+              </div>
             </div>
-
-            <button
-              mat-flat-button
-              (click)="goBack(3)"
-              class="float-left ml-2 border rounded"
-            >
-              <span class="pl-1">back</span>
-            </button>
-            <button
-              mat-flat-button
-              color="accent"
-              class="float-left ml-2"
-              (click)="submitStep(3)"
-              [disabled]="substepDisabled()"
-            >
-              <mat-icon class="text-light" aria-label="submit">done</mat-icon>
-              <span class="text-light pl-1">next</span>
-            </button>
           </div>
 
           <!-- 2.4 competitors and brands -->

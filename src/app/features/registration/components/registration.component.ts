@@ -191,22 +191,15 @@ export class RegistrationComponent implements OnInit {
     return false;
   }
 
-  // stepDisabled(formName: string): boolean {
-  //   const formGroup: FormGroup = get(this, formName);
-  //   // console.log(JSON.stringify(formGroup));
-  //   return formGroup.invalid;
-  //   // return false;
-  // }
-
   get substep1(): any {
     return this.step2Form.get("substep1");
   }
 
-  handleTooltipClick() {
+  handleTooltipClick(field: string) {
     this.dialog
       .open(DynamicModalComponent, {
         data: {
-          title: "Title",
+          title: `Locate your ${field}`,
           content: "Content",
           actionYes: "Close",
           actionNo: "Close",
