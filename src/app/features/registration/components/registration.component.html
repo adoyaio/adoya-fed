@@ -290,7 +290,7 @@
             </div>
 
             <!-- buttons -->
-            <div class="w-100 row">
+            <div class="w-100 row ml-2">
               <button
                 mat-flat-button
                 matStepperPrevious
@@ -424,7 +424,7 @@
               </div>
 
               <!-- buttons -->
-              <div class="w-100 row">
+              <div class="w-100 row ml-2">
                 <button
                   mat-flat-button
                   (click)="goBack(2)"
@@ -544,7 +544,7 @@
               </div>
 
               <!-- buttons -->
-              <div class="w-100 row">
+              <div class="w-100 row ml-2">
                 <button
                   mat-flat-button
                   (click)="goBack(3)"
@@ -574,58 +574,97 @@
             class="w-100 mt-2"
             *ngIf="isOrdinalActive(4)"
           >
-            <div class="col-6">
-              <mat-form-field
-                appearance="outline"
-                class="w-100"
-                color="accent"
-                matTooltip="Many app store searches are branded. &#13; &#13; Therefore, we reccomend you bid on most, if not all, competitor terms. &#13; Try to include competitor name variants, acronyms and synonyms. &#13; &#13; You should also use top-performing keywords from your existing Apple Search Ads campaigns."
-              >
-                <mat-label>List your competitor's names</mat-label>
-                <textarea matInput formControlName="competitors"> </textarea>
-              </mat-form-field>
-              <mat-form-field
-                appearance="outline"
-                class="w-100"
-                color="accent"
-                matTooltip="Try to keep the phrases between 1-4 words. &#13; &#13; Example: &#13; Say you have an automotive app. use terms like: automotive, car, automotive app, car app, etc. &#13; Do NOT include your brand name. You'll include that on the step below. &#13; &#13; You should also use top-performing keywords from your existing Apple Search Ads campaigns."
-              >
-                <mat-label
-                  >List words and phrases that best describe your app and
-                  business</mat-label
-                >
-                <textarea matInput formControlName="phrases"> </textarea>
-              </mat-form-field>
+            <div class="w-100 row">
+              <!-- form -->
 
-              <mat-form-field
-                appearance="outline"
-                class="w-100"
-                color="accent"
-                matTooltip="List variants of your brand name. &#13; &#13; Tip: Keep each phrase between 1-4 words. example: &#13; Let's say your brand is acme. Include phrases ike ACME, ACME App, and Download Acme App. &#13; &#13; You should also use top-performing keywords from your existing Apple Search Ads campaigns."
-              >
-                <mat-label
-                  >List words and phrases that best describe your
-                  brand</mat-label
-                >
-                <textarea matInput formControlName="brand"> </textarea>
-              </mat-form-field>
-              <button
-                mat-flat-button
-                (click)="goBack(4)"
-                class="float-left ml-2 border rounded"
-              >
-                <span class="pl-1">back</span>
-              </button>
-              <button
-                mat-flat-button
-                color="accent"
-                class="float-left ml-2"
-                (click)="submitStep(4)"
-                [disabled]="substepDisabled()"
-              >
-                <mat-icon class="text-light" aria-label="submit">done</mat-icon>
-                <span class="text-light pl-1">next</span>
-              </button>
+              <div class="col-6">
+                <!-- field and icon -->
+                <div class="w-100 no-gutters">
+                  <mat-form-field
+                    appearance="outline"
+                    class="col-11"
+                    color="accent"
+                  >
+                    <mat-label>List your competitor's names</mat-label>
+                    <textarea matInput formControlName="competitors">
+                    </textarea>
+                  </mat-form-field>
+
+                  <mat-icon
+                    class="float-right"
+                    color="accent"
+                    matTooltip="Many app store searches are branded. &#13; &#13; Therefore, we reccomend you bid on most, if not all, competitor terms. &#13; Try to include competitor name variants, acronyms and synonyms. &#13; &#13; You should also use top-performing keywords from your existing Apple Search Ads campaigns."
+                    >help</mat-icon
+                  >
+                </div>
+
+                <!-- field and icon -->
+                <div class="w-100 no-gutters">
+                  <mat-form-field
+                    appearance="outline"
+                    class="col-11"
+                    color="accent"
+                  >
+                    <mat-label
+                      >List words and phrases that best describe your app and
+                      business</mat-label
+                    >
+                    <textarea matInput formControlName="phrases"> </textarea>
+                  </mat-form-field>
+
+                  <mat-icon
+                    class="float-right"
+                    color="accent"
+                    matTooltip="Try to keep the phrases between 1-4 words. &#13; &#13; Example: &#13; Say you have an automotive app. use terms like: automotive, car, automotive app, car app, etc. &#13; Do NOT include your brand name. You'll include that on the step below. &#13; &#13; You should also use top-performing keywords from your existing Apple Search Ads campaigns."
+                    >help</mat-icon
+                  >
+                </div>
+
+                <!-- field and icon -->
+                <div class="w-100 no-gutters">
+                  <mat-form-field
+                    appearance="outline"
+                    class="col-11"
+                    color="accent"
+                  >
+                    <mat-label
+                      >List words and phrases that best describe your
+                      brand</mat-label
+                    >
+                    <textarea matInput formControlName="brand"> </textarea>
+                  </mat-form-field>
+
+                  <mat-icon
+                    class="float-right"
+                    color="accent"
+                    matTooltip="List variants of your brand name. &#13; &#13; Tip: Keep each phrase between 1-4 words. example: &#13; Let's say your brand is acme. Include phrases ike ACME, ACME App, and Download Acme App. &#13; &#13; You should also use top-performing keywords from your existing Apple Search Ads campaigns."
+                    >help</mat-icon
+                  >
+                </div>
+
+                <!-- buttons -->
+                <div class="w-100 row ml-2">
+                  <button
+                    mat-flat-button
+                    (click)="goBack(4)"
+                    class="float-left ml-2 border rounded"
+                  >
+                    <span class="pl-1">back</span>
+                  </button>
+                  <button
+                    mat-flat-button
+                    color="accent"
+                    class="float-left ml-2"
+                    (click)="submitStep(4)"
+                    [disabled]="substepDisabled()"
+                  >
+                    <mat-icon class="text-light" aria-label="submit"
+                      >done</mat-icon
+                    >
+                    <span class="text-light pl-1">next</span>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -635,54 +674,76 @@
             class="w-100 mt-2"
             *ngIf="isOrdinalActive(5)"
           >
-            <div class="col-6">
-              <mat-form-field
-                appearance="fill"
-                class="w-100"
-                matTooltip="Unless you have strict gender targeting restrictions, we reccomend 'All' to maximize your reach."
-              >
-                <mat-select formControlName="genders" class="p-1">
-                  <mat-option value="all">All (recommended)</mat-option>
-                  <mat-option value="female">Female</mat-option>
-                  <mat-option value="male">Male</mat-option>
-                </mat-select>
-                <mat-label
-                  ><mat-icon>settings</mat-icon>&nbsp;Which genders do you want
-                  to target?</mat-label
-                >
-              </mat-form-field>
+            <div class="w-100 row">
+              <!-- form -->
 
-              <mat-form-field
-                appearance="fill"
-                class="w-100"
-                matTooltip="Unless you have strict age targeting restrictions, we reccomend 'All' to maximize your reach."
-              >
-                <mat-select formControlName="ages" class="p-1">
-                  <mat-option value="all">All (recommended)</mat-option>
-                  <mat-option value="18">18 +</mat-option>
-                  <mat-option value="21">21 +</mat-option>
-                </mat-select>
-                <mat-label
-                  ><mat-icon>settings</mat-icon>&nbsp;What's your app's minimum
-                  age requirement?</mat-label
-                >
-              </mat-form-field>
-              <button
-                mat-flat-button
-                (click)="goBack(5)"
-                class="float-left ml-2 border rounded"
-              >
-                <span class="pl-1">back</span>
-              </button>
-              <button
-                mat-flat-button
-                color="accent"
-                class="float-left ml-2"
-                (click)="submitStep(5)"
-              >
-                <mat-icon class="text-light" aria-label="submit">done</mat-icon>
-                <span class="text-light pl-1">next</span>
-              </button>
+              <div class="col-6">
+                <!-- field and icon -->
+                <div class="w-100 no-gutters">
+                  <mat-form-field appearance="fill" class="col-11">
+                    <mat-select formControlName="genders" class="p-1">
+                      <mat-option value="all">All (recommended)</mat-option>
+                      <mat-option value="female">Female</mat-option>
+                      <mat-option value="male">Male</mat-option>
+                    </mat-select>
+                    <mat-label
+                      ><mat-icon>settings</mat-icon>&nbsp;Which genders do you
+                      want to target?</mat-label
+                    >
+                  </mat-form-field>
+
+                  <mat-icon
+                    class="float-right"
+                    color="accent"
+                    matTooltip="Unless you have strict gender targeting restrictions, we reccomend 'All' to maximize your reach."
+                    >help</mat-icon
+                  >
+                </div>
+
+                <!-- field and icon -->
+                <div class="w-100 no-gutters">
+                  <mat-form-field appearance="fill" class="col-11">
+                    <mat-select formControlName="ages" class="p-1">
+                      <mat-option value="all">All (recommended)</mat-option>
+                      <mat-option value="18">18 +</mat-option>
+                      <mat-option value="21">21 +</mat-option>
+                    </mat-select>
+                    <mat-label
+                      ><mat-icon>settings</mat-icon>&nbsp;What's your app's
+                      minimum age requirement?</mat-label
+                    >
+                  </mat-form-field>
+
+                  <mat-icon
+                    class="float-right"
+                    color="accent"
+                    matTooltip="Unless you have strict age targeting restrictions, we reccomend 'All' to maximize your reach."
+                    >help</mat-icon
+                  >
+                </div>
+
+                <!-- buttons -->
+                <div class="w-100 row ml-2">
+                  <button
+                    mat-flat-button
+                    (click)="goBack(5)"
+                    class="float-left ml-2 border rounded"
+                  >
+                    <span class="pl-1">back</span>
+                  </button>
+                  <button
+                    mat-flat-button
+                    color="accent"
+                    class="float-left ml-2"
+                    (click)="submitStep(5)"
+                  >
+                    <mat-icon class="text-light" aria-label="submit"
+                      >done</mat-icon
+                    >
+                    <span class="text-light pl-1">next</span>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
 
