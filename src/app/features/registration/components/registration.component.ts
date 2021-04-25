@@ -5,13 +5,14 @@ import {
   FormGroup,
   Validators,
 } from "@angular/forms";
-import { MatSnackBar } from "@angular/material";
+import { MatDialog, MatSnackBar } from "@angular/material";
 import { Router } from "@angular/router";
 import { AmplifyService } from "aws-amplify-angular";
 import { chain, find, get, isNil, set } from "lodash";
 import { Client } from "src/app/core/models/client";
 import { ClientService } from "src/app/core/services/client.service";
 import { UserAccountService } from "src/app/core/services/user-account.service";
+import { DynamicModalComponent } from "src/app/shared/dynamic-modal/dynamic-modal.component";
 
 @Component({
   selector: "app-registration",
@@ -86,7 +87,8 @@ export class RegistrationComponent implements OnInit {
     private fb: FormBuilder,
     private userAccountService: UserAccountService,
     private clientService: ClientService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) {}
 
   step1Form = this.fb.group({
@@ -198,5 +200,23 @@ export class RegistrationComponent implements OnInit {
 
   get substep1(): any {
     return this.step2Form.get("substep1");
+  }
+
+  handleTooltipClick() {
+    this.dialog
+      .open(DynamicModalComponent, {
+        data: {
+          title: "Title",
+          content: "Content",
+          actionYes: "Close",
+          actionNo: "Close",
+        },
+        maxWidth: "500px",
+        width: "500px",
+        panelClass: "tooltip-dialog-box",
+        autoFocus: false,
+      })
+      .afterClosed()
+      .subscribe();
   }
 }

@@ -14,60 +14,142 @@
             >
             <div class="w-100 mt-2 d-flex flex-row">
               <div class="col-6">
-                <mat-form-field appearance="fill" color="accent" class="w-100">
-                  <mat-label>Client Id</mat-label>
-                  <input
-                    matInput
-                    placeholder="client id"
-                    required
-                    formControlName="clientId"
-                  />
-                </mat-form-field>
+                <div class="w-100 no-gutters">
+                  <mat-form-field
+                    appearance="fill"
+                    color="accent"
+                    class="col-11"
+                  >
+                    <mat-label>Client Id</mat-label>
+                    <input
+                      matInput
+                      placeholder="client id"
+                      required
+                      formControlName="clientId"
+                    />
+                  </mat-form-field>
 
-                <mat-form-field appearance="fill" color="accent" class="w-100">
-                  <mat-label>Client Secret</mat-label>
-                  <input
-                    matInput
-                    placeholder="client secret"
-                    required
-                    formControlName="clientSecret"
-                  />
-                </mat-form-field>
+                  <button mat-icon-button (click)="handleTooltipClick()">
+                    <mat-icon
+                      class="float-right"
+                      color="accent"
+                      matTooltip="Client ID"
+                      >help</mat-icon
+                    >
+                  </button>
+                </div>
 
-                <mat-form-field appearance="fill" color="accent" class="w-100">
-                  <mat-label>OAuth Username</mat-label>
-                  <input
-                    matInput
-                    placeholder="user name"
-                    required
-                    formControlName="oauthUsername"
-                  />
-                </mat-form-field>
+                <div class="w-100 no-gutters">
+                  <mat-form-field
+                    appearance="fill"
+                    color="accent"
+                    class="col-11"
+                  >
+                    <mat-label>Client Secret</mat-label>
+                    <input
+                      matInput
+                      placeholder="client secret"
+                      required
+                      formControlName="clientSecret"
+                    />
+                  </mat-form-field>
 
-                <mat-form-field appearance="fill" color="accent" class="w-100">
-                  <mat-label>OAuth Password</mat-label>
-                  <input
-                    matInput
-                    placeholder="password"
-                    required
-                    formControlName="oauthPassword"
-                  />
-                </mat-form-field>
+                  <button mat-icon-button (click)="handleTooltipClick()">
+                    <mat-icon
+                      class="float-right"
+                      color="accent"
+                      matTooltip="Your oauth client ID can be found on your Apple Search Ads Console. &#13; &#13;
+                      Click for exact details on where to find this
+                      information"
+                      >help</mat-icon
+                    >
+                  </button>
+                </div>
 
-                <mat-form-field appearance="fill" color="accent" class="w-100">
-                  <mat-label>Organization Id</mat-label>
-                  <input
-                    matInput
-                    placeholder="organization id"
-                    required
-                    formControlName="orgId"
-                  />
-                </mat-form-field>
+                <div class="w-100 no-gutters">
+                  <mat-form-field
+                    appearance="fill"
+                    color="accent"
+                    class="col-11"
+                  >
+                    <mat-label>OAuth Username</mat-label>
+                    <input
+                      matInput
+                      placeholder="user name"
+                      required
+                      formControlName="oauthUsername"
+                    />
+                  </mat-form-field>
+
+                  <button mat-icon-button (click)="handleTooltipClick()">
+                    <mat-icon
+                      class="float-right"
+                      color="accent"
+                      matTooltip="Your oauth username can be found on your Apple Search Ads Console. &#13; &#13;
+                      Click for exact details on where to find this
+                      information"
+                      >help</mat-icon
+                    >
+                  </button>
+                </div>
+
+                <div class="w-100 no-gutters">
+                  <mat-form-field
+                    appearance="fill"
+                    color="accent"
+                    class="col-11"
+                  >
+                    <mat-label>OAuth Password</mat-label>
+                    <input
+                      matInput
+                      placeholder="password"
+                      required
+                      formControlName="oauthPassword"
+                    />
+                  </mat-form-field>
+
+                  <button mat-icon-button (click)="handleTooltipClick()">
+                    <mat-icon
+                      class="float-right"
+                      color="accent"
+                      matTooltip="Your oauth client password can be found on your Apple Search Ads Console. &#13; &#13;
+                      Click for exact details on where to find this
+                      information"
+                      >help</mat-icon
+                    >
+                  </button>
+                </div>
+
+                <div class="w-100 no-gutters">
+                  <mat-form-field
+                    appearance="fill"
+                    color="accent"
+                    class="col-11"
+                  >
+                    <mat-label>Organization Id</mat-label>
+                    <input
+                      matInput
+                      placeholder="organization id"
+                      required
+                      formControlName="orgId"
+                    />
+                  </mat-form-field>
+                  <button mat-icon-button (click)="handleTooltipClick()">
+                    <mat-icon
+                      class="float-right"
+                      color="accent"
+                      matTooltip="Your Apple Search Ads Organiztion ID can be found on your Apple Search Ads Console. &#13; &#13;
+                      Click for exact details on where to find this
+                      information"
+                      >help</mat-icon
+                    >
+                  </button>
+                </div>
               </div>
 
               <div class="col-6">
                 <mat-list>
-                  <mat-list-item>
+                  <mat-list-item class="mb-4">
                     <mat-icon color="accent" class="align-text-top mr-2"
                       >done</mat-icon
                     >
@@ -77,15 +159,16 @@
                       you
                     </mat-label>
                   </mat-list-item>
-                  <mat-list-item>
+                  <mat-list-item class="mb-4">
                     <mat-icon color="accent" class="align-text-top mr-2"
                       >done</mat-icon
                     >
                     <mat-label>
-                      Hover over fields for more information
+                      Hover and click on the help icons for exact details on
+                      where to find these details in Apple Search Ads
                     </mat-label>
                   </mat-list-item>
-                  <mat-list-item>
+                  <!-- <mat-list-item class="mb-4">
                     <mat-icon color="accent" class="align-text-top mr-2"
                       >done</mat-icon
                     >
@@ -93,7 +176,7 @@
                       More on this later, we'll get your campaign strategies on
                       the next step!
                     </mat-label>
-                  </mat-list-item>
+                  </mat-list-item> -->
                 </mat-list>
               </div>
             </div>

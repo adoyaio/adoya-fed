@@ -5,6 +5,8 @@ import { RegistrationRoutingModule } from "./registration-routing.module";
 import { MaterialModule } from "src/app/shared/material-design/material.module";
 import { DynamicFormModule } from "src/app/shared/dynamic-form/dynamic-form.module";
 import { RegistrationComponent } from "./components/registration.component";
+import { SharedModule } from "src/app/shared/shared.module";
+import { DynamicModalComponent } from "src/app/shared/dynamic-modal/dynamic-modal.component";
 
 @NgModule({
   declarations: [RegistrationComponent],
@@ -13,6 +15,8 @@ import { RegistrationComponent } from "./components/registration.component";
     RegistrationRoutingModule,
     MaterialModule,
     DynamicFormModule,
+    SharedModule,
   ],
+  providers: [],
 })
 export class RegistrationModule {}
