@@ -36,7 +36,9 @@
                     <mat-icon
                       class="float-right"
                       color="accent"
-                      matTooltip="Client ID"
+                      matTooltip="Your oauth client ID can be found on your Apple Search Ads Console. &#13; &#13;
+                      Click for exact details on where to find this
+                      information"
                       >help</mat-icon
                     >
                   </button>
@@ -64,7 +66,7 @@
                     <mat-icon
                       class="float-right"
                       color="accent"
-                      matTooltip="Your oauth client ID can be found on your Apple Search Ads Console. &#13; &#13;
+                      matTooltip="Your oauth client secret can be found on your Apple Search Ads Console. &#13; &#13;
                       Click for exact details on where to find this
                       information"
                       >help</mat-icon
@@ -576,7 +578,6 @@
           >
             <div class="w-100 row">
               <!-- form -->
-
               <div class="col-6">
                 <!-- field and icon -->
                 <div class="w-100 no-gutters">
@@ -593,7 +594,7 @@
                   <mat-icon
                     class="float-right"
                     color="accent"
-                    matTooltip="Many app store searches are branded. &#13; &#13; Therefore, we reccomend you bid on most, if not all, competitor terms. &#13; Try to include competitor name variants, acronyms and synonyms. &#13; &#13; You should also use top-performing keywords from your existing Apple Search Ads campaigns."
+                    matTooltip="Many app store searches are branded. &#13; &#13; Therefore, we recommend you bid on most, if not all, competitor terms. &#13; Try to include competitor name variants, acronyms and synonyms. &#13; &#13; You should also use top-performing keywords from your existing Apple Search Ads campaigns."
                     >help</mat-icon
                   >
                 </div>
@@ -641,29 +642,51 @@
                     >help</mat-icon
                   >
                 </div>
+              </div>
 
-                <!-- buttons -->
-                <div class="w-100 row ml-2">
-                  <button
-                    mat-flat-button
-                    (click)="goBack(4)"
-                    class="float-left ml-2 border rounded"
-                  >
-                    <span class="pl-1">back</span>
-                  </button>
-                  <button
-                    mat-flat-button
-                    color="accent"
-                    class="float-left ml-2"
-                    (click)="submitStep(4)"
-                    [disabled]="substepDisabled()"
-                  >
-                    <mat-icon class="text-light" aria-label="submit"
+              <!-- explainer text -->
+              <div class="col-6">
+                <mat-list class="p-0 m-0">
+                  <mat-list-item class="mb-1">
+                    <mat-icon color="accent" class="align-text-top mr-2"
                       >done</mat-icon
                     >
-                    <span class="text-light pl-1">next</span>
-                  </button>
-                </div>
+                    <mat-label
+                      >Enter terms that will be used to create exact campaigns
+                    </mat-label>
+                  </mat-list-item>
+                  <mat-list-item class="mb-1">
+                    <mat-icon color="accent" class="align-text-top mr-2"
+                      >done</mat-icon
+                    >
+                    <mat-label>
+                      Hover on the help icons for more information
+                    </mat-label>
+                  </mat-list-item>
+                </mat-list>
+              </div>
+
+              <!-- buttons -->
+              <div class="w-100 row ml-2">
+                <button
+                  mat-flat-button
+                  (click)="goBack(4)"
+                  class="float-left ml-2 border rounded"
+                >
+                  <span class="pl-1">back</span>
+                </button>
+                <button
+                  mat-flat-button
+                  color="accent"
+                  class="float-left ml-2"
+                  (click)="submitStep(4)"
+                  [disabled]="substepDisabled()"
+                >
+                  <mat-icon class="text-light" aria-label="submit"
+                    >done</mat-icon
+                  >
+                  <span class="text-light pl-1">next</span>
+                </button>
               </div>
             </div>
           </div>
@@ -676,7 +699,6 @@
           >
             <div class="w-100 row">
               <!-- form -->
-
               <div class="col-6">
                 <!-- field and icon -->
                 <div class="w-100 no-gutters">
@@ -695,7 +717,7 @@
                   <mat-icon
                     class="float-right"
                     color="accent"
-                    matTooltip="Unless you have strict gender targeting restrictions, we reccomend 'All' to maximize your reach."
+                    matTooltip="Unless you have strict gender targeting restrictions, we recommend 'All' to maximize your reach."
                     >help</mat-icon
                   >
                 </div>
@@ -717,32 +739,55 @@
                   <mat-icon
                     class="float-right"
                     color="accent"
-                    matTooltip="Unless you have strict age targeting restrictions, we reccomend 'All' to maximize your reach."
+                    matTooltip="Unless you have strict age targeting restrictions, we recommend 'All' to maximize your reach."
                     >help</mat-icon
                   >
                 </div>
+              </div>
 
-                <!-- buttons -->
-                <div class="w-100 row ml-2">
-                  <button
-                    mat-flat-button
-                    (click)="goBack(5)"
-                    class="float-left ml-2 border rounded"
-                  >
-                    <span class="pl-1">back</span>
-                  </button>
-                  <button
-                    mat-flat-button
-                    color="accent"
-                    class="float-left ml-2"
-                    (click)="submitStep(5)"
-                  >
-                    <mat-icon class="text-light" aria-label="submit"
+              <!-- explainer text -->
+              <div class="col-6">
+                <mat-list class="p-0 m-0">
+                  <mat-list-item class="mb-1">
+                    <mat-icon color="accent" class="align-text-top mr-2"
                       >done</mat-icon
                     >
-                    <span class="text-light pl-1">next</span>
-                  </button>
-                </div>
+                    <mat-label
+                      >Enter information to allow a specific, or a more general
+                      targeting strategy
+                    </mat-label>
+                  </mat-list-item>
+                  <mat-list-item class="mb-1">
+                    <mat-icon color="accent" class="align-text-top mr-2"
+                      >done</mat-icon
+                    >
+                    <mat-label>
+                      Hover on the help icons for more information
+                    </mat-label>
+                  </mat-list-item>
+                </mat-list>
+              </div>
+
+              <!-- buttons -->
+              <div class="w-100 row ml-2">
+                <button
+                  mat-flat-button
+                  (click)="goBack(5)"
+                  class="float-left ml-2 border rounded"
+                >
+                  <span class="pl-1">back</span>
+                </button>
+                <button
+                  mat-flat-button
+                  color="accent"
+                  class="float-left ml-2"
+                  (click)="submitStep(5)"
+                >
+                  <mat-icon class="text-light" aria-label="submit"
+                    >done</mat-icon
+                  >
+                  <span class="text-light pl-1">next</span>
+                </button>
               </div>
             </div>
           </div>

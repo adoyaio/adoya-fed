@@ -1,0 +1,30 @@
+<!-- title -->
+<div class="d-flex justify-content-end px-4 mb-1">
+  <div #modalTitleWrapper class="dynamic-modal__title">
+    <div #modalTitle class="font-size-16 font-weight-bold"></div>
+    <div #modalSubTitle class="font-size-12"></div>
+  </div>
+  <button
+    class="dynamic-modal__dismiss"
+    [mat-dialog-close]="false"
+    mat-icon-button
+  >
+    <mat-icon color="accent"> close </mat-icon>
+  </button>
+</div>
+<!-- content -->
+<div class="px-4 pb-4 m-0" #content mat-dialog-content></div>
+
+<!-- actions -->
+<div
+  class="px-4 py-2 bg-grey border-top flex-nowrap justify-content-between"
+  mat-dialog-actions
+>
+  <!-- <button #actionNoButton mat-button color="primary">
+    <span #actionNo class="text-uppercase font-weight-bold"></span>
+  </button>
+
+  <button #actionYesButton mat-button color="primary">
+    <span #actionYes class="text-uppercase font-weight-bold"></span>
+  </button> -->
+</div>
