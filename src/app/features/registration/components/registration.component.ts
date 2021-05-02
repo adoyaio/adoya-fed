@@ -92,12 +92,16 @@ export class RegistrationComponent implements OnInit {
   ) {}
 
   step1Form = this.fb.group({
-    clientId: [""],
-    clientSecret: [""],
-    oauthUsername: [""],
-    oauthPassword: [""],
-    orgId: [""],
+    orgId: new FormControl("", Validators.required),
+    clientId: new FormControl("", Validators.required),
+    teamId: new FormControl("", Validators.required),
+    keyId: new FormControl("", Validators.required),
+    privateKey: new FormControl("", Validators.required),
+    publicKey: new FormControl(""),
   });
+
+  // TODO countries
+  // United States = 'US', Canada = 'CA', United Kingdom = 'GB', Austrailia = 'AU', New Zealand = 'NZ', Philippines = 'PH' Ireland = 'IE', and India = 'IN' (edited)
 
   step2Form = this.fb.group({
     substep1: this.fb.group({
@@ -195,7 +199,8 @@ export class RegistrationComponent implements OnInit {
     return this.step2Form.get("substep1");
   }
 
-  handleTooltipClick(field: string) {
+  handleTooltipClick($event, field: string) {
+    $event.preventDefault();
     this.dialog
       .open(DynamicModalComponent, {
         data: {

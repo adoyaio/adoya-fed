@@ -31,12 +31,12 @@
 
                   <button
                     mat-icon-button
-                    (click)="handleTooltipClick('OAuth Client ID')"
+                    (click)="handleTooltipClick($event, 'Client ID')"
                   >
                     <mat-icon
                       class="float-right"
                       color="accent"
-                      matTooltip="Your oauth client ID can be found on your Apple Search Ads Console. &#13; &#13;
+                      matTooltip="Your client ID can be found on your Apple Search Ads Console. &#13; &#13;
                       Click for exact details on where to find this
                       information"
                       >help</mat-icon
@@ -50,23 +50,23 @@
                     color="accent"
                     class="col-11"
                   >
-                    <mat-label>Client Secret</mat-label>
+                    <mat-label>Team Id</mat-label>
                     <input
                       matInput
-                      placeholder="client secret"
+                      placeholder="team id"
                       required
-                      formControlName="clientSecret"
+                      formControlName="teamId"
                     />
                   </mat-form-field>
 
                   <button
                     mat-icon-button
-                    (click)="handleTooltipClick('OAuth Client Secret')"
+                    (click)="handleTooltipClick($event, 'Team ID')"
                   >
                     <mat-icon
                       class="float-right"
                       color="accent"
-                      matTooltip="Your oauth client secret can be found on your Apple Search Ads Console. &#13; &#13;
+                      matTooltip="Your team id can be found on your Apple Search Ads Console. &#13; &#13;
                       Click for exact details on where to find this
                       information"
                       >help</mat-icon
@@ -80,23 +80,23 @@
                     color="accent"
                     class="col-11"
                   >
-                    <mat-label>OAuth Username</mat-label>
+                    <mat-label>Key ID</mat-label>
                     <input
                       matInput
-                      placeholder="user name"
+                      placeholder="key id"
                       required
-                      formControlName="oauthUsername"
+                      formControlName="keyId"
                     />
                   </mat-form-field>
 
                   <button
                     mat-icon-button
-                    (click)="handleTooltipClick('OAuth Username')"
+                    (click)="handleTooltipClick($event, 'Key ID')"
                   >
                     <mat-icon
                       class="float-right"
                       color="accent"
-                      matTooltip="Your oauth username can be found on your Apple Search Ads Console. &#13; &#13;
+                      matTooltip="Your key id can be found on your Apple Search Ads Console. &#13; &#13;
                       Click for exact details on where to find this
                       information"
                       >help</mat-icon
@@ -110,23 +110,23 @@
                     color="accent"
                     class="col-11"
                   >
-                    <mat-label>OAuth Password</mat-label>
+                    <mat-label>Private Key</mat-label>
                     <input
                       matInput
-                      placeholder="password"
+                      placeholder="private key"
                       required
-                      formControlName="oauthPassword"
+                      formControlName="privateKey"
                     />
                   </mat-form-field>
 
                   <button
                     mat-icon-button
-                    (click)="handleTooltipClick('OAuth Client Password')"
+                    (click)="handleTooltipClick($event, 'Private Key')"
                   >
                     <mat-icon
                       class="float-right"
                       color="accent"
-                      matTooltip="Your oauth client password can be found on your Apple Search Ads Console. &#13; &#13;
+                      matTooltip="Your key id can be found on your Apple Search Ads Console. &#13; &#13;
                       Click for exact details on where to find this
                       information"
                       >help</mat-icon
@@ -151,7 +151,10 @@
                   <button
                     mat-icon-button
                     (click)="
-                      handleTooltipClick('Apple Search Ads Organiztion ID')
+                      handleTooltipClick(
+                        $event,
+                        'Apple Search Ads Organiztion ID'
+                      )
                     "
                   >
                     <mat-icon
@@ -182,12 +185,39 @@
                     <mat-icon color="accent" class="align-text-top mr-2"
                       >done</mat-icon
                     >
+                    <mat-label
+                      >Enter the 3 ids provided when you uploaded your public
+                      key to the Apple Search console. If you havent yet
+                      uploaded a public key, we can generate your keys for you
+                      by clicking the button below.
+                    </mat-label>
+                  </mat-list-item>
+                  <mat-list-item class="mb-4">
+                    <mat-icon color="accent" class="align-text-top mr-2"
+                      >done</mat-icon
+                    >
                     <mat-label>
                       Hover and click on the help icons for exact details on
                       where to find these details in Apple Search Ads
                     </mat-label>
                   </mat-list-item>
+
+                  <mat-list-item class="mb-4">
+                    <mat-icon color="accent" class="align-text-top mr-2"
+                      >build</mat-icon
+                    >
+                    <mat-label>
+                      We can handle this step for you, click below to open the
+                      Apple Search Ads web console to send us an invitation.
+                    </mat-label>
+                  </mat-list-item>
                 </mat-list>
+
+                <div class="d-flex w-100 justify-content-start pl-5 ml-2">
+                  <button mat-flat-button color="accent" class="float-right">
+                    <span class="text-light pl-1">open</span>
+                  </button>
+                </div>
               </div>
             </div>
 

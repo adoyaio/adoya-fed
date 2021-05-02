@@ -3,6 +3,7 @@ import { NgModule } from "@angular/core";
 import { Routes, RouterModule, PreloadAllModules } from "@angular/router";
 import { AuthGuard } from "./core/guards/auth.guard";
 import { RegistrationComponent } from "./features/registration/components/registration.component";
+import { HasRegisteredGuard } from "./core/guards/has-registered.guard";
 
 const routes: Routes = [
   {
@@ -21,7 +22,7 @@ const routes: Routes = [
       import("./layout/secure-layout/secure-layout.module").then(
         (m) => m.SecureLayoutModule
       ),
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, HasRegisteredGuard],
     data: { title: "workbench" },
   },
   {
