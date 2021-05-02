@@ -194,6 +194,8 @@ export class OrgDetailsPayload {
   disabled: boolean;
   appleCampaigns: any[];
   campaignName: string;
+  auth: any;
+  hasRegistered: boolean;
 
   static buildFromClient(response: OrgDetails) {
     const retVal = new OrgDetailsPayload();
@@ -208,6 +210,8 @@ export class OrgDetailsPayload {
     retVal.pemFilename = response.pemFilename;
     retVal.appName = response.appName;
     retVal.clientName = response.clientName;
+    retVal.auth = response.auth;
+    retVal.hasRegistered = response.hasRegistered;
     retVal.branchBidParameters = BranchBidParametersPayload.buildFromClient(
       response.branchBidParameters
     );

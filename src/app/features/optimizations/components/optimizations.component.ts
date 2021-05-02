@@ -529,6 +529,7 @@ export class OptimizationsComponent implements OnInit {
       this.clientService
         .postClient(ClientPayload.buildFromClient(this.client))
         .pipe(
+          take(1),
           tap(() => {
             this.isSendingResults = true;
           }),
@@ -539,7 +540,7 @@ export class OptimizationsComponent implements OnInit {
             this.openSnackBar("successfully updated settings!", "dismiss");
             return data;
           }),
-          take(1),
+
           catchError(() => {
             this.isSendingResults = false;
             this.openSnackBar(

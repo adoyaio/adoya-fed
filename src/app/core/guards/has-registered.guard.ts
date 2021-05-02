@@ -18,6 +18,7 @@ import {
   filter,
   catchError,
   takeUntil,
+  take,
 } from "rxjs/operators";
 import { UserAccountService } from "../services/user-account.service";
 import { ClientService } from "../services/client.service";
@@ -39,6 +40,7 @@ export class HasRegisteredGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> | Promise<boolean> | boolean {
+    console.log("can activate");
     const orgId = this.userAccountService
       .getCurrentUser()
       .UserAttributes.find((val) => {
@@ -50,12 +52,13 @@ export class HasRegisteredGuard implements CanActivate {
     }
 
     return this.clientService.getClient(orgId).pipe(
+      take(1),
       map((data) => {
         const client = Client.buildFromGetClientResponse(data);
-        return has(client, "registered") && !!get(client, "registered");
+        return client.orgDetails.hasRegistered;
       }),
       tap((result) => this.handleResult(result)),
-      takeUntil(this.destroyed$),
+
       catchError((error: HttpErrorResponse) => {
         return of(this.handleResult(false));
       })

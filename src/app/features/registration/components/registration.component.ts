@@ -8,10 +8,18 @@ import {
 import { MatDialog, MatSnackBar, MatStepper } from "@angular/material";
 import { Router } from "@angular/router";
 import { AmplifyService } from "aws-amplify-angular";
-import { chain, find, get, isNil, set } from "lodash";
+import { chain, delay, find, get, has, isNil, set } from "lodash";
 import { EMPTY } from "rxjs";
-import { catchError, finalize, take, tap } from "rxjs/operators";
-import { Client } from "src/app/core/models/client";
+import { catchError, finalize, switchMap, take, tap } from "rxjs/operators";
+import {
+  BidParameters,
+  BranchBidParameters,
+  BranchIntegrationParameters,
+  Client,
+  KeywordAdderParameters,
+  OrgDetails,
+} from "src/app/core/models/client";
+import { ClientPayload } from "src/app/core/models/client-payload";
 import { ClientService } from "src/app/core/services/client.service";
 import { UserAccountService } from "src/app/core/services/user-account.service";
 import { DynamicModalComponent } from "src/app/shared/dynamic-modal/dynamic-modal.component";
@@ -84,9 +92,24 @@ export class RegistrationComponent implements OnInit {
     },
   ];
 
-  // get substep1(): any {
-  //   return this.step2Form.get("substep1");
-  // }
+  get substep1(): any {
+    return this.step2Form.get("substep1");
+  }
+  get substep2(): any {
+    return this.step2Form.get("substep2");
+  }
+  get substep3(): any {
+    return this.step2Form.get("substep3");
+  }
+  get substep4(): any {
+    return this.step2Form.get("substep4");
+  }
+  get substep5(): any {
+    return this.step2Form.get("substep5");
+  }
+  get substep6(): any {
+    return this.step2Form.get("substep6");
+  }
   // get application(): any {
   //   return this.step2Form.get("substep1.application");
   // }
@@ -182,39 +205,202 @@ export class RegistrationComponent implements OnInit {
     this.stepper.selectionChange
       .pipe(
         tap((val) => {
-          if (val.selectedIndex === 1) {
-            //  TODO build the client
+          this.isLoadingResults = true;
 
-            // set the dropdown values of apps
-            this.isLoadingResults = true;
+          // STEP 1
+          if (val.selectedIndex === 1) {
+            //  build and submit a skeleton client
+            if (has(this.client.orgDetails, "appleCampaigns")) {
+              // TODO modal warning
+            }
+
+            const newClient = new Client();
+            newClient.orgDetails = new OrgDetails();
+            newClient.orgDetails.auth = {
+              clientId: this.step1Form.get("clientId").value,
+              teamId: this.step1Form.get("teamId").value,
+              keyId: this.step1Form.get("keyId").value,
+              privateKey: this.step1Form.get("privateKey").value,
+            };
+
+            // TODO set these in a step
+            newClient.orgDetails.appID = "TODO";
+            newClient.orgDetails.appName = "TODO";
+            newClient.orgDetails.currency = "USD";
+            newClient.orgDetails.emailAddresses = ["scott.kaplan@adoya.io"];
+
+            newClient.orgDetails.appleCampaigns = [];
+            newClient.orgDetails.bidParameters = new BidParameters();
+            newClient.orgDetails.branchBidParameters = new BranchBidParameters();
+            newClient.orgDetails.keywordAdderParameters = new KeywordAdderParameters();
+            newClient.orgDetails.branchIntegrationParameters = new BranchIntegrationParameters();
+
             this.clientService
-              .getAppleCampaigns(this.orgId)
+              .postClient(ClientPayload.buildFromClient(this.client))
               .pipe(
                 take(1),
-                tap((val) => {
-                  this.apps = val.data;
+                switchMap((data) => {
+                  if (isNil(data)) {
+                    this.openSnackBar(
+                      "unable to process changes to settings at this time",
+                      "dismiss"
+                    );
+                  }
+                  return this.clientService.getAppleCampaigns(this.orgId).pipe(
+                    take(1),
+                    tap((val) => {
+                      this.apps = val.data;
+                    }),
+                    finalize(() => {
+                      this.isLoadingResults = false;
+                    })
+                  );
                 }),
-                finalize(() => {
-                  this.isLoadingResults = false;
+                catchError(() => {
+                  this.isSendingResults = false;
+                  this.openSnackBar(
+                    "unable to process changes to settings at this time",
+                    "dismiss"
+                  );
+                  return [];
                 })
               )
               .subscribe();
           }
+
+          // STEP 2
           if (val.selectedIndex === 2) {
-            // submit the client
-            this.isLoadingResults = true;
-            this.clientService
-              .getAppleCampaigns(this.orgId)
-              .pipe(
-                take(1),
-                tap((val) => {
-                  this.apps = val.data;
-                }),
-                finalize(() => {
-                  this.isLoadingResults = false;
-                })
-              )
-              .subscribe();
+            // build the client from step 2 values
+            if (this.step2Form.valid) {
+              this.isSendingResults = true;
+
+              this.client.orgDetails.bidParameters.objective = this.substep2.get(
+                "objective"
+              ).value;
+              this.client.orgDetails.adgroupBidParameters.objective = this.substep2.get(
+                "objective"
+              ).value;
+
+              this.client.orgDetails.bidParameters.highCPIBidDecreaseThresh = this.substep2.get(
+                "cpi"
+              ).value;
+
+              this.client.orgDetails.adgroupBidParameters.highCPIBidDecreaseThresh = this.substep2.get(
+                "cpi"
+              ).value;
+
+              // Branch fields
+              this.client.orgDetails.branchBidParameters.branchOptimizationGoal = this.substep6.get(
+                "mmpObjective"
+              ).value;
+
+              this.client.orgDetails.branchBidParameters.costPerPurchaseThreshold = this.substep6.get(
+                "cpp"
+              ).value;
+
+              this.client.orgDetails.branchBidParameters.revenueOverAdSpendThreshold = this.substep6.get(
+                "roas"
+              ).value;
+
+              this.client.orgDetails.branchIntegrationParameters.branchBidAdjusterEnabled = this.substep6.get(
+                "branchBidAdjusterEnabled"
+              ).value;
+
+              this.client.orgDetails.branchIntegrationParameters.branchKey = this.substep6.get(
+                "branchKey"
+              ).value;
+              this.client.orgDetails.branchIntegrationParameters.branchSecret = this.substep6.get(
+                "branchSecret"
+              ).value;
+
+              // // build campaigns
+              // chain(this.client)
+              //   .get("orgDetails")
+              //   .get("appleCampaigns")
+              //   .each((campaign) => {
+              //     // get the checkbox value to see if bid params overridden
+              //     const hasOverrides = this.appleForm.get(
+              //       "checkbox_" + campaign.campaignId
+              //     ).value;
+
+              //     if (hasOverrides) {
+              //       const bidParameters = {};
+              //       const cpi = this.appleForm.get("cpi_" + campaign.campaignId).value;
+
+              //       const objective = this.appleForm.get(
+              //         "objective_" + campaign.campaignId
+              //       ).value;
+
+              //       if (!isNil(cpi)) {
+              //         set(bidParameters, "HIGH_CPI_BID_DECREASE_THRESH", cpi);
+              //       }
+
+              //       if (!isNil(objective)) {
+              //         set(bidParameters, "OBJECTIVE", objective);
+              //       }
+
+              //       set(campaign, "bidParameters", bidParameters);
+              //     } else {
+              //       set(campaign, "bidParameters", {});
+              //     }
+
+              //     // check if there are branch bid params overrides
+              //     const hasBranchOverrides = this.appleForm.get(
+              //       "mmpCheckbox_" + campaign.campaignId
+              //     ).value;
+
+              //     if (hasBranchOverrides) {
+              //       const branchBidParameters = {};
+
+              //       const mmpObjective = this.appleForm.get(
+              //         "mmpObjective_" + campaign.campaignId
+              //       ).value;
+
+              //       if (mmpObjective === "revenue_over_ad_spend") {
+              //         const roas = this.appleForm.get("roas_" + campaign.campaignId)
+              //           .value;
+
+              //         set(branchBidParameters, "revenue_over_ad_spend_threshold", roas);
+              //         set(
+              //           branchBidParameters,
+              //           "branch_optimization_goal",
+              //           mmpObjective
+              //         );
+              //       } else {
+              //         const cpp = this.appleForm.get("cpp_" + campaign.campaignId)
+              //           .value;
+              //         set(branchBidParameters, "cost_per_purchase_threshold", cpp);
+              //         set(
+              //           branchBidParameters,
+              //           "branch_optimization_goal",
+              //           mmpObjective
+              //         );
+              //       }
+              //       set(campaign, "branchBidParameters", branchBidParameters);
+              //     } else {
+              //       set(campaign, "branchBidParameters", {});
+              //     }
+              //   })
+              //   .value();
+
+              this.clientService
+                .postClient(ClientPayload.buildFromClient(this.client))
+                .pipe(
+                  take(1),
+                  tap(() => {
+                    this.isLoadingResults = false;
+                  }),
+                  catchError(() => {
+                    this.isSendingResults = false;
+                    this.openSnackBar(
+                      "unable to process changes to settings at this time",
+                      "dismiss"
+                    );
+                    return [];
+                  })
+                )
+                .subscribe();
+            }
           }
         })
       )
@@ -246,6 +432,29 @@ export class RegistrationComponent implements OnInit {
     const nextStep = find(this.step2, (step) => step.ordinal === ordinal + 1);
     set(nextStep, "complete", false);
     set(nextStep, "active", true);
+  }
+
+  complete() {
+    this.isLoadingResults = true;
+    this.client.orgDetails.hasRegistered = true;
+    this.clientService
+      .postClient(ClientPayload.buildFromClient(this.client))
+      .pipe(
+        take(1),
+        tap(() => {
+          this.isLoadingResults = false;
+          this.router.navigateByUrl("/workbench");
+        }),
+        catchError(() => {
+          this.isLoadingResults = false;
+          this.openSnackBar(
+            "unable to process changes to settings at this time",
+            "dismiss"
+          );
+          return [];
+        })
+      )
+      .subscribe();
   }
 
   goBack(ordinal: number) {
@@ -286,10 +495,6 @@ export class RegistrationComponent implements OnInit {
     return false;
   }
 
-  get substep1(): any {
-    return this.step2Form.get("substep1");
-  }
-
   handleTooltipClick($event, field: string) {
     $event.preventDefault();
     this.dialog
@@ -307,5 +512,12 @@ export class RegistrationComponent implements OnInit {
       })
       .afterClosed()
       .subscribe();
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 10000,
+      panelClass: "standard",
+    });
   }
 }
