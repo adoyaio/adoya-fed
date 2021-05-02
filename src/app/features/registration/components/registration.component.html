@@ -220,8 +220,13 @@
                 </mat-list>
 
                 <div class="d-flex w-100 justify-content-start pl-5 ml-2">
-                  <button mat-flat-button color="accent" class="float-right">
-                    <span class="text-light pl-1">open</span>
+                  <button
+                    (click)="handleOpenConsole($event)"
+                    mat-flat-button
+                    color="accent"
+                    class="float-right"
+                  >
+                    <span class="text-light pl-1">open console</span>
                   </button>
                 </div>
               </div>
@@ -973,7 +978,9 @@
       <!-- TODO step to add additional countries and apps -->
 
       <mat-step>
-        <ng-template matStepLabel>Done</ng-template>
+        <ng-template matStepLabel
+          >Review your campaigns and complete registration</ng-template
+        >
         <div class="w-100">
           Congrats, you're done! <br />
           Based on the info you've provided, we've created the following

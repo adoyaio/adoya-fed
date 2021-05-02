@@ -29,6 +29,7 @@ import { HttpErrorResponse } from "@angular/common/http";
 @Injectable({ providedIn: "root" })
 export class HasRegisteredGuard implements CanActivate {
   destroyed$: Subject<boolean> = new Subject<boolean>();
+  initialized = false;
   constructor(
     private amplifyService: AmplifyService,
     private userAccountService: UserAccountService,
@@ -40,7 +41,6 @@ export class HasRegisteredGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> | Promise<boolean> | boolean {
-    console.log("can activate");
     const orgId = this.userAccountService
       .getCurrentUser()
       .UserAttributes.find((val) => {
@@ -51,6 +51,10 @@ export class HasRegisteredGuard implements CanActivate {
       return this.handleResult(false);
     }
 
+    if (this.initialized) {
+      return this.handleResult(true);
+    }
+
     return this.clientService.getClient(orgId).pipe(
       take(1),
       map((data) => {
@@ -58,7 +62,6 @@ export class HasRegisteredGuard implements CanActivate {
         return client.orgDetails.hasRegistered;
       }),
       tap((result) => this.handleResult(result)),
-
       catchError((error: HttpErrorResponse) => {
         return of(this.handleResult(false));
       })
@@ -71,8 +74,10 @@ export class HasRegisteredGuard implements CanActivate {
 
   handleResult(result: boolean) {
     if (!result) {
+      this.initialized = false;
       this.router.navigate(["/registration"]);
     }
+    this.initialized = true;
     return result;
   }
 }

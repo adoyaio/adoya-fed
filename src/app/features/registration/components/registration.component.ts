@@ -8,10 +8,11 @@ import {
 import { MatDialog, MatSnackBar, MatStepper } from "@angular/material";
 import { Router } from "@angular/router";
 import { AmplifyService } from "aws-amplify-angular";
-import { chain, delay, find, get, has, isNil, set } from "lodash";
+import { chain, delay, find, get, has, isEmpty, isNil, set } from "lodash";
 import { EMPTY } from "rxjs";
 import { catchError, finalize, switchMap, take, tap } from "rxjs/operators";
 import {
+  AdgroupBidParameters,
   BidParameters,
   BranchBidParameters,
   BranchIntegrationParameters,
@@ -186,14 +187,15 @@ export class RegistrationComponent implements OnInit {
         take(1),
         tap((data: Client) => {
           this.client = Client.buildFromGetClientResponse(data);
-
           // check if client exists and has auth fields
           if (!isNil(this.client.orgDetails.auth)) {
+            this.setOrgIdValue();
             this.setStep1FormValues();
           }
           this.isLoadingResults = false;
         }),
         catchError(() => {
+          this.setOrgIdValue();
           this.isLoadingResults = false;
           return EMPTY;
         })
@@ -210,8 +212,12 @@ export class RegistrationComponent implements OnInit {
           // STEP 1
           if (val.selectedIndex === 1) {
             //  build and submit a skeleton client
-            if (has(this.client.orgDetails, "appleCampaigns")) {
-              // TODO modal warning
+            if (
+              has(this.client.orgDetails, "appleCampaigns") &&
+              !isEmpty(this.client.orgDetails.appleCampaigns)
+            ) {
+              // modal warnin g
+              this.showWarningDialog();
             }
 
             const newClient = new Client();
@@ -224,19 +230,22 @@ export class RegistrationComponent implements OnInit {
             };
 
             // TODO set these in a step
+            newClient.orgId = +this.orgId;
             newClient.orgDetails.appID = "TODO";
             newClient.orgDetails.appName = "TODO";
+            newClient.orgDetails.campaignName = "TODO";
             newClient.orgDetails.currency = "USD";
             newClient.orgDetails.emailAddresses = ["scott.kaplan@adoya.io"];
 
             newClient.orgDetails.appleCampaigns = [];
             newClient.orgDetails.bidParameters = new BidParameters();
+            newClient.orgDetails.adgroupBidParameters = new AdgroupBidParameters();
             newClient.orgDetails.branchBidParameters = new BranchBidParameters();
             newClient.orgDetails.keywordAdderParameters = new KeywordAdderParameters();
             newClient.orgDetails.branchIntegrationParameters = new BranchIntegrationParameters();
 
             this.clientService
-              .postClient(ClientPayload.buildFromClient(this.client))
+              .postClient(ClientPayload.buildFromClient(newClient))
               .pipe(
                 take(1),
                 switchMap((data) => {
@@ -407,6 +416,10 @@ export class RegistrationComponent implements OnInit {
       .subscribe();
   }
 
+  setOrgIdValue() {
+    // set the org field
+    this.step1Form.get("orgId").setValue(this.orgId);
+  }
   setStep1FormValues() {
     this.step1Form.get("orgId").setValue(this.client.orgDetails.orgId);
     this.step1Form
@@ -512,6 +525,34 @@ export class RegistrationComponent implements OnInit {
       })
       .afterClosed()
       .subscribe();
+  }
+
+  showWarningDialog() {
+    this.dialog
+      .open(DynamicModalComponent, {
+        data: {
+          title: `Warning`,
+          content:
+            "You are attempting to re-register an existing account, clicking Yes below will delete any existing campaigns. Would you like to proceed?",
+          actionYes: "Yes, continue and delete existing campaigns",
+          actionNo: "No! Take me back to my dashboard",
+        },
+        maxWidth: "500px",
+        width: "500px",
+        panelClass: "tooltip-dialog-box",
+        autoFocus: false,
+      })
+      .afterClosed()
+      .subscribe();
+  }
+
+  handleOpenConsole($event) {
+    $event.preventDefault();
+
+    window.open(
+      "https://app.searchads.apple.com/cm/app/settings/users/invite",
+      "_blank"
+    );
   }
 
   openSnackBar(message: string, action: string) {
