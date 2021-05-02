@@ -46,7 +46,7 @@ export class HasRegisteredGuard implements CanActivate {
       }).Value;
 
     if (isNil(orgId)) {
-      return false;
+      return this.handleResult(false);
     }
 
     return this.clientService.getClient(orgId).pipe(
@@ -57,7 +57,7 @@ export class HasRegisteredGuard implements CanActivate {
       tap((result) => this.handleResult(result)),
       takeUntil(this.destroyed$),
       catchError((error: HttpErrorResponse) => {
-        return of(false);
+        return of(this.handleResult(false));
       })
     );
   }

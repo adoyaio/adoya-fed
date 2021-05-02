@@ -5,6 +5,12 @@
     /></a>
   </div>
   <div class="row">
+    <div class="workbench__loading-shade" *ngIf="isLoadingResults">
+      <mat-spinner color="accent"></mat-spinner>
+    </div>
+    <div class="workbench__sending" *ngIf="isSendingResults">
+      <mat-progress-bar color="accent" mode="indeterminate"></mat-progress-bar>
+    </div>
     <mat-vertical-stepper [linear]="true" #stepper>
       <mat-step [stepControl]="step1Form">
         <form [formGroup]="step1Form">
@@ -260,7 +266,9 @@
                   >
                     <mat-select formControlName="application">
                       <ng-container *ngFor="let app of apps">
-                        <mat-option value="standard">{{ app }}</mat-option>
+                        <mat-option [value]="app.adamId">{{
+                          app.appName
+                        }}</mat-option>
                       </ng-container>
                     </mat-select>
                     <mat-label>&nbsp;Select Application </mat-label>
@@ -283,7 +291,9 @@
                   >
                     <mat-select formControlName="country">
                       <ng-container *ngFor="let country of countries">
-                        <mat-option value="standard">{{ country }}</mat-option>
+                        <mat-option value="country.code">{{
+                          country.name
+                        }}</mat-option>
                       </ng-container>
                     </mat-select>
                     <mat-label>Select Country</mat-label>

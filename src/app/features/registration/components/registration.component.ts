@@ -1,14 +1,16 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import {
   FormBuilder,
   FormControl,
   FormGroup,
   Validators,
 } from "@angular/forms";
-import { MatDialog, MatSnackBar } from "@angular/material";
+import { MatDialog, MatSnackBar, MatStepper } from "@angular/material";
 import { Router } from "@angular/router";
 import { AmplifyService } from "aws-amplify-angular";
 import { chain, find, get, isNil, set } from "lodash";
+import { EMPTY } from "rxjs";
+import { catchError, finalize, take, tap } from "rxjs/operators";
 import { Client } from "src/app/core/models/client";
 import { ClientService } from "src/app/core/services/client.service";
 import { UserAccountService } from "src/app/core/services/user-account.service";
@@ -20,8 +22,20 @@ import { DynamicModalComponent } from "src/app/shared/dynamic-modal/dynamic-moda
   styleUrls: ["./registration.component.scss"],
 })
 export class RegistrationComponent implements OnInit {
-  countries = ["United States", "Canada", "Japan"];
-  apps = ["Acme", "Beta", "Delta"]; // TODO load from api
+  @ViewChild("stepper", { static: false }) private stepper: MatStepper;
+
+  countries = [
+    { name: "United States", code: "US" },
+    { name: "Canada", code: "CA" },
+    { name: "United Kingdom", code: "GB" },
+    { name: "Australia", code: "AU" },
+    { name: "New Zealand", code: "NZ" },
+    { name: "Phillippines", code: "PH" },
+    { name: "Ireland", code: "IE" },
+    { name: "India", code: "IN" },
+  ];
+
+  apps = [];
   campaigns = [
     "Acme - US - Discovery - Broad Match",
     "Acme - US - Discovery - Exact Match",
@@ -97,11 +111,7 @@ export class RegistrationComponent implements OnInit {
     teamId: new FormControl("", Validators.required),
     keyId: new FormControl("", Validators.required),
     privateKey: new FormControl("", Validators.required),
-    publicKey: new FormControl(""),
   });
-
-  // TODO countries
-  // United States = 'US', Canada = 'CA', United Kingdom = 'GB', Austrailia = 'AU', New Zealand = 'NZ', Philippines = 'PH' Ireland = 'IE', and India = 'IN' (edited)
 
   step2Form = this.fb.group({
     substep1: this.fb.group({
@@ -140,7 +150,88 @@ export class RegistrationComponent implements OnInit {
   isSendingResults;
   orgId: string;
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.orgId = this.userAccountService
+      .getCurrentUser()
+      .UserAttributes.find((val) => {
+        return val.Name === "custom:org_id";
+      }).Value;
+
+    this.clientService
+      .getClient(this.orgId)
+      .pipe(
+        take(1),
+        tap((data: Client) => {
+          this.client = Client.buildFromGetClientResponse(data);
+
+          // check if client exists and has auth fields
+          if (!isNil(this.client.orgDetails.auth)) {
+            this.setStep1FormValues();
+          }
+          this.isLoadingResults = false;
+        }),
+        catchError(() => {
+          this.isLoadingResults = false;
+          return EMPTY;
+        })
+      )
+      .subscribe();
+  }
+
+  ngAfterViewInit() {
+    this.stepper.selectionChange
+      .pipe(
+        tap((val) => {
+          if (val.selectedIndex === 1) {
+            //  TODO build the client
+
+            // set the dropdown values of apps
+            this.isLoadingResults = true;
+            this.clientService
+              .getAppleCampaigns(this.orgId)
+              .pipe(
+                take(1),
+                tap((val) => {
+                  this.apps = val.data;
+                }),
+                finalize(() => {
+                  this.isLoadingResults = false;
+                })
+              )
+              .subscribe();
+          }
+          if (val.selectedIndex === 2) {
+            // submit the client
+            this.isLoadingResults = true;
+            this.clientService
+              .getAppleCampaigns(this.orgId)
+              .pipe(
+                take(1),
+                tap((val) => {
+                  this.apps = val.data;
+                }),
+                finalize(() => {
+                  this.isLoadingResults = false;
+                })
+              )
+              .subscribe();
+          }
+        })
+      )
+      .subscribe();
+  }
+
+  setStep1FormValues() {
+    this.step1Form.get("orgId").setValue(this.client.orgDetails.orgId);
+    this.step1Form
+      .get("clientId")
+      .setValue(this.client.orgDetails.auth.clientId);
+    this.step1Form.get("teamId").setValue(this.client.orgDetails.auth.teamId);
+    this.step1Form.get("keyId").setValue(this.client.orgDetails.auth.keyId);
+    this.step1Form
+      .get("privateKey")
+      .setValue(this.client.orgDetails.auth.privateKey);
+  }
 
   isOrdinalActive(ordinal: number): boolean {
     const step = find(this.step2, (step) => step.ordinal === ordinal);
