@@ -254,6 +254,8 @@ export class RegistrationComponent implements OnInit {
                       "unable to process changes to settings at this time",
                       "dismiss"
                     );
+                    this.isLoadingResults = false;
+                    return;
                   }
                   return this.clientService.getAppleCampaigns(this.orgId).pipe(
                     take(1),
@@ -266,7 +268,7 @@ export class RegistrationComponent implements OnInit {
                   );
                 }),
                 catchError(() => {
-                  this.isSendingResults = false;
+                  this.isLoadingResults = false;
                   this.openSnackBar(
                     "unable to process changes to settings at this time",
                     "dismiss"
@@ -548,7 +550,6 @@ export class RegistrationComponent implements OnInit {
 
   handleOpenConsole($event) {
     $event.preventDefault();
-
     window.open(
       "https://app.searchads.apple.com/cm/app/settings/users/invite",
       "_blank"
