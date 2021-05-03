@@ -7,7 +7,7 @@ import {
 } from "@angular/forms";
 import { MatDialog, MatSnackBar, MatStepper } from "@angular/material";
 import { Router } from "@angular/router";
-import { AmplifyService } from "aws-amplify-angular";
+import { Auth } from "aws-amplify";
 import { chain, delay, find, get, has, isEmpty, isNil, set } from "lodash";
 import { EMPTY } from "rxjs";
 import { catchError, finalize, switchMap, take, tap } from "rxjs/operators";
@@ -120,7 +120,6 @@ export class RegistrationComponent implements OnInit {
   // }
 
   constructor(
-    private amplifyService: AmplifyService,
     private router: Router,
     private fb: FormBuilder,
     private userAccountService: UserAccountService,
@@ -175,32 +174,29 @@ export class RegistrationComponent implements OnInit {
   orgId: string;
 
   ngOnInit() {
-    this.orgId = this.userAccountService
-      .getCurrentUser()
-      .UserAttributes.find((val) => {
-        return val.Name === "custom:org_id";
-      }).Value;
-
-    this.clientService
-      .getClient(this.orgId)
-      .pipe(
-        take(1),
-        tap((data: Client) => {
-          this.client = Client.buildFromGetClientResponse(data);
-          // check if client exists and has auth fields
-          if (!isNil(this.client.orgDetails.auth)) {
+    Auth.currentUserInfo().then((val) => {
+      this.orgId = get(val.attributes, "custom:org_id");
+      this.clientService
+        .getClient(this.orgId)
+        .pipe(
+          take(1),
+          tap((data: Client) => {
+            this.client = Client.buildFromGetClientResponse(data);
+            // check if client exists and has auth fields
+            if (!isNil(this.client.orgDetails.auth)) {
+              this.setOrgIdValue();
+              this.setStep1FormValues();
+            }
+            this.isLoadingResults = false;
+          }),
+          catchError(() => {
             this.setOrgIdValue();
-            this.setStep1FormValues();
-          }
-          this.isLoadingResults = false;
-        }),
-        catchError(() => {
-          this.setOrgIdValue();
-          this.isLoadingResults = false;
-          return EMPTY;
-        })
-      )
-      .subscribe();
+            this.isLoadingResults = false;
+            return EMPTY;
+          })
+        )
+        .subscribe();
+    });
   }
 
   ngAfterViewInit() {

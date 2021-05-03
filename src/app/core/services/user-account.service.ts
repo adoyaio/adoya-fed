@@ -1,18 +1,18 @@
-import { UserAttributes } from "../../shared/models/user-account";
-import { HttpClient } from "@angular/common/http";
+import { Auth } from "aws-amplify";
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, from, Observable, of } from "rxjs";
 import { UserAccount } from "../../shared/models/user-account";
 import { AmplifyService } from "aws-amplify-angular";
+import { isNil } from "lodash";
 
 @Injectable({
   providedIn: "root",
 })
 export class UserAccountService {
   private storedUser: UserAccount;
-  private currentUserSubject: BehaviorSubject<
-    UserAccount
-  > = new BehaviorSubject<UserAccount>(this.storedUser);
+  private currentUserSubject: BehaviorSubject<UserAccount> = new BehaviorSubject<UserAccount>(
+    this.storedUser
+  );
   public currentUser$: Observable<UserAccount>;
 
   // signedIn: boolean = false;
@@ -25,22 +25,6 @@ export class UserAccountService {
   public get currentUserValue(): UserAccount {
     return this.currentUserSubject.value;
   }
-
-  // setSignedInState(_signedIn) {
-  //   console.log("set signed in state:::" + this.signedIn);
-  //   this.signedIn = _signedIn;
-  //   const user: UserAccount = this.getCurrentUser();
-  //   this.setCurrentUser(user);
-  // }
-
-  // getSignedInState() {
-  //   if (this.currentUserSubject.getValue()) {
-  //     this.setSignedInState(true);
-  //   }
-  //   this.setSignedInState(false);
-
-  //   return this.signedIn;
-  // }
 
   getCurrentUser(): UserAccount {
     let userAccount = new UserAccount();

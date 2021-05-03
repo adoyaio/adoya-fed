@@ -59,7 +59,6 @@ export class AccountComponent implements OnInit {
   }
 
   onSupportClick() {
-    console.log("onsupport");
     this.router.navigateByUrl("/workbench/support");
   }
 }

@@ -2,69 +2,60 @@ import { Injectable } from "@angular/core";
 import {
   ActivatedRouteSnapshot,
   CanActivate,
-  CanLoad,
-  Route,
   RouterStateSnapshot,
-  UrlSegment,
   Router,
 } from "@angular/router";
-import { Observable, of, Subject } from "rxjs";
-import { AmplifyService } from "aws-amplify-angular";
-import { AuthState } from "aws-amplify-angular/dist/src/providers";
-import {
-  tap,
-  switchMap,
-  map,
-  filter,
-  catchError,
-  takeUntil,
-  take,
-} from "rxjs/operators";
-import { UserAccountService } from "../services/user-account.service";
+import { Observable, Subject } from "rxjs";
+import { tap, map, take } from "rxjs/operators";
+
 import { ClientService } from "../services/client.service";
 import { get, has, isNil } from "lodash";
 import { Client } from "../models/client";
-import { HttpErrorResponse } from "@angular/common/http";
+import { Auth } from "aws-amplify";
 
 @Injectable({ providedIn: "root" })
 export class HasRegisteredGuard implements CanActivate {
   destroyed$: Subject<boolean> = new Subject<boolean>();
   initialized = false;
-  constructor(
-    private amplifyService: AmplifyService,
-    private userAccountService: UserAccountService,
-    private clientService: ClientService,
-    private router: Router
-  ) {}
+  constructor(private clientService: ClientService, private router: Router) {}
 
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> | Promise<boolean> | boolean {
-    const orgId = this.userAccountService
-      .getCurrentUser()
-      .UserAttributes.find((val) => {
-        return val.Name === "custom:org_id";
-      }).Value;
+    return Auth.currentUserInfo().then(
+      (val) => {
+        const orgId = get(val.attributes, "custom:org_id");
 
-    if (isNil(orgId)) {
-      return this.handleResult(false);
-    }
+        if (isNil(orgId)) {
+          return this.handleResult(false);
+        }
 
-    if (this.initialized) {
-      return this.handleResult(true);
-    }
+        if (this.initialized) {
+          return this.handleResult(true);
+        }
 
-    return this.clientService.getClient(orgId).pipe(
-      take(1),
-      map((data) => {
-        const client = Client.buildFromGetClientResponse(data);
-        return client.orgDetails.hasRegistered;
-      }),
-      tap((result) => this.handleResult(result)),
-      catchError((error: HttpErrorResponse) => {
-        return of(this.handleResult(false));
-      })
+        return this.clientService
+          .getClient(orgId)
+          .pipe(
+            take(1),
+            map((data) => {
+              if (isNil(data)) {
+                return this.handleResult(false);
+              }
+              const client = Client.buildFromGetClientResponse(data);
+              if (!has(client.orgDetails, "hasRegistered")) {
+                return this.handleResult(false);
+              }
+              return client.orgDetails.hasRegistered;
+            }),
+            tap((result) => this.handleResult(result))
+          )
+          .toPromise();
+      },
+      () => {
+        return this.handleResult(false);
+      }
     );
   }
 
