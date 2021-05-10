@@ -203,19 +203,19 @@ export class RegistrationComponent implements OnInit {
     this.stepper.selectionChange
       .pipe(
         tap((val) => {
-          this.isLoadingResults = true;
-
           // STEP 1
           if (val.selectedIndex === 1) {
+            this.isLoadingResults = true;
             //  build and submit a skeleton client
             if (
               has(this.client.orgDetails, "appleCampaigns") &&
               !isEmpty(this.client.orgDetails.appleCampaigns)
             ) {
-              // modal warnin g
+              // modal warning
               this.showWarningDialog();
             }
 
+            // TODO move all this into the modal
             const newClient = new Client();
             newClient.orgDetails = new OrgDetails();
             newClient.orgDetails.auth = {
@@ -226,7 +226,8 @@ export class RegistrationComponent implements OnInit {
             };
 
             // TODO set these in a step
-            newClient.orgId = +this.orgId;
+            newClient.orgId = +this.orgId; // NOTE this may diverge at some point from asa id
+            newClient.orgDetails.orgId = +this.orgId;
             newClient.orgDetails.appID = "TODO";
             newClient.orgDetails.appName = "TODO";
             newClient.orgDetails.campaignName = "TODO";
@@ -257,6 +258,12 @@ export class RegistrationComponent implements OnInit {
                     take(1),
                     tap((val) => {
                       this.apps = val.data;
+                      if (!isEmpty(val.data)) {
+                        this.openSnackBar(
+                          "we found some of your applications, please select one from the dropdown to continue",
+                          "dismiss"
+                        );
+                      }
                     }),
                     finalize(() => {
                       this.isLoadingResults = false;
@@ -279,7 +286,7 @@ export class RegistrationComponent implements OnInit {
           if (val.selectedIndex === 2) {
             // build the client from step 2 values
             if (this.step2Form.valid) {
-              this.isSendingResults = true;
+              this.isLoadingResults = true;
 
               this.client.orgDetails.bidParameters.objective = this.substep2.get(
                 "objective"
@@ -320,76 +327,6 @@ export class RegistrationComponent implements OnInit {
                 "branchSecret"
               ).value;
 
-              // // build campaigns
-              // chain(this.client)
-              //   .get("orgDetails")
-              //   .get("appleCampaigns")
-              //   .each((campaign) => {
-              //     // get the checkbox value to see if bid params overridden
-              //     const hasOverrides = this.appleForm.get(
-              //       "checkbox_" + campaign.campaignId
-              //     ).value;
-
-              //     if (hasOverrides) {
-              //       const bidParameters = {};
-              //       const cpi = this.appleForm.get("cpi_" + campaign.campaignId).value;
-
-              //       const objective = this.appleForm.get(
-              //         "objective_" + campaign.campaignId
-              //       ).value;
-
-              //       if (!isNil(cpi)) {
-              //         set(bidParameters, "HIGH_CPI_BID_DECREASE_THRESH", cpi);
-              //       }
-
-              //       if (!isNil(objective)) {
-              //         set(bidParameters, "OBJECTIVE", objective);
-              //       }
-
-              //       set(campaign, "bidParameters", bidParameters);
-              //     } else {
-              //       set(campaign, "bidParameters", {});
-              //     }
-
-              //     // check if there are branch bid params overrides
-              //     const hasBranchOverrides = this.appleForm.get(
-              //       "mmpCheckbox_" + campaign.campaignId
-              //     ).value;
-
-              //     if (hasBranchOverrides) {
-              //       const branchBidParameters = {};
-
-              //       const mmpObjective = this.appleForm.get(
-              //         "mmpObjective_" + campaign.campaignId
-              //       ).value;
-
-              //       if (mmpObjective === "revenue_over_ad_spend") {
-              //         const roas = this.appleForm.get("roas_" + campaign.campaignId)
-              //           .value;
-
-              //         set(branchBidParameters, "revenue_over_ad_spend_threshold", roas);
-              //         set(
-              //           branchBidParameters,
-              //           "branch_optimization_goal",
-              //           mmpObjective
-              //         );
-              //       } else {
-              //         const cpp = this.appleForm.get("cpp_" + campaign.campaignId)
-              //           .value;
-              //         set(branchBidParameters, "cost_per_purchase_threshold", cpp);
-              //         set(
-              //           branchBidParameters,
-              //           "branch_optimization_goal",
-              //           mmpObjective
-              //         );
-              //       }
-              //       set(campaign, "branchBidParameters", branchBidParameters);
-              //     } else {
-              //       set(campaign, "branchBidParameters", {});
-              //     }
-              //   })
-              //   .value();
-
               this.clientService
                 .postClient(ClientPayload.buildFromClient(this.client))
                 .pipe(
@@ -419,7 +356,6 @@ export class RegistrationComponent implements OnInit {
     this.step1Form.get("orgId").setValue(this.orgId);
   }
   setStep1FormValues() {
-    this.step1Form.get("orgId").setValue(this.client.orgDetails.orgId);
     this.step1Form
       .get("clientId")
       .setValue(this.client.orgDetails.auth.clientId);
