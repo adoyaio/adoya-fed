@@ -138,6 +138,7 @@ export class RegistrationComponent implements OnInit {
 
   step2Form = this.fb.group({
     substep1: this.fb.group({
+      clientName: new FormControl(""),
       application: new FormControl(undefined, Validators.required),
       country: new FormControl(undefined, Validators.required),
     }),
@@ -172,10 +173,12 @@ export class RegistrationComponent implements OnInit {
   isLoadingResults = true;
   isSendingResults;
   orgId: string;
+  emailAddresses: string;
 
   ngOnInit() {
     Auth.currentUserInfo().then((val) => {
       this.orgId = get(val.attributes, "custom:org_id");
+      this.emailAddresses = get(val.attributes, "email");
       this.clientService
         .getClient(this.orgId)
         .pipe(
@@ -228,11 +231,9 @@ export class RegistrationComponent implements OnInit {
             // TODO set these in a step
             newClient.orgId = +this.orgId; // NOTE this may diverge at some point from asa id
             newClient.orgDetails.orgId = +this.orgId;
-            newClient.orgDetails.appID = "TODO";
-            newClient.orgDetails.appName = "TODO";
-            newClient.orgDetails.campaignName = "TODO";
-            newClient.orgDetails.currency = "USD";
-            newClient.orgDetails.emailAddresses = ["scott.kaplan@adoya.io"];
+            newClient.orgDetails.emailAddresses = [this.emailAddresses];
+
+            newClient.orgDetails.currency = "USD"; // TODO need an endpoint
 
             newClient.orgDetails.appleCampaigns = [];
             newClient.orgDetails.bidParameters = new BidParameters();
@@ -326,6 +327,20 @@ export class RegistrationComponent implements OnInit {
               this.client.orgDetails.branchIntegrationParameters.branchSecret = this.substep6.get(
                 "branchSecret"
               ).value;
+
+              // write the substep 1 values to client
+              this.client.orgDetails.appID = this.substep1.get(
+                "application"
+              ).value;
+
+              const app = chain(this.apps)
+                .find((app) => {
+                  return app.adamId === this.client.orgDetails.appID;
+                })
+                .value();
+
+              this.client.orgDetails.appName = get(app, "appName");
+              this.client.orgDetails.clientName = get(app, "developerName");
 
               this.clientService
                 .postClient(ClientPayload.buildFromClient(this.client))
