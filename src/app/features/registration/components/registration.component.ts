@@ -5,12 +5,25 @@ import {
   FormGroup,
   Validators,
 } from "@angular/forms";
-import { MatDialog, MatSnackBar, MatStepper } from "@angular/material";
+import {
+  MatCheckboxChange,
+  MatDialog,
+  MatSnackBar,
+  MatStepper,
+} from "@angular/material";
 import { Router } from "@angular/router";
 import { Auth } from "aws-amplify";
 import { chain, delay, find, get, has, isEmpty, isNil, set } from "lodash";
-import { EMPTY } from "rxjs";
-import { catchError, finalize, switchMap, take, tap } from "rxjs/operators";
+import { combineLatest, EMPTY, Subject } from "rxjs";
+import {
+  catchError,
+  filter,
+  finalize,
+  switchMap,
+  take,
+  takeUntil,
+  tap,
+} from "rxjs/operators";
 import {
   AdgroupBidParameters,
   BidParameters,
@@ -42,6 +55,17 @@ export class RegistrationComponent implements OnInit {
     { name: "Phillippines", code: "PH" },
     { name: "Ireland", code: "IE" },
     { name: "India", code: "IN" },
+  ];
+
+  currencies = [
+    { code: "USD", countryCode: "US" },
+    { code: "CAD", countryCode: "CA" },
+    { code: "GBP", countryCode: "GB" },
+    { code: "AUD", countryCode: "AU" },
+    { code: "NZD", countryCode: "NZ" },
+    { code: "PHP", countryCode: "PH" },
+    { code: "EUR", countryCode: "IE" },
+    { code: "INR", countryCode: "IN" },
   ];
 
   apps = [];
@@ -119,6 +143,8 @@ export class RegistrationComponent implements OnInit {
   //   return this.step2Form.get("substep1.country");
   // }
 
+  private _destroyed$: Subject<boolean> = new Subject<boolean>();
+
   constructor(
     private router: Router,
     private fb: FormBuilder,
@@ -138,17 +164,32 @@ export class RegistrationComponent implements OnInit {
 
   step2Form = this.fb.group({
     substep1: this.fb.group({
-      clientName: new FormControl(""),
       application: new FormControl(undefined, Validators.required),
       country: new FormControl(undefined, Validators.required),
+      currency: new FormControl(undefined, Validators.required),
     }),
     substep2: this.fb.group({
       objective: new FormControl(undefined, Validators.required),
-      cpi: new FormControl(undefined, Validators.required),
+      cpi: new FormControl(undefined, [
+        Validators.required,
+        Validators.min(0.1),
+        Validators.max(1000),
+        Validators.minLength(1),
+      ]),
     }),
     substep3: this.fb.group({
-      dailyBudget: new FormControl(undefined, Validators.required),
-      lifetimeBudget: new FormControl(undefined, Validators.required),
+      dailyBudget: new FormControl(undefined, [
+        Validators.required,
+        Validators.min(0.1),
+        Validators.max(1000),
+        Validators.minLength(1),
+      ]),
+      lifetimeBudget: new FormControl(undefined, [
+        Validators.required,
+        Validators.min(0.1),
+        Validators.max(1000),
+        Validators.minLength(1),
+      ]),
     }),
     substep4: this.fb.group({
       competitors: new FormControl(undefined, Validators.required),
@@ -156,16 +197,26 @@ export class RegistrationComponent implements OnInit {
       brand: new FormControl(undefined, Validators.required),
     }),
     substep5: this.fb.group({
-      genders: new FormControl(undefined, Validators.required),
-      ages: new FormControl(undefined, Validators.required),
+      genders: new FormControl(undefined, [Validators.required]),
+      ages: new FormControl(undefined, [Validators.required]),
     }),
     substep6: this.fb.group({
-      mmpObjective: new FormControl(undefined),
-      cpp: new FormControl(undefined),
-      roas: new FormControl(undefined),
+      mmpObjective: new FormControl(undefined, Validators.required),
+      cpp: new FormControl(undefined, [
+        Validators.required,
+        Validators.min(0.1),
+        Validators.max(1000),
+        Validators.minLength(1),
+      ]),
+      roas: new FormControl(undefined, [
+        Validators.required,
+        Validators.min(0.1),
+        Validators.max(1000),
+        Validators.minLength(1),
+      ]),
       branchBidAdjusterEnabled: new FormControl(false),
-      branchKey: new FormControl(false),
-      branchSecret: new FormControl(false),
+      branchKey: new FormControl(undefined, Validators.required),
+      branchSecret: new FormControl(undefined, Validators.required),
     }),
   });
 
@@ -189,6 +240,7 @@ export class RegistrationComponent implements OnInit {
             if (!isNil(this.client.orgDetails.auth)) {
               this.setOrgIdValue();
               this.setStep1FormValues();
+              this.setStep2FormValues();
             }
             this.isLoadingResults = false;
           }),
@@ -228,12 +280,12 @@ export class RegistrationComponent implements OnInit {
               privateKey: this.step1Form.get("privateKey").value,
             };
 
-            // TODO set these in a step
+            // set values from token
             newClient.orgId = +this.orgId; // NOTE this may diverge at some point from asa id
             newClient.orgDetails.orgId = +this.orgId;
             newClient.orgDetails.emailAddresses = [this.emailAddresses];
 
-            newClient.orgDetails.currency = "USD"; // TODO need an endpoint
+            // newClient.orgDetails.currency = "USD"; // TODO need an endpoint
 
             newClient.orgDetails.appleCampaigns = [];
             newClient.orgDetails.bidParameters = new BidParameters();
@@ -342,6 +394,10 @@ export class RegistrationComponent implements OnInit {
               this.client.orgDetails.appName = get(app, "appName");
               this.client.orgDetails.clientName = get(app, "developerName");
 
+              this.client.orgDetails.currency = this.substep1.get(
+                "currency"
+              ).value;
+
               this.clientService
                 .postClient(ClientPayload.buildFromClient(this.client))
                 .pipe(
@@ -361,15 +417,88 @@ export class RegistrationComponent implements OnInit {
                 .subscribe();
             }
           }
-        })
+        }),
+        takeUntil(this._destroyed$)
       )
       .subscribe();
+
+    this.substep1
+      .get("country")
+      .valueChanges.pipe(
+        tap((val) => {
+          const currency = chain(this.currencies)
+            .find((currency) => {
+              return currency.countryCode === val;
+            })
+            .get("code")
+            .value();
+
+          this.substep1.get("currency").setValue(currency);
+        }),
+        takeUntil(this._destroyed$)
+      )
+      .subscribe();
+
+    combineLatest([
+      this.substep6.get("branchBidAdjusterEnabled").valueChanges,
+      this.substep6.get("mmpObjective").valueChanges,
+    ])
+      .pipe(
+        tap(([enabled, objective]) => {
+          if (!enabled) {
+            this.substep6.get("cpp").disable();
+            this.substep6.get("roas").disable();
+            this.substep6.get("branchKey").disable();
+            this.substep6.get("branchSecret").disable();
+
+            return;
+          }
+
+          if (objective === "revenue_over_ad_spend") {
+            this.substep6.get("cpp").disable();
+            this.substep6.get("roas").enable();
+          }
+          if (objective === "cost_per_purchase") {
+            this.substep6.get("cpp").enable();
+            this.substep6.get("roas").disable();
+          }
+        }),
+        takeUntil(this._destroyed$)
+      )
+      .subscribe();
+  }
+
+  ngOnDestroy(): void {
+    this._destroyed$.next(true);
+  }
+
+  handleBranchCheckboxChange($event: MatCheckboxChange) {
+    if ($event.checked) {
+      this.substep6.get("mmpObjective").enable();
+      this.substep6.get("branchKey").enable();
+      this.substep6.get("branchSecret").enable();
+
+      if (this.substep6.get("mmpObjective").value === "revenue_over_ad_spend") {
+        this.substep6.get("roas").enable();
+      }
+
+      if (this.substep6.get("mmpObjective").value === "cost_per_purchase") {
+        this.substep6.get("cpp").enable();
+      }
+    } else {
+      this.substep6.get("cpp").disable();
+      this.substep6.get("mmpObjective").disable();
+      this.substep6.get("roas").disable();
+      this.substep6.get("branchKey").disable();
+      this.substep6.get("branchSecret").disable();
+    }
   }
 
   setOrgIdValue() {
     // set the org field
     this.step1Form.get("orgId").setValue(this.orgId);
   }
+
   setStep1FormValues() {
     this.step1Form
       .get("clientId")
@@ -379,6 +508,66 @@ export class RegistrationComponent implements OnInit {
     this.step1Form
       .get("privateKey")
       .setValue(this.client.orgDetails.auth.privateKey);
+  }
+
+  setStep2FormValues() {
+    // client level controls
+    this.substep2
+      .get("objective")
+      .setValue(this.client.orgDetails.bidParameters.objective);
+
+    this.substep2
+      .get("cpi")
+      .setValue(this.client.orgDetails.bidParameters.highCPIBidDecreaseThresh);
+
+    this.substep6
+      .get("mmpObjective")
+      .setValue(
+        this.client.orgDetails.branchBidParameters.branchOptimizationGoal
+      );
+
+    this.substep6
+      .get("cpp")
+      .setValue(
+        this.client.orgDetails.branchBidParameters.costPerPurchaseThreshold
+      );
+
+    this.substep6
+      .get("roas")
+      .setValue(
+        this.client.orgDetails.branchBidParameters.revenueOverAdSpendThreshold
+      );
+
+    this.substep6
+      .get("branchBidAdjusterEnabled")
+      .setValue(
+        this.client.orgDetails.branchIntegrationParameters
+          .branchBidAdjusterEnabled
+      );
+
+    this.substep6
+      .get("branchKey")
+      .setValue(this.client.orgDetails.branchIntegrationParameters.branchKey);
+
+    this.substep6
+      .get("branchSecret")
+      .setValue(
+        this.client.orgDetails.branchIntegrationParameters.branchSecret
+      );
+
+    if (
+      isNil(
+        this.client.orgDetails.branchIntegrationParameters
+          .branchBidAdjusterEnabled
+      ) ||
+      isNil(this.client.orgDetails.branchIntegrationParameters)
+    ) {
+      this.substep6.get("cpp").disable();
+      this.substep6.get("roas").disable();
+      this.substep6.get("mmpObjective").disable();
+      this.substep6.get("branchKey").disable();
+      this.substep6.get("branchSecret").disable();
+    }
   }
 
   isOrdinalActive(ordinal: number): boolean {
@@ -429,8 +618,6 @@ export class RegistrationComponent implements OnInit {
     set(prevStep, "active", true);
   }
 
-  handleBranchCheckboxChange() {}
-
   substepDisabled(): boolean {
     const activeSubstep = find(this.step2, (step) => step.active === true);
 
@@ -452,6 +639,10 @@ export class RegistrationComponent implements OnInit {
 
     if (activeSubstep.ordinal === 5) {
       return this.step2Form.get("substep5").invalid;
+    }
+
+    if (activeSubstep.ordinal === 6) {
+      return this.step2Form.get("substep6").invalid;
     }
 
     return false;

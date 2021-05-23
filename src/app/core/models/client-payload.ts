@@ -193,13 +193,11 @@ export class OrgDetailsPayload {
   currency: string;
   disabled: boolean;
   appleCampaigns: any[];
-  campaignName: string;
   auth: any;
   hasRegistered: boolean;
 
   static buildFromClient(response: OrgDetails) {
     const retVal = new OrgDetailsPayload();
-    retVal.campaignName = response.campaignName;
     retVal.appleCampaigns = response.appleCampaigns;
     retVal.disabled = response.disabled;
     retVal.currency = response.currency;
