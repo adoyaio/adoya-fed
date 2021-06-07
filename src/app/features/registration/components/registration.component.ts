@@ -13,29 +13,22 @@ import {
 } from "@angular/material";
 import { Router } from "@angular/router";
 import { Auth } from "aws-amplify";
+
 import { chain, delay, find, get, has, isEmpty, isNil, set } from "lodash";
-import { combineLatest, EMPTY, Subject } from "rxjs";
+import { combineLatest, EMPTY, of, Subject } from "rxjs";
 import {
   catchError,
-  filter,
   finalize,
   switchMap,
   take,
   takeUntil,
   tap,
 } from "rxjs/operators";
-import {
-  AdgroupBidParameters,
-  BidParameters,
-  BranchBidParameters,
-  BranchIntegrationParameters,
-  Client,
-  KeywordAdderParameters,
-  OrgDetails,
-} from "src/app/core/models/client";
+import { Client, OrgDetails } from "src/app/core/models/client";
 import { ClientPayload } from "src/app/core/models/client-payload";
 import { ClientService } from "src/app/core/services/client.service";
 import { UserAccountService } from "src/app/core/services/user-account.service";
+import { CustomFormValidators } from "src/app/shared/dynamic-form/validators/CustomFormValidators";
 import { DynamicModalComponent } from "src/app/shared/dynamic-modal/dynamic-modal.component";
 
 @Component({
@@ -148,7 +141,6 @@ export class RegistrationComponent implements OnInit {
   constructor(
     private router: Router,
     private fb: FormBuilder,
-    private userAccountService: UserAccountService,
     private clientService: ClientService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog
@@ -177,20 +169,23 @@ export class RegistrationComponent implements OnInit {
         Validators.minLength(1),
       ]),
     }),
-    substep3: this.fb.group({
-      dailyBudget: new FormControl(undefined, [
-        Validators.required,
-        Validators.min(0.1),
-        Validators.max(1000),
-        Validators.minLength(1),
-      ]),
-      lifetimeBudget: new FormControl(undefined, [
-        Validators.required,
-        Validators.min(0.1),
-        Validators.max(1000),
-        Validators.minLength(1),
-      ]),
-    }),
+    substep3: this.fb.group(
+      {
+        dailyBudget: new FormControl(undefined, [
+          Validators.required,
+          Validators.min(1),
+          Validators.max(10000),
+          Validators.minLength(1),
+        ]),
+        lifetimeBudget: new FormControl(undefined, [
+          Validators.required,
+          Validators.min(10),
+          Validators.max(1000000),
+          Validators.minLength(1),
+        ]),
+      },
+      { validators: CustomFormValidators.budgetValidator }
+    ),
     substep4: this.fb.group({
       competitors: new FormControl(undefined, Validators.required),
       phrases: new FormControl(undefined, Validators.required),
@@ -220,13 +215,14 @@ export class RegistrationComponent implements OnInit {
     }),
   });
 
-  client: Client = new Client();
+  client: Client;
   isLoadingResults = true;
   isSendingResults;
   orgId: string;
   emailAddresses: string;
 
   ngOnInit() {
+    // this.initializeClient();
     Auth.currentUserInfo().then((val) => {
       this.orgId = get(val.attributes, "custom:org_id");
       this.emailAddresses = get(val.attributes, "email");
@@ -260,8 +256,8 @@ export class RegistrationComponent implements OnInit {
         tap((val) => {
           // STEP 1
           if (val.selectedIndex === 1) {
+            this.initializeClient();
             this.isLoadingResults = true;
-            //  build and submit a skeleton client
             if (
               has(this.client.orgDetails, "appleCampaigns") &&
               !isEmpty(this.client.orgDetails.appleCampaigns)
@@ -271,9 +267,7 @@ export class RegistrationComponent implements OnInit {
             }
 
             // TODO move all this into the modal
-            const newClient = new Client();
-            newClient.orgDetails = new OrgDetails();
-            newClient.orgDetails.auth = {
+            this.client.orgDetails.auth = {
               clientId: this.step1Form.get("clientId").value,
               teamId: this.step1Form.get("teamId").value,
               keyId: this.step1Form.get("keyId").value,
@@ -281,21 +275,12 @@ export class RegistrationComponent implements OnInit {
             };
 
             // set values from token
-            newClient.orgId = +this.orgId; // NOTE this may diverge at some point from asa id
-            newClient.orgDetails.orgId = +this.orgId;
-            newClient.orgDetails.emailAddresses = [this.emailAddresses];
-
-            // newClient.orgDetails.currency = "USD"; // TODO need an endpoint
-
-            newClient.orgDetails.appleCampaigns = [];
-            newClient.orgDetails.bidParameters = new BidParameters();
-            newClient.orgDetails.adgroupBidParameters = new AdgroupBidParameters();
-            newClient.orgDetails.branchBidParameters = new BranchBidParameters();
-            newClient.orgDetails.keywordAdderParameters = new KeywordAdderParameters();
-            newClient.orgDetails.branchIntegrationParameters = new BranchIntegrationParameters();
+            this.client.orgId = +this.orgId; // NOTE this may diverge at some point from asa id
+            this.client.orgDetails.orgId = +this.orgId;
+            this.client.orgDetails.emailAddresses = [this.emailAddresses];
 
             this.clientService
-              .postClient(ClientPayload.buildFromClient(newClient))
+              .postClient(ClientPayload.buildFromClient(this.client))
               .pipe(
                 take(1),
                 switchMap((data) => {
@@ -337,85 +322,80 @@ export class RegistrationComponent implements OnInit {
 
           // STEP 2
           if (val.selectedIndex === 2) {
-            // build the client from step 2 values
-            if (this.step2Form.valid) {
-              this.isLoadingResults = true;
+            this.isLoadingResults = true;
+            this.clientService
+              .getClient(this.orgId)
+              .pipe(
+                take(1),
+                switchMap((val) => {
+                  const client = Client.buildFromGetClientResponse(val);
 
-              this.client.orgDetails.bidParameters.objective = this.substep2.get(
-                "objective"
-              ).value;
-              this.client.orgDetails.adgroupBidParameters.objective = this.substep2.get(
-                "objective"
-              ).value;
+                  client.orgDetails.bidParameters.objective =
+                    this.substep2.get("objective").value;
 
-              this.client.orgDetails.bidParameters.highCPIBidDecreaseThresh = this.substep2.get(
-                "cpi"
-              ).value;
+                  client.orgDetails.adgroupBidParameters.objective =
+                    this.substep2.get("objective").value;
 
-              this.client.orgDetails.adgroupBidParameters.highCPIBidDecreaseThresh = this.substep2.get(
-                "cpi"
-              ).value;
+                  client.orgDetails.bidParameters.highCPIBidDecreaseThresh =
+                    this.substep2.get("cpi").value;
 
-              // Branch fields
-              this.client.orgDetails.branchBidParameters.branchOptimizationGoal = this.substep6.get(
-                "mmpObjective"
-              ).value;
+                  client.orgDetails.adgroupBidParameters.highCPIBidDecreaseThresh =
+                    this.substep2.get("cpi").value;
 
-              this.client.orgDetails.branchBidParameters.costPerPurchaseThreshold = this.substep6.get(
-                "cpp"
-              ).value;
+                  // Branch fields
+                  client.orgDetails.branchBidParameters.branchOptimizationGoal =
+                    this.substep6.get("mmpObjective").value;
 
-              this.client.orgDetails.branchBidParameters.revenueOverAdSpendThreshold = this.substep6.get(
-                "roas"
-              ).value;
+                  client.orgDetails.branchBidParameters.costPerPurchaseThreshold =
+                    this.substep6.get("cpp").value;
 
-              this.client.orgDetails.branchIntegrationParameters.branchBidAdjusterEnabled = this.substep6.get(
-                "branchBidAdjusterEnabled"
-              ).value;
+                  client.orgDetails.branchBidParameters.revenueOverAdSpendThreshold =
+                    this.substep6.get("roas").value;
 
-              this.client.orgDetails.branchIntegrationParameters.branchKey = this.substep6.get(
-                "branchKey"
-              ).value;
-              this.client.orgDetails.branchIntegrationParameters.branchSecret = this.substep6.get(
-                "branchSecret"
-              ).value;
+                  client.orgDetails.branchIntegrationParameters.branchBidAdjusterEnabled =
+                    this.substep6.get("branchBidAdjusterEnabled").value;
 
-              // write the substep 1 values to client
-              this.client.orgDetails.appID = this.substep1.get(
-                "application"
-              ).value;
+                  client.orgDetails.branchIntegrationParameters.branchKey =
+                    this.substep6.get("branchKey").value;
 
-              const app = chain(this.apps)
-                .find((app) => {
-                  return app.adamId === this.client.orgDetails.appID;
-                })
-                .value();
+                  client.orgDetails.branchIntegrationParameters.branchSecret =
+                    this.substep6.get("branchSecret").value;
 
-              this.client.orgDetails.appName = get(app, "appName");
-              this.client.orgDetails.clientName = get(app, "developerName");
+                  // write the substep 1 values to client
+                  client.orgDetails.appID =
+                    this.substep1.get("application").value;
 
-              this.client.orgDetails.currency = this.substep1.get(
-                "currency"
-              ).value;
+                  const app = chain(this.apps)
+                    .find((app) => {
+                      return app.adamId === this.client.orgDetails.appID;
+                    })
+                    .value();
 
-              this.clientService
-                .postClient(ClientPayload.buildFromClient(this.client))
-                .pipe(
-                  take(1),
-                  tap(() => {
-                    this.isLoadingResults = false;
-                  }),
-                  catchError(() => {
-                    this.isSendingResults = false;
-                    this.openSnackBar(
-                      "unable to process changes to settings at this time",
-                      "dismiss"
+                  client.orgDetails.appName = get(app, "appName");
+                  client.orgDetails.clientName = get(app, "developerName");
+
+                  client.orgDetails.currency =
+                    this.substep1.get("currency").value;
+
+                  return this.clientService
+                    .postClient(ClientPayload.buildFromClient(client))
+                    .pipe(
+                      take(1),
+                      tap(() => {
+                        this.isLoadingResults = false;
+                      }),
+                      catchError(() => {
+                        this.isSendingResults = false;
+                        this.openSnackBar(
+                          "unable to process changes to settings at this time",
+                          "dismiss"
+                        );
+                        return [];
+                      })
                     );
-                    return [];
-                  })
-                )
-                .subscribe();
-            }
+                })
+              )
+              .subscribe();
           }
         }),
         takeUntil(this._destroyed$)
@@ -472,6 +452,76 @@ export class RegistrationComponent implements OnInit {
     this._destroyed$.next(true);
   }
 
+  initializeClient() {
+    // set default KeywordAdderParameters
+    this.client = new Client();
+    this.client.orgDetails = new OrgDetails();
+    this.client.orgDetails.keywordAdderParameters = {
+      targetedKeywordTapThreshold: 2,
+      negativeKeywordConversionThreshold: 0,
+      broadMatchDefaultBid: 1,
+      exactMatchDefaultBid: 1,
+      negativeKeywordTapThreshold: 10,
+      targetedKeywordConversionThreshold: 2,
+    };
+
+    // set default AdgroupBidParameters
+    this.client.orgDetails.adgroupBidParameters = {
+      highCPABidDecrease: 0.85,
+      tapThreshold: 7,
+      lowCPIBidIncreaseThresh: 0.4,
+      objective: undefined,
+      minBid: 0.1,
+      noInstallBidDecreaseThresh: 0,
+      highCPIBidDecreaseThresh: undefined,
+      lowCPABidBoost: 1.15,
+      maxBid: 3,
+      staleRaiseBidBoost: 1.025,
+      staleRaiseImpresshionThresh: 0,
+    };
+
+    this.client.orgDetails.bidParameters = {
+      highCPABidDecrease: 0.85,
+      tapThreshold: 7,
+      objective: undefined,
+      minBid: 0.1,
+      noInstallBidDecreaseThresh: 0,
+      highCPIBidDecreaseThresh: undefined,
+      lowCPABidBoost: 1.15,
+      maxBid: 0.35,
+      staleRaiseBidBoost: 1.025,
+      staleRaiseImpresshionThresh: 0,
+    };
+
+    this.client.orgDetails.branchIntegrationParameters = {
+      branchBidAdjusterEnabled: false,
+      branchKey: undefined,
+      branchSecret: undefined,
+    };
+
+    this.client.orgDetails.branchBidParameters = {
+      branchBidAdjustment: 0.1,
+      branchOptimizationGoal: undefined,
+      minAppleInstalls: 15,
+      branchMinBid: 0.1,
+      branchMaxBid: 25,
+      revenueOverAdSpendThreshold: undefined,
+      revenueOverAdSpendThresholdBuffer: 0.2,
+      costPerPurchaseThreshold: undefined,
+      costPerPurchaseThresholdBuffer: 0.2,
+      objective: undefined,
+    };
+
+    this.client.orgDetails.disabled = false;
+
+    // disable branch controls by defuault
+    this.substep6.get("cpp").disable();
+    this.substep6.get("mmpObjective").disable();
+    this.substep6.get("roas").disable();
+    this.substep6.get("branchKey").disable();
+    this.substep6.get("branchSecret").disable();
+  }
+
   handleBranchCheckboxChange($event: MatCheckboxChange) {
     if ($event.checked) {
       this.substep6.get("mmpObjective").enable();
@@ -495,7 +545,6 @@ export class RegistrationComponent implements OnInit {
   }
 
   setOrgIdValue() {
-    // set the org field
     this.step1Form.get("orgId").setValue(this.orgId);
   }
 
@@ -587,22 +636,30 @@ export class RegistrationComponent implements OnInit {
 
   complete() {
     this.isLoadingResults = true;
-    this.client.orgDetails.hasRegistered = true;
     this.clientService
-      .postClient(ClientPayload.buildFromClient(this.client))
+      .getClient(this.orgId)
       .pipe(
         take(1),
-        tap(() => {
-          this.isLoadingResults = false;
-          this.router.navigateByUrl("/workbench");
-        }),
-        catchError(() => {
-          this.isLoadingResults = false;
-          this.openSnackBar(
-            "unable to process changes to settings at this time",
-            "dismiss"
-          );
-          return [];
+        switchMap((val) => {
+          const client = Client.buildFromGetClientResponse(val);
+          client.orgDetails.hasRegistered = true;
+          return this.clientService
+            .postClient(ClientPayload.buildFromClient(client))
+            .pipe(
+              take(1),
+              tap(() => {
+                this.isLoadingResults = false;
+                this.router.navigateByUrl("/workbench");
+              }),
+              catchError(() => {
+                this.isLoadingResults = false;
+                this.openSnackBar(
+                  "unable to process changes to settings at this time",
+                  "dismiss"
+                );
+                return [];
+              })
+            );
         })
       )
       .subscribe();

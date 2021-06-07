@@ -70,8 +70,8 @@ export class BidParameters {
   highCPIBidDecreaseThresh: number;
   lowCPABidBoost: number;
   maxBid: number;
-  staleRaiseBidBoost: string;
-  staleRaiseImpresshionThresh: string;
+  staleRaiseBidBoost: number;
+  staleRaiseImpresshionThresh: number;
 
   static buildFromResponse(response: any) {
     const retVal = new BidParameters();
@@ -163,9 +163,10 @@ export class OrgDetails {
     retVal.branchBidParameters = BranchBidParameters.buildFromResponse(
       response.branchBidParameters
     );
-    retVal.branchIntegrationParameters = BranchIntegrationParameters.buildFromResponse(
-      response.branchIntegrationParameters
-    );
+    retVal.branchIntegrationParameters =
+      BranchIntegrationParameters.buildFromResponse(
+        response.branchIntegrationParameters
+      );
     retVal.bidParameters = BidParameters.buildFromResponse(
       response.bidParameters
     );

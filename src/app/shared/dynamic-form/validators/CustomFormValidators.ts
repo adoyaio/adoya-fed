@@ -24,7 +24,8 @@ export class CustomFormValidators {
     if (url.pristine) {
       return null;
     }
-    const URL_REGEXP = /^(http?|https?|ftp):\/\/([a-zA-Z0-9.-]+(:[a-zA-Z0-9.&%$-]+)*@)*((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}|([a-zA-Z0-9-]+\.)*[a-zA-Z0-9-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(:[0-9]+)*(\/($|[a-zA-Z0-9.,?'\\+&%$#=~_-]+))*$/;
+    const URL_REGEXP =
+      /^(http?|https?|ftp):\/\/([a-zA-Z0-9.-]+(:[a-zA-Z0-9.&%$-]+)*@)*((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}|([a-zA-Z0-9-]+\.)*[a-zA-Z0-9-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(:[0-9]+)*(\/($|[a-zA-Z0-9.,?'\\+&%$#=~_-]+))*$/;
     url.markAsTouched();
     if (URL_REGEXP.test(url.value)) {
       return null;
@@ -175,7 +176,8 @@ export class CustomFormValidators {
     if (ssn.pristine) {
       return null;
     }
-    const SSN_REGEXP = /^(?!219-09-9999|078-05-1120)(?!666|000|9\d{2})\d{3}-(?!00)\d{2}-(?!0{4})\d{4}$/;
+    const SSN_REGEXP =
+      /^(?!219-09-9999|078-05-1120)(?!666|000|9\d{2})\d{3}-(?!00)\d{2}-(?!0{4})\d{4}$/;
     ssn.markAsTouched();
     if (SSN_REGEXP.test(ssn.value)) {
       return null;
@@ -270,6 +272,25 @@ export class CustomFormValidators {
     if (String(quantity.value).length === 0) {
       return error;
     }
+    return null;
+  }
+
+  // Validates the budget controls
+  static budgetValidator(form: FormGroup): any {
+    if (!form) {
+      return null;
+    }
+    if (form.untouched) {
+      return null;
+    }
+    const error = { invalid: true };
+    const dailyBudget = form.get("dailyBudget");
+    const lifetimeBudget = form.get("lifetimeBudget");
+
+    if (dailyBudget.value >= lifetimeBudget.value) {
+      return error;
+    }
+
     return null;
   }
 }

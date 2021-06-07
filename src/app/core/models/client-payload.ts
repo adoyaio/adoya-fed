@@ -76,8 +76,8 @@ export class BidParametersPayload {
   HIGH_CPI_BID_DECREASE_THRESH: number;
   LOW_CPA_BID_BOOST: number;
   MAX_BID: number;
-  STALE_RAISE_BID_BOOST: string;
-  STALE_RAISE_IMPRESSION_THRESH: string;
+  STALE_RAISE_BID_BOOST: number;
+  STALE_RAISE_IMPRESSION_THRESH: number;
 
   static buildFromClient(params: BidParameters) {
     const response = new BidParametersPayload();
@@ -213,18 +213,21 @@ export class OrgDetailsPayload {
     retVal.branchBidParameters = BranchBidParametersPayload.buildFromClient(
       response.branchBidParameters
     );
-    retVal.branchIntegrationParameters = BranchIntegrationParametersPayload.buildFromClient(
-      response.branchIntegrationParameters
-    );
-    retVal.branchIntegrationParameters = BranchIntegrationParametersPayload.buildFromClient(
-      response.branchIntegrationParameters
-    );
+    retVal.branchIntegrationParameters =
+      BranchIntegrationParametersPayload.buildFromClient(
+        response.branchIntegrationParameters
+      );
+    retVal.branchIntegrationParameters =
+      BranchIntegrationParametersPayload.buildFromClient(
+        response.branchIntegrationParameters
+      );
     retVal.bidParameters = BidParametersPayload.buildFromClient(
       response.bidParameters
     );
-    retVal.keywordAdderParameters = KeywordAdderParametersPayload.buildFromClient(
-      response.keywordAdderParameters
-    );
+    retVal.keywordAdderParameters =
+      KeywordAdderParametersPayload.buildFromClient(
+        response.keywordAdderParameters
+      );
     retVal.adgroupBidParameters = AdgroupBidParametersPayload.buildFromClient(
       response.adgroupBidParameters
     );
