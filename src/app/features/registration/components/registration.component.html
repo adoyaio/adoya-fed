@@ -117,12 +117,13 @@
                     class="col-11"
                   >
                     <mat-label>Private Key</mat-label>
-                    <input
+
+                    <textarea
                       matInput
-                      placeholder="private key"
-                      required
+                      cdkTextareaAutosize
                       formControlName="privateKey"
-                    />
+                    >
+                    </textarea>
                   </mat-form-field>
 
                   <button
@@ -1098,7 +1099,14 @@
 </div>
 
 <div
-  class="position-absolute position-md-fixed left-0 bottom-0 w-99 m-auto text-center"
+  class="
+    position-absolute position-md-fixed
+    left-0
+    bottom-0
+    w-99
+    m-auto
+    text-center
+  "
 >
   <a class="adoya-link" routerLink="#">Terms of service</a> |
   <a class="adoya-link" href="mailto:info@adoya.io?subject=Adoya Support"

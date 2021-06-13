@@ -1,10 +1,5 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from "@angular/forms";
+import { FormBuilder, FormControl, Validators } from "@angular/forms";
 import {
   MatCheckboxChange,
   MatDialog,
@@ -14,20 +9,22 @@ import {
 import { Router } from "@angular/router";
 import { Auth } from "aws-amplify";
 
-import { chain, delay, find, get, has, isEmpty, isNil, set } from "lodash";
-import { combineLatest, EMPTY, of, Subject } from "rxjs";
 import {
-  catchError,
-  finalize,
-  switchMap,
-  take,
-  takeUntil,
-  tap,
-} from "rxjs/operators";
+  chain,
+  find,
+  get,
+  has,
+  isEmpty,
+  isNil,
+  set,
+  map as _map,
+} from "lodash";
+import { combineLatest, EMPTY, of, Subject } from "rxjs";
+import { catchError, switchMap, take, takeUntil, tap } from "rxjs/operators";
 import { Client, OrgDetails } from "src/app/core/models/client";
 import { ClientPayload } from "src/app/core/models/client-payload";
+import { AppleService } from "src/app/core/services/apple.service";
 import { ClientService } from "src/app/core/services/client.service";
-import { UserAccountService } from "src/app/core/services/user-account.service";
 import { CustomFormValidators } from "src/app/shared/dynamic-form/validators/CustomFormValidators";
 import { DynamicModalComponent } from "src/app/shared/dynamic-modal/dynamic-modal.component";
 
@@ -50,18 +47,22 @@ export class RegistrationComponent implements OnInit {
     { name: "India", code: "IN" },
   ];
 
-  currencies = [
-    { code: "USD", countryCode: "US" },
-    { code: "CAD", countryCode: "CA" },
-    { code: "GBP", countryCode: "GB" },
-    { code: "AUD", countryCode: "AU" },
-    { code: "NZD", countryCode: "NZ" },
-    { code: "PHP", countryCode: "PH" },
-    { code: "EUR", countryCode: "IE" },
-    { code: "INR", countryCode: "IN" },
-  ];
+  // currencies = [
+  //   { code: "USD", countryCode: "US" },
+  //   { code: "CAD", countryCode: "CA" },
+  //   { code: "GBP", countryCode: "GB" },
+  //   { code: "AUD", countryCode: "AU" },
+  //   { code: "NZD", countryCode: "NZ" },
+  //   { code: "PHP", countryCode: "PH" },
+  //   { code: "EUR", countryCode: "IE" },
+  //   { code: "INR", countryCode: "IN" },
+  // ];
 
+  currencies = [];
   apps = [];
+  app: any;
+
+  // TODO load from api
   campaigns = [
     "Acme - US - Discovery - Broad Match",
     "Acme - US - Discovery - Exact Match",
@@ -69,7 +70,7 @@ export class RegistrationComponent implements OnInit {
     "Acme - US - Competitor - Exact Match",
     "Acme - US - Non-Brand - Exact Match",
     "Acme - US - Brand - Exact Match",
-  ]; // TODO load from api
+  ];
 
   step2: any[] = [
     {
@@ -142,6 +143,7 @@ export class RegistrationComponent implements OnInit {
     private router: Router,
     private fb: FormBuilder,
     private clientService: ClientService,
+    private appleService: AppleService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog
   ) {}
@@ -290,21 +292,38 @@ export class RegistrationComponent implements OnInit {
                       "dismiss"
                     );
                     this.isLoadingResults = false;
-                    return;
                   }
-                  return this.clientService.getAppleCampaigns(this.orgId).pipe(
-                    take(1),
-                    tap((val) => {
-                      this.apps = val.data;
-                      if (!isEmpty(val.data)) {
+                  return combineLatest([
+                    this.appleService.getAppleApps(this.orgId),
+                    this.appleService.getAppleAcls(this.orgId),
+                  ]).pipe(
+                    tap(([apps, acls]) => {
+                      this.isLoadingResults = false;
+
+                      if (isEmpty(apps.data) || isEmpty(acls)) {
                         this.openSnackBar(
-                          "we found some of your applications, please select one from the dropdown to continue",
+                          "unable to process changes to settings at this time",
                           "dismiss"
                         );
                       }
+                      if (!isEmpty(apps.data)) {
+                        this.openSnackBar(
+                          "we found some of your applications, please select one from the dropdown to continue",
+                          ""
+                        );
+                      }
+                      this.apps = apps.data;
+                      this.currencies = _map(acls, (acl) => {
+                        return { code: acl.currency };
+                      });
                     }),
-                    finalize(() => {
+                    catchError(() => {
                       this.isLoadingResults = false;
+                      this.openSnackBar(
+                        "unable to process changes to settings at this time",
+                        "dismiss"
+                      );
+                      return [];
                     })
                   );
                 }),
@@ -365,34 +384,65 @@ export class RegistrationComponent implements OnInit {
                   client.orgDetails.appID =
                     this.substep1.get("application").value;
 
-                  const app = chain(this.apps)
+                  this.app = chain(this.apps)
                     .find((app) => {
-                      return app.adamId === this.client.orgDetails.appID;
+                      return (
+                        app.adamId === this.substep1.get("application").value
+                      );
                     })
                     .value();
 
-                  client.orgDetails.appName = get(app, "appName");
-                  client.orgDetails.clientName = get(app, "developerName");
+                  client.orgDetails.appName = get(this.app, "appName");
+                  client.orgDetails.appID = get(this.app, "appID");
+                  client.orgDetails.clientName = get(this.app, "developerName");
 
                   client.orgDetails.currency =
                     this.substep1.get("currency").value;
 
-                  return this.clientService
-                    .postClient(ClientPayload.buildFromClient(client))
-                    .pipe(
-                      take(1),
-                      tap(() => {
-                        this.isLoadingResults = false;
-                      }),
-                      catchError(() => {
-                        this.isSendingResults = false;
-                        this.openSnackBar(
-                          "unable to process changes to settings at this time",
-                          "dismiss"
-                        );
-                        return [];
-                      })
-                    );
+                  // post to client service for clients json
+                  // post to apple service for campaign creation
+
+                  console.log(JSON.stringify(this.app));
+
+                  return combineLatest([
+                    this.clientService.postClient(
+                      ClientPayload.buildFromClient(client)
+                    ),
+                    this.appleService.postAppleCampaign(this.orgId, {
+                      org_id: this.orgId,
+                      app_name: get(this.app, "appName"),
+                      adam_id: get(this.app, "adamId"),
+                      campaign_target_country:
+                        this.substep1.get("country").value,
+                      front_end_lifetime_budget:
+                        this.substep3.get("lifetimeBudget").value,
+                      front_end_daily_budget:
+                        this.substep3.get("dailyBudget").value,
+                      objective: this.substep2.get("objective").value,
+                      target_cost_per_install: this.substep2.get("cpi").value,
+                      gender_first_entry: this.substep5.get("genders").value,
+                      min_age_first_entry: this.substep5.get("ages").value,
+                      targeted_keywords_first_entry_competitor:
+                        this.substep4.get("competitors").value,
+                      targeted_keywords_first_entry_category:
+                        this.substep4.get("phrases").value,
+                      targeted_keywords_first_entry_brand:
+                        this.substep4.get("brand").value,
+                      currency: this.substep1.get("currency").value,
+                    }),
+                  ]).pipe(
+                    tap(() => {
+                      this.isLoadingResults = false;
+                    }),
+                    catchError(() => {
+                      this.isLoadingResults = false;
+                      this.openSnackBar(
+                        "unable to process changes to settings at this time",
+                        "dismiss"
+                      );
+                      return [];
+                    })
+                  );
                 })
               )
               .subscribe();
@@ -402,22 +452,22 @@ export class RegistrationComponent implements OnInit {
       )
       .subscribe();
 
-    this.substep1
-      .get("country")
-      .valueChanges.pipe(
-        tap((val) => {
-          const currency = chain(this.currencies)
-            .find((currency) => {
-              return currency.countryCode === val;
-            })
-            .get("code")
-            .value();
+    // this.substep1
+    //   .get("country")
+    //   .valueChanges.pipe(
+    //     tap((val) => {
+    //       const currency = chain(this.currencies)
+    //         .find((currency) => {
+    //           return currency.countryCode === val;
+    //         })
+    //         .get("code")
+    //         .value();
 
-          this.substep1.get("currency").setValue(currency);
-        }),
-        takeUntil(this._destroyed$)
-      )
-      .subscribe();
+    //       this.substep1.get("currency").setValue(currency);
+    //     }),
+    //     takeUntil(this._destroyed$)
+    //   )
+    //   .subscribe();
 
     combineLatest([
       this.substep6.get("branchBidAdjusterEnabled").valueChanges,
