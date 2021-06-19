@@ -1,5 +1,5 @@
 import { FormControl, FormGroup } from "@angular/forms";
-import { isNil as _isNil } from "lodash";
+import { isNil as _isNil, toInteger } from "lodash";
 import { FormUtils } from "../utils/form-utils";
 
 export class CustomFormValidators {
@@ -284,10 +284,10 @@ export class CustomFormValidators {
       return null;
     }
     const error = { invalid: true };
-    const dailyBudget = form.get("dailyBudget");
-    const lifetimeBudget = form.get("lifetimeBudget");
+    const dailyBudget = +form.get("dailyBudget").value;
+    const lifetimeBudget = +form.get("lifetimeBudget").value;
 
-    if (dailyBudget.value >= lifetimeBudget.value) {
+    if (dailyBudget >= +lifetimeBudget) {
       return error;
     }
 

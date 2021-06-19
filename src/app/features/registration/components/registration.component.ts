@@ -1,5 +1,10 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { FormBuilder, FormControl, Validators } from "@angular/forms";
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from "@angular/forms";
 import {
   MatCheckboxChange,
   MatDialog,
@@ -61,6 +66,9 @@ export class RegistrationComponent implements OnInit {
   currencies = [];
   apps = [];
   app: any;
+  keywordsBrand: string[] = [];
+  keywordsCategory: string[] = [];
+  keywordsCompetitor: string[] = [];
 
   // TODO load from api
   campaigns = [
@@ -402,7 +410,12 @@ export class RegistrationComponent implements OnInit {
                   // post to client service for clients json
                   // post to apple service for campaign creation
 
-                  console.log(JSON.stringify(this.app));
+                  const targeted_keywords_first_entry_competitor: string =
+                    this.substep4.get("competitors").value;
+                  const targeted_keywords_first_entry_category: string =
+                    this.substep4.get("phrases").value;
+                  const targeted_keywords_first_entry_brand: string =
+                    this.substep4.get("brand").value;
 
                   return combineLatest([
                     this.clientService.postClient(
@@ -423,11 +436,11 @@ export class RegistrationComponent implements OnInit {
                       gender_first_entry: this.substep5.get("genders").value,
                       min_age_first_entry: this.substep5.get("ages").value,
                       targeted_keywords_first_entry_competitor:
-                        this.substep4.get("competitors").value,
+                        targeted_keywords_first_entry_competitor.split(" "),
                       targeted_keywords_first_entry_category:
-                        this.substep4.get("phrases").value,
+                        targeted_keywords_first_entry_category.split(" "),
                       targeted_keywords_first_entry_brand:
-                        this.substep4.get("brand").value,
+                        targeted_keywords_first_entry_brand.split(" "),
                       currency: this.substep1.get("currency").value,
                     }),
                   ]).pipe(
@@ -807,4 +820,14 @@ export class RegistrationComponent implements OnInit {
       panelClass: "standard",
     });
   }
+
+  handleBrandKeywords() {
+    // TODO grab
+
+    const keywords: string = this.substep4.get("brand").value;
+
+    this.keywordsBrand = keywords.split(",");
+  }
+
+  keywordsBrandRemove() {}
 }

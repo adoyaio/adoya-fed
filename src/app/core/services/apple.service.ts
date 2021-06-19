@@ -71,15 +71,18 @@ export class AppleService {
           ),
           gender_first_entry: _get(campaignData, "gender_first_entry"),
           min_age_first_entry: _get(campaignData, "min_age_first_entry"),
-          targeted_keywords_first_entry_competitor: [
-            _get(campaignData, "targeted_keywords_first_entry_competitor"),
-          ],
-          targeted_keywords_first_entry_category: [
-            _get(campaignData, "targeted_keywords_first_entry_category"),
-          ],
-          targeted_keywords_first_entry_brand: [
-            _get(campaignData, "targeted_keywords_first_entry_brand"),
-          ],
+          targeted_keywords_first_entry_competitor: _get(
+            campaignData,
+            "targeted_keywords_first_entry_competitor"
+          ),
+          targeted_keywords_first_entry_category: _get(
+            campaignData,
+            "targeted_keywords_first_entry_category"
+          ),
+          targeted_keywords_first_entry_brand: _get(
+            campaignData,
+            "targeted_keywords_first_entry_brand"
+          ),
           currency: _get(campaignData, "currency"),
         },
         { headers: headers }
