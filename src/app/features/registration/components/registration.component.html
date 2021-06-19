@@ -678,7 +678,10 @@
                     >help</mat-icon
                   >
 
-                  <button mat-icon-button>
+                  <button
+                    mat-icon-button
+                    (click)="handleAddKeywords($event, 'competitors')"
+                  >
                     <mat-icon class="float-right" color="accent"
                       >add_circle</mat-icon
                     >
@@ -689,12 +692,12 @@
                 <div class="w-100 no-gutters mb-4">
                   <mat-chip-list #chipList>
                     <mat-chip
-                      *ngFor="let keyword of keywordsBrand"
+                      *ngFor="let keyword of keywordsCompetitors"
                       [selectable]="true"
                       [selected]="true"
                       [removable]="true"
                       color="primary"
-                      (removed)="keywordsBrandRemove(keyword)"
+                      (removed)="handleRemoveKeywords('competitors', keyword)"
                     >
                       {{ keyword }}
                       <mat-icon matChipRemove>cancel</mat-icon>
@@ -725,7 +728,10 @@
                     >help</mat-icon
                   >
 
-                  <button mat-icon-button>
+                  <button
+                    mat-icon-button
+                    (click)="handleAddKeywords($event, 'phrases')"
+                  >
                     <mat-icon class="float-right" color="accent"
                       >add_circle</mat-icon
                     >
@@ -736,12 +742,12 @@
                 <div class="w-100 no-gutters mb-4">
                   <mat-chip-list>
                     <mat-chip
-                      *ngFor="let keyword of keywordsBrand"
+                      *ngFor="let keyword of keywordsPhrases"
                       [selectable]="true"
                       [selected]="true"
                       [removable]="true"
                       color="primary"
-                      (removed)="keywordsBrandRemove(keyword)"
+                      (removed)="handleRemoveKeywords('phrases', keyword)"
                     >
                       {{ keyword }}
                       <mat-icon matChipRemove>cancel</mat-icon>
@@ -765,7 +771,10 @@
                     <textarea matInput formControlName="brand"> </textarea>
                   </mat-form-field>
 
-                  <button mat-icon-button (click)="handleBrandKeywords()">
+                  <button
+                    mat-icon-button
+                    (click)="handleAddKeywords($event, 'brand')"
+                  >
                     <mat-icon class="float-right" color="accent"
                       >add_circle</mat-icon
                     >
@@ -788,7 +797,7 @@
                       [selected]="true"
                       [removable]="true"
                       color="primary"
-                      (removed)="keywordsBrandRemove(keyword)"
+                      (removed)="handleRemoveKeywords('brand', keyword)"
                     >
                       {{ keyword }}
                       <mat-icon matChipRemove>cancel</mat-icon>

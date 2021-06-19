@@ -67,8 +67,8 @@ export class RegistrationComponent implements OnInit {
   apps = [];
   app: any;
   keywordsBrand: string[] = [];
-  keywordsCategory: string[] = [];
-  keywordsCompetitor: string[] = [];
+  keywordsPhrases: string[] = [];
+  keywordsCompetitors: string[] = [];
 
   // TODO load from api
   campaigns = [
@@ -821,13 +821,59 @@ export class RegistrationComponent implements OnInit {
     });
   }
 
-  handleBrandKeywords() {
-    // TODO grab
+  handleAddKeywords($event, type: string) {
+    $event.preventDefault();
+    const keywords: string = this.substep4.get(`${type}`).value;
 
-    const keywords: string = this.substep4.get("brand").value;
+    switch (type) {
+      case "brand":
+        this.keywordsBrand = keywords
+          .split(",")
+          .map((keyword) => keyword.trim().replace(".", ""));
+        break;
 
-    this.keywordsBrand = keywords.split(",");
+      case "phrases":
+        this.keywordsPhrases = keywords
+          .split(",")
+          .map((keyword) => keyword.trim().replace(".", ""));
+        break;
+
+      case "competitors":
+        this.keywordsCompetitors = keywords
+          .split(",")
+          .map((keyword) => keyword.trim().replace(".", ""));
+        break;
+    }
   }
 
-  keywordsBrandRemove() {}
+  handleRemoveKeywords(type: string, removed: string) {
+    let newValue;
+    switch (type) {
+      case "brand":
+        chain(this.keywordsBrand)
+          .remove((keyword) => keyword == removed)
+          .value();
+
+        newValue = this.keywordsBrand;
+        break;
+
+      case "phrases":
+        chain(this.keywordsPhrases)
+          .remove((keyword) => keyword == removed)
+          .value();
+
+        newValue = this.keywordsPhrases;
+        break;
+
+      case "competitors":
+        chain(this.keywordsCompetitors)
+          .remove((keyword) => keyword == removed)
+          .value();
+
+        newValue = this.keywordsCompetitors;
+        break;
+    }
+
+    this.substep4.get(`${type}`).setValue(newValue);
+  }
 }
