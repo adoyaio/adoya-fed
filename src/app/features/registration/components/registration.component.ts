@@ -754,7 +754,12 @@ export class RegistrationComponent implements OnInit {
     }
 
     if (activeSubstep.ordinal === 4) {
-      return this.step2Form.get("substep4").invalid;
+      return (
+        this.step2Form.get("substep4").invalid ||
+        isEmpty(this.keywordsBrand) ||
+        isEmpty(this.keywordsCompetitors) ||
+        isEmpty(this.keywordsPhrases)
+      );
     }
 
     if (activeSubstep.ordinal === 5) {
