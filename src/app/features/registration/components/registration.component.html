@@ -557,9 +557,8 @@
                       type="number"
                       placeholder=""
                     />
-                    <mat-error>
-                      Must enter a number between .1 and 1,000
-                    </mat-error>
+
+                    <mat-error> {{ dailyBudgetError }} </mat-error>
                   </mat-form-field>
 
                   <mat-icon
@@ -589,7 +588,7 @@
                       placeholder=""
                     />
                     <mat-error>
-                      Must enter a number between .1 and 1,000
+                      {{ lifetimeBudgetError }}
                     </mat-error>
                   </mat-form-field>
 

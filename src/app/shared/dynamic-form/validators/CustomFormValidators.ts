@@ -283,11 +283,33 @@ export class CustomFormValidators {
     if (form.untouched) {
       return null;
     }
-    const error = { invalid: true };
-    const dailyBudget = +form.get("dailyBudget").value;
-    const lifetimeBudget = +form.get("lifetimeBudget").value;
+    const error = { invalidLifetimeBudget: true };
+    const dailyBudgetValue: number = +form.get("dailyBudget").value;
+    const lifetimeBudgetValue: number = +form.get("lifetimeBudget").value;
 
-    if (dailyBudget >= +lifetimeBudget) {
+    if (dailyBudgetValue >= lifetimeBudgetValue) {
+      form.get("lifetimeBudget").setErrors(error);
+      return error;
+    }
+
+    return null;
+  }
+
+  // Validates the budget controls
+  static budgetCpiValidator(form: FormGroup): any {
+    if (!form) {
+      return null;
+    }
+    if (form.untouched) {
+      return null;
+    }
+    const error = { invalidDailyBudget: true };
+    const dailyBudgetValue: number = +form.get("substep3").get("dailyBudget")
+      .value;
+    const cpi: number = +form.get("substep2").get("cpi").value;
+
+    if (dailyBudgetValue  < cpi * 20) {
+      form.get("substep3").get("dailyBudget").setErrors(error);
       return error;
     }
 

@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import {
+  AbstractControl,
   FormBuilder,
   FormControl,
   FormGroup,
@@ -13,6 +14,7 @@ import {
 } from "@angular/material";
 import { Router } from "@angular/router";
 import { Auth } from "aws-amplify";
+
 
 import {
   chain,
@@ -137,13 +139,12 @@ export class RegistrationComponent implements OnInit {
   get substep6(): any {
     return this.step2Form.get("substep6");
   }
-  // get application(): any {
-  //   return this.step2Form.get("substep1.application");
-  // }
-
-  // get country(): any {
-  //   return this.step2Form.get("substep1.country");
-  // }
+  get dailyBudget(): AbstractControl {
+    return this.step2Form.get("substep3").get("dailyBudget");
+  }
+  get lifetimeBudget(): AbstractControl {
+    return this.step2Form.get("substep3").get("lifetimeBudget");
+  }
 
   private _destroyed$: Subject<boolean> = new Subject<boolean>();
 
@@ -164,66 +165,69 @@ export class RegistrationComponent implements OnInit {
     privateKey: new FormControl("", Validators.required),
   });
 
-  step2Form = this.fb.group({
-    substep1: this.fb.group({
-      application: new FormControl(undefined, Validators.required),
-      country: new FormControl(undefined, Validators.required),
-      currency: new FormControl(undefined, Validators.required),
-    }),
-    substep2: this.fb.group({
-      objective: new FormControl(undefined, Validators.required),
-      cpi: new FormControl(undefined, [
-        Validators.required,
-        Validators.min(0.1),
-        Validators.max(1000),
-        Validators.minLength(1),
-      ]),
-    }),
-    substep3: this.fb.group(
-      {
-        dailyBudget: new FormControl(undefined, [
+  step2Form = this.fb.group(
+    {
+      substep1: this.fb.group({
+        application: new FormControl(undefined, Validators.required),
+        country: new FormControl(undefined, Validators.required),
+        currency: new FormControl(undefined, Validators.required),
+      }),
+      substep2: this.fb.group({
+        objective: new FormControl(undefined, Validators.required),
+        cpi: new FormControl(undefined, [
           Validators.required,
-          Validators.min(1),
-          Validators.max(10000),
+          Validators.min(0.1),
+          Validators.max(1000),
           Validators.minLength(1),
         ]),
-        lifetimeBudget: new FormControl(undefined, [
+      }),
+      substep3: this.fb.group(
+        {
+          dailyBudget: new FormControl(undefined, [
+            Validators.required,
+            Validators.min(1),
+            Validators.max(10000),
+            Validators.minLength(1),
+          ]),
+          lifetimeBudget: new FormControl(undefined, [
+            Validators.required,
+            Validators.min(10),
+            Validators.max(1000000),
+            Validators.minLength(1),
+          ]),
+        },
+        { validators: CustomFormValidators.budgetValidator }
+      ),
+      substep4: this.fb.group({
+        competitors: new FormControl(undefined, Validators.required),
+        phrases: new FormControl(undefined, Validators.required),
+        brand: new FormControl(undefined, Validators.required),
+      }),
+      substep5: this.fb.group({
+        genders: new FormControl(undefined, [Validators.required]),
+        ages: new FormControl(undefined, [Validators.required]),
+      }),
+      substep6: this.fb.group({
+        mmpObjective: new FormControl(undefined, Validators.required),
+        cpp: new FormControl(undefined, [
           Validators.required,
-          Validators.min(10),
-          Validators.max(1000000),
+          Validators.min(0.1),
+          Validators.max(1000),
           Validators.minLength(1),
         ]),
-      },
-      { validators: CustomFormValidators.budgetValidator }
-    ),
-    substep4: this.fb.group({
-      competitors: new FormControl(undefined, Validators.required),
-      phrases: new FormControl(undefined, Validators.required),
-      brand: new FormControl(undefined, Validators.required),
-    }),
-    substep5: this.fb.group({
-      genders: new FormControl(undefined, [Validators.required]),
-      ages: new FormControl(undefined, [Validators.required]),
-    }),
-    substep6: this.fb.group({
-      mmpObjective: new FormControl(undefined, Validators.required),
-      cpp: new FormControl(undefined, [
-        Validators.required,
-        Validators.min(0.1),
-        Validators.max(1000),
-        Validators.minLength(1),
-      ]),
-      roas: new FormControl(undefined, [
-        Validators.required,
-        Validators.min(0.1),
-        Validators.max(1000),
-        Validators.minLength(1),
-      ]),
-      branchBidAdjusterEnabled: new FormControl(false),
-      branchKey: new FormControl(undefined, Validators.required),
-      branchSecret: new FormControl(undefined, Validators.required),
-    }),
-  });
+        roas: new FormControl(undefined, [
+          Validators.required,
+          Validators.min(0.1),
+          Validators.max(1000),
+          Validators.minLength(1),
+        ]),
+        branchBidAdjusterEnabled: new FormControl(false),
+        branchKey: new FormControl(undefined, Validators.required),
+        branchSecret: new FormControl(undefined, Validators.required),
+      }),
+    },
+    { validators: CustomFormValidators.budgetCpiValidator }
+  );
 
   client: Client;
   isLoadingResults = true;
@@ -231,8 +235,25 @@ export class RegistrationComponent implements OnInit {
   orgId: string;
   emailAddresses: string;
 
+  get dailyBudgetError(): string {
+    if (this.dailyBudget.hasError("invalidDailyBudget")) {
+      return "Daily budget cap must be 20x your Target Cost Per Install";
+    }
+    if (this.dailyBudget.invalid) {
+      return "Please enter a number between 1 and 10,000";
+    }
+  }
+
+  get lifetimeBudgetError(): string {
+    if (this.lifetimeBudget.hasError("invalidLifetimeBudget")) {
+      return "Lifetime budget must exceed daily budget cap";
+    }
+    if (this.lifetimeBudget.invalid) {
+      return "Please enter a number between 10 and 10,000,000";
+    }
+  }
+
   ngOnInit() {
-    // this.initializeClient();
     Auth.currentUserInfo().then((val) => {
       this.orgId = get(val.attributes, "custom:org_id");
       this.emailAddresses = get(val.attributes, "email");
