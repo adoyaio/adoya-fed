@@ -649,7 +649,7 @@
             </div>
           </div>
 
-          <!-- 2.4 competitors and brands -->
+          <!-- 2.4 keywords, competitor category brand  -->
           <div
             formGroupName="substep4"
             class="w-100 mt-2"
@@ -717,7 +717,7 @@
                       >List words and phrases that best describe your app and
                       business</mat-label
                     >
-                    <textarea matInput formControlName="phrases"> </textarea>
+                    <textarea matInput formControlName="category"> </textarea>
                   </mat-form-field>
 
                   <mat-icon
@@ -729,7 +729,7 @@
 
                   <button
                     mat-icon-button
-                    (click)="handleAddKeywords($event, 'phrases')"
+                    (click)="handleAddKeywords($event, 'category')"
                   >
                     <mat-icon class="float-right" color="accent"
                       >add_circle</mat-icon
@@ -741,12 +741,12 @@
                 <div class="w-100 no-gutters mb-4">
                   <mat-chip-list>
                     <mat-chip
-                      *ngFor="let keyword of keywordsPhrases"
+                      *ngFor="let keyword of keywordsCategory"
                       [selectable]="true"
                       [selected]="true"
                       [removable]="true"
                       color="primary"
-                      (removed)="handleRemoveKeywords('phrases', keyword)"
+                      (removed)="handleRemoveKeywords('category', keyword)"
                     >
                       {{ keyword }}
                       <mat-icon matChipRemove>cancel</mat-icon>

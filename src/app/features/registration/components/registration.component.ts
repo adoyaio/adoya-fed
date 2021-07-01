@@ -34,6 +34,7 @@ import { AppleService } from "src/app/core/services/apple.service";
 import { ClientService } from "src/app/core/services/client.service";
 import { CustomFormValidators } from "src/app/shared/dynamic-form/validators/CustomFormValidators";
 import { DynamicModalComponent } from "src/app/shared/dynamic-modal/dynamic-modal.component";
+import { CampaignData } from "../model/campaign-data";
 
 @Component({
   selector: "app-registration",
@@ -69,8 +70,15 @@ export class RegistrationComponent implements OnInit {
   apps = [];
   app: any;
   keywordsBrand: string[] = [];
-  keywordsPhrases: string[] = [];
+  keywordsCategory: string[] = [];
   keywordsCompetitors: string[] = [];
+  client: Client;
+  isLoadingResults = true;
+  isSendingResults;
+  orgId: string;
+  emailAddresses: string;
+
+  private _destroyed$: Subject<boolean> = new Subject<boolean>();
 
   // TODO load from api
   campaigns = [
@@ -121,42 +129,6 @@ export class RegistrationComponent implements OnInit {
     },
   ];
 
-  get substep1(): any {
-    return this.step2Form.get("substep1");
-  }
-  get substep2(): any {
-    return this.step2Form.get("substep2");
-  }
-  get substep3(): any {
-    return this.step2Form.get("substep3");
-  }
-  get substep4(): any {
-    return this.step2Form.get("substep4");
-  }
-  get substep5(): any {
-    return this.step2Form.get("substep5");
-  }
-  get substep6(): any {
-    return this.step2Form.get("substep6");
-  }
-  get dailyBudget(): AbstractControl {
-    return this.step2Form.get("substep3").get("dailyBudget");
-  }
-  get lifetimeBudget(): AbstractControl {
-    return this.step2Form.get("substep3").get("lifetimeBudget");
-  }
-
-  private _destroyed$: Subject<boolean> = new Subject<boolean>();
-
-  constructor(
-    private router: Router,
-    private fb: FormBuilder,
-    private clientService: ClientService,
-    private appleService: AppleService,
-    private snackBar: MatSnackBar,
-    private dialog: MatDialog
-  ) {}
-
   step1Form = this.fb.group({
     orgId: new FormControl("", Validators.required),
     clientId: new FormControl("", Validators.required),
@@ -200,7 +172,7 @@ export class RegistrationComponent implements OnInit {
       ),
       substep4: this.fb.group({
         competitors: new FormControl(undefined, Validators.required),
-        phrases: new FormControl(undefined, Validators.required),
+        category: new FormControl(undefined, Validators.required),
         brand: new FormControl(undefined, Validators.required),
       }),
       substep5: this.fb.group({
@@ -229,11 +201,30 @@ export class RegistrationComponent implements OnInit {
     { validators: CustomFormValidators.budgetCpiValidator }
   );
 
-  client: Client;
-  isLoadingResults = true;
-  isSendingResults;
-  orgId: string;
-  emailAddresses: string;
+  get substep1(): any {
+    return this.step2Form.get("substep1");
+  }
+  get substep2(): any {
+    return this.step2Form.get("substep2");
+  }
+  get substep3(): any {
+    return this.step2Form.get("substep3");
+  }
+  get substep4(): any {
+    return this.step2Form.get("substep4");
+  }
+  get substep5(): any {
+    return this.step2Form.get("substep5");
+  }
+  get substep6(): any {
+    return this.step2Form.get("substep6");
+  }
+  get dailyBudget(): AbstractControl {
+    return this.step2Form.get("substep3").get("dailyBudget");
+  }
+  get lifetimeBudget(): AbstractControl {
+    return this.step2Form.get("substep3").get("lifetimeBudget");
+  }
 
   get dailyBudgetError(): string {
     if (this.dailyBudget.hasError("invalidDailyBudget")) {
@@ -252,6 +243,16 @@ export class RegistrationComponent implements OnInit {
       return "Please enter a number between 10 and 10,000,000";
     }
   }
+
+  constructor(
+    private router: Router,
+    private fb: FormBuilder,
+    private clientService: ClientService,
+    private appleService: AppleService,
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
+  ) {}
+
 
   ngOnInit() {
     Auth.currentUserInfo().then((val) => {
@@ -376,6 +377,8 @@ export class RegistrationComponent implements OnInit {
               .pipe(
                 take(1),
                 switchMap((val) => {
+
+                  // for adoya
                   const client = Client.buildFromGetClientResponse(val);
 
                   client.orgDetails.bidParameters.objective =
@@ -390,7 +393,7 @@ export class RegistrationComponent implements OnInit {
                   client.orgDetails.adgroupBidParameters.highCPIBidDecreaseThresh =
                     this.substep2.get("cpi").value;
 
-                  // Branch fields
+                  // branch fields
                   client.orgDetails.branchBidParameters.branchOptimizationGoal =
                     this.substep6.get("mmpObjective").value;
 
@@ -428,53 +431,54 @@ export class RegistrationComponent implements OnInit {
                   client.orgDetails.currency =
                     this.substep1.get("currency").value;
 
-                  // post to client service for clients json
+                  // for apple
+                  const campaignData = new CampaignData();
+                  campaignData.org_id = this.orgId
+                  campaignData.app_name = get(this.app, "appName")
+                  campaignData.adam_id = get(this.app, "adamId")
+                  campaignData.campaign_target_country = this.substep1.get("country").value
+                  campaignData.front_end_lifetime_budget = this.substep3.get("lifetimeBudget").value
+                  campaignData.front_end_daily_budget = this.substep3.get("dailyBudget").value
+                  campaignData.objective = this.substep2.get("objective").value
+                  campaignData.target_cost_per_install = this.substep2.get("cpi").value
+                  campaignData.gender = this.substep5.get("genders").value
+                  campaignData.min_age = this.substep5.get("ages").value
+                  campaignData.currency = this.substep1.get("currency").value
+                  campaignData.targeted_keywords_competitor = this.keywordsCompetitors
+                  campaignData.targeted_keywords_category = this.keywordsCategory
+                  campaignData.targeted_keywords_brand = this.keywordsBrand
+
+                  // post to client service for clients json &
                   // post to apple service for campaign creation
-
-                  const targeted_keywords_first_entry_competitor: string =
-                    this.substep4.get("competitors").value;
-                  const targeted_keywords_first_entry_category: string =
-                    this.substep4.get("phrases").value;
-                  const targeted_keywords_first_entry_brand: string =
-                    this.substep4.get("brand").value;
-
                   return combineLatest([
                     this.clientService.postClient(
                       ClientPayload.buildFromClient(client)
+                    ).pipe(
+                      take(1),
+                      catchError(() => {
+                        this.isLoadingResults = false;
+                        this.openSnackBar(
+                          "unable to process changes to settings at this time",
+                          "dismiss"
+                        );
+                        return [];
+                      })
                     ),
-                    this.appleService.postAppleCampaign(this.orgId, {
-                      org_id: this.orgId,
-                      app_name: get(this.app, "appName"),
-                      adam_id: get(this.app, "adamId"),
-                      campaign_target_country:
-                        this.substep1.get("country").value,
-                      front_end_lifetime_budget:
-                        this.substep3.get("lifetimeBudget").value,
-                      front_end_daily_budget:
-                        this.substep3.get("dailyBudget").value,
-                      objective: this.substep2.get("objective").value,
-                      target_cost_per_install: this.substep2.get("cpi").value,
-                      gender_first_entry: this.substep5.get("genders").value,
-                      min_age_first_entry: this.substep5.get("ages").value,
-                      targeted_keywords_first_entry_competitor:
-                        targeted_keywords_first_entry_competitor.split(" "),
-                      targeted_keywords_first_entry_category:
-                        targeted_keywords_first_entry_category.split(" "),
-                      targeted_keywords_first_entry_brand:
-                        targeted_keywords_first_entry_brand.split(" "),
-                      currency: this.substep1.get("currency").value,
-                    }),
+                    this.appleService.postAppleCampaign(this.orgId, campaignData).pipe(
+                      take(1),
+                      catchError(() => {
+                        this.isLoadingResults = false;
+                        this.openSnackBar(
+                          "unable to process changes to settings at this time",
+                          "dismiss"
+                        );
+                        return [];
+                      })
+                    ),
                   ]).pipe(
+                    take(1),
                     tap(() => {
                       this.isLoadingResults = false;
-                    }),
-                    catchError(() => {
-                      this.isLoadingResults = false;
-                      this.openSnackBar(
-                        "unable to process changes to settings at this time",
-                        "dismiss"
-                      );
-                      return [];
                     })
                   );
                 })
@@ -779,7 +783,7 @@ export class RegistrationComponent implements OnInit {
         this.step2Form.get("substep4").invalid ||
         isEmpty(this.keywordsBrand) ||
         isEmpty(this.keywordsCompetitors) ||
-        isEmpty(this.keywordsPhrases)
+        isEmpty(this.keywordsCategory)
       );
     }
 
@@ -858,8 +862,8 @@ export class RegistrationComponent implements OnInit {
           .map((keyword) => keyword.trim().replace(".", ""));
         break;
 
-      case "phrases":
-        this.keywordsPhrases = keywords
+      case "category":
+        this.keywordsCategory = keywords
           .split(",")
           .map((keyword) => keyword.trim().replace(".", ""));
         break;
@@ -883,12 +887,12 @@ export class RegistrationComponent implements OnInit {
         newValue = this.keywordsBrand;
         break;
 
-      case "phrases":
-        chain(this.keywordsPhrases)
+      case "category":
+        chain(this.keywordsCategory)
           .remove((keyword) => keyword == removed)
           .value();
 
-        newValue = this.keywordsPhrases;
+        newValue = this.keywordsCategory;
         break;
 
       case "competitors":
