@@ -78,19 +78,9 @@ export class RegistrationComponent implements OnInit {
   isSendingResults;
   orgId: string;
   emailAddresses: string;
+  campaigns = []
 
   private _destroyed$: Subject<boolean> = new Subject<boolean>();
-
-  // TODO load from api
-  campaigns = []
-  // campaigns = [
-  //   "Acme - US - Discovery - Broad Match",
-  //   "Acme - US - Discovery - Exact Match",
-  //   "Acme - US - Discovery - Search Match",
-  //   "Acme - US - Competitor - Exact Match",
-  //   "Acme - US - Non-Brand - Exact Match",
-  //   "Acme - US - Brand - Exact Match",
-  // ];
 
   step2: any[] = [
     {
@@ -528,7 +518,7 @@ export class RegistrationComponent implements OnInit {
                                                   tap(() => {
                                                     this.client = client;
                                                     this.isLoadingResults = false;
-                                                    this.openSnackBar("we completed creating your campaigns! please review details and complete registration to finalize", "")
+                                                    this.openSnackBar("we completed creating your campaigns! &#13; please review details and complete registration to finalize", "")
                                                   })
                                               )
                                             })
