@@ -25,6 +25,7 @@ import {
   isNil,
   set,
   map as _map,
+  cloneDeep,
 } from "lodash";
 import { combineLatest, EMPTY, of, Subject } from "rxjs";
 import { catchError, switchMap, take, takeUntil, tap } from "rxjs/operators";
@@ -81,14 +82,15 @@ export class RegistrationComponent implements OnInit {
   private _destroyed$: Subject<boolean> = new Subject<boolean>();
 
   // TODO load from api
-  campaigns = [
-    "Acme - US - Discovery - Broad Match",
-    "Acme - US - Discovery - Exact Match",
-    "Acme - US - Discovery - Search Match",
-    "Acme - US - Competitor - Exact Match",
-    "Acme - US - Non-Brand - Exact Match",
-    "Acme - US - Brand - Exact Match",
-  ];
+  campaigns = []
+  // campaigns = [
+  //   "Acme - US - Discovery - Broad Match",
+  //   "Acme - US - Discovery - Exact Match",
+  //   "Acme - US - Discovery - Search Match",
+  //   "Acme - US - Competitor - Exact Match",
+  //   "Acme - US - Non-Brand - Exact Match",
+  //   "Acme - US - Brand - Exact Match",
+  // ];
 
   step2: any[] = [
     {
@@ -242,6 +244,17 @@ export class RegistrationComponent implements OnInit {
     if (this.lifetimeBudget.invalid) {
       return "Please enter a number between 10 and 10,000,000";
     }
+  }
+
+  get showStep3Text(): boolean {
+    if(isNil(this.client.orgDetails)){
+      return false
+    }
+
+    if(isNil(this.client.orgDetails.appleCampaigns)){
+      return false
+    }
+    return !isEmpty(this.client.orgDetails.appleCampaigns)
   }
 
   constructor(
@@ -448,20 +461,107 @@ export class RegistrationComponent implements OnInit {
                   campaignData.targeted_keywords_category = this.keywordsCategory
                   campaignData.targeted_keywords_brand = this.keywordsBrand
 
-                  // post to apple service for campaign creation
-                  return this.appleService.postAppleCampaign(this.orgId, campaignData).pipe(
+                  // get auth
+                  return this.appleService.getAppleAuth(this.orgId).pipe(
                     take(1),
                     switchMap((val) => {
-                        set(client, 'orgDetails.appleCampaigns', get(val, 'campaigns', []));
-                         // post to client service for clients json
-                        return this.clientService.postClient(ClientPayload.buildFromClient(client)).pipe(
-                          take(1),
-                          tap(() => {
-                            this.isLoadingResults = false;
-                          })
-                        )
+                      console.log(JSON.stringify(val))
+
+                      // set auth
+                      set(campaignData, 'authToken', val);
+
+                      // run one api call for each of the campaign types
+                      // competitor, category, brand, exact_discovery, broad_discovery, search_discovery
+                      const competitorData = cloneDeep(campaignData);
+                      set(competitorData, 'campaignType', "competitor");
+
+                      return this.appleService.postAppleCampaign(this.orgId, competitorData).pipe(
+                        take(1),
+                        tap((val) => {
+                          this.campaigns.push(val.campaign)
+
+                        }),
+                        switchMap(() => {
+                          const categoryData = cloneDeep(campaignData)
+                          set(categoryData, 'campaignType', "category")
+                          return this.appleService.postAppleCampaign(this.orgId, categoryData).pipe(
+                            take(1),
+                            tap((val) => {
+                              this.campaigns.push(val.campaign)
+                            }),
+                            switchMap(() => {
+                              const brandData = cloneDeep(campaignData)
+                              set(brandData, 'campaignType', "brand")
+                              return this.appleService.postAppleCampaign(this.orgId, brandData).pipe(
+                                take(1),
+                                tap((val) => {
+                                  this.campaigns.push(val.campaign)
+                                }),
+                                switchMap(() => {
+                                  const exactDiscoveryData = cloneDeep(campaignData)
+                                  set(exactDiscoveryData, 'campaignType', "exact_discovery")
+                                  return this.appleService.postAppleCampaign(this.orgId, exactDiscoveryData).pipe(
+                                    take(1),
+                                    tap((val) => {
+                                      this.campaigns.push(val.campaign)
+                                    }),
+                                    switchMap(() => {
+                                      const broadDiscoveryData = cloneDeep(campaignData)
+                                      set(broadDiscoveryData, 'campaignType', "broad_discovery")
+                                      return this.appleService.postAppleCampaign(this.orgId, broadDiscoveryData).pipe(
+                                        take(1),
+                                        tap((val) => {
+                                          this.campaigns.push(val.campaign)
+                                        }),
+                                        switchMap(() => {
+                                          const searchDiscoveryData = cloneDeep(campaignData)
+                                          set(searchDiscoveryData, 'campaignType', "search_discovery")
+                                          return this.appleService.postAppleCampaign(this.orgId, searchDiscoveryData).pipe(
+                                            take(1),
+                                            tap((val) => {
+                                              this.campaigns.push(val.campaign)
+                                            }),
+                                            switchMap(() => {
+                                              set(client, 'orgDetails.appleCampaigns', this.campaigns);
+                                              return this.clientService.postClient(ClientPayload.buildFromClient(client)).pipe(
+                                                  take(1),
+                                                  tap(() => {
+                                                    this.client = client;
+                                                    this.isLoadingResults = false;
+                                                    this.openSnackBar("we completed creating your campaigns! please review details and complete registration to finalize", "")
+                                                  })
+                                              )
+                                            })
+                                          )
+                                        })
+                                      )
+                                    })
+                                  )
+                                })
+                              )
+                            })
+                          )
+                        })
+                      )
                     })
                   )
+
+                  // post to apple service for campaign creation
+                  // return this.appleService.postAppleCampaign(this.orgId, campaignData).pipe(
+                  //   take(1),
+                  //   switchMap((val) => {
+                  //       set(client, 'orgDetails.appleCampaigns', get(val, 'campaigns', []));
+                  //        // post to client service for clients json
+                  //       return this.clientService.postClient(ClientPayload.buildFromClient(client)).pipe(
+                  //         take(1),
+                  //         tap(() => {
+                  //           this.client = client;
+                  //           this.isLoadingResults = false;
+                  //           this.openSnackBar("we completed creating your campaigns! please review details and complete registration to finalize", "")
+                  //         })
+                  //       )
+                  //   })
+                  // )
                 }),
                 catchError(() => {
                   this.isLoadingResults = false;
@@ -469,6 +569,7 @@ export class RegistrationComponent implements OnInit {
                           "unable to process changes to settings at this time",
                           "dismiss"
                         );
+                        this.stepper.previous()
                         return [];
                       })
               )

@@ -12,5 +12,7 @@ export class CampaignData {
   currency: string;
   targeted_keywords_competitor: string[];
   targeted_keywords_category: string[];
-  targeted_keywords_brand: string[]
+  targeted_keywords_brand: string[];
+  campaignType: string;
+  authToken: any;
 }

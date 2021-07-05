@@ -21,6 +21,7 @@ export class AppleService {
   baseUrl = environment.baseUrl;
   getAppleAppsUrl = this.baseUrl + `/apple/apps`;
   getAppleAclsUrl = this.baseUrl + `/apple/acls`;
+  getAppleAuthUrl = this.baseUrl + `/apple/auth`;
   createAppleCampaignsUrl = this.baseUrl + `/apple/campaign`;
 
   public getAppleApps(orgId: string): Observable<any> {
@@ -36,6 +37,17 @@ export class AppleService {
 
   public getAppleAcls(orgId: string): Observable<any> {
     const url = `${this.getAppleAclsUrl}?org_id=${orgId}`;
+    let headers = new HttpHeaders();
+    headers = headers.set("x-api-key", this.authKey);
+    return this.http.get<any>(url, { headers: headers }).pipe(
+      map((response) => {
+        return response;
+      })
+    );
+  }
+
+  public getAppleAuth(orgId: string): Observable<any> {
+    const url = `${this.getAppleAuthUrl}?org_id=${orgId}`;
     let headers = new HttpHeaders();
     headers = headers.set("x-api-key", this.authKey);
     return this.http.get<any>(url, { headers: headers }).pipe(
