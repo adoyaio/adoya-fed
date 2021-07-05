@@ -45,6 +45,7 @@ export class NavLinksComponent {
   handleClick(link: LayoutNavLinks, index: number) {
     this.navButtonClicked.emit();
     this.navLinkService.setActiveLink(index);
+    this.router.navigateByUrl(link.routerLink);
     if (link.onclick) {
       link.onclick();
     }

@@ -448,40 +448,29 @@ export class RegistrationComponent implements OnInit {
                   campaignData.targeted_keywords_category = this.keywordsCategory
                   campaignData.targeted_keywords_brand = this.keywordsBrand
 
-                  // post to client service for clients json &
                   // post to apple service for campaign creation
-                  return combineLatest([
-                    this.clientService.postClient(
-                      ClientPayload.buildFromClient(client)
-                    ).pipe(
-                      take(1),
-                      catchError(() => {
-                        this.isLoadingResults = false;
-                        this.openSnackBar(
-                          "unable to process changes to settings at this time",
-                          "dismiss"
-                        );
-                        return [];
-                      })
-                    ),
-                    this.appleService.postAppleCampaign(this.orgId, campaignData).pipe(
-                      take(1),
-                      catchError(() => {
-                        this.isLoadingResults = false;
-                        this.openSnackBar(
-                          "unable to process changes to settings at this time",
-                          "dismiss"
-                        );
-                        return [];
-                      })
-                    ),
-                  ]).pipe(
+                  return this.appleService.postAppleCampaign(this.orgId, campaignData).pipe(
                     take(1),
-                    tap(() => {
-                      this.isLoadingResults = false;
+                    switchMap((val) => {
+                        set(client, 'orgDetails.appleCampaigns', get(val, 'campaigns', []));
+                         // post to client service for clients json
+                        return this.clientService.postClient(ClientPayload.buildFromClient(client)).pipe(
+                          take(1),
+                          tap(() => {
+                            this.isLoadingResults = false;
+                          })
+                        )
                     })
-                  );
-                })
+                  )
+                }),
+                catchError(() => {
+                  this.isLoadingResults = false;
+                        this.openSnackBar(
+                          "unable to process changes to settings at this time",
+                          "dismiss"
+                        );
+                        return [];
+                      })
               )
               .subscribe();
           }

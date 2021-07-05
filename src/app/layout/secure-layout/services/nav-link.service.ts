@@ -31,9 +31,7 @@ export class NavLinkService implements OnDestroy {
         "/workbench/optimizations",
         "dashboard",
         undefined,
-        () => {
-          location.href = "/workbench/optimizations";
-        }
+        undefined
       )
     );
 
@@ -45,9 +43,7 @@ export class NavLinkService implements OnDestroy {
         "/workbench/reporting",
         "assessment",
         undefined,
-        () => {
-          location.href = "/workbench/reporting";
-        }
+        undefined
       )
     );
 
@@ -59,9 +55,7 @@ export class NavLinkService implements OnDestroy {
         "/workbench/preferences",
         "build",
         undefined,
-        () => {
-          location.href = "/workbench/preferences";
-        }
+        undefined
       )
     );
 
@@ -73,9 +67,7 @@ export class NavLinkService implements OnDestroy {
         "/workbench/newsfeed",
         "dynamic_feed",
         undefined,
-        () => {
-          location.href = "/workbench/newsfeed";
-        }
+        undefined
       )
     );
 
@@ -87,9 +79,7 @@ export class NavLinkService implements OnDestroy {
         "/workbench/account",
         "account_box",
         undefined,
-        () => {
-          location.href = "/workbench/account";
-        }
+        undefined
       )
     );
     this.navLinks.push(
@@ -100,9 +90,7 @@ export class NavLinkService implements OnDestroy {
         "/workbench/support",
         "feedback",
         undefined,
-        () => {
-          location.href = "/workbench/support";
-        }
+        undefined
       )
     );
   }
