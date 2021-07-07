@@ -345,3 +345,16 @@ $altTheme: mat-dark-theme($theme-primary, $theme-accent, $theme-warn);
   align-items: center;
   justify-content: center;
 }
+
+.workbench__loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0px;
+  right: 0;
+  // background: #5d7d41, 0.15;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

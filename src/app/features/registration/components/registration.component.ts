@@ -15,7 +15,6 @@ import {
 import { Router } from "@angular/router";
 import { Auth } from "aws-amplify";
 
-
 import {
   chain,
   find,
@@ -78,7 +77,7 @@ export class RegistrationComponent implements OnInit {
   isSendingResults;
   orgId: string;
   emailAddresses: string;
-  campaigns = []
+  campaigns = [];
 
   private _destroyed$: Subject<boolean> = new Subject<boolean>();
 
@@ -236,17 +235,6 @@ export class RegistrationComponent implements OnInit {
     }
   }
 
-  get showStep3Text(): boolean {
-    if(isNil(this.client.orgDetails)){
-      return false
-    }
-
-    if(isNil(this.client.orgDetails.appleCampaigns)){
-      return false
-    }
-    return !isEmpty(this.client.orgDetails.appleCampaigns)
-  }
-
   constructor(
     private router: Router,
     private fb: FormBuilder,
@@ -255,7 +243,6 @@ export class RegistrationComponent implements OnInit {
     private snackBar: MatSnackBar,
     private dialog: MatDialog
   ) {}
-
 
   ngOnInit() {
     Auth.currentUserInfo().then((val) => {
@@ -269,6 +256,10 @@ export class RegistrationComponent implements OnInit {
             this.client = Client.buildFromGetClientResponse(data);
             // check if client exists and has auth fields
             if (!isNil(this.client.orgDetails.auth)) {
+              this.openSnackBar(
+                "we found your apple search ads configuration! if you would like to continue, click 'next'",
+                ""
+              );
               this.setOrgIdValue();
               this.setStep1FormValues();
               this.setStep2FormValues();
@@ -291,6 +282,11 @@ export class RegistrationComponent implements OnInit {
         tap((val) => {
           // STEP 1
           if (val.selectedIndex === 1) {
+            this.openSnackBar(
+              "one moment, while we gather more details about your account",
+              ""
+            );
+
             this.initializeClient();
             this.isLoadingResults = true;
             if (
@@ -341,7 +337,7 @@ export class RegistrationComponent implements OnInit {
                       }
                       if (!isEmpty(apps.data)) {
                         this.openSnackBar(
-                          "we found some of your applications, please select one from the dropdown to continue",
+                          "we found some of your applications! please select from the dropdown to continue",
                           ""
                         );
                       }
@@ -374,13 +370,16 @@ export class RegistrationComponent implements OnInit {
 
           // STEP 2
           if (val.selectedIndex === 2) {
+            this.openSnackBar(
+              "one moment, while we save your campaign configuration",
+              ""
+            );
             this.isLoadingResults = true;
             this.clientService
               .getClient(this.orgId)
               .pipe(
                 take(1),
                 switchMap((val) => {
-
                   // for adoya
                   const client = Client.buildFromGetClientResponse(val);
 
@@ -436,105 +435,167 @@ export class RegistrationComponent implements OnInit {
 
                   // for apple
                   const campaignData = new CampaignData();
-                  campaignData.org_id = this.orgId
-                  campaignData.app_name = get(this.app, "appName")
-                  campaignData.adam_id = get(this.app, "adamId")
-                  campaignData.campaign_target_country = this.substep1.get("country").value
-                  campaignData.front_end_lifetime_budget = this.substep3.get("lifetimeBudget").value
-                  campaignData.front_end_daily_budget = this.substep3.get("dailyBudget").value
-                  campaignData.objective = this.substep2.get("objective").value
-                  campaignData.target_cost_per_install = this.substep2.get("cpi").value
-                  campaignData.gender = this.substep5.get("genders").value
-                  campaignData.min_age = this.substep5.get("ages").value
-                  campaignData.currency = this.substep1.get("currency").value
-                  campaignData.targeted_keywords_competitor = this.keywordsCompetitors
-                  campaignData.targeted_keywords_category = this.keywordsCategory
-                  campaignData.targeted_keywords_brand = this.keywordsBrand
+                  campaignData.org_id = this.orgId;
+                  campaignData.app_name = get(this.app, "appName");
+                  campaignData.adam_id = get(this.app, "adamId");
+                  campaignData.campaign_target_country =
+                    this.substep1.get("country").value;
+                  campaignData.front_end_lifetime_budget =
+                    this.substep3.get("lifetimeBudget").value;
+                  campaignData.front_end_daily_budget =
+                    this.substep3.get("dailyBudget").value;
+                  campaignData.objective = this.substep2.get("objective").value;
+                  campaignData.target_cost_per_install =
+                    this.substep2.get("cpi").value;
+                  campaignData.gender = this.substep5.get("genders").value;
+                  campaignData.min_age = this.substep5.get("ages").value;
+                  campaignData.currency = this.substep1.get("currency").value;
+                  campaignData.targeted_keywords_competitor =
+                    this.keywordsCompetitors;
+                  campaignData.targeted_keywords_category =
+                    this.keywordsCategory;
+                  campaignData.targeted_keywords_brand = this.keywordsBrand;
 
                   // get auth
                   return this.appleService.getAppleAuth(this.orgId).pipe(
                     take(1),
                     switchMap((val) => {
-                      console.log(JSON.stringify(val))
-
+                      this.openSnackBar(
+                        "creating apple search ads campaigns, this may take a few minutes! please don't refresh during this time",
+                        ""
+                      );
                       // set auth
-                      set(campaignData, 'authToken', val);
+                      set(campaignData, "authToken", val);
 
                       // run one api call for each of the campaign types
                       // competitor, category, brand, exact_discovery, broad_discovery, search_discovery
                       const competitorData = cloneDeep(campaignData);
-                      set(competitorData, 'campaignType', "competitor");
+                      set(competitorData, "campaignType", "competitor");
 
-                      return this.appleService.postAppleCampaign(this.orgId, competitorData).pipe(
-                        take(1),
-                        tap((val) => {
-                          this.campaigns.push(val.campaign)
-
-                        }),
-                        switchMap(() => {
-                          const categoryData = cloneDeep(campaignData)
-                          set(categoryData, 'campaignType', "category")
-                          return this.appleService.postAppleCampaign(this.orgId, categoryData).pipe(
-                            take(1),
-                            tap((val) => {
-                              this.campaigns.push(val.campaign)
-                            }),
-                            switchMap(() => {
-                              const brandData = cloneDeep(campaignData)
-                              set(brandData, 'campaignType', "brand")
-                              return this.appleService.postAppleCampaign(this.orgId, brandData).pipe(
+                      return this.appleService
+                        .postAppleCampaign(this.orgId, competitorData)
+                        .pipe(
+                          take(1),
+                          tap((val) => {
+                            this.campaigns.push(val.campaign);
+                          }),
+                          switchMap(() => {
+                            const categoryData = cloneDeep(campaignData);
+                            set(categoryData, "campaignType", "category");
+                            return this.appleService
+                              .postAppleCampaign(this.orgId, categoryData)
+                              .pipe(
                                 take(1),
                                 tap((val) => {
-                                  this.campaigns.push(val.campaign)
+                                  this.campaigns.push(val.campaign);
                                 }),
                                 switchMap(() => {
-                                  const exactDiscoveryData = cloneDeep(campaignData)
-                                  set(exactDiscoveryData, 'campaignType', "exact_discovery")
-                                  return this.appleService.postAppleCampaign(this.orgId, exactDiscoveryData).pipe(
-                                    take(1),
-                                    tap((val) => {
-                                      this.campaigns.push(val.campaign)
-                                    }),
-                                    switchMap(() => {
-                                      const broadDiscoveryData = cloneDeep(campaignData)
-                                      set(broadDiscoveryData, 'campaignType', "broad_discovery")
-                                      return this.appleService.postAppleCampaign(this.orgId, broadDiscoveryData).pipe(
-                                        take(1),
-                                        tap((val) => {
-                                          this.campaigns.push(val.campaign)
-                                        }),
-                                        switchMap(() => {
-                                          const searchDiscoveryData = cloneDeep(campaignData)
-                                          set(searchDiscoveryData, 'campaignType', "search_discovery")
-                                          return this.appleService.postAppleCampaign(this.orgId, searchDiscoveryData).pipe(
+                                  const brandData = cloneDeep(campaignData);
+                                  set(brandData, "campaignType", "brand");
+                                  return this.appleService
+                                    .postAppleCampaign(this.orgId, brandData)
+                                    .pipe(
+                                      take(1),
+                                      tap((val) => {
+                                        this.campaigns.push(val.campaign);
+                                      }),
+                                      switchMap(() => {
+                                        const exactDiscoveryData =
+                                          cloneDeep(campaignData);
+                                        set(
+                                          exactDiscoveryData,
+                                          "campaignType",
+                                          "exact_discovery"
+                                        );
+                                        return this.appleService
+                                          .postAppleCampaign(
+                                            this.orgId,
+                                            exactDiscoveryData
+                                          )
+                                          .pipe(
                                             take(1),
                                             tap((val) => {
-                                              this.campaigns.push(val.campaign)
+                                              this.campaigns.push(val.campaign);
                                             }),
                                             switchMap(() => {
-                                              set(client, 'orgDetails.appleCampaigns', this.campaigns);
-                                              return this.clientService.postClient(ClientPayload.buildFromClient(client)).pipe(
+                                              const broadDiscoveryData =
+                                                cloneDeep(campaignData);
+                                              set(
+                                                broadDiscoveryData,
+                                                "campaignType",
+                                                "broad_discovery"
+                                              );
+                                              return this.appleService
+                                                .postAppleCampaign(
+                                                  this.orgId,
+                                                  broadDiscoveryData
+                                                )
+                                                .pipe(
                                                   take(1),
-                                                  tap(() => {
-                                                    this.client = client;
-                                                    this.isLoadingResults = false;
-                                                    this.openSnackBar("we completed creating your campaigns! &#13; please review details and complete registration to finalize", "")
+                                                  tap((val) => {
+                                                    this.campaigns.push(
+                                                      val.campaign
+                                                    );
+                                                  }),
+                                                  switchMap(() => {
+                                                    const searchDiscoveryData =
+                                                      cloneDeep(campaignData);
+                                                    set(
+                                                      searchDiscoveryData,
+                                                      "campaignType",
+                                                      "search_discovery"
+                                                    );
+                                                    return this.appleService
+                                                      .postAppleCampaign(
+                                                        this.orgId,
+                                                        searchDiscoveryData
+                                                      )
+                                                      .pipe(
+                                                        take(1),
+                                                        tap((val) => {
+                                                          this.campaigns.push(
+                                                            val.campaign
+                                                          );
+                                                        }),
+                                                        switchMap(() => {
+                                                          set(
+                                                            client,
+                                                            "orgDetails.appleCampaigns",
+                                                            this.campaigns
+                                                          );
+                                                          return this.clientService
+                                                            .postClient(
+                                                              ClientPayload.buildFromClient(
+                                                                client
+                                                              )
+                                                            )
+                                                            .pipe(
+                                                              take(1),
+                                                              tap(() => {
+                                                                this.client =
+                                                                  client;
+                                                                this.isLoadingResults =
+                                                                  false;
+                                                                this.openSnackBar(
+                                                                  "we've completed creating your campaigns! please review details and complete registration to finalize",
+                                                                  ""
+                                                                );
+                                                              })
+                                                            );
+                                                        })
+                                                      );
                                                   })
-                                              )
+                                                );
                                             })
-                                          )
-                                        })
-                                      )
-                                    })
-                                  )
+                                          );
+                                      })
+                                    );
                                 })
-                              )
-                            })
-                          )
-                        })
-                      )
+                              );
+                          })
+                        );
                     })
-                  )
+                  );
 
                   // post to apple service for campaign creation
                   // return this.appleService.postAppleCampaign(this.orgId, campaignData).pipe(
@@ -555,13 +616,13 @@ export class RegistrationComponent implements OnInit {
                 }),
                 catchError(() => {
                   this.isLoadingResults = false;
-                        this.openSnackBar(
-                          "unable to process changes to settings at this time",
-                          "dismiss"
-                        );
-                        this.stepper.previous()
-                        return [];
-                      })
+                  this.openSnackBar(
+                    "unable to process changes to settings at this time",
+                    "dismiss"
+                  );
+                  this.stepper.previous();
+                  return [];
+                })
               )
               .subscribe();
           }
@@ -816,7 +877,7 @@ export class RegistrationComponent implements OnInit {
             .pipe(
               take(1),
               tap(() => {
-                this.isLoadingResults = false;
+                // this.isLoadingResults = false;
                 this.router.navigateByUrl("/workbench");
               }),
               catchError(() => {
@@ -926,7 +987,7 @@ export class RegistrationComponent implements OnInit {
 
   openSnackBar(message: string, action: string) {
     this.snackBar.open(message, action, {
-      duration: 10000,
+      duration: 15000,
       panelClass: "standard",
     });
   }
@@ -939,19 +1000,19 @@ export class RegistrationComponent implements OnInit {
       case "brand":
         this.keywordsBrand = keywords
           .split(",")
-          .map((keyword) => keyword.trim().replace(".", ""));
+          .map((keyword) => keyword.trim().replace(".", "").replace(",", ""));
         break;
 
       case "category":
         this.keywordsCategory = keywords
           .split(",")
-          .map((keyword) => keyword.trim().replace(".", ""));
+          .map((keyword) => keyword.trim().replace(".", "").replace(",", ""));
         break;
 
       case "competitors":
         this.keywordsCompetitors = keywords
           .split(",")
-          .map((keyword) => keyword.trim().replace(".", ""));
+          .map((keyword) => keyword.trim().replace(".", "").replace(",", ""));
         break;
     }
   }

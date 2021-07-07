@@ -6,7 +6,9 @@ import { MaterialModule } from "src/app/shared/material-design/material.module";
 import { DynamicFormModule } from "src/app/shared/dynamic-form/dynamic-form.module";
 import { RegistrationComponent } from "./components/registration.component";
 import { SharedModule } from "src/app/shared/shared.module";
+
 import { DynamicModalComponent } from "src/app/shared/dynamic-modal/dynamic-modal.component";
+import { NgxSkeletonLoaderModule } from "ngx-skeleton-loader";
 
 @NgModule({
   declarations: [RegistrationComponent],
@@ -16,6 +18,7 @@ import { DynamicModalComponent } from "src/app/shared/dynamic-modal/dynamic-moda
     MaterialModule,
     DynamicFormModule,
     SharedModule,
+    NgxSkeletonLoaderModule
   ],
   providers: [],
 })

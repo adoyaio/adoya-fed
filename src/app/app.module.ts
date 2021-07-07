@@ -14,6 +14,7 @@ import { SecureLayoutModule } from "./layout/secure-layout/secure-layout.module"
 import { RegistrationModule } from "./features/registration/registration.module";
 import { SharedModule } from "./shared/shared.module";
 import { DynamicModalComponent } from "./shared/dynamic-modal/dynamic-modal.component";
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 @NgModule({
   declarations: [AppComponent],
@@ -29,6 +30,7 @@ import { DynamicModalComponent } from "./shared/dynamic-modal/dynamic-modal.comp
     ChartsModule,
     RegistrationModule,
     SharedModule,
+    NgxSkeletonLoaderModule
   ],
   providers: [AmplifyService],
   bootstrap: [AppComponent],
