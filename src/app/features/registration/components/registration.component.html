@@ -385,7 +385,8 @@
                   matStepperPrevious
                   class="float-left ml-2 border rounded"
                 >
-                  <span class="pl-1">back</span>
+                  <mat-icon aria-label="back">arrow_left</mat-icon>
+                  <span>back</span>
                 </button>
 
                 <button
@@ -521,7 +522,8 @@
                     (click)="goBack(2)"
                     class="float-left ml-2 border rounded"
                   >
-                    <span class="pl-1">back</span>
+                    <mat-icon aria-label="back">arrow_left</mat-icon>
+                    <span>back</span>
                   </button>
                   <button
                     mat-flat-button
@@ -640,7 +642,8 @@
                     (click)="goBack(3)"
                     class="float-left ml-2 border rounded"
                   >
-                    <span class="pl-1">back</span>
+                    <mat-icon aria-label="back">arrow_left</mat-icon>
+                    <span>back</span>
                   </button>
                   <button
                     mat-flat-button
@@ -845,7 +848,8 @@
                     (click)="goBack(4)"
                     class="float-left ml-2 border rounded"
                   >
-                    <span class="pl-1">back</span>
+                    <mat-icon aria-label="back">arrow_left</mat-icon>
+                    <span>back</span>
                   </button>
                   <button
                     mat-flat-button
@@ -947,7 +951,8 @@
                     (click)="goBack(5)"
                     class="float-left ml-2 border rounded"
                   >
-                    <span class="pl-1">back</span>
+                    <mat-icon aria-label="back">arrow_left</mat-icon>
+                    <span>back</span>
                   </button>
                   <button
                     mat-flat-button
@@ -1084,7 +1089,8 @@
                     (click)="goBack(6)"
                     class="float-left ml-2 border rounded"
                   >
-                    <span class="pl-1">back</span>
+                    <mat-icon aria-label="back">arrow_left</mat-icon>
+                    <span>back</span>
                   </button>
                   <button
                     mat-flat-button
@@ -1107,138 +1113,168 @@
 
       <!-- TODO step to add additional countries and apps -->
 
-      <mat-step>
-        <ng-template matStepLabel>Review and complete</ng-template>
-        <div *ngIf="isLoadingResults" class="w-100 mt-2">
-          <ngx-skeleton-loader
-            count="4"
-            [theme]="{
-              'border-radius': '0',
-              height: '50px',
-              width: '100%',
-              'background-color': 'WhiteSmoke',
-              'margin-top': '5px'
-            }"
-          ></ngx-skeleton-loader>
-        </div>
-        <div class="w-100" *ngIf="!isLoadingResults">
-          <mat-list class="p-0 m-0">
-            <mat-list-item class="mb-1">
-              <mat-icon color="accent" class="align-text-top mr-2"
-                >done</mat-icon
-              >
-              <mat-label>Congrats, you're all done! </mat-label>
-            </mat-list-item>
-            <mat-list-item class="mb-1">
-              <mat-icon color="accent" class="align-text-top mr-2"
-                >done</mat-icon
-              >
-              <mat-label>
-                Based on the info you've provided, we've created the following
-                campaigns and recommended budgets.
-              </mat-label>
-            </mat-list-item>
+      <mat-step [stepControl]="step3Form" *ngIf="stepper.selectedIndex > 0">
+        <form [formGroup]="step3Form">
+          <ng-template matStepLabel>Review and complete</ng-template>
+          <div *ngIf="isLoadingResults" class="w-100 mt-2">
+            <ngx-skeleton-loader
+              count="4"
+              [theme]="{
+                'border-radius': '0',
+                height: '50px',
+                width: '100%',
+                'background-color': 'WhiteSmoke',
+                'margin-top': '5px'
+              }"
+            ></ngx-skeleton-loader>
+          </div>
+          <div class="w-100" *ngIf="!isLoadingResults">
+            <mat-list class="p-0 m-0">
+              <mat-list-item class="mb-1">
+                <mat-icon color="accent" class="align-text-top mr-2"
+                  >done</mat-icon
+                >
+                <mat-label>Congrats, you're all done! </mat-label>
+              </mat-list-item>
+              <mat-list-item class="mb-1">
+                <mat-icon color="accent" class="align-text-top mr-2"
+                  >done</mat-icon
+                >
+                <mat-label>
+                  Based on the info you've provided, we've created the following
+                  campaigns and recommended budgets.
+                </mat-label>
+              </mat-list-item>
 
-            <mat-list-item class="mb-1">
-              <mat-icon color="accent" class="align-text-top mr-2"
-                >done</mat-icon
-              >
-              <mat-label>
-                Feel free to update budgets and enable the campaigns you want to
-                run.
-              </mat-label>
-            </mat-list-item>
-          </mat-list>
-        </div>
-        <div class="w-100 p-2 mt-2" *ngIf="!isLoadingResults">
-          <table class="w-100">
-            <tr>
-              <td class="col-2">Enable</td>
-              <td class="col-8">Campaign Name</td>
-              <td class="col-1">Daily Budget Cap</td>
-              <td class="col-1">Lifetime Budget</td>
-            </tr>
-            <ng-container
-              *ngFor="let campaign of client.orgDetails.appleCampaigns"
-            >
+              <mat-list-item class="mb-1">
+                <mat-icon color="accent" class="align-text-top mr-2"
+                  >done</mat-icon
+                >
+                <mat-label>
+                  Feel free to update budgets and enable the campaigns you want
+                  to run.
+                </mat-label>
+              </mat-list-item>
+            </mat-list>
+          </div>
+          <div class="w-100 p-2 mt-2" *ngIf="!isLoadingResults">
+            <table class="w-100">
               <tr>
-                <td class="col-2">
-                  <mat-slide-toggle color="accent" [checked]="campaign.active"
-                    >Enable</mat-slide-toggle
-                  >
-                </td>
-                <td class="col-8">{{ campaign.campaignName }}</td>
-                <td class="col-1">
-                  <!--- daily Budget -->
-                  <mat-form-field
-                    matTooltip="Daily Budget Cap: &#13; Enter the amount you're willing to spend per day. &#13; &#13; You know your business so you should enter what you feel is best. But if you need a guide, we suggest the following approach: &#13; # of installs you want to get per day x maximum cost per install x 10-20% buffer. Let's say you're targeting 100 installs at a $2 maximum cost per install. Your budget should be $220-$240 (100 x $2 x 120%-140%). &#13; &#13; Don't worry! You can change your daily budget cap at any time."
-                    appearance="fill"
-                    color="accent"
-                  >
-                    <mat-label
-                      ><mat-icon>attach_money</mat-icon>&nbsp;Daily Budget
-                      Cap</mat-label
-                    >
-                    <input
-                      required
-                      matInput
-                      type="number"
-                      placeholder=""
-                      [value]="campaign.dailyBudget"
-                    />
-                    <mat-error>
-                      Must enter a number between 1 and 1,000
-                    </mat-error>
-                  </mat-form-field>
-                </td>
-                <td class="col-1">
-                  <!--- Lifetime Budget -->
-                  <mat-form-field
-                    matTooltip="Lifetime Budget: &#13; Enter the amount you're willing to spend for the life of your Apple Search Ads campaigns. When starting, set it sufficiently high enough so it can run for a total of 30 days. This gives the system enough data and time to optimize. A simple formula, take your daily budget and multiply it by 30. So if your daily budget is $100, your lifetime budget should be $3,000. &#13; &#13; After your campaign has been running for some time you should raise your lifetime budget significantly higher. &#13; &#13; Don't worry! You can change your lifetime budget cap at any time. &#13; &#13; IMPORTANT: Your lifetime budget must be higher than your daily budget cap."
-                    appearance="fill"
-                    color="accent"
-                  >
-                    <mat-label
-                      ><mat-icon>attach_money</mat-icon>&nbsp;Lifetime Budget
-                      Cap</mat-label
-                    >
-                    <input
-                      required
-                      matInput
-                      type="number"
-                      placeholder=""
-                      [value]="campaign.lifetimeBudget"
-                    />
-                    <mat-error>
-                      Must enter a number between 10 and 10,000,000
-                    </mat-error>
-                  </mat-form-field>
-                </td>
+                <td class="col-2">Enable</td>
+                <td class="col-8">Campaign Name</td>
+                <td class="col-1">Daily Budget Cap</td>
+                <td class="col-1">Lifetime Budget</td>
               </tr>
-            </ng-container>
-          </table>
-        </div>
+              <ng-container
+                *ngFor="let campaign of client.orgDetails.appleCampaigns"
+              >
+                <tr>
+                  <td class="col-2">
+                    <mat-slide-toggle
+                      color="accent"
+                      [formControlName]="'status|' + campaign.campaignId"
+                      >Enable</mat-slide-toggle
+                    >
+                  </td>
+                  <td class="col-8">{{ campaign.campaignName }}</td>
+                  <td class="col-1">
+                    <!--- daily Budget -->
+                    <mat-form-field
+                      matTooltip="Daily Budget Cap: &#13; Enter the amount you're willing to spend per day. &#13; &#13; You know your business so you should enter what you feel is best. But if you need a guide, we suggest the following approach: &#13; # of installs you want to get per day x maximum cost per install x 10-20% buffer. Let's say you're targeting 100 installs at a $2 maximum cost per install. Your budget should be $220-$240 (100 x $2 x 120%-140%). &#13; &#13; Don't worry! You can change your daily budget cap at any time."
+                      appearance="fill"
+                      color="accent"
+                    >
+                      <mat-label
+                        ><mat-icon>attach_money</mat-icon>&nbsp;Daily Budget
+                        Cap</mat-label
+                      >
+                      <input
+                        required
+                        matInput
+                        type="number"
+                        placeholder=""
+                        [formControlName]="'dailyBudget|' + campaign.campaignId"
+                      />
+                      <mat-error>
+                        Must enter a number between 1 and 1,000
+                      </mat-error>
+                    </mat-form-field>
+                  </td>
+                  <td class="col-1">
+                    <!--- Lifetime Budget -->
+                    <mat-form-field
+                      matTooltip="Lifetime Budget: &#13; Enter the amount you're willing to spend for the life of your Apple Search Ads campaigns. When starting, set it sufficiently high enough so it can run for a total of 30 days. This gives the system enough data and time to optimize. A simple formula, take your daily budget and multiply it by 30. So if your daily budget is $100, your lifetime budget should be $3,000. &#13; &#13; After your campaign has been running for some time you should raise your lifetime budget significantly higher. &#13; &#13; Don't worry! You can change your lifetime budget cap at any time. &#13; &#13; IMPORTANT: Your lifetime budget must be higher than your daily budget cap."
+                      appearance="fill"
+                      color="accent"
+                    >
+                      <mat-label
+                        ><mat-icon>attach_money</mat-icon>&nbsp;Lifetime Budget
+                        Cap</mat-label
+                      >
+                      <input
+                        required
+                        matInput
+                        type="number"
+                        placeholder=""
+                        [formControlName]="
+                          'lifetimeBudget|' + campaign.campaignId
+                        "
+                      />
+                      <mat-error>
+                        Must enter a number between 10 and 10,000,000
+                      </mat-error>
+                    </mat-form-field>
+                  </td>
+                </tr>
+              </ng-container>
+            </table>
+          </div>
 
-        <div class="w-100 mt-3 mb-3">
-          <button
-            mat-flat-button
-            matStepperPrevious
-            [disabled]="isLoadingResults"
-            class="float-left ml-2 border rounded"
-          >
-            <span class="pl-1">back</span>
-          </button>
-          <button
-            mat-flat-button
-            color="accent"
-            class="float-left ml-2"
-            [disabled]="isLoadingResults"
-            (click)="complete()"
-          >
-            <mat-icon class="text-light" aria-label="submit">done</mat-icon>
-            <span class="text-light pl-1">complete</span>
-          </button>
-        </div>
+          <div *ngIf="step3Form.dirty; else continueBlock">
+            <button
+              mat-flat-button
+              [disabled]="isLoadingResults"
+              class="float-left ml-2 border rounded"
+              (click)="undoStep3Changes()"
+            >
+              <mat-icon aria-label="undo">refresh</mat-icon>
+              <span class="pl-1">undo</span>
+            </button>
+            <button
+              mat-flat-button
+              color="accent"
+              class="float-left ml-2"
+              [disabled]="isLoadingResults"
+              (click)="updateAppleCampaign()"
+            >
+              <mat-icon class="text-light" aria-label="submit">done</mat-icon>
+              <span class="text-light pl-1">save</span>
+            </button>
+          </div>
+          <ng-template #continueBlock>
+            <div class="w-100 mt-3 mb-3">
+              <button
+                mat-flat-button
+                matStepperPrevious
+                [disabled]="isLoadingResults"
+                class="float-left ml-2 border rounded"
+              >
+                <mat-icon aria-label="back">arrow_left</mat-icon>
+                <span>back</span>
+              </button>
+              <button
+                mat-flat-button
+                color="accent"
+                class="float-left ml-2"
+                [disabled]="isLoadingResults"
+                (click)="complete()"
+              >
+                <mat-icon class="text-light" aria-label="submit">done</mat-icon>
+                <span class="text-light pl-1">complete</span>
+              </button>
+            </div>
+          </ng-template>
+        </form>
       </mat-step>
     </mat-vertical-stepper>
   </div>

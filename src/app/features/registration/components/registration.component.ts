@@ -192,6 +192,8 @@ export class RegistrationComponent implements OnInit {
     { validators: CustomFormValidators.budgetCpiValidator }
   );
 
+  step3Form: FormGroup = this.fb.group({});
+
   get substep1(): any {
     return this.step2Form.get("substep1");
   }
@@ -252,7 +254,7 @@ export class RegistrationComponent implements OnInit {
         .getClient(this.orgId)
         .pipe(
           take(1),
-          tap((data: Client) => {
+          tap((data: any) => {
             this.client = Client.buildFromGetClientResponse(data);
             // check if client exists and has auth fields
             if (!isNil(this.client.orgDetails.auth)) {
@@ -440,9 +442,9 @@ export class RegistrationComponent implements OnInit {
                   campaignData.adam_id = get(this.app, "adamId");
                   campaignData.campaign_target_country =
                     this.substep1.get("country").value;
-                  campaignData.front_end_lifetime_budget =
+                  campaignData.lifetime_budget =
                     this.substep3.get("lifetimeBudget").value;
-                  campaignData.front_end_daily_budget =
+                  campaignData.daily_budget =
                     this.substep3.get("dailyBudget").value;
                   campaignData.objective = this.substep2.get("objective").value;
                   campaignData.target_cost_per_install =
@@ -460,7 +462,7 @@ export class RegistrationComponent implements OnInit {
                   return this.appleService.getAppleAuth(this.orgId).pipe(
                     take(1),
                     switchMap((val) => {
-                      this.openSnackBar(
+                      this.openIndefiniteSnackBar(
                         "creating apple search ads campaigns, this may take a few minutes! please don't refresh during this time",
                         ""
                       );
@@ -477,6 +479,25 @@ export class RegistrationComponent implements OnInit {
                         .pipe(
                           take(1),
                           tap((val) => {
+                            const statusControl = `status|${val.campaign.campaignId}`;
+                            this.step3Form.addControl(
+                              statusControl,
+                              new FormControl(
+                                val.campaign.status === "ENABLED" ? true : false
+                              )
+                            );
+
+                            const lifetimeBudgetControl = `lifetimeBudget|${val.campaign.campaignId}`;
+                            this.step3Form.addControl(
+                              lifetimeBudgetControl,
+                              new FormControl(val.campaign.lifetimeBudget)
+                            );
+
+                            const dailyBudgetControl = `dailyBudget|${val.campaign.campaignId}`;
+                            this.step3Form.addControl(
+                              dailyBudgetControl,
+                              new FormControl(val.campaign.dailyBudget)
+                            );
                             this.campaigns.push(val.campaign);
                           }),
                           switchMap(() => {
@@ -487,6 +508,29 @@ export class RegistrationComponent implements OnInit {
                               .pipe(
                                 take(1),
                                 tap((val) => {
+                                  // set the forms for this campaign
+                                  const statusControl = `status|${val.campaign.campaignId}`;
+                                  this.step3Form.addControl(
+                                    statusControl,
+                                    new FormControl(
+                                      val.campaign.status === "ENABLED"
+                                        ? true
+                                        : false
+                                    )
+                                  );
+
+                                  const lifetimeBudgetControl = `lifetimeBudget|${val.campaign.campaignId}`;
+                                  this.step3Form.addControl(
+                                    lifetimeBudgetControl,
+                                    new FormControl(val.campaign.lifetimeBudget)
+                                  );
+
+                                  const dailyBudgetControl = `dailyBudget|${val.campaign.campaignId}`;
+                                  this.step3Form.addControl(
+                                    dailyBudgetControl,
+                                    new FormControl(val.campaign.dailyBudget)
+                                  );
+
                                   this.campaigns.push(val.campaign);
                                 }),
                                 switchMap(() => {
@@ -497,6 +541,31 @@ export class RegistrationComponent implements OnInit {
                                     .pipe(
                                       take(1),
                                       tap((val) => {
+                                        const statusControl = `status|${val.campaign.campaignId}`;
+                                        this.step3Form.addControl(
+                                          statusControl,
+                                          new FormControl(
+                                            val.campaign.status === "ENABLED"
+                                              ? true
+                                              : false
+                                          )
+                                        );
+
+                                        const lifetimeBudgetControl = `lifetimeBudget|${val.campaign.campaignId}`;
+                                        this.step3Form.addControl(
+                                          lifetimeBudgetControl,
+                                          new FormControl(
+                                            val.campaign.lifetimeBudget
+                                          )
+                                        );
+
+                                        const dailyBudgetControl = `dailyBudget|${val.campaign.campaignId}`;
+                                        this.step3Form.addControl(
+                                          dailyBudgetControl,
+                                          new FormControl(
+                                            val.campaign.dailyBudget
+                                          )
+                                        );
                                         this.campaigns.push(val.campaign);
                                       }),
                                       switchMap(() => {
@@ -515,6 +584,32 @@ export class RegistrationComponent implements OnInit {
                                           .pipe(
                                             take(1),
                                             tap((val) => {
+                                              const statusControl = `status|${val.campaign.campaignId}`;
+                                              this.step3Form.addControl(
+                                                statusControl,
+                                                new FormControl(
+                                                  val.campaign.status ===
+                                                  "ENABLED"
+                                                    ? true
+                                                    : false
+                                                )
+                                              );
+
+                                              const lifetimeBudgetControl = `lifetimeBudget|${val.campaign.campaignId}`;
+                                              this.step3Form.addControl(
+                                                lifetimeBudgetControl,
+                                                new FormControl(
+                                                  val.campaign.lifetimeBudget
+                                                )
+                                              );
+
+                                              const dailyBudgetControl = `dailyBudget|${val.campaign.campaignId}`;
+                                              this.step3Form.addControl(
+                                                dailyBudgetControl,
+                                                new FormControl(
+                                                  val.campaign.dailyBudget
+                                                )
+                                              );
                                               this.campaigns.push(val.campaign);
                                             }),
                                             switchMap(() => {
@@ -533,6 +628,32 @@ export class RegistrationComponent implements OnInit {
                                                 .pipe(
                                                   take(1),
                                                   tap((val) => {
+                                                    const statusControl = `status|${val.campaign.campaignId}`;
+                                                    this.step3Form.addControl(
+                                                      statusControl,
+                                                      new FormControl(
+                                                        val.campaign.status ===
+                                                        "ENABLED"
+                                                          ? true
+                                                          : false
+                                                      )
+                                                    );
+
+                                                    const lifetimeBudgetControl = `lifetimeBudget|${val.campaign.campaignId}`;
+                                                    this.step3Form.addControl(
+                                                      lifetimeBudgetControl,
+                                                      new FormControl(
+                                                        val.campaign.lifetimeBudget
+                                                      )
+                                                    );
+
+                                                    const dailyBudgetControl = `dailyBudget|${val.campaign.campaignId}`;
+                                                    this.step3Form.addControl(
+                                                      dailyBudgetControl,
+                                                      new FormControl(
+                                                        val.campaign.dailyBudget
+                                                      )
+                                                    );
                                                     this.campaigns.push(
                                                       val.campaign
                                                     );
@@ -553,6 +674,33 @@ export class RegistrationComponent implements OnInit {
                                                       .pipe(
                                                         take(1),
                                                         tap((val) => {
+                                                          const statusControl = `status|${val.campaign.campaignId}`;
+                                                          this.step3Form.addControl(
+                                                            statusControl,
+                                                            new FormControl(
+                                                              val.campaign
+                                                                .status ===
+                                                              "ENABLED"
+                                                                ? true
+                                                                : false
+                                                            )
+                                                          );
+
+                                                          const lifetimeBudgetControl = `lifetimeBudget|${val.campaign.campaignId}`;
+                                                          this.step3Form.addControl(
+                                                            lifetimeBudgetControl,
+                                                            new FormControl(
+                                                              val.campaign.lifetimeBudget
+                                                            )
+                                                          );
+
+                                                          const dailyBudgetControl = `dailyBudget|${val.campaign.campaignId}`;
+                                                          this.step3Form.addControl(
+                                                            dailyBudgetControl,
+                                                            new FormControl(
+                                                              val.campaign.dailyBudget
+                                                            )
+                                                          );
                                                           this.campaigns.push(
                                                             val.campaign
                                                           );
@@ -681,6 +829,56 @@ export class RegistrationComponent implements OnInit {
     this._destroyed$.next(true);
   }
 
+  undoStep3Changes(){
+    this.step3Form.reset();
+  }
+
+  updateAppleCampaign() {
+    const payload = [];
+    chain(this.client.orgDetails.appleCampaigns)
+      .each((campaign) => {
+        payload.push({
+          campaignId: campaign.campaignId,
+          status:
+            this.step3Form.controls[`status|${campaign.campaignId}`].value,
+          lifetimeBudget:
+            this.step3Form.controls[`lifetimeBudget|${campaign.campaignId}`]
+              .value,
+          dailyBudget:
+            this.step3Form.controls[`dailyBudget|${campaign.campaignId}`].value,
+        });
+      })
+      .value();
+
+    this.appleService
+      .patchAppleCampaign(this.orgId, payload)
+      .pipe(
+        take(1),
+        switchMap((val) => {
+          return this.clientService.getClient(this.orgId).pipe(
+            take(1),
+            tap((val) => {
+              this.client = Client.buildFromGetClientResponse(val);
+              this.step3Form.markAsPristine();
+            })
+          );
+        })
+      )
+      .subscribe();
+    // const moveToActions = [];
+    //         chain(formGroup.controls)
+    //             .keys()
+    //             .each((ctrl) => {
+    //                 const newValue = +formGroup.get(ctrl).value;
+    //                 if (newValue > 0) {
+    //                     moveToActions.push(
+    //                         new MoveShipmentLinesToExistingPackage(shipmentHeaderId, ctrl)
+    //                     );
+    //                 }
+    //             })
+    //             .value();
+  }
+
   initializeClient() {
     // set default KeywordAdderParameters
     this.client = new Client();
@@ -742,6 +940,7 @@ export class RegistrationComponent implements OnInit {
     };
 
     this.client.orgDetails.disabled = false;
+    this.client.orgDetails.appleCampaigns = [];
 
     // disable branch controls by defuault
     this.substep6.get("cpp").disable();
@@ -988,6 +1187,12 @@ export class RegistrationComponent implements OnInit {
   openSnackBar(message: string, action: string) {
     this.snackBar.open(message, action, {
       duration: 15000,
+      panelClass: "standard",
+    });
+  }
+
+  openIndefiniteSnackBar(message: string, action?: string) {
+    this.snackBar.open(message, action, {
       panelClass: "standard",
     });
   }

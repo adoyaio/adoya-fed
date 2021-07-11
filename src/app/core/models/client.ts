@@ -186,9 +186,8 @@ export class Client {
 
   static buildFromGetClientResponse(response: any): Client {
     const retVal = new Client();
-    retVal.orgDetails = OrgDetails.buildFromResponse(response.orgDetails);
-    retVal.orgId = response.orgId;
-
+    retVal.orgDetails = OrgDetails.buildFromResponse(response);
+    retVal.orgId = retVal.orgDetails.orgId;
     return retVal;
   }
 }

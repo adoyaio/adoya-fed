@@ -3,8 +3,8 @@ export class CampaignData {
   app_name: string;
   adam_id: string;
   campaign_target_country: string;
-  front_end_lifetime_budget: number;
-  front_end_daily_budget: number;
+  lifetime_budget: number;
+  daily_budget: number;
   objective: string;
   target_cost_per_install: number;
   gender: string;
@@ -15,4 +15,16 @@ export class CampaignData {
   targeted_keywords_brand: string[];
   campaignType: string;
   authToken: any;
+}
+
+export class CampaignUpdateData {
+  lifetime_budget: number;
+  daily_budget: number;
+  currency: string;
+  status: CampaignStatus;
+}
+
+export enum CampaignStatus {
+  ENABLED = "ENABLED",
+  PAUSED = "PAUSED",
 }

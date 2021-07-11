@@ -31,9 +31,9 @@ export class ClientService {
 
   authKey = "GerGRueNWE3qCkPG8GfPV649wyVnQEQN2oJQUpnI";
 
-  getAppleAppsUrl = this.baseUrl + `/apple/apps`;
-  getAppleAclsUrl = this.baseUrl + `/apple/acls`;
-  createAppleCampaignsUrl = this.baseUrl + `apple/campaign`;
+  // getAppleAppsUrl = this.baseUrl + `/apple/apps`;
+  // getAppleAclsUrl = this.baseUrl + `/apple/acls`;
+  // createAppleCampaignsUrl = this.baseUrl + `apple/campaign`;
 
   public postClient(client: ClientPayload): Observable<any> {
     const url = `${this.clientPostUrl}`;
@@ -65,7 +65,7 @@ export class ClientService {
     headers = headers.set("x-api-key", this.authKey);
     return this.http.get<any>(url, { headers: headers }).pipe(
       map((response) => {
-        return response[0];
+        return response; // TODO handle this server side
       }),
       catchError((error: HttpErrorResponse) => {
         throw new Error(error.message);

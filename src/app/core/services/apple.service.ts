@@ -9,7 +9,10 @@ import { map, catchError } from "rxjs/operators";
 
 import { environment } from "src/environments/environment";
 import { get as _get } from "lodash";
-import { CampaignData } from "src/app/features/registration/model/campaign-data";
+import {
+  CampaignData,
+  CampaignUpdateData,
+} from "src/app/features/registration/model/campaign-data";
 
 @Injectable({
   providedIn: "root",
@@ -22,7 +25,8 @@ export class AppleService {
   getAppleAppsUrl = this.baseUrl + `/apple/apps`;
   getAppleAclsUrl = this.baseUrl + `/apple/acls`;
   getAppleAuthUrl = this.baseUrl + `/apple/auth`;
-  createAppleCampaignsUrl = this.baseUrl + `/apple/campaign`;
+  createAppleCampaignsUrl = this.baseUrl + `/apple/campaign/post`;
+  updateAppleCampaignsUrl = this.baseUrl + `/apple/campaign/patch`;
 
   public getAppleApps(orgId: string): Observable<any> {
     const url = `${this.getAppleAppsUrl}?org_id=${orgId}`;
@@ -57,23 +61,31 @@ export class AppleService {
     );
   }
 
-  public postAppleCampaign(orgId: string, campaignData: CampaignData): Observable<any> {
+  public postAppleCampaign(
+    orgId: string,
+    campaignData: CampaignData
+  ): Observable<any> {
     const url = `${this.createAppleCampaignsUrl}?org_id=${orgId}`;
     let headers = new HttpHeaders();
     headers = headers.set("x-api-key", this.authKey);
-    return this.http
-      .post<any>(
-        url,
-        campaignData,
-        { headers: headers }
-      )
-      .pipe(
-        map((response) => {
-          return response;
-        }),
-        catchError((error: HttpErrorResponse) => {
-          throw new Error(error.message);
-        })
-      );
+    return this.http.post<any>(url, campaignData, { headers: headers }).pipe(
+      map((response) => {
+        return response;
+      })
+    );
+  }
+
+  public patchAppleCampaign(
+    orgId: string,
+    updateData: Array<CampaignUpdateData>
+  ): Observable<any> {
+    const url = `${this.createAppleCampaignsUrl}?org_id=${orgId}`;
+    let headers = new HttpHeaders();
+    headers = headers.set("x-api-key", this.authKey);
+    return this.http.patch<any>(url, updateData, { headers: headers }).pipe(
+      map((response) => {
+        return response;
+      })
+    );
   }
 }
