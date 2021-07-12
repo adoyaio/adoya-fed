@@ -1256,7 +1256,7 @@
               <button
                 mat-flat-button
                 matStepperPrevious
-                [disabled]="isLoadingResults"
+                [disabled]="isLoadingResults || isStep3BackDisabled"
                 class="float-left ml-2 border rounded"
               >
                 <mat-icon aria-label="back">arrow_left</mat-icon>

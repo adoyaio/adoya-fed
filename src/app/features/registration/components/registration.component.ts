@@ -237,6 +237,14 @@ export class RegistrationComponent implements OnInit {
     }
   }
 
+  get isStep3BackDisabled(): boolean {
+    return chain(this.client.orgDetails.appleCampaigns)
+      .some((campaign) => {
+        return campaign.status === "ENABLED";
+      })
+      .value();
+  }
+
   constructor(
     private router: Router,
     private fb: FormBuilder,
@@ -829,8 +837,21 @@ export class RegistrationComponent implements OnInit {
     this._destroyed$.next(true);
   }
 
-  undoStep3Changes(){
-    this.step3Form.reset();
+  undoStep3Changes() {
+    chain(this.client.orgDetails.appleCampaigns)
+      .each((campaign) => {
+        this.step3Form.controls[`status|${campaign.campaignId}`].setValue(
+          campaign.status === "ENABLED" ? true : false
+        ),
+          this.step3Form.controls[
+            `lifetimeBudget|${campaign.campaignId}`
+          ].setValue(campaign.lifetimeBudget);
+        this.step3Form.controls[`dailyBudget|${campaign.campaignId}`].setValue(
+          campaign.dailyBudget
+        );
+      })
+      .value();
+    this.step3Form.markAsPristine();
   }
 
   updateAppleCampaign() {
@@ -839,8 +860,9 @@ export class RegistrationComponent implements OnInit {
       .each((campaign) => {
         payload.push({
           campaignId: campaign.campaignId,
-          status:
-            this.step3Form.controls[`status|${campaign.campaignId}`].value,
+          status: this.step3Form.controls[`status|${campaign.campaignId}`].value
+            ? "ENABLED"
+            : "PAUSED",
           lifetimeBudget:
             this.step3Form.controls[`lifetimeBudget|${campaign.campaignId}`]
               .value,
@@ -865,18 +887,6 @@ export class RegistrationComponent implements OnInit {
         })
       )
       .subscribe();
-    // const moveToActions = [];
-    //         chain(formGroup.controls)
-    //             .keys()
-    //             .each((ctrl) => {
-    //                 const newValue = +formGroup.get(ctrl).value;
-    //                 if (newValue > 0) {
-    //                     moveToActions.push(
-    //                         new MoveShipmentLinesToExistingPackage(shipmentHeaderId, ctrl)
-    //                     );
-    //                 }
-    //             })
-    //             .value();
   }
 
   initializeClient() {

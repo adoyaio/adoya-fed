@@ -79,7 +79,7 @@ export class AppleService {
     orgId: string,
     updateData: Array<CampaignUpdateData>
   ): Observable<any> {
-    const url = `${this.createAppleCampaignsUrl}?org_id=${orgId}`;
+    const url = `${this.updateAppleCampaignsUrl}?org_id=${orgId}`;
     let headers = new HttpHeaders();
     headers = headers.set("x-api-key", this.authKey);
     return this.http.patch<any>(url, updateData, { headers: headers }).pipe(

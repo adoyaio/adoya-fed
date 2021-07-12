@@ -52,9 +52,6 @@ export class ClientService {
       .pipe(
         map((response) => {
           return response;
-        }),
-        catchError((error: HttpErrorResponse) => {
-          throw new Error(error.message);
         })
       );
   }
@@ -65,10 +62,7 @@ export class ClientService {
     headers = headers.set("x-api-key", this.authKey);
     return this.http.get<any>(url, { headers: headers }).pipe(
       map((response) => {
-        return response; // TODO handle this server side
-      }),
-      catchError((error: HttpErrorResponse) => {
-        throw new Error(error.message);
+        return response;
       })
     );
   }
@@ -83,9 +77,6 @@ export class ClientService {
     return this.http.get<any>(url, { headers: headers }).pipe(
       map((response) => {
         return CostPerInstallDayObject.buildFromGetHistoryResponse(response);
-      }),
-      catchError((error: HttpErrorResponse) => {
-        throw new Error(error.message);
       })
     );
   }
@@ -101,9 +92,6 @@ export class ClientService {
     return this.http.get<any>(url, { headers: headers }).pipe(
       map((response) => {
         return CostPerInstallDayObject.buildFromGetHistoryResponse(response);
-      }),
-      catchError((error: HttpErrorResponse) => {
-        throw new Error(error.message);
       })
     );
   }
@@ -132,9 +120,6 @@ export class ClientService {
     return this.http.get<any>(url, { headers: headers }).pipe(
       map((response) => {
         return response;
-      }),
-      catchError((error: HttpErrorResponse) => {
-        throw new Error(error.message);
       })
     );
   }
