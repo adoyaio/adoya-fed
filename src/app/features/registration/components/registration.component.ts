@@ -855,20 +855,29 @@ export class RegistrationComponent implements OnInit {
   }
 
   updateAppleCampaign() {
+    this.isLoadingResults = true;
     const payload = [];
     chain(this.client.orgDetails.appleCampaigns)
       .each((campaign) => {
-        payload.push({
-          campaignId: campaign.campaignId,
-          status: this.step3Form.controls[`status|${campaign.campaignId}`].value
-            ? "ENABLED"
-            : "PAUSED",
-          lifetimeBudget:
-            this.step3Form.controls[`lifetimeBudget|${campaign.campaignId}`]
-              .value,
-          dailyBudget:
-            this.step3Form.controls[`dailyBudget|${campaign.campaignId}`].value,
-        });
+        const statusCtrl =
+          this.step3Form.controls[`status|${campaign.campaignId}`];
+        const lifetimeBudgetCtrl =
+          this.step3Form.controls[`lifetimeBudget|${campaign.campaignId}`];
+        const dailyBudgetCtrl =
+          this.step3Form.controls[`dailyBudget|${campaign.campaignId}`];
+
+        if (
+          statusCtrl.dirty ||
+          lifetimeBudgetCtrl.dirty ||
+          dailyBudgetCtrl.dirty
+        ) {
+          payload.push({
+            campaignId: campaign.campaignId,
+            status: statusCtrl.value ? "ENABLED" : "PAUSED",
+            lifetimeBudget: lifetimeBudgetCtrl.value,
+            dailyBudget: dailyBudgetCtrl.value,
+          });
+        }
       })
       .value();
 
@@ -880,10 +889,19 @@ export class RegistrationComponent implements OnInit {
           return this.clientService.getClient(this.orgId).pipe(
             take(1),
             tap((val) => {
+              this.isLoadingResults = false;
               this.client = Client.buildFromGetClientResponse(val);
               this.step3Form.markAsPristine();
             })
           );
+        }),
+        catchError(() => {
+          this.isLoadingResults = false;
+          this.openSnackBar(
+            "unable to process changes to settings at this time",
+            "dismiss"
+          );
+          return [];
         })
       )
       .subscribe();

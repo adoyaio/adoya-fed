@@ -1113,7 +1113,7 @@
 
       <!-- TODO step to add additional countries and apps -->
 
-      <mat-step [stepControl]="step3Form" *ngIf="stepper.selectedIndex > 0">
+      <mat-step [stepControl]="step3Form">
         <form [formGroup]="step3Form">
           <ng-template matStepLabel>Review and complete</ng-template>
           <div *ngIf="isLoadingResults" class="w-100 mt-2">
@@ -1128,7 +1128,10 @@
               }"
             ></ngx-skeleton-loader>
           </div>
-          <div class="w-100" *ngIf="!isLoadingResults">
+          <div
+            class="w-100"
+            *ngIf="!isLoadingResults && stepper.selectedIndex > 0"
+          >
             <mat-list class="p-0 m-0">
               <mat-list-item class="mb-1">
                 <mat-icon color="accent" class="align-text-top mr-2"
@@ -1157,7 +1160,10 @@
               </mat-list-item>
             </mat-list>
           </div>
-          <div class="w-100 p-2 mt-2" *ngIf="!isLoadingResults">
+          <div
+            class="w-100 p-2 mt-2"
+            *ngIf="!isLoadingResults && stepper.selectedIndex > 0"
+          >
             <table class="w-100">
               <tr>
                 <td class="col-2">Enable</td>
