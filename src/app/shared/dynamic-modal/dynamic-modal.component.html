@@ -20,11 +20,11 @@
   class="px-4 py-2 bg-grey border-top flex-nowrap justify-content-between"
   mat-dialog-actions
 >
-  <!-- <button #actionNoButton mat-button color="primary">
-    <span #actionNo class="text-uppercase font-weight-bold"></span>
-  </button>
-
-  <button #actionYesButton mat-button color="primary">
+  <a #actionYesButton class="adoya-link" (click)="onYesClick()">
     <span #actionYes class="text-uppercase font-weight-bold"></span>
-  </button> -->
+  </a>
+
+  <a #actionNoButton class="adoya-link" (click)="onNoClick()">
+    <span #actionNo class="text-uppercase font-weight-bold"></span>
+  </a>
 </div>

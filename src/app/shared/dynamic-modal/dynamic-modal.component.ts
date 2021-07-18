@@ -32,12 +32,11 @@ export class DynamicModalComponent implements OnInit {
   modalTitleWrapper: ElementRef;
   @ViewChild("content", { static: true }) content: ElementRef;
 
-  @ViewChild("actionNoButton", { static: true })
-  actionNoButton: ElementRef;
-  @ViewChild("actionYesButton", { static: true })
-  actionYesButton: ElementRef;
-  @ViewChild("actionNo", { static: true }) actionNo: ElementRef;
-  @ViewChild("actionYes", { static: true }) actionYes: ElementRef;
+  @ViewChild("actionNoButton", { static: false }) actionNoButton: ElementRef;
+  @ViewChild("actionYesButton", { static: false }) actionYesButton: ElementRef;
+  @ViewChild("actionNo", { static: false }) actionNo: ElementRef;
+  @ViewChild("actionYes", { static: false }) actionYes: ElementRef;
+
   hideTitle = true;
   hideSubTitle = true;
   showActionNo = false;
@@ -85,25 +84,21 @@ export class DynamicModalComponent implements OnInit {
       }
     }
 
-    // if (this.showActionNo) {
-    //   this.actionNo.nativeElement.innerHTML = this.data.actionNo;
+    // fromEvent(this.actionNoButton.nativeElement, "click").subscribe(() =>
+    //   this.onNoClick()
+    // );
 
-    //   fromEvent(this.actionNoButton.nativeElement, "click").subscribe(() =>
-    //     this.onNoClick()
-    //   );
-    // } else {
-    //   this.actionNoButton.nativeElement.remove();
-    // }
+    if (this.showActionNo) {
+      this.actionNo.nativeElement.innerHTML = this.data.actionNo;
+    } else {
+      this.actionNoButton.nativeElement.remove();
+    }
 
-    // if (this.showActionYes) {
-    //   this.actionYes.nativeElement.innerHTML = this.data.actionYes;
-
-    //   fromEvent(this.actionYesButton.nativeElement, "click").subscribe(() =>
-    //     this.onYesClick()
-    //   );
-    // } else {
-    //   this.actionYesButton.nativeElement.remove();
-    // }
+    if (this.showActionYes) {
+      this.actionYes.nativeElement.innerHTML = this.data.actionYes;
+    } else {
+      this.actionYesButton.nativeElement.remove();
+    }
 
     this.content.nativeElement.innerHTML = this.data.content;
   }
