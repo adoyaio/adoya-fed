@@ -25,6 +25,8 @@ import {
   set,
   map as _map,
   cloneDeep,
+  each,
+  some,
 } from "lodash";
 import { combineLatest, EMPTY, of, Subject } from "rxjs";
 import { catchError, switchMap, take, takeUntil, tap } from "rxjs/operators";
@@ -79,6 +81,69 @@ export class RegistrationComponent implements OnInit {
   emailAddresses: string;
   campaigns = [];
 
+  dailyBudgetValidators = [
+    Validators.required,
+    Validators.min(0.1),
+    Validators.max(1000),
+    Validators.minLength(1),
+  ];
+
+  lifetimeBudgetValidators = [
+    Validators.required,
+    Validators.min(10),
+    Validators.max(1000000),
+    Validators.minLength(1),
+  ];
+
+  lifetimeBudgetValidatorsCompetitor = [
+    Validators.required,
+    Validators.min(3),
+    Validators.max(300000),
+    Validators.minLength(1),
+  ];
+
+  lifetimeBudgetValidatorsCategory = [
+    Validators.required,
+    Validators.min(3),
+    Validators.max(300000),
+    Validators.minLength(1),
+  ];
+
+  lifetimeBudgetValidatorsBrand = [
+    Validators.required,
+    Validators.min(1.5),
+    Validators.max(150000),
+    Validators.minLength(1),
+  ];
+
+  lifetimeBudgetValidatorsExactDiscovery = [
+    Validators.required,
+    Validators.min(0.5),
+    Validators.max(150000),
+    Validators.minLength(1),
+  ];
+
+  lifetimeBudgetValidatorsBroadDiscovery = [
+    Validators.required,
+    Validators.min(2),
+    Validators.max(100000),
+    Validators.minLength(1),
+  ];
+
+  lifetimeBudgetValidatorsSearchDiscovery = [
+    Validators.required,
+    Validators.min(2),
+    Validators.max(100000),
+    Validators.minLength(1),
+  ];
+
+  costValidators = [
+    Validators.required,
+    Validators.min(0.1),
+    Validators.max(1000),
+    Validators.minLength(1),
+  ];
+
   private _destroyed$: Subject<boolean> = new Subject<boolean>();
 
   step2: any[] = [
@@ -120,79 +185,75 @@ export class RegistrationComponent implements OnInit {
     },
   ];
 
-  step1Form = this.fb.group({
-    orgId: new FormControl("", Validators.required),
-    clientId: new FormControl("", Validators.required),
-    teamId: new FormControl("", Validators.required),
-    keyId: new FormControl("", Validators.required),
-    privateKey: new FormControl("", Validators.required),
+  form = this.fb.group({
+    step1Form: this.fb.group({
+      orgId: new FormControl("", Validators.required),
+      clientId: new FormControl("", Validators.required),
+      teamId: new FormControl("", Validators.required),
+      keyId: new FormControl("", Validators.required),
+      privateKey: new FormControl("", Validators.required),
+    }),
+    step2Form: this.fb.group(
+      {
+        substep1: this.fb.group({
+          application: new FormControl(undefined, Validators.required),
+          country: new FormControl(undefined, Validators.required),
+          currency: new FormControl(undefined, Validators.required),
+        }),
+        substep2: this.fb.group({
+          objective: new FormControl(undefined, Validators.required),
+          cpi: new FormControl(undefined, this.costValidators),
+        }),
+        substep3: this.fb.group(
+          {
+            dailyBudget: new FormControl(undefined, this.dailyBudgetValidators),
+            lifetimeBudget: new FormControl(
+              undefined,
+              this.lifetimeBudgetValidators
+            ),
+          },
+          { validators: CustomFormValidators.budgetValidator }
+        ),
+        substep4: this.fb.group({
+          competitors: new FormControl(undefined, Validators.required),
+          category: new FormControl(undefined, Validators.required),
+          brand: new FormControl(undefined, Validators.required),
+        }),
+        substep5: this.fb.group({
+          genders: new FormControl(undefined, [Validators.required]),
+          ages: new FormControl(undefined, [Validators.required]),
+        }),
+        substep6: this.fb.group({
+          mmpObjective: new FormControl(undefined, Validators.required),
+          cpp: new FormControl(undefined, this.costValidators),
+          roas: new FormControl(undefined, this.costValidators),
+          branchBidAdjusterEnabled: new FormControl(false),
+          branchKey: new FormControl(undefined, Validators.required),
+          branchSecret: new FormControl(undefined, Validators.required),
+        }),
+      },
+      { validators: CustomFormValidators.budgetCpiValidator }
+    ),
+    step3Form: this.fb.group({}),
   });
 
-  step2Form = this.fb.group(
-    {
-      substep1: this.fb.group({
-        application: new FormControl(undefined, Validators.required),
-        country: new FormControl(undefined, Validators.required),
-        currency: new FormControl(undefined, Validators.required),
-      }),
-      substep2: this.fb.group({
-        objective: new FormControl(undefined, Validators.required),
-        cpi: new FormControl(undefined, [
-          Validators.required,
-          Validators.min(0.1),
-          Validators.max(1000),
-          Validators.minLength(1),
-        ]),
-      }),
-      substep3: this.fb.group(
-        {
-          dailyBudget: new FormControl(undefined, [
-            Validators.required,
-            Validators.min(1),
-            Validators.max(10000),
-            Validators.minLength(1),
-          ]),
-          lifetimeBudget: new FormControl(undefined, [
-            Validators.required,
-            Validators.min(10),
-            Validators.max(1000000),
-            Validators.minLength(1),
-          ]),
-        },
-        { validators: CustomFormValidators.budgetValidator }
-      ),
-      substep4: this.fb.group({
-        competitors: new FormControl(undefined, Validators.required),
-        category: new FormControl(undefined, Validators.required),
-        brand: new FormControl(undefined, Validators.required),
-      }),
-      substep5: this.fb.group({
-        genders: new FormControl(undefined, [Validators.required]),
-        ages: new FormControl(undefined, [Validators.required]),
-      }),
-      substep6: this.fb.group({
-        mmpObjective: new FormControl(undefined, Validators.required),
-        cpp: new FormControl(undefined, [
-          Validators.required,
-          Validators.min(0.1),
-          Validators.max(1000),
-          Validators.minLength(1),
-        ]),
-        roas: new FormControl(undefined, [
-          Validators.required,
-          Validators.min(0.1),
-          Validators.max(1000),
-          Validators.minLength(1),
-        ]),
-        branchBidAdjusterEnabled: new FormControl(false),
-        branchKey: new FormControl(undefined, Validators.required),
-        branchSecret: new FormControl(undefined, Validators.required),
-      }),
-    },
-    { validators: CustomFormValidators.budgetCpiValidator }
-  );
+  // { validators: CustomFormValidators.budgetValidatorStep3 }
 
-  step3Form: FormGroup = this.fb.group({});
+  // {
+  //   validators: CustomFormValidators.budgetCpiValidatorStep3,
+  // }
+
+  get step1Form(): any {
+    return this.form.get("step1Form");
+  }
+
+  get step2Form(): any {
+    return this.form.get("step2Form");
+  }
+
+  get step3Form(): any {
+    return this.form.get("step3Form");
+  }
 
   get substep1(): any {
     return this.step2Form.get("substep1");
@@ -488,6 +549,7 @@ export class RegistrationComponent implements OnInit {
                           take(1),
                           tap((val) => {
                             const statusControl = `status|${val.campaign.campaignId}`;
+
                             this.step3Form.addControl(
                               statusControl,
                               new FormControl(
@@ -498,16 +560,23 @@ export class RegistrationComponent implements OnInit {
                             const lifetimeBudgetControl = `lifetimeBudget|${val.campaign.campaignId}`;
                             this.step3Form.addControl(
                               lifetimeBudgetControl,
-                              new FormControl(val.campaign.lifetimeBudget)
+                              new FormControl(
+                                val.campaign.lifetimeBudget,
+                                this.lifetimeBudgetValidatorsCompetitor
+                              )
                             );
 
                             const dailyBudgetControl = `dailyBudget|${val.campaign.campaignId}`;
                             this.step3Form.addControl(
                               dailyBudgetControl,
-                              new FormControl(val.campaign.dailyBudget)
+                              new FormControl(
+                                val.campaign.dailyBudget,
+                                this.dailyBudgetValidators
+                              )
                             );
                             this.campaigns.push(val.campaign);
                           }),
+                          // category
                           switchMap(() => {
                             const categoryData = cloneDeep(campaignData);
                             set(categoryData, "campaignType", "category");
@@ -530,17 +599,25 @@ export class RegistrationComponent implements OnInit {
                                   const lifetimeBudgetControl = `lifetimeBudget|${val.campaign.campaignId}`;
                                   this.step3Form.addControl(
                                     lifetimeBudgetControl,
-                                    new FormControl(val.campaign.lifetimeBudget)
+                                    new FormControl(
+                                      val.campaign.lifetimeBudget,
+                                      this.lifetimeBudgetValidatorsCategory
+                                    )
                                   );
 
                                   const dailyBudgetControl = `dailyBudget|${val.campaign.campaignId}`;
                                   this.step3Form.addControl(
                                     dailyBudgetControl,
-                                    new FormControl(val.campaign.dailyBudget)
+                                    new FormControl(
+                                      val.campaign.dailyBudget,
+                                      this.dailyBudgetValidators
+                                    )
                                   );
 
                                   this.campaigns.push(val.campaign);
                                 }),
+
+                                // brand
                                 switchMap(() => {
                                   const brandData = cloneDeep(campaignData);
                                   set(brandData, "campaignType", "brand");
@@ -563,7 +640,8 @@ export class RegistrationComponent implements OnInit {
                                         this.step3Form.addControl(
                                           lifetimeBudgetControl,
                                           new FormControl(
-                                            val.campaign.lifetimeBudget
+                                            val.campaign.lifetimeBudget,
+                                            this.lifetimeBudgetValidatorsBrand
                                           )
                                         );
 
@@ -571,11 +649,14 @@ export class RegistrationComponent implements OnInit {
                                         this.step3Form.addControl(
                                           dailyBudgetControl,
                                           new FormControl(
-                                            val.campaign.dailyBudget
+                                            val.campaign.dailyBudget,
+                                            this.dailyBudgetValidators
                                           )
                                         );
                                         this.campaigns.push(val.campaign);
                                       }),
+
+                                      // exact discover
                                       switchMap(() => {
                                         const exactDiscoveryData =
                                           cloneDeep(campaignData);
@@ -607,7 +688,8 @@ export class RegistrationComponent implements OnInit {
                                               this.step3Form.addControl(
                                                 lifetimeBudgetControl,
                                                 new FormControl(
-                                                  val.campaign.lifetimeBudget
+                                                  val.campaign.lifetimeBudget,
+                                                  this.lifetimeBudgetValidatorsExactDiscovery
                                                 )
                                               );
 
@@ -615,11 +697,14 @@ export class RegistrationComponent implements OnInit {
                                               this.step3Form.addControl(
                                                 dailyBudgetControl,
                                                 new FormControl(
-                                                  val.campaign.dailyBudget
+                                                  val.campaign.dailyBudget,
+                                                  this.dailyBudgetValidators
                                                 )
                                               );
                                               this.campaigns.push(val.campaign);
                                             }),
+
+                                            // broad discovery
                                             switchMap(() => {
                                               const broadDiscoveryData =
                                                 cloneDeep(campaignData);
@@ -651,7 +736,8 @@ export class RegistrationComponent implements OnInit {
                                                     this.step3Form.addControl(
                                                       lifetimeBudgetControl,
                                                       new FormControl(
-                                                        val.campaign.lifetimeBudget
+                                                        val.campaign.lifetimeBudget,
+                                                        this.lifetimeBudgetValidatorsBroadDiscovery
                                                       )
                                                     );
 
@@ -659,13 +745,16 @@ export class RegistrationComponent implements OnInit {
                                                     this.step3Form.addControl(
                                                       dailyBudgetControl,
                                                       new FormControl(
-                                                        val.campaign.dailyBudget
+                                                        val.campaign.dailyBudget,
+                                                        this.dailyBudgetValidators
                                                       )
                                                     );
                                                     this.campaigns.push(
                                                       val.campaign
                                                     );
                                                   }),
+
+                                                  // search discovery
                                                   switchMap(() => {
                                                     const searchDiscoveryData =
                                                       cloneDeep(campaignData);
@@ -698,7 +787,8 @@ export class RegistrationComponent implements OnInit {
                                                           this.step3Form.addControl(
                                                             lifetimeBudgetControl,
                                                             new FormControl(
-                                                              val.campaign.lifetimeBudget
+                                                              val.campaign.lifetimeBudget,
+                                                              this.lifetimeBudgetValidatorsSearchDiscovery
                                                             )
                                                           );
 
@@ -706,7 +796,8 @@ export class RegistrationComponent implements OnInit {
                                                           this.step3Form.addControl(
                                                             dailyBudgetControl,
                                                             new FormControl(
-                                                              val.campaign.dailyBudget
+                                                              val.campaign.dailyBudget,
+                                                              this.dailyBudgetValidators
                                                             )
                                                           );
                                                           this.campaigns.push(
@@ -892,6 +983,10 @@ export class RegistrationComponent implements OnInit {
               this.isLoadingResults = false;
               this.client = Client.buildFromGetClientResponse(val);
               this.step3Form.markAsPristine();
+              this.openSnackBar(
+                "we've completed updating your campaigns! please review details and complete registration to finalize",
+                ""
+              );
             })
           );
         }),
@@ -905,6 +1000,43 @@ export class RegistrationComponent implements OnInit {
         })
       )
       .subscribe();
+  }
+
+  step3Invalid(): boolean {
+    if (this.step3Form.invalid) {
+      return true;
+    }
+
+    const cpi: number = this.substep2.get("cpi").value;
+
+    if (isEmpty(this.step3Form["controls"])) {
+      return true;
+    }
+
+    if (isEmpty(this.client.orgDetails.appleCampaigns)) {
+      return true;
+    }
+
+    const hasInvalid = chain(this.client.orgDetails.appleCampaigns)
+      .some((campaign) => {
+        const lifetimeBudgetCtrl =
+          this.step3Form.controls[`lifetimeBudget|${campaign.campaignId}`];
+        const dailyBudgetCtrl =
+          this.step3Form.controls[`dailyBudget|${campaign.campaignId}`];
+
+        const lifetimeBudgetCtrlValue: number = +lifetimeBudgetCtrl.value;
+        const dailyBudgetCtrlValue: number = +dailyBudgetCtrl.value;
+
+        if (
+          dailyBudgetCtrlValue >= lifetimeBudgetCtrlValue ||
+          cpi > dailyBudgetCtrlValue
+        ) {
+          return true;
+        }
+      })
+      .value();
+
+    return hasInvalid;
   }
 
   initializeClient() {

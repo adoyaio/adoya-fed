@@ -113,9 +113,9 @@ export class OptimizationsComponent implements OnInit {
           this.appleForm.markAsPristine();
           this.branchForm.markAsPristine();
         }),
-        tap((data: Client) => {
+        tap((data) => {
           this.client = Client.buildFromGetClientResponse(data);
-          this.buildCampaignForm(data);
+          this.buildCampaignForm(this.client);
           this.setFormValues();
           this.isLoadingResults = false;
         }),
@@ -167,16 +167,16 @@ export class OptimizationsComponent implements OnInit {
     this.clientService
       .getClient(this.orgId)
       .pipe(
+        take(1),
         tap(() => {
           this.appleForm.markAsPristine();
           this.branchForm.markAsPristine();
         }),
-        tap((data: Client) => {
+        tap((data) => {
           this.client = Client.buildFromGetClientResponse(data);
           this.setFormValues();
           this.isLoadingResults = false;
         }),
-        take(1),
         catchError(() => {
           this.isLoadingResults = false;
           return EMPTY;
@@ -417,44 +417,34 @@ export class OptimizationsComponent implements OnInit {
       this.isSendingResults = true;
 
       // Update client model TODO replace with cqrs pattern
-      this.client.orgDetails.bidParameters.objective = this.appleForm.get(
-        "objective"
-      ).value;
-      this.client.orgDetails.adgroupBidParameters.objective = this.appleForm.get(
-        "objective"
-      ).value;
+      this.client.orgDetails.bidParameters.objective =
+        this.appleForm.get("objective").value;
+      this.client.orgDetails.adgroupBidParameters.objective =
+        this.appleForm.get("objective").value;
 
-      this.client.orgDetails.bidParameters.highCPIBidDecreaseThresh = this.appleForm.get(
-        "cpi"
-      ).value;
+      this.client.orgDetails.bidParameters.highCPIBidDecreaseThresh =
+        this.appleForm.get("cpi").value;
 
-      this.client.orgDetails.adgroupBidParameters.highCPIBidDecreaseThresh = this.appleForm.get(
-        "cpi"
-      ).value;
+      this.client.orgDetails.adgroupBidParameters.highCPIBidDecreaseThresh =
+        this.appleForm.get("cpi").value;
 
       // Branch fields
-      this.client.orgDetails.branchBidParameters.branchOptimizationGoal = this.branchForm.get(
-        "mmpObjective"
-      ).value;
+      this.client.orgDetails.branchBidParameters.branchOptimizationGoal =
+        this.branchForm.get("mmpObjective").value;
 
-      this.client.orgDetails.branchBidParameters.costPerPurchaseThreshold = this.branchForm.get(
-        "cpp"
-      ).value;
+      this.client.orgDetails.branchBidParameters.costPerPurchaseThreshold =
+        this.branchForm.get("cpp").value;
 
-      this.client.orgDetails.branchBidParameters.revenueOverAdSpendThreshold = this.branchForm.get(
-        "roas"
-      ).value;
+      this.client.orgDetails.branchBidParameters.revenueOverAdSpendThreshold =
+        this.branchForm.get("roas").value;
 
-      this.client.orgDetails.branchIntegrationParameters.branchBidAdjusterEnabled = this.branchForm.get(
-        "branchBidAdjusterEnabled"
-      ).value;
+      this.client.orgDetails.branchIntegrationParameters.branchBidAdjusterEnabled =
+        this.branchForm.get("branchBidAdjusterEnabled").value;
 
-      this.client.orgDetails.branchIntegrationParameters.branchKey = this.branchForm.get(
-        "branchKey"
-      ).value;
-      this.client.orgDetails.branchIntegrationParameters.branchSecret = this.branchForm.get(
-        "branchSecret"
-      ).value;
+      this.client.orgDetails.branchIntegrationParameters.branchKey =
+        this.branchForm.get("branchKey").value;
+      this.client.orgDetails.branchIntegrationParameters.branchSecret =
+        this.branchForm.get("branchSecret").value;
 
       // build campaigns
       chain(this.client)
@@ -500,8 +490,9 @@ export class OptimizationsComponent implements OnInit {
             ).value;
 
             if (mmpObjective === "revenue_over_ad_spend") {
-              const roas = this.appleForm.get("roas_" + campaign.campaignId)
-                .value;
+              const roas = this.appleForm.get(
+                "roas_" + campaign.campaignId
+              ).value;
 
               set(branchBidParameters, "revenue_over_ad_spend_threshold", roas);
               set(
@@ -510,8 +501,9 @@ export class OptimizationsComponent implements OnInit {
                 mmpObjective
               );
             } else {
-              const cpp = this.appleForm.get("cpp_" + campaign.campaignId)
-                .value;
+              const cpp = this.appleForm.get(
+                "cpp_" + campaign.campaignId
+              ).value;
               set(branchBidParameters, "cost_per_purchase_threshold", cpp);
               set(
                 branchBidParameters,

@@ -1185,11 +1185,7 @@
                   <td class="col-8">{{ campaign.campaignName }}</td>
                   <td class="col-1">
                     <!--- daily Budget -->
-                    <mat-form-field
-                      matTooltip="Daily Budget Cap: &#13; Enter the amount you're willing to spend per day. &#13; &#13; You know your business so you should enter what you feel is best. But if you need a guide, we suggest the following approach: &#13; # of installs you want to get per day x maximum cost per install x 10-20% buffer. Let's say you're targeting 100 installs at a $2 maximum cost per install. Your budget should be $220-$240 (100 x $2 x 120%-140%). &#13; &#13; Don't worry! You can change your daily budget cap at any time."
-                      appearance="fill"
-                      color="accent"
-                    >
+                    <mat-form-field appearance="fill" color="accent">
                       <mat-label
                         ><mat-icon>attach_money</mat-icon>&nbsp;Daily Budget
                         Cap</mat-label
@@ -1208,11 +1204,7 @@
                   </td>
                   <td class="col-1">
                     <!--- Lifetime Budget -->
-                    <mat-form-field
-                      matTooltip="Lifetime Budget: &#13; Enter the amount you're willing to spend for the life of your Apple Search Ads campaigns. When starting, set it sufficiently high enough so it can run for a total of 30 days. This gives the system enough data and time to optimize. A simple formula, take your daily budget and multiply it by 30. So if your daily budget is $100, your lifetime budget should be $3,000. &#13; &#13; After your campaign has been running for some time you should raise your lifetime budget significantly higher. &#13; &#13; Don't worry! You can change your lifetime budget cap at any time. &#13; &#13; IMPORTANT: Your lifetime budget must be higher than your daily budget cap."
-                      appearance="fill"
-                      color="accent"
-                    >
+                    <mat-form-field appearance="fill" color="accent">
                       <mat-label
                         ><mat-icon>attach_money</mat-icon>&nbsp;Lifetime Budget
                         Cap</mat-label
@@ -1250,7 +1242,7 @@
               mat-flat-button
               color="accent"
               class="float-left ml-2"
-              [disabled]="isLoadingResults"
+              [disabled]="isLoadingResults || step3Invalid()"
               (click)="updateAppleCampaign()"
             >
               <mat-icon class="text-light" aria-label="submit">done</mat-icon>
