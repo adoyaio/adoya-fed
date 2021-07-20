@@ -52,7 +52,7 @@ import { CampaignData } from "../model/campaign-data";
   styleUrls: ["./registration.component.scss"],
 })
 export class RegistrationComponent implements OnInit {
-  @ViewChild("stepper", { static: false }) private stepper: MatStepper;
+  @ViewChild("stepper") private stepper: MatStepper;
 
   countries = [
     { name: "United States", code: "US" },

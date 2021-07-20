@@ -28,7 +28,7 @@ export class InputComponent implements OnInit, OnDestroy, AfterViewInit {
 
   prefixUrl: string;
 
-  @ViewChild("input", { static: false }) input: ElementRef;
+  @ViewChild("input") input: ElementRef;
 
   _destroyed$: Subject<boolean> = new Subject<boolean>();
 

@@ -31,7 +31,7 @@ export class SelectComponent implements AfterViewInit {
     this.form = this.formInjected;
   }
 
-  @ViewChild("select", { static: false }) select: MatSelect;
+  @ViewChild("select") select: MatSelect;
 
   ngAfterViewInit() {
     if (this.field.initialFocus) {

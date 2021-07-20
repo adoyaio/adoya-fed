@@ -32,10 +32,10 @@ export class DynamicModalComponent implements OnInit {
   modalTitleWrapper: ElementRef;
   @ViewChild("content", { static: true }) content: ElementRef;
 
-  @ViewChild("actionNoButton", { static: false }) actionNoButton: ElementRef;
-  @ViewChild("actionYesButton", { static: false }) actionYesButton: ElementRef;
-  @ViewChild("actionNo", { static: false }) actionNo: ElementRef;
-  @ViewChild("actionYes", { static: false }) actionYes: ElementRef;
+  @ViewChild("actionNoButton") actionNoButton: ElementRef;
+  @ViewChild("actionYesButton") actionYesButton: ElementRef;
+  @ViewChild("actionNo") actionNo: ElementRef;
+  @ViewChild("actionYes") actionYes: ElementRef;
 
   hideTitle = true;
   hideSubTitle = true;

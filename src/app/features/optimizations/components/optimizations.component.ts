@@ -32,7 +32,7 @@ import { ClientPayload } from "src/app/core/models/client-payload";
   styleUrls: ["./optimizations.component.scss"],
 })
 export class OptimizationsComponent implements OnInit {
-  @ViewChild(MatAccordion, { static: false }) accordion: MatAccordion;
+  @ViewChild(MatAccordion) accordion: MatAccordion;
   private _destroyed$: Subject<boolean> = new Subject<boolean>();
 
   constructor(

@@ -47,11 +47,11 @@ export class ReportingComponent implements AfterViewInit, OnInit {
   maxDate: Date = new Date();
   minDate: Date = new Date();
 
-  @ViewChild("aggregatePaginator", { static: false })
+  @ViewChild("aggregatePaginator")
   aggregatePaginator: MatPaginator;
 
-  @ViewChild(MatSort, { static: false }) sort: MatSort;
-  @ViewChild(MatChipList, { static: false })
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatChipList)
   lineChartLabelChipList: MatChipList;
 
   startPickerInputControl: FormControl = this.fb.control("");

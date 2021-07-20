@@ -65,10 +65,10 @@ export class KeywordReportingComponent implements OnInit {
     matchType: ["all"],
   });
 
-  @ViewChild("keywordsPaginator", { static: false })
+  @ViewChild("keywordsPaginator")
   keywordsPaginator: MatPaginator;
 
-  @ViewChild(MatSort, { static: false }) sort: MatSort;
+  @ViewChild(MatSort) sort: MatSort;
 
   constructor(
     private clientService: ClientService,
