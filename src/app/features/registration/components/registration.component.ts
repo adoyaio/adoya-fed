@@ -1053,7 +1053,7 @@ export class RegistrationComponent implements OnInit {
         data: {
           title: `Terms of Service`,
           content: AppService.termsOfService,
-          actionYes: "Save",
+          actionYes: "Agree",
           actionNo: "Cancel",
         },
         maxWidth: "500px",
