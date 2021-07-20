@@ -508,7 +508,7 @@ export class RegistrationComponent implements OnInit {
   completeStep2() {
     this.handleAgreeToTerms()
       .pipe(
-        tap((agreed) => {
+        switchMap((agreed) => {
           if (agreed) {
             this.openSnackBar(
               "one moment, while we save your campaign configuration",
@@ -893,6 +893,7 @@ export class RegistrationComponent implements OnInit {
                                                                 "we've completed creating your campaigns! please review details and complete registration to finalize",
                                                                 ""
                                                               );
+                                                              this.stepper.next();
                                                             })
                                                           );
                                                       })
@@ -945,12 +946,14 @@ export class RegistrationComponent implements OnInit {
       .subscribe();
   }
 
-  resetStep2(){
-    chain(this.step2).each((substep) => {
-      set(substep, 'complete', false)
-      set(substep, 'active', false)
-    }).value()
-    chain(this.step2).first().set('active', true).value()
+  resetStep2() {
+    chain(this.step2)
+      .each((substep) => {
+        set(substep, "complete", false);
+        set(substep, "active", false);
+      })
+      .value();
+    chain(this.step2).first().set("active", true).value();
   }
 
   undoStep3Changes() {
