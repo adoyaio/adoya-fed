@@ -3,10 +3,13 @@
     <a href="/workbench/reporting"
       ><img class="logo" src="/assets/images/adoya-client-portal.png" alt=""
     /></a>
+    <div class="d-none d-print-block">
+      <span [innerHTML]="printViewText"></span>
+    </div>
   </div>
-  <div class="row">
+  <div class="row d-print-none">
     <div class="workbench__loading" *ngIf="isLoadingResults">
-      <mat-spinner color="accent"></mat-spinner>
+      <mat-spinner color="accent" strokeWidth="6.5"></mat-spinner>
     </div>
     <div class="workbench__sending" *ngIf="isSendingResults">
       <mat-progress-bar color="accent" mode="indeterminate"></mat-progress-bar>
@@ -1288,7 +1291,9 @@
     text-center
   "
 >
-  <a class="adoya-link" (click)="handleTermsClick($event)">Terms of service</a>
+  <a class="adoya-link" (click)="handleShowTermsClick($event)"
+    >Terms of service</a
+  >
   |
   <a class="adoya-link" href="mailto:info@adoya.io?subject=Adoya Support"
     >Contact Us</a
