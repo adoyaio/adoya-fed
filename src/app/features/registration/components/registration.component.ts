@@ -28,10 +28,18 @@ import {
   each,
   some,
 } from "lodash";
-import { combineLatest, EMPTY, of, Subject } from "rxjs";
-import { catchError, switchMap, take, takeUntil, tap } from "rxjs/operators";
+import { combineLatest, EMPTY, Observable, of, Subject } from "rxjs";
+import {
+  catchError,
+  share,
+  switchMap,
+  take,
+  takeUntil,
+  tap,
+} from "rxjs/operators";
 import { Client, OrgDetails } from "src/app/core/models/client";
 import { ClientPayload } from "src/app/core/models/client-payload";
+import { AppService } from "src/app/core/services/app.service";
 import { AppleService } from "src/app/core/services/apple.service";
 import { ClientService } from "src/app/core/services/client.service";
 import { CustomFormValidators } from "src/app/shared/dynamic-form/validators/CustomFormValidators";
@@ -80,6 +88,7 @@ export class RegistrationComponent implements OnInit {
   orgId: string;
   emailAddresses: string;
   campaigns = [];
+  printViewText = AppService.termsOfService;
 
   dailyBudgetValidators = [
     Validators.required,
@@ -298,6 +307,10 @@ export class RegistrationComponent implements OnInit {
   }
 
   get isStep3BackDisabled(): boolean {
+    if (isNil(this.client)) {
+      return true;
+    }
+
     return chain(this.client.orgDetails.appleCampaigns)
       .some((campaign) => {
         return campaign.status === "ENABLED";
@@ -437,441 +450,6 @@ export class RegistrationComponent implements OnInit {
               )
               .subscribe();
           }
-
-          // STEP 2
-          if (val.selectedIndex === 2) {
-            this.openSnackBar(
-              "one moment, while we save your campaign configuration",
-              ""
-            );
-            this.isLoadingResults = true;
-            this.clientService
-              .getClient(this.orgId)
-              .pipe(
-                take(1),
-                switchMap((val) => {
-                  // for adoya
-                  const client = Client.buildFromGetClientResponse(val);
-
-                  client.orgDetails.bidParameters.objective =
-                    this.substep2.get("objective").value;
-
-                  client.orgDetails.adgroupBidParameters.objective =
-                    this.substep2.get("objective").value;
-
-                  client.orgDetails.bidParameters.highCPIBidDecreaseThresh =
-                    this.substep2.get("cpi").value;
-
-                  client.orgDetails.adgroupBidParameters.highCPIBidDecreaseThresh =
-                    this.substep2.get("cpi").value;
-
-                  // branch fields
-                  client.orgDetails.branchBidParameters.branchOptimizationGoal =
-                    this.substep6.get("mmpObjective").value;
-
-                  client.orgDetails.branchBidParameters.costPerPurchaseThreshold =
-                    this.substep6.get("cpp").value;
-
-                  client.orgDetails.branchBidParameters.revenueOverAdSpendThreshold =
-                    this.substep6.get("roas").value;
-
-                  client.orgDetails.branchIntegrationParameters.branchBidAdjusterEnabled =
-                    this.substep6.get("branchBidAdjusterEnabled").value;
-
-                  client.orgDetails.branchIntegrationParameters.branchKey =
-                    this.substep6.get("branchKey").value;
-
-                  client.orgDetails.branchIntegrationParameters.branchSecret =
-                    this.substep6.get("branchSecret").value;
-
-                  // write the substep 1 values to client
-                  client.orgDetails.appID =
-                    this.substep1.get("application").value;
-
-                  this.app = chain(this.apps)
-                    .find((app) => {
-                      return (
-                        app.adamId === this.substep1.get("application").value
-                      );
-                    })
-                    .value();
-
-                  client.orgDetails.appName = get(this.app, "appName");
-                  client.orgDetails.appID = get(this.app, "appID");
-                  client.orgDetails.clientName = get(this.app, "developerName");
-
-                  client.orgDetails.currency =
-                    this.substep1.get("currency").value;
-
-                  // for apple
-                  const campaignData = new CampaignData();
-                  campaignData.org_id = this.orgId;
-                  campaignData.app_name = get(this.app, "appName");
-                  campaignData.adam_id = get(this.app, "adamId");
-                  campaignData.campaign_target_country =
-                    this.substep1.get("country").value;
-                  campaignData.lifetime_budget =
-                    this.substep3.get("lifetimeBudget").value;
-                  campaignData.daily_budget =
-                    this.substep3.get("dailyBudget").value;
-                  campaignData.objective = this.substep2.get("objective").value;
-                  campaignData.target_cost_per_install =
-                    this.substep2.get("cpi").value;
-                  campaignData.gender = this.substep5.get("genders").value;
-                  campaignData.min_age = this.substep5.get("ages").value;
-                  campaignData.currency = this.substep1.get("currency").value;
-                  campaignData.targeted_keywords_competitor =
-                    this.keywordsCompetitors;
-                  campaignData.targeted_keywords_category =
-                    this.keywordsCategory;
-                  campaignData.targeted_keywords_brand = this.keywordsBrand;
-
-                  // get auth
-                  return this.appleService.getAppleAuth(this.orgId).pipe(
-                    take(1),
-                    switchMap((val) => {
-                      this.openIndefiniteSnackBar(
-                        "creating apple search ads campaigns, this may take a few minutes! please don't refresh your browser during this time!",
-                        ""
-                      );
-                      // set auth
-                      set(campaignData, "authToken", val);
-
-                      // run one api call for each of the campaign types
-                      // competitor, category, brand, exact_discovery, broad_discovery, search_discovery
-                      const competitorData = cloneDeep(campaignData);
-                      set(competitorData, "campaignType", "competitor");
-
-                      return this.appleService
-                        .postAppleCampaign(this.orgId, competitorData)
-                        .pipe(
-                          take(1),
-                          tap((val) => {
-                            const statusControl = `status|${val.campaign.campaignId}`;
-
-                            this.step3Form.addControl(
-                              statusControl,
-                              new FormControl(
-                                val.campaign.status === "ENABLED" ? true : false
-                              )
-                            );
-
-                            const lifetimeBudgetControl = `lifetimeBudget|${val.campaign.campaignId}`;
-                            this.step3Form.addControl(
-                              lifetimeBudgetControl,
-                              new FormControl(
-                                val.campaign.lifetimeBudget,
-                                this.lifetimeBudgetValidatorsCompetitor
-                              )
-                            );
-
-                            const dailyBudgetControl = `dailyBudget|${val.campaign.campaignId}`;
-                            this.step3Form.addControl(
-                              dailyBudgetControl,
-                              new FormControl(
-                                val.campaign.dailyBudget,
-                                this.dailyBudgetValidators
-                              )
-                            );
-                            this.campaigns.push(val.campaign);
-                          }),
-                          // category
-                          switchMap(() => {
-                            const categoryData = cloneDeep(campaignData);
-                            set(categoryData, "campaignType", "category");
-                            return this.appleService
-                              .postAppleCampaign(this.orgId, categoryData)
-                              .pipe(
-                                take(1),
-                                tap((val) => {
-                                  // set the forms for this campaign
-                                  const statusControl = `status|${val.campaign.campaignId}`;
-                                  this.step3Form.addControl(
-                                    statusControl,
-                                    new FormControl(
-                                      val.campaign.status === "ENABLED"
-                                        ? true
-                                        : false
-                                    )
-                                  );
-
-                                  const lifetimeBudgetControl = `lifetimeBudget|${val.campaign.campaignId}`;
-                                  this.step3Form.addControl(
-                                    lifetimeBudgetControl,
-                                    new FormControl(
-                                      val.campaign.lifetimeBudget,
-                                      this.lifetimeBudgetValidatorsCategory
-                                    )
-                                  );
-
-                                  const dailyBudgetControl = `dailyBudget|${val.campaign.campaignId}`;
-                                  this.step3Form.addControl(
-                                    dailyBudgetControl,
-                                    new FormControl(
-                                      val.campaign.dailyBudget,
-                                      this.dailyBudgetValidators
-                                    )
-                                  );
-
-                                  this.campaigns.push(val.campaign);
-                                }),
-
-                                // brand
-                                switchMap(() => {
-                                  const brandData = cloneDeep(campaignData);
-                                  set(brandData, "campaignType", "brand");
-                                  return this.appleService
-                                    .postAppleCampaign(this.orgId, brandData)
-                                    .pipe(
-                                      take(1),
-                                      tap((val) => {
-                                        const statusControl = `status|${val.campaign.campaignId}`;
-                                        this.step3Form.addControl(
-                                          statusControl,
-                                          new FormControl(
-                                            val.campaign.status === "ENABLED"
-                                              ? true
-                                              : false
-                                          )
-                                        );
-
-                                        const lifetimeBudgetControl = `lifetimeBudget|${val.campaign.campaignId}`;
-                                        this.step3Form.addControl(
-                                          lifetimeBudgetControl,
-                                          new FormControl(
-                                            val.campaign.lifetimeBudget,
-                                            this.lifetimeBudgetValidatorsBrand
-                                          )
-                                        );
-
-                                        const dailyBudgetControl = `dailyBudget|${val.campaign.campaignId}`;
-                                        this.step3Form.addControl(
-                                          dailyBudgetControl,
-                                          new FormControl(
-                                            val.campaign.dailyBudget,
-                                            this.dailyBudgetValidators
-                                          )
-                                        );
-                                        this.campaigns.push(val.campaign);
-                                      }),
-
-                                      // exact discover
-                                      switchMap(() => {
-                                        const exactDiscoveryData =
-                                          cloneDeep(campaignData);
-                                        set(
-                                          exactDiscoveryData,
-                                          "campaignType",
-                                          "exact_discovery"
-                                        );
-                                        return this.appleService
-                                          .postAppleCampaign(
-                                            this.orgId,
-                                            exactDiscoveryData
-                                          )
-                                          .pipe(
-                                            take(1),
-                                            tap((val) => {
-                                              const statusControl = `status|${val.campaign.campaignId}`;
-                                              this.step3Form.addControl(
-                                                statusControl,
-                                                new FormControl(
-                                                  val.campaign.status ===
-                                                  "ENABLED"
-                                                    ? true
-                                                    : false
-                                                )
-                                              );
-
-                                              const lifetimeBudgetControl = `lifetimeBudget|${val.campaign.campaignId}`;
-                                              this.step3Form.addControl(
-                                                lifetimeBudgetControl,
-                                                new FormControl(
-                                                  val.campaign.lifetimeBudget,
-                                                  this.lifetimeBudgetValidatorsExactDiscovery
-                                                )
-                                              );
-
-                                              const dailyBudgetControl = `dailyBudget|${val.campaign.campaignId}`;
-                                              this.step3Form.addControl(
-                                                dailyBudgetControl,
-                                                new FormControl(
-                                                  val.campaign.dailyBudget,
-                                                  this.dailyBudgetValidators
-                                                )
-                                              );
-                                              this.campaigns.push(val.campaign);
-                                            }),
-
-                                            // broad discovery
-                                            switchMap(() => {
-                                              const broadDiscoveryData =
-                                                cloneDeep(campaignData);
-                                              set(
-                                                broadDiscoveryData,
-                                                "campaignType",
-                                                "broad_discovery"
-                                              );
-                                              return this.appleService
-                                                .postAppleCampaign(
-                                                  this.orgId,
-                                                  broadDiscoveryData
-                                                )
-                                                .pipe(
-                                                  take(1),
-                                                  tap((val) => {
-                                                    const statusControl = `status|${val.campaign.campaignId}`;
-                                                    this.step3Form.addControl(
-                                                      statusControl,
-                                                      new FormControl(
-                                                        val.campaign.status ===
-                                                        "ENABLED"
-                                                          ? true
-                                                          : false
-                                                      )
-                                                    );
-
-                                                    const lifetimeBudgetControl = `lifetimeBudget|${val.campaign.campaignId}`;
-                                                    this.step3Form.addControl(
-                                                      lifetimeBudgetControl,
-                                                      new FormControl(
-                                                        val.campaign.lifetimeBudget,
-                                                        this.lifetimeBudgetValidatorsBroadDiscovery
-                                                      )
-                                                    );
-
-                                                    const dailyBudgetControl = `dailyBudget|${val.campaign.campaignId}`;
-                                                    this.step3Form.addControl(
-                                                      dailyBudgetControl,
-                                                      new FormControl(
-                                                        val.campaign.dailyBudget,
-                                                        this.dailyBudgetValidators
-                                                      )
-                                                    );
-                                                    this.campaigns.push(
-                                                      val.campaign
-                                                    );
-                                                  }),
-
-                                                  // search discovery
-                                                  switchMap(() => {
-                                                    const searchDiscoveryData =
-                                                      cloneDeep(campaignData);
-                                                    set(
-                                                      searchDiscoveryData,
-                                                      "campaignType",
-                                                      "search_discovery"
-                                                    );
-                                                    return this.appleService
-                                                      .postAppleCampaign(
-                                                        this.orgId,
-                                                        searchDiscoveryData
-                                                      )
-                                                      .pipe(
-                                                        take(1),
-                                                        tap((val) => {
-                                                          const statusControl = `status|${val.campaign.campaignId}`;
-                                                          this.step3Form.addControl(
-                                                            statusControl,
-                                                            new FormControl(
-                                                              val.campaign
-                                                                .status ===
-                                                              "ENABLED"
-                                                                ? true
-                                                                : false
-                                                            )
-                                                          );
-
-                                                          const lifetimeBudgetControl = `lifetimeBudget|${val.campaign.campaignId}`;
-                                                          this.step3Form.addControl(
-                                                            lifetimeBudgetControl,
-                                                            new FormControl(
-                                                              val.campaign.lifetimeBudget,
-                                                              this.lifetimeBudgetValidatorsSearchDiscovery
-                                                            )
-                                                          );
-
-                                                          const dailyBudgetControl = `dailyBudget|${val.campaign.campaignId}`;
-                                                          this.step3Form.addControl(
-                                                            dailyBudgetControl,
-                                                            new FormControl(
-                                                              val.campaign.dailyBudget,
-                                                              this.dailyBudgetValidators
-                                                            )
-                                                          );
-                                                          this.campaigns.push(
-                                                            val.campaign
-                                                          );
-                                                        }),
-                                                        switchMap(() => {
-                                                          set(
-                                                            client,
-                                                            "orgDetails.appleCampaigns",
-                                                            this.campaigns
-                                                          );
-                                                          return this.clientService
-                                                            .postClient(
-                                                              ClientPayload.buildFromClient(
-                                                                client
-                                                              )
-                                                            )
-                                                            .pipe(
-                                                              take(1),
-                                                              tap(() => {
-                                                                this.client =
-                                                                  client;
-                                                                this.isLoadingResults =
-                                                                  false;
-                                                                this.openSnackBar(
-                                                                  "we've completed creating your campaigns! please review details and complete registration to finalize",
-                                                                  ""
-                                                                );
-                                                              })
-                                                            );
-                                                        })
-                                                      );
-                                                  })
-                                                );
-                                            })
-                                          );
-                                      })
-                                    );
-                                })
-                              );
-                          })
-                        );
-                    })
-                  );
-
-                  // post to apple service for campaign creation
-                  // return this.appleService.postAppleCampaign(this.orgId, campaignData).pipe(
-                  //   take(1),
-                  //   switchMap((val) => {
-                  //       set(client, 'orgDetails.appleCampaigns', get(val, 'campaigns', []));
-                  //        // post to client service for clients json
-                  //       return this.clientService.postClient(ClientPayload.buildFromClient(client)).pipe(
-                  //         take(1),
-                  //         tap(() => {
-                  //           this.client = client;
-                  //           this.isLoadingResults = false;
-                  //           this.openSnackBar("we completed creating your campaigns! please review details and complete registration to finalize", "")
-                  //         })
-                  //       )
-                  //   })
-                  // )
-                }),
-                catchError(() => {
-                  this.isLoadingResults = false;
-                  this.openSnackBar(
-                    "unable to process changes to settings at this time",
-                    "dismiss"
-                  );
-                  this.stepper.previous();
-                  return [];
-                })
-              )
-              .subscribe();
-          }
         }),
         takeUntil(this._destroyed$)
       )
@@ -925,6 +503,454 @@ export class RegistrationComponent implements OnInit {
 
   ngOnDestroy(): void {
     this._destroyed$.next(true);
+  }
+
+  completeStep2() {
+    this.handleAgreeToTerms()
+      .pipe(
+        tap((agreed) => {
+          if (agreed) {
+            this.openSnackBar(
+              "one moment, while we save your campaign configuration",
+              ""
+            );
+            this.isLoadingResults = true;
+            return this.clientService.getClient(this.orgId).pipe(
+              take(1),
+              switchMap((val) => {
+                // for adoya
+                const client = Client.buildFromGetClientResponse(val);
+
+                client.orgDetails.bidParameters.objective =
+                  this.substep2.get("objective").value;
+
+                client.orgDetails.adgroupBidParameters.objective =
+                  this.substep2.get("objective").value;
+
+                client.orgDetails.bidParameters.highCPIBidDecreaseThresh =
+                  this.substep2.get("cpi").value;
+
+                client.orgDetails.adgroupBidParameters.highCPIBidDecreaseThresh =
+                  this.substep2.get("cpi").value;
+
+                // branch fields
+                client.orgDetails.branchBidParameters.branchOptimizationGoal =
+                  this.substep6.get("mmpObjective").value;
+
+                client.orgDetails.branchBidParameters.costPerPurchaseThreshold =
+                  this.substep6.get("cpp").value;
+
+                client.orgDetails.branchBidParameters.revenueOverAdSpendThreshold =
+                  this.substep6.get("roas").value;
+
+                client.orgDetails.branchIntegrationParameters.branchBidAdjusterEnabled =
+                  this.substep6.get("branchBidAdjusterEnabled").value;
+
+                client.orgDetails.branchIntegrationParameters.branchKey =
+                  this.substep6.get("branchKey").value;
+
+                client.orgDetails.branchIntegrationParameters.branchSecret =
+                  this.substep6.get("branchSecret").value;
+
+                // write the substep 1 values to client
+                client.orgDetails.appID =
+                  this.substep1.get("application").value;
+
+                this.app = chain(this.apps)
+                  .find((app) => {
+                    return (
+                      app.adamId === this.substep1.get("application").value
+                    );
+                  })
+                  .value();
+
+                client.orgDetails.appName = get(this.app, "appName");
+                client.orgDetails.appID = get(this.app, "appID");
+                client.orgDetails.clientName = get(this.app, "developerName");
+
+                client.orgDetails.currency =
+                  this.substep1.get("currency").value;
+
+                // for apple
+                const campaignData = new CampaignData();
+                campaignData.org_id = this.orgId;
+                campaignData.app_name = get(this.app, "appName");
+                campaignData.adam_id = get(this.app, "adamId");
+                campaignData.campaign_target_country =
+                  this.substep1.get("country").value;
+                campaignData.lifetime_budget =
+                  this.substep3.get("lifetimeBudget").value;
+                campaignData.daily_budget =
+                  this.substep3.get("dailyBudget").value;
+                campaignData.objective = this.substep2.get("objective").value;
+                campaignData.target_cost_per_install =
+                  this.substep2.get("cpi").value;
+                campaignData.gender = this.substep5.get("genders").value;
+                campaignData.min_age = this.substep5.get("ages").value;
+                campaignData.currency = this.substep1.get("currency").value;
+                campaignData.targeted_keywords_competitor =
+                  this.keywordsCompetitors;
+                campaignData.targeted_keywords_category = this.keywordsCategory;
+                campaignData.targeted_keywords_brand = this.keywordsBrand;
+
+                // get auth
+                return this.appleService.getAppleAuth(this.orgId).pipe(
+                  take(1),
+                  switchMap((val) => {
+                    this.openIndefiniteSnackBar(
+                      "creating apple search ads campaigns, this may take a few minutes! please don't refresh your browser during this time!",
+                      ""
+                    );
+                    // set auth
+                    set(campaignData, "authToken", val);
+
+                    // run one api call for each of the campaign types
+                    // competitor, category, brand, exact_discovery, broad_discovery, search_discovery
+                    const competitorData = cloneDeep(campaignData);
+                    set(competitorData, "campaignType", "competitor");
+
+                    return this.appleService
+                      .postAppleCampaign(this.orgId, competitorData)
+                      .pipe(
+                        take(1),
+                        tap((val) => {
+                          const statusControl = `status|${val.campaign.campaignId}`;
+
+                          this.step3Form.addControl(
+                            statusControl,
+                            new FormControl(
+                              val.campaign.status === "ENABLED" ? true : false
+                            )
+                          );
+
+                          const lifetimeBudgetControl = `lifetimeBudget|${val.campaign.campaignId}`;
+                          this.step3Form.addControl(
+                            lifetimeBudgetControl,
+                            new FormControl(
+                              val.campaign.lifetimeBudget,
+                              this.lifetimeBudgetValidatorsCompetitor
+                            )
+                          );
+
+                          const dailyBudgetControl = `dailyBudget|${val.campaign.campaignId}`;
+                          this.step3Form.addControl(
+                            dailyBudgetControl,
+                            new FormControl(
+                              val.campaign.dailyBudget,
+                              this.dailyBudgetValidators
+                            )
+                          );
+                          this.campaigns.push(val.campaign);
+                        }),
+                        // category
+                        switchMap(() => {
+                          const categoryData = cloneDeep(campaignData);
+                          set(categoryData, "campaignType", "category");
+                          return this.appleService
+                            .postAppleCampaign(this.orgId, categoryData)
+                            .pipe(
+                              take(1),
+                              tap((val) => {
+                                // set the forms for this campaign
+                                const statusControl = `status|${val.campaign.campaignId}`;
+                                this.step3Form.addControl(
+                                  statusControl,
+                                  new FormControl(
+                                    val.campaign.status === "ENABLED"
+                                      ? true
+                                      : false
+                                  )
+                                );
+
+                                const lifetimeBudgetControl = `lifetimeBudget|${val.campaign.campaignId}`;
+                                this.step3Form.addControl(
+                                  lifetimeBudgetControl,
+                                  new FormControl(
+                                    val.campaign.lifetimeBudget,
+                                    this.lifetimeBudgetValidatorsCategory
+                                  )
+                                );
+
+                                const dailyBudgetControl = `dailyBudget|${val.campaign.campaignId}`;
+                                this.step3Form.addControl(
+                                  dailyBudgetControl,
+                                  new FormControl(
+                                    val.campaign.dailyBudget,
+                                    this.dailyBudgetValidators
+                                  )
+                                );
+
+                                this.campaigns.push(val.campaign);
+                              }),
+
+                              // brand
+                              switchMap(() => {
+                                const brandData = cloneDeep(campaignData);
+                                set(brandData, "campaignType", "brand");
+                                return this.appleService
+                                  .postAppleCampaign(this.orgId, brandData)
+                                  .pipe(
+                                    take(1),
+                                    tap((val) => {
+                                      const statusControl = `status|${val.campaign.campaignId}`;
+                                      this.step3Form.addControl(
+                                        statusControl,
+                                        new FormControl(
+                                          val.campaign.status === "ENABLED"
+                                            ? true
+                                            : false
+                                        )
+                                      );
+
+                                      const lifetimeBudgetControl = `lifetimeBudget|${val.campaign.campaignId}`;
+                                      this.step3Form.addControl(
+                                        lifetimeBudgetControl,
+                                        new FormControl(
+                                          val.campaign.lifetimeBudget,
+                                          this.lifetimeBudgetValidatorsBrand
+                                        )
+                                      );
+
+                                      const dailyBudgetControl = `dailyBudget|${val.campaign.campaignId}`;
+                                      this.step3Form.addControl(
+                                        dailyBudgetControl,
+                                        new FormControl(
+                                          val.campaign.dailyBudget,
+                                          this.dailyBudgetValidators
+                                        )
+                                      );
+                                      this.campaigns.push(val.campaign);
+                                    }),
+
+                                    // exact discover
+                                    switchMap(() => {
+                                      const exactDiscoveryData =
+                                        cloneDeep(campaignData);
+                                      set(
+                                        exactDiscoveryData,
+                                        "campaignType",
+                                        "exact_discovery"
+                                      );
+                                      return this.appleService
+                                        .postAppleCampaign(
+                                          this.orgId,
+                                          exactDiscoveryData
+                                        )
+                                        .pipe(
+                                          take(1),
+                                          tap((val) => {
+                                            const statusControl = `status|${val.campaign.campaignId}`;
+                                            this.step3Form.addControl(
+                                              statusControl,
+                                              new FormControl(
+                                                val.campaign.status ===
+                                                "ENABLED"
+                                                  ? true
+                                                  : false
+                                              )
+                                            );
+
+                                            const lifetimeBudgetControl = `lifetimeBudget|${val.campaign.campaignId}`;
+                                            this.step3Form.addControl(
+                                              lifetimeBudgetControl,
+                                              new FormControl(
+                                                val.campaign.lifetimeBudget,
+                                                this.lifetimeBudgetValidatorsExactDiscovery
+                                              )
+                                            );
+
+                                            const dailyBudgetControl = `dailyBudget|${val.campaign.campaignId}`;
+                                            this.step3Form.addControl(
+                                              dailyBudgetControl,
+                                              new FormControl(
+                                                val.campaign.dailyBudget,
+                                                this.dailyBudgetValidators
+                                              )
+                                            );
+                                            this.campaigns.push(val.campaign);
+                                          }),
+
+                                          // broad discovery
+                                          switchMap(() => {
+                                            const broadDiscoveryData =
+                                              cloneDeep(campaignData);
+                                            set(
+                                              broadDiscoveryData,
+                                              "campaignType",
+                                              "broad_discovery"
+                                            );
+                                            return this.appleService
+                                              .postAppleCampaign(
+                                                this.orgId,
+                                                broadDiscoveryData
+                                              )
+                                              .pipe(
+                                                take(1),
+                                                tap((val) => {
+                                                  const statusControl = `status|${val.campaign.campaignId}`;
+                                                  this.step3Form.addControl(
+                                                    statusControl,
+                                                    new FormControl(
+                                                      val.campaign.status ===
+                                                      "ENABLED"
+                                                        ? true
+                                                        : false
+                                                    )
+                                                  );
+
+                                                  const lifetimeBudgetControl = `lifetimeBudget|${val.campaign.campaignId}`;
+                                                  this.step3Form.addControl(
+                                                    lifetimeBudgetControl,
+                                                    new FormControl(
+                                                      val.campaign.lifetimeBudget,
+                                                      this.lifetimeBudgetValidatorsBroadDiscovery
+                                                    )
+                                                  );
+
+                                                  const dailyBudgetControl = `dailyBudget|${val.campaign.campaignId}`;
+                                                  this.step3Form.addControl(
+                                                    dailyBudgetControl,
+                                                    new FormControl(
+                                                      val.campaign.dailyBudget,
+                                                      this.dailyBudgetValidators
+                                                    )
+                                                  );
+                                                  this.campaigns.push(
+                                                    val.campaign
+                                                  );
+                                                }),
+
+                                                // search discovery
+                                                switchMap(() => {
+                                                  const searchDiscoveryData =
+                                                    cloneDeep(campaignData);
+                                                  set(
+                                                    searchDiscoveryData,
+                                                    "campaignType",
+                                                    "search_discovery"
+                                                  );
+                                                  return this.appleService
+                                                    .postAppleCampaign(
+                                                      this.orgId,
+                                                      searchDiscoveryData
+                                                    )
+                                                    .pipe(
+                                                      take(1),
+                                                      tap((val) => {
+                                                        const statusControl = `status|${val.campaign.campaignId}`;
+                                                        this.step3Form.addControl(
+                                                          statusControl,
+                                                          new FormControl(
+                                                            val.campaign
+                                                              .status ===
+                                                            "ENABLED"
+                                                              ? true
+                                                              : false
+                                                          )
+                                                        );
+
+                                                        const lifetimeBudgetControl = `lifetimeBudget|${val.campaign.campaignId}`;
+                                                        this.step3Form.addControl(
+                                                          lifetimeBudgetControl,
+                                                          new FormControl(
+                                                            val.campaign.lifetimeBudget,
+                                                            this.lifetimeBudgetValidatorsSearchDiscovery
+                                                          )
+                                                        );
+
+                                                        const dailyBudgetControl = `dailyBudget|${val.campaign.campaignId}`;
+                                                        this.step3Form.addControl(
+                                                          dailyBudgetControl,
+                                                          new FormControl(
+                                                            val.campaign.dailyBudget,
+                                                            this.dailyBudgetValidators
+                                                          )
+                                                        );
+                                                        this.campaigns.push(
+                                                          val.campaign
+                                                        );
+                                                      }),
+                                                      switchMap(() => {
+                                                        set(
+                                                          client,
+                                                          "orgDetails.appleCampaigns",
+                                                          this.campaigns
+                                                        );
+                                                        return this.clientService
+                                                          .postClient(
+                                                            ClientPayload.buildFromClient(
+                                                              client
+                                                            )
+                                                          )
+                                                          .pipe(
+                                                            take(1),
+                                                            tap(() => {
+                                                              this.client =
+                                                                client;
+                                                              this.isLoadingResults =
+                                                                false;
+                                                              this.openSnackBar(
+                                                                "we've completed creating your campaigns! please review details and complete registration to finalize",
+                                                                ""
+                                                              );
+                                                            })
+                                                          );
+                                                      })
+                                                    );
+                                                })
+                                              );
+                                          })
+                                        );
+                                    })
+                                  );
+                              })
+                            );
+                        })
+                      );
+                  })
+                );
+
+                // post to apple service for campaign creation
+                // return this.appleService.postAppleCampaign(this.orgId, campaignData).pipe(
+                //   take(1),
+                //   switchMap((val) => {
+                //       set(client, 'orgDetails.appleCampaigns', get(val, 'campaigns', []));
+                //        // post to client service for clients json
+                //       return this.clientService.postClient(ClientPayload.buildFromClient(client)).pipe(
+                //         take(1),
+                //         tap(() => {
+                //           this.client = client;
+                //           this.isLoadingResults = false;
+                //           this.openSnackBar("we completed creating your campaigns! please review details and complete registration to finalize", "")
+                //         })
+                //       )
+                //   })
+                // )
+              }),
+              catchError(() => {
+                this.isLoadingResults = false;
+                this.openSnackBar(
+                  "unable to process changes to settings at this time",
+                  "dismiss"
+                );
+                this.stepper.previous();
+                return [];
+              })
+            );
+          }
+          this.stepper.previous();
+          this.resetStep2();
+        })
+      )
+      .subscribe();
+  }
+
+  resetStep2(){
+    chain(this.step2).each((substep) => {
+      set(substep, 'complete', false)
+      set(substep, 'active', false)
+    }).value()
+    chain(this.step2).first().set('active', true).value()
   }
 
   undoStep3Changes() {
@@ -1314,35 +1340,14 @@ export class RegistrationComponent implements OnInit {
       .subscribe();
   }
 
-  handleTermsClick($event) {
+  handleShowTermsClick($event) {
     $event.preventDefault();
-    this.dialog
+    return this.dialog
       .open(DynamicModalComponent, {
         data: {
           title: `Terms of Service`,
-          content: `
-          <div class='text-center'><h4>Adoya Client Portal Terms of Use</h4></div>
-          <div class='p-2 p-md-4'>These Terms of Service (these &ldquo;Terms&rdquo;) contain the terms and conditions that govern your access to and use of one or more (the &ldquo;Services&rdquo;) and is entered into by and between you and</div>
-          <div>PLEASE READ THIS DOCUMENT CAREFULLY. BY CLICKING TO AGREE TO THESE TERMS WHEN THIS OPTION IS MADE AVAILABLE TO YOU, YOU ACCEPT AND AGREE TO BE BOUND AND ABIDE BY THE TERMS CONTAINED HEREIN AND THE ADOYA TERMS OF USE- <a href='https://www.adoya.io/' target='_blank'>https://www.adoya.io/</a>, WHICH ARE INCORPORATD HEREIN BY REFERENCE.  IF YOU DO NOT AGREE TO BE BOUND BY ANY OF THESE TERMS, YOU MAY NOT USE THE SERVICES.</div>
-          <div>
-          <ol start='1'>
-          <li><u>Lorem Ipsum</u>.<br/><br/><ol type='a'><li>consectetur adipiscing elit</li></ol><ol type='b'><li>consectetur adipiscing elit</li></ol></li>
-          </ol>
-          <ol start='2'>
-          <li><u>Lorem Ipsum</u>.<br/><br/><ol type='a'><li>consectetur adipiscing elit</li></ol><ol type='b'><li>consectetur adipiscing elit</li></ol></li>
-          </ol>
-          <ol start='3'>
-          <li><u>Lorem Ipsum</u>.<br/><br/><ol type='a'><li>consectetur adipiscing elit</li></ol><ol type='b'><li>consectetur adipiscing elit</li></ol></li>
-          </ol>
-          <ol start='4'>
-          <li><u>Lorem Ipsum</u>.<br/><br/><ol type='a'><li>consectetur adipiscing elit</li></ol><ol type='b'><li>consectetur adipiscing elit</li></ol></li>
-          </ol>
-          <ol start='5'>
-          <li><u>Lorem Ipsum</u>.<br/><br/><ol type='a'><li>consectetur adipiscing elit</li></ol><ol type='b'><li>consectetur adipiscing elit</li></ol></li>
-          </ol>
-          </div>
-          `,
-          actionYes: "Agree",
+          content: AppService.termsOfService,
+          actionYes: "Save",
           actionNo: "Cancel",
         },
         maxWidth: "500px",
@@ -1351,7 +1356,37 @@ export class RegistrationComponent implements OnInit {
         autoFocus: false,
       })
       .afterClosed()
+      .pipe(
+        share(),
+        take(1),
+        tap((val) => {
+          if (val) {
+            this.handlePrintTerms();
+          }
+        })
+      )
       .subscribe();
+  }
+
+  handleAgreeToTerms(): Observable<boolean> {
+    return this.dialog
+      .open(DynamicModalComponent, {
+        data: {
+          title: `Terms of Service`,
+          content: AppService.termsOfService,
+          actionYes: "Agree",
+          actionNo: "Cancel",
+        },
+        maxWidth: "500px",
+        width: "500px",
+        panelClass: "tooltip-dialog-box",
+        autoFocus: false,
+      })
+      .afterClosed();
+  }
+
+  handlePrintTerms() {
+    window.print();
   }
 
   showWarningDialog() {

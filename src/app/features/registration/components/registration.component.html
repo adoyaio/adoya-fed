@@ -1,4 +1,4 @@
-<div class="registration__container container pt-2 pb-1">
+<div class="registration__container container pt-2 pb-1 d-print-none">
   <div class="row bottom-border justify-content-center">
     <a href="/workbench/reporting"
       ><img class="logo" src="/assets/images/adoya-client-portal.png" alt=""
@@ -6,7 +6,7 @@
   </div>
   <div class="row">
     <div class="workbench__loading" *ngIf="isLoadingResults">
-      <mat-spinner color="accent"></mat-spinner>
+      <mat-spinner color="accent" strokeWidth="6"></mat-spinner>
     </div>
     <div class="workbench__sending" *ngIf="isSendingResults">
       <mat-progress-bar color="accent" mode="indeterminate"></mat-progress-bar>
@@ -1094,7 +1094,7 @@
                   </button>
                   <button
                     mat-flat-button
-                    matStepperNext
+                    (click)="completeStep2()"
                     color="accent"
                     class="float-left ml-2"
                     [disabled]="substepDisabled()"
@@ -1277,7 +1277,9 @@
     </mat-vertical-stepper>
   </div>
 </div>
-
+<div class="d-none d-print-block">
+  <span [innerHTML]="printViewText"></span>
+</div>
 <div
   class="
     position-absolute position-md-fixed
@@ -1288,7 +1290,9 @@
     text-center
   "
 >
-  <a class="adoya-link" (click)="handleTermsClick($event)">Terms of service</a>
+  <a class="adoya-link" (click)="handleShowTermsClick($event)"
+    >Terms of service</a
+  >
   |
   <a class="adoya-link" href="mailto:info@adoya.io?subject=Adoya Support"
     >Contact Us</a

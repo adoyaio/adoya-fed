@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-center" *ngIf="isAppLoading">
-  <mat-spinner color="accent"></mat-spinner>
+  <mat-spinner color="accent" strokeWidth="6"></mat-spinner>
 </div>
 <div *ngIf="!isAppLoading" class="h-100">
   <router-outlet></router-outlet>
