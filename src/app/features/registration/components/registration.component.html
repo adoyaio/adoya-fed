@@ -1097,7 +1097,7 @@
                   </button>
                   <button
                     mat-flat-button
-                    matStepperNext
+                    (click)="completeStep2()"
                     color="accent"
                     class="float-left ml-2"
                     [disabled]="substepDisabled()"
