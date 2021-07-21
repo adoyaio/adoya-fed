@@ -197,6 +197,7 @@ export class RegistrationComponent implements OnInit {
     }),
     step2Form: this.fb.group(
       {
+        termsControl: new FormControl(undefined, Validators.required),
         substep1: this.fb.group({
           application: new FormControl(undefined, Validators.required),
           country: new FormControl(undefined, Validators.required),
@@ -279,6 +280,10 @@ export class RegistrationComponent implements OnInit {
   }
   get lifetimeBudget(): AbstractControl {
     return this.step2Form.get("substep3").get("lifetimeBudget");
+  }
+
+  get termsControl(): AbstractControl {
+    return this.step2Form.get("termsControl");
   }
 
   get dailyBudgetError(): string {
@@ -1070,6 +1075,7 @@ export class RegistrationComponent implements OnInit {
               "one moment, while we save your campaign configuration",
               ""
             );
+            this.termsControl.setValue(true);
             this.isLoadingResults = true;
             return this.clientService.getClient(this.orgId).pipe(
               take(1),
