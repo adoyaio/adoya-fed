@@ -1189,7 +1189,11 @@
                   <td class="col-8">{{ campaign.campaignName }}</td>
                   <td class="col-1">
                     <!--- daily Budget -->
-                    <mat-form-field appearance="fill" color="accent">
+                    <mat-form-field
+                      appearance="fill"
+                      color="accent"
+                      class="pb-2"
+                    >
                       <mat-label
                         ><mat-icon>attach_money</mat-icon>&nbsp;Daily Budget
                         Cap</mat-label
@@ -1202,13 +1206,21 @@
                         [formControlName]="'dailyBudget|' + campaign.campaignId"
                       />
                       <mat-error>
-                        Must enter a number between 1 and 1,000
+                        {{
+                          step3DailyBudgetError(
+                            "dailyBudget|" + campaign.campaignId
+                          )
+                        }}
                       </mat-error>
                     </mat-form-field>
                   </td>
                   <td class="col-1">
                     <!--- Lifetime Budget -->
-                    <mat-form-field appearance="fill" color="accent">
+                    <mat-form-field
+                      appearance="fill"
+                      color="accent"
+                      class="pb-2"
+                    >
                       <mat-label
                         ><mat-icon>attach_money</mat-icon>&nbsp;Lifetime Budget
                         Cap</mat-label
@@ -1223,7 +1235,12 @@
                         "
                       />
                       <mat-error>
-                        Must enter a number between 10 and 10,000,000
+                        {{
+                          step3LifetimeBudgetError(
+                            campaign.campaignType,
+                            "lifetimeBudget|" + campaign.campaignId
+                          )
+                        }}
                       </mat-error>
                     </mat-form-field>
                   </td>

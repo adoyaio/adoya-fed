@@ -240,21 +240,16 @@ export class RegistrationComponent implements OnInit {
     step3Form: this.fb.group({}),
   });
 
-  // { validators: CustomFormValidators.budgetValidatorStep3 }
-  // {
-  //   validators: CustomFormValidators.budgetCpiValidatorStep3,
-  // }
-
-  get step1Form(): any {
-    return this.form.get("step1Form");
+  get step1Form(): FormGroup {
+    return this.form.get("step1Form") as FormGroup;
   }
 
-  get step2Form(): any {
-    return this.form.get("step2Form");
+  get step2Form(): FormGroup {
+    return this.form.get("step2Form") as FormGroup;
   }
 
-  get step3Form(): any {
-    return this.form.get("step3Form");
+  get step3Form(): FormGroup {
+    return this.form.get("step3Form") as FormGroup;
   }
 
   get substep1(): any {
@@ -275,6 +270,10 @@ export class RegistrationComponent implements OnInit {
   get substep6(): any {
     return this.step2Form.get("substep6");
   }
+
+  get cpiControl(): AbstractControl {
+    return this.step2Form.get("substep2").get("cpi");
+  }
   get dailyBudget(): AbstractControl {
     return this.step2Form.get("substep3").get("dailyBudget");
   }
@@ -288,7 +287,7 @@ export class RegistrationComponent implements OnInit {
 
   get dailyBudgetError(): string {
     if (this.dailyBudget.hasError("invalidDailyBudget")) {
-      return "Daily budget cap must be 20x your Target Cost Per Install";
+      return "Daily budget cap must be 20x Target Cost Per Install";
     }
     if (this.dailyBudget.invalid) {
       return "Please enter a number between 1 and 10,000";
@@ -301,6 +300,47 @@ export class RegistrationComponent implements OnInit {
     }
     if (this.lifetimeBudget.invalid) {
       return "Please enter a number between 10 and 10,000,000";
+    }
+  }
+
+  step3DailyBudgetError(formControlName: string): string {
+    const formControl: AbstractControl = this.step3Form.get(formControlName);
+    if (formControl.hasError("invalidDailyBudget")) {
+      return "Must be greater or equal to Target Cost Per Install";
+    }
+    if (formControl.invalid) {
+      return "Please enter a number between 1 and 10,000";
+    }
+  }
+
+  step3LifetimeBudgetError(
+    campaignType: string,
+    formControlName: string
+  ): string {
+    const formControl: AbstractControl = this.step3Form.get(formControlName);
+    if (formControl.hasError("invalidLifetimeBudget")) {
+      return "Lifetime budget must exceed daily budget cap";
+    }
+    if (formControl.invalid) {
+      switch (campaignType) {
+        case "competitor":
+          return "Please enter a number between 3 and 300,000";
+
+        case "category":
+          return "Please enter a number between 3 and 300,000";
+
+        case "brand":
+          return "Please enter a number between 1.5 and 150,000";
+
+        case "exact_discovery":
+          return "Please enter a number between 1.5 and 150,000";
+
+        case "broad_discovery":
+          return "Please enter a number between 2 and 100,000";
+
+        case "search_discovery":
+          return "Please enter a number between 2 and 100,000";
+      }
     }
   }
 
@@ -532,15 +572,15 @@ export class RegistrationComponent implements OnInit {
   undoStep3Changes() {
     chain(this.client.orgDetails.appleCampaigns)
       .each((campaign) => {
-        this.step3Form.controls[`status|${campaign.campaignId}`].setValue(
+        this.step3Form["controls"][`status|${campaign.campaignId}`].setValue(
           campaign.status === "ENABLED" ? true : false
         ),
-          this.step3Form.controls[
+          this.step3Form["controls"][
             `lifetimeBudget|${campaign.campaignId}`
           ].setValue(campaign.lifetimeBudget);
-        this.step3Form.controls[`dailyBudget|${campaign.campaignId}`].setValue(
-          campaign.dailyBudget
-        );
+        this.step3Form["controls"][
+          `dailyBudget|${campaign.campaignId}`
+        ].setValue(campaign.dailyBudget);
       })
       .value();
     this.step3Form.markAsPristine();
@@ -552,11 +592,11 @@ export class RegistrationComponent implements OnInit {
     chain(this.client.orgDetails.appleCampaigns)
       .each((campaign) => {
         const statusCtrl =
-          this.step3Form.controls[`status|${campaign.campaignId}`];
+          this.step3Form["controls"][`status|${campaign.campaignId}`];
         const lifetimeBudgetCtrl =
-          this.step3Form.controls[`lifetimeBudget|${campaign.campaignId}`];
+          this.step3Form["controls"][`lifetimeBudget|${campaign.campaignId}`];
         const dailyBudgetCtrl =
-          this.step3Form.controls[`dailyBudget|${campaign.campaignId}`];
+          this.step3Form["controls"][`dailyBudget|${campaign.campaignId}`];
 
         if (
           statusCtrl.dirty ||
@@ -621,19 +661,30 @@ export class RegistrationComponent implements OnInit {
     const hasInvalid = chain(this.client.orgDetails.appleCampaigns)
       .some((campaign) => {
         const lifetimeBudgetCtrl =
-          this.step3Form.controls[`lifetimeBudget|${campaign.campaignId}`];
+          this.step3Form["controls"][`lifetimeBudget|${campaign.campaignId}`];
         const dailyBudgetCtrl =
-          this.step3Form.controls[`dailyBudget|${campaign.campaignId}`];
+          this.step3Form["controls"][`dailyBudget|${campaign.campaignId}`];
 
         const lifetimeBudgetCtrlValue: number = +lifetimeBudgetCtrl.value;
         const dailyBudgetCtrlValue: number = +dailyBudgetCtrl.value;
+        const cpi: number = +this.cpiControl.value;
 
-        if (
-          dailyBudgetCtrlValue >= lifetimeBudgetCtrlValue ||
-          cpi > dailyBudgetCtrlValue
-        ) {
-          return true;
+        let retVal = false;
+        if (dailyBudgetCtrlValue >= lifetimeBudgetCtrlValue) {
+          lifetimeBudgetCtrl.setErrors({ invalidLifetimeBudget: true });
+          retVal = true;
+        } else {
+          lifetimeBudgetCtrl.setErrors(null);
         }
+
+        if (cpi > dailyBudgetCtrlValue) {
+          dailyBudgetCtrl.setErrors({ invalidDailyBudget: true });
+          retVal = true;
+        } else {
+          dailyBudgetCtrl.setErrors(null);
+        }
+
+        return retVal;
       })
       .value();
 
@@ -906,46 +957,6 @@ export class RegistrationComponent implements OnInit {
         data: {
           title: `Locate your ${field}`,
           content: "Content",
-        },
-        maxWidth: "500px",
-        width: "500px",
-        panelClass: "tooltip-dialog-box",
-        autoFocus: false,
-      })
-      .afterClosed()
-      .subscribe();
-  }
-
-  handleTermsClick($event) {
-    $event.preventDefault();
-    this.dialog
-      .open(DynamicModalComponent, {
-        data: {
-          title: `Terms of Service`,
-          content: `
-          <div class='text-center'><h4>Adoya Client Portal Terms of Use</h4></div>
-          <div class='p-2 p-md-4'>These Terms of Service (these &ldquo;Terms&rdquo;) contain the terms and conditions that govern your access to and use of one or more (the &ldquo;Services&rdquo;) and is entered into by and between you and</div>
-          <div>PLEASE READ THIS DOCUMENT CAREFULLY. BY CLICKING TO AGREE TO THESE TERMS WHEN THIS OPTION IS MADE AVAILABLE TO YOU, YOU ACCEPT AND AGREE TO BE BOUND AND ABIDE BY THE TERMS CONTAINED HEREIN AND THE ADOYA TERMS OF USE- <a href='https://www.adoya.io/' target='_blank'>https://www.adoya.io/</a>, WHICH ARE INCORPORATD HEREIN BY REFERENCE.  IF YOU DO NOT AGREE TO BE BOUND BY ANY OF THESE TERMS, YOU MAY NOT USE THE SERVICES.</div>
-          <div>
-          <ol start='1'>
-          <li><u>Lorem Ipsum</u>.<br/><br/><ol type='a'><li>consectetur adipiscing elit</li></ol><ol type='b'><li>consectetur adipiscing elit</li></ol></li>
-          </ol>
-          <ol start='2'>
-          <li><u>Lorem Ipsum</u>.<br/><br/><ol type='a'><li>consectetur adipiscing elit</li></ol><ol type='b'><li>consectetur adipiscing elit</li></ol></li>
-          </ol>
-          <ol start='3'>
-          <li><u>Lorem Ipsum</u>.<br/><br/><ol type='a'><li>consectetur adipiscing elit</li></ol><ol type='b'><li>consectetur adipiscing elit</li></ol></li>
-          </ol>
-          <ol start='4'>
-          <li><u>Lorem Ipsum</u>.<br/><br/><ol type='a'><li>consectetur adipiscing elit</li></ol><ol type='b'><li>consectetur adipiscing elit</li></ol></li>
-          </ol>
-          <ol start='5'>
-          <li><u>Lorem Ipsum</u>.<br/><br/><ol type='a'><li>consectetur adipiscing elit</li></ol><ol type='b'><li>consectetur adipiscing elit</li></ol></li>
-          </ol>
-          </div>
-          `,
-          actionYes: "Agree",
-          actionNo: "Cancel",
         },
         maxWidth: "500px",
         width: "500px",
