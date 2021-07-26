@@ -243,9 +243,7 @@
                         <div class="w-100 no-gutters">
                           <mat-form-field appearance="fill" class="col-11">
                             <mat-select
-                              [formControlName]="
-                                'genders' + campaign.campaignId
-                              "
+                              [formControlName]="'gender' + campaign.campaignId"
                               class="p-1"
                             >
                               <mat-option value="all"
@@ -271,7 +269,7 @@
                         <div class="w-100 no-gutters">
                           <mat-form-field appearance="fill" class="col-11">
                             <mat-select
-                              [formControlName]="'ages' + campaign.campaignId"
+                              [formControlName]="'minAge' + campaign.campaignId"
                               class="p-1"
                             >
                               <mat-option value="all"

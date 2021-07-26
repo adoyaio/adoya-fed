@@ -19,7 +19,9 @@ import {
   each as _each,
   get,
   has,
+  includes,
   isEmpty,
+  isEqual,
   isNil,
   map as _map,
   set,
@@ -216,9 +218,9 @@ export class OptimizationsComponent implements OnInit {
           dailyBudget
         );
 
-        this.appleForm.addControl("genders" + campaign.campaignId, genders);
+        this.appleForm.addControl("gender" + campaign.campaignId, genders);
 
-        this.appleForm.addControl("ages" + campaign.campaignId, ages);
+        this.appleForm.addControl("minAge" + campaign.campaignId, ages);
 
         this.appleForm
           .get("cpi" + campaign.campaignId)
@@ -332,6 +334,31 @@ export class OptimizationsComponent implements OnInit {
       .get("orgDetails")
       .get("appleCampaigns")
       .each((campaign) => {
+        // apple campaign values
+        const dailyBudget = get(campaign, "dailyBudget");
+        const budgetLifetime = get(campaign, "lifetimeBudget");
+        const gender = get(campaign, "gender");
+        const minAge = get(campaign, "minAge");
+
+        this.appleForm
+          .get("dailyBudget" + campaign.campaignId)
+          .setValue(dailyBudget);
+        this.appleForm
+          .get("lifetimeBudget" + campaign.campaignId)
+          .setValue(budgetLifetime);
+        this.appleForm
+          .get("gender" + campaign.campaignId)
+          .setValue(
+            isEqual(["M", "F"], gender)
+              ? "all"
+              : includes(["M"], gender)
+              ? "male"
+              : includes(["F"], gender ? "female" : "all")
+          );
+        this.appleForm
+          .get("minAge" + campaign.campaignId)
+          .setValue(isNil(minAge) ? "all" : minAge);
+
         // bid param overrides
         const cpi = get(campaign, "bidParameters.HIGH_CPI_BID_DECREASE_THRESH");
         const objective = get(campaign, "bidParameters.OBJECTIVE");

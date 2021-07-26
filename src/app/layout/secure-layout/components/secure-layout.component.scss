@@ -1,15 +1,11 @@
 @import "variables";
 
-// ::ng-deep .mat-drawer-container {
-//   position: absolute;
-// }
-
-// ::ng-deep mat-sidenav-container {
-//   position: absolute;
-// }
-
 .secure-layout__mat-sidenav-container {
-  position: inherit;
+  position: fixed;
+  height: 100%;
+  min-height: 100%;
+  width: 99%;
+  min-width: 99%;
 }
 
 .layout-container {
