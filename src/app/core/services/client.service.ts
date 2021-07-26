@@ -31,10 +31,6 @@ export class ClientService {
 
   authKey = "GerGRueNWE3qCkPG8GfPV649wyVnQEQN2oJQUpnI";
 
-  // getAppleAppsUrl = this.baseUrl + `/apple/apps`;
-  // getAppleAclsUrl = this.baseUrl + `/apple/acls`;
-  // createAppleCampaignsUrl = this.baseUrl + `apple/campaign`;
-
   public postClient(client: ClientPayload): Observable<any> {
     const url = `${this.clientPostUrl}`;
     let headers = new HttpHeaders();

@@ -124,14 +124,14 @@
                 mat-button
                 (click)="accordion.openAll()"
               >
-                <mat-icon>expand_more</mat-icon>Expand All
+                <mat-icon color="accent">expand_more</mat-icon>Expand All
               </button>
               <button
                 class="float-right"
                 mat-button
                 (click)="accordion.closeAll()"
               >
-                <mat-icon>expand_less</mat-icon>Collapse All
+                <mat-icon color="accent">expand_less</mat-icon>Collapse All
               </button>
             </mat-card-subtitle>
 
@@ -166,33 +166,165 @@
                     </mat-expansion-panel-header>
 
                     <div
-                      class="d-flex flex-row flex-wrap no-gutters justify-content-start"
+                      class="
+                        d-flex
+                        flex-row flex-wrap
+                        no-gutters
+                        justify-content-start
+                      "
+                    >
+                      <div class="col-6">
+                        <!-- field and icon -->
+                        <div class="w-100 no-gutters">
+                          <!--- daily Budget -->
+                          <mat-form-field
+                            appearance="fill"
+                            class="col-11 ml-1"
+                            color="accent"
+                          >
+                            <mat-label
+                              ><mat-icon>attach_money</mat-icon>&nbsp;Daily
+                              Budget Cap</mat-label
+                            >
+                            <input
+                              [formControlName]="
+                                'dailyBudget' + campaign.campaignId
+                              "
+                              matInput
+                              type="number"
+                              placeholder=""
+                            />
+
+                            <!-- <mat-error> {{ dailyBudgetError }} </mat-error> -->
+                          </mat-form-field>
+
+                          <mat-icon
+                            color="accent"
+                            matTooltip="Daily Budget Cap: &#13; Enter the amount you're willing to spend per day. &#13; &#13; You know your business so you should enter what you feel is best. But if you need a guide, we suggest the following approach: &#13; # of installs you want to get per day x maximum cost per install x 10-20% buffer. Let's say you're targeting 100 installs at a $2 maximum cost per install. Your budget should be $220-$240 (100 x $2 x 120%-140%). &#13; &#13; Don't worry! You can change your daily budget cap at any time."
+                            >help</mat-icon
+                          >
+                        </div>
+
+                        <!-- field and icon -->
+                        <div class="w-100 no-gutters">
+                          <!--- Lifetime Budget -->
+                          <mat-form-field
+                            appearance="fill"
+                            class="col-11 ml-1"
+                            color="accent"
+                          >
+                            <mat-label
+                              ><mat-icon>attach_money</mat-icon>&nbsp;Lifetime
+                              Budget Cap</mat-label
+                            >
+                            <input
+                              [formControlName]="
+                                'lifetimeBudget' + campaign.campaignId
+                              "
+                              matInput
+                              type="number"
+                              placeholder=""
+                            />
+                            <!-- <mat-error>
+                            {{ lifetimeBudgetError }}
+                          </mat-error> -->
+                          </mat-form-field>
+
+                          <mat-icon
+                            color="accent"
+                            matTooltip="Lifetime Budget: &#13; Enter the amount you're willing to spend for the life of your Apple Search Ads campaigns. When starting, set it sufficiently high enough so it can run for a total of 30 days. This gives the system enough data and time to optimize. A simple formula, take your daily budget and multiply it by 30. So if your daily budget is $100, your lifetime budget should be $3,000. &#13; &#13; After your campaign has been running for some time you should raise your lifetime budget significantly higher. &#13; &#13; Don't worry! You can change your lifetime budget cap at any time. &#13; &#13; IMPORTANT: Your lifetime budget must be higher than your daily budget cap."
+                            >help</mat-icon
+                          >
+                        </div>
+                      </div>
+
+                      <div class="col-6">
+                        <!-- field and icon -->
+                        <div class="w-100 no-gutters">
+                          <mat-form-field appearance="fill" class="col-11">
+                            <mat-select
+                              [formControlName]="
+                                'genders' + campaign.campaignId
+                              "
+                              class="p-1"
+                            >
+                              <mat-option value="all"
+                                >All (recommended)</mat-option
+                              >
+                              <mat-option value="female">Female</mat-option>
+                              <mat-option value="male">Male</mat-option>
+                            </mat-select>
+                            <mat-label
+                              ><mat-icon>settings</mat-icon>&nbsp;Which genders
+                              do you want to target?</mat-label
+                            >
+                          </mat-form-field>
+
+                          <mat-icon
+                            color="accent"
+                            matTooltip="Unless you have strict gender targeting restrictions, we recommend 'All' to maximize your reach."
+                            >help</mat-icon
+                          >
+                        </div>
+
+                        <!-- field and icon -->
+                        <div class="w-100 no-gutters">
+                          <mat-form-field appearance="fill" class="col-11">
+                            <mat-select
+                              [formControlName]="'ages' + campaign.campaignId"
+                              class="p-1"
+                            >
+                              <mat-option value="all"
+                                >All (recommended)</mat-option
+                              >
+                              <mat-option value="18">18 +</mat-option>
+                              <mat-option value="21">21 +</mat-option>
+                            </mat-select>
+                            <mat-label
+                              ><mat-icon>settings</mat-icon>&nbsp;What's your
+                              app's minimum age requirement?</mat-label
+                            >
+                          </mat-form-field>
+
+                          <mat-icon
+                            color="accent"
+                            matTooltip="Unless you have strict age targeting restrictions, we recommend 'All' to maximize your reach."
+                            >help</mat-icon
+                          >
+                        </div>
+                      </div>
+                    </div>
+
+                    <div
+                      class="
+                        d-flex
+                        flex-row flex-wrap
+                        no-gutters
+                        justify-content-start
+                      "
                     >
                       <div class="col-6 p-0">
                         <!--checkbox div asa -->
-                        <div class="text-left mb-2 p-0">
+                        <div class="text-left mb-2 p-0 w-100 no-gutters">
                           <mat-checkbox
                             (change)="
                               handleCampaignCheckboxChange($event, campaign)
                             "
-                            [formControlName]="
-                              'checkbox_' + campaign.campaignId
-                            "
+                            [formControlName]="'checkbox' + campaign.campaignId"
                           >
                           </mat-checkbox>
                           Enable Campaign Level Overrides for Bid Optimizations
                         </div>
 
                         <!--form div asa -->
-                        <div class="p-0">
+                        <div class="p-0 w-100 no-gutters">
                           <mat-form-field
-                            class="float-left mr-2"
+                            class="col-11"
                             [ngClass]="
-                              isControlDisabled('cpi_' + campaign.campaignId)
+                              isControlDisabled('cpi' + campaign.campaignId)
                                 ? 'd-none'
                                 : 'visisble'
                             "
-                            matTooltip="Target Cost Per Install: &#13;  Enter the most you’re willing to spend for an install. &#13; &#13; Be realistic. Setting target too low will severely restrict your volume.  &#13; &#13; Keep changes +/- 20% of the previous value (if applicable). This prevents volatility. &#13; &#13; Also, try to allow for 7 days of performance before making adjustments."
                             appearance="fill"
                             color="accent"
                           >
@@ -201,7 +333,7 @@
                               Cost Per Install</mat-label
                             >
                             <input
-                              [formControlName]="'cpi_' + campaign.campaignId"
+                              [formControlName]="'cpi' + campaign.campaignId"
                               matInput
                               type="number"
                               placeholder="Target Cost Per Install"
@@ -210,22 +342,35 @@
                               Must enter a number between .1 and 1,000
                             </mat-error>
                           </mat-form-field>
+
+                          <mat-icon
+                            color="accent"
+                            [ngClass]="
+                              isControlDisabled('cpi' + campaign.campaignId)
+                                ? 'd-none'
+                                : 'visisble'
+                            "
+                            matTooltip="Target Cost Per Install: &#13;  Enter the most you’re willing to spend for an install. &#13; &#13; Be realistic. Setting target too low will severely restrict your volume.  &#13; &#13; Keep changes +/- 20% of the previous value (if applicable). This prevents volatility. &#13; &#13; Also, try to allow for 7 days of performance before making adjustments."
+                            >help</mat-icon
+                          >
+                        </div>
+
+                        <div class="p-0 w-100 no-gutters">
                           <mat-form-field
-                            class="float-left mr-2"
+                            class="col-11"
                             [ngClass]="
                               isControlDisabled(
-                                'objective_' + campaign.campaignId
+                                'objective' + campaign.campaignId
                               )
                                 ? 'd-none'
                                 : 'visisble'
                             "
                             appearance="fill"
                             color="accent"
-                            matTooltip="Objective: &#13; Determines how aggressive our system will bid to your cost per install target. &#13; &#13; We recommend allowing for 7 days of performance before changing your objective. &#13; &#13; Mouse over options for more detailed information on each strategy."
                           >
                             <mat-select
                               [formControlName]="
-                                'objective_' + campaign.campaignId
+                                'objective' + campaign.campaignId
                               "
                             >
                               <mat-option
@@ -249,6 +394,19 @@
                               >&nbsp;Objective</mat-label
                             >
                           </mat-form-field>
+
+                          <mat-icon
+                            color="accent"
+                            [ngClass]="
+                              isControlDisabled(
+                                'objective' + campaign.campaignId
+                              )
+                                ? 'd-none'
+                                : 'visisble'
+                            "
+                            matTooltip="Objective: &#13; Determines how aggressive our system will bid to your cost per install target. &#13; &#13; We recommend allowing for 7 days of performance before changing your objective. &#13; &#13; Mouse over options for more detailed information on each strategy."
+                            >help</mat-icon
+                          >
                         </div>
                       </div>
 
@@ -261,7 +419,7 @@
                               handleCampaignMmpCheckboxChange($event, campaign)
                             "
                             [formControlName]="
-                              'mmpCheckbox_' + campaign.campaignId
+                              'mmpCheckbox' + campaign.campaignId
                             "
                           >
                           </mat-checkbox>
@@ -274,7 +432,7 @@
                           <mat-form-field
                             [ngClass]="
                               isControlDisabled(
-                                'mmpObjective_' + campaign.campaignId
+                                'mmpObjective' + campaign.campaignId
                               )
                                 ? 'd-none'
                                 : 'visisble'
@@ -285,7 +443,7 @@
                           >
                             <mat-select
                               [formControlName]="
-                                'mmpObjective_' + campaign.campaignId
+                                'mmpObjective' + campaign.campaignId
                               "
                               (selectionChange)="
                                 handleCampaignMmpObjectiveChange(
@@ -315,7 +473,7 @@
                             class="float-left mr-2"
                             appearance="fill"
                             [ngClass]="
-                              isControlDisabled('cpp_' + campaign.campaignId)
+                              isControlDisabled('cpp' + campaign.campaignId)
                                 ? 'd-none'
                                 : 'visisble'
                             "
@@ -326,7 +484,7 @@
                             </mat-label>
                             <input
                               class="p-1"
-                              [formControlName]="'cpp_' + campaign.campaignId"
+                              [formControlName]="'cpp' + campaign.campaignId"
                               matInput
                               type="number"
                               placeholder="Target Cost Per Purchase"
@@ -340,7 +498,7 @@
                           <mat-form-field
                             class="float-left mr-2"
                             [ngClass]="
-                              isControlDisabled('roas_' + campaign.campaignId)
+                              isControlDisabled('roas' + campaign.campaignId)
                                 ? 'd-none'
                                 : 'visisble'
                             "
@@ -353,7 +511,7 @@
                             >
                             <input
                               class="p-1"
-                              [formControlName]="'roas_' + campaign.campaignId"
+                              [formControlName]="'roas' + campaign.campaignId"
                               matInput
                               type="number"
                               placeholder="Target Return On Ad Spend"

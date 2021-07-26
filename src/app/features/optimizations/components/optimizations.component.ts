@@ -194,19 +194,34 @@ export class OptimizationsComponent implements OnInit {
         const cpi = new FormControl();
         const objective = new FormControl();
         const bidOverrides = new FormControl();
+        const lifetimeBudget = new FormControl();
+        const dailyBudget = new FormControl();
+        const genders = new FormControl();
+        const ages = new FormControl();
 
-        this.appleForm.addControl("cpi_" + campaign.campaignId, cpi);
+        this.appleForm.addControl("cpi" + campaign.campaignId, cpi);
+        this.appleForm.addControl("objective" + campaign.campaignId, objective);
         this.appleForm.addControl(
-          "objective_" + campaign.campaignId,
-          objective
-        );
-        this.appleForm.addControl(
-          "checkbox_" + campaign.campaignId,
+          "checkbox" + campaign.campaignId,
           bidOverrides
         );
 
+        this.appleForm.addControl(
+          "lifetimeBudget" + campaign.campaignId,
+          lifetimeBudget
+        );
+
+        this.appleForm.addControl(
+          "dailyBudget" + campaign.campaignId,
+          dailyBudget
+        );
+
+        this.appleForm.addControl("genders" + campaign.campaignId, genders);
+
+        this.appleForm.addControl("ages" + campaign.campaignId, ages);
+
         this.appleForm
-          .get("cpi_" + campaign.campaignId)
+          .get("cpi" + campaign.campaignId)
           .setValidators([
             Validators.min(0.1),
             Validators.max(1000),
@@ -221,22 +236,22 @@ export class OptimizationsComponent implements OnInit {
         const mmpBidOverrides = new FormControl();
 
         this.appleForm.addControl(
-          "mmpCheckbox_" + campaign.campaignId,
+          "mmpCheckbox" + campaign.campaignId,
           mmpBidOverrides
         );
-        this.appleForm.addControl("cpp_" + campaign.campaignId, cpp);
-        this.appleForm.addControl("roas_" + campaign.campaignId, roas);
+        this.appleForm.addControl("cpp" + campaign.campaignId, cpp);
+        this.appleForm.addControl("roas" + campaign.campaignId, roas);
         this.appleForm.addControl(
-          "mmpObjective_" + campaign.campaignId,
+          "mmpObjective" + campaign.campaignId,
           mmpObjective
         );
 
         this.appleForm
-          .get("mmpObjective_" + campaign.campaignId)
+          .get("mmpObjective" + campaign.campaignId)
           .setValidators([Validators.required]);
 
         this.appleForm
-          .get("cpp_" + campaign.campaignId)
+          .get("cpp" + campaign.campaignId)
           .setValidators([
             Validators.min(0.1),
             Validators.max(1000),
@@ -245,7 +260,7 @@ export class OptimizationsComponent implements OnInit {
           ]);
 
         this.appleForm
-          .get("roas_" + campaign.campaignId)
+          .get("roas" + campaign.campaignId)
           .setValidators([
             Validators.min(0.1),
             Validators.max(1000),
@@ -322,20 +337,20 @@ export class OptimizationsComponent implements OnInit {
         const objective = get(campaign, "bidParameters.OBJECTIVE");
         const bidOverrides = !isEmpty(get(campaign, "bidParameters"));
 
-        this.appleForm.get("cpi_" + campaign.campaignId).setValue(cpi);
+        this.appleForm.get("cpi" + campaign.campaignId).setValue(cpi);
         this.appleForm
-          .get("objective_" + campaign.campaignId)
+          .get("objective" + campaign.campaignId)
           .setValue(objective);
         this.appleForm
-          .get("checkbox_" + campaign.campaignId)
+          .get("checkbox" + campaign.campaignId)
           .setValue(bidOverrides);
 
         if (!bidOverrides) {
-          this.appleForm.get("cpi_" + campaign.campaignId).disable();
-          this.appleForm.get("objective_" + campaign.campaignId).disable();
+          this.appleForm.get("cpi" + campaign.campaignId).disable();
+          this.appleForm.get("objective" + campaign.campaignId).disable();
         } else {
-          this.appleForm.get("cpi_" + campaign.campaignId).enable();
-          this.appleForm.get("objective_" + campaign.campaignId).enable();
+          this.appleForm.get("cpi" + campaign.campaignId).enable();
+          this.appleForm.get("objective" + campaign.campaignId).enable();
         }
 
         // mmp bid param overrides
@@ -353,27 +368,27 @@ export class OptimizationsComponent implements OnInit {
         );
         const mmpOverrides = !isEmpty(get(campaign, "branchBidParameters"));
 
-        this.appleForm.get("cpp_" + campaign.campaignId).setValue(cpp);
-        this.appleForm.get("roas_" + campaign.campaignId).setValue(roas);
+        this.appleForm.get("cpp" + campaign.campaignId).setValue(cpp);
+        this.appleForm.get("roas" + campaign.campaignId).setValue(roas);
         this.appleForm
-          .get("mmpObjective_" + campaign.campaignId)
+          .get("mmpObjective" + campaign.campaignId)
           .setValue(mmpObjective);
         this.appleForm
-          .get("mmpCheckbox_" + campaign.campaignId)
+          .get("mmpCheckbox" + campaign.campaignId)
           .setValue(mmpOverrides);
 
         if (!mmpOverrides) {
-          this.appleForm.get("cpp_" + campaign.campaignId).disable();
-          this.appleForm.get("roas_" + campaign.campaignId).disable();
-          this.appleForm.get("mmpObjective_" + campaign.campaignId).disable();
+          this.appleForm.get("cpp" + campaign.campaignId).disable();
+          this.appleForm.get("roas" + campaign.campaignId).disable();
+          this.appleForm.get("mmpObjective" + campaign.campaignId).disable();
         } else {
-          this.appleForm.get("mmpObjective_" + campaign.campaignId).enable();
+          this.appleForm.get("mmpObjective" + campaign.campaignId).enable();
           if (mmpObjective === "revenue_over_ad_spend") {
-            this.appleForm.get("roas_" + campaign.campaignId).enable();
-            this.appleForm.get("cpp_" + campaign.campaignId).disable();
+            this.appleForm.get("roas" + campaign.campaignId).enable();
+            this.appleForm.get("cpp" + campaign.campaignId).disable();
           } else {
-            this.appleForm.get("roas_" + campaign.campaignId).disable();
-            this.appleForm.get("cpp_" + campaign.campaignId).enable();
+            this.appleForm.get("roas" + campaign.campaignId).disable();
+            this.appleForm.get("cpp" + campaign.campaignId).enable();
           }
         }
       })
@@ -389,13 +404,13 @@ export class OptimizationsComponent implements OnInit {
 
   isCampaignDirty(campaign: any): boolean {
     return (
-      this.appleForm.get("cpi_" + campaign.campaignId).dirty ||
-      this.appleForm.get("objective_" + campaign.campaignId).dirty ||
-      this.appleForm.get("checkbox_" + campaign.campaignId).dirty ||
-      this.appleForm.get("cpp_" + campaign.campaignId).dirty ||
-      this.appleForm.get("roas_" + campaign.campaignId).dirty ||
-      this.appleForm.get("mmpObjective_" + campaign.campaignId).dirty ||
-      this.appleForm.get("mmpCheckbox_" + campaign.campaignId).dirty
+      this.appleForm.get("cpi" + campaign.campaignId).dirty ||
+      this.appleForm.get("objective" + campaign.campaignId).dirty ||
+      this.appleForm.get("checkbox" + campaign.campaignId).dirty ||
+      this.appleForm.get("cpp" + campaign.campaignId).dirty ||
+      this.appleForm.get("roas" + campaign.campaignId).dirty ||
+      this.appleForm.get("mmpObjective" + campaign.campaignId).dirty ||
+      this.appleForm.get("mmpCheckbox" + campaign.campaignId).dirty
     );
   }
 
@@ -458,10 +473,10 @@ export class OptimizationsComponent implements OnInit {
 
           if (hasOverrides) {
             const bidParameters = {};
-            const cpi = this.appleForm.get("cpi_" + campaign.campaignId).value;
+            const cpi = this.appleForm.get("cpi" + campaign.campaignId).value;
 
             const objective = this.appleForm.get(
-              "objective_" + campaign.campaignId
+              "objective" + campaign.campaignId
             ).value;
 
             if (!isNil(cpi)) {
@@ -479,19 +494,19 @@ export class OptimizationsComponent implements OnInit {
 
           // check if there are branch bid params overrides
           const hasBranchOverrides = this.appleForm.get(
-            "mmpCheckbox_" + campaign.campaignId
+            "mmpCheckbox" + campaign.campaignId
           ).value;
 
           if (hasBranchOverrides) {
             const branchBidParameters = {};
 
             const mmpObjective = this.appleForm.get(
-              "mmpObjective_" + campaign.campaignId
+              "mmpObjective" + campaign.campaignId
             ).value;
 
             if (mmpObjective === "revenue_over_ad_spend") {
               const roas = this.appleForm.get(
-                "roas_" + campaign.campaignId
+                "roas" + campaign.campaignId
               ).value;
 
               set(branchBidParameters, "revenue_over_ad_spend_threshold", roas);
@@ -501,9 +516,7 @@ export class OptimizationsComponent implements OnInit {
                 mmpObjective
               );
             } else {
-              const cpp = this.appleForm.get(
-                "cpp_" + campaign.campaignId
-              ).value;
+              const cpp = this.appleForm.get("cpp" + campaign.campaignId).value;
               set(branchBidParameters, "cost_per_purchase_threshold", cpp);
               set(
                 branchBidParameters,
@@ -604,31 +617,31 @@ export class OptimizationsComponent implements OnInit {
 
   handleCampaignCheckboxChange($event: MatCheckboxChange, campaign: any) {
     if ($event.checked) {
-      this.appleForm.get("cpi_" + campaign.campaignId).enable();
-      this.appleForm.get("objective_" + campaign.campaignId).enable();
+      this.appleForm.get("cpi" + campaign.campaignId).enable();
+      this.appleForm.get("objective" + campaign.campaignId).enable();
     } else {
-      this.appleForm.get("cpi_" + campaign.campaignId).disable();
-      this.appleForm.get("objective_" + campaign.campaignId).disable();
+      this.appleForm.get("cpi" + campaign.campaignId).disable();
+      this.appleForm.get("objective" + campaign.campaignId).disable();
     }
   }
 
   handleCampaignMmpCheckboxChange($event: MatCheckboxChange, campaign: any) {
     if ($event.checked) {
-      this.appleForm.get("mmpObjective_" + campaign.campaignId).enable();
+      this.appleForm.get("mmpObjective" + campaign.campaignId).enable();
     } else {
-      this.appleForm.get("cpp_" + campaign.campaignId).disable();
-      this.appleForm.get("roas_" + campaign.campaignId).disable();
-      this.appleForm.get("mmpObjective_" + campaign.campaignId).disable();
+      this.appleForm.get("cpp" + campaign.campaignId).disable();
+      this.appleForm.get("roas" + campaign.campaignId).disable();
+      this.appleForm.get("mmpObjective" + campaign.campaignId).disable();
     }
   }
 
   handleCampaignMmpObjectiveChange($event: MatSelectChange, campaign: any) {
     if ($event.value === "revenue_over_ad_spend") {
-      this.appleForm.get("cpp_" + campaign.campaignId).disable();
-      this.appleForm.get("roas_" + campaign.campaignId).enable();
+      this.appleForm.get("cpp" + campaign.campaignId).disable();
+      this.appleForm.get("roas" + campaign.campaignId).enable();
     } else {
-      this.appleForm.get("cpp_" + campaign.campaignId).enable();
-      this.appleForm.get("roas_" + campaign.campaignId).disable();
+      this.appleForm.get("cpp" + campaign.campaignId).enable();
+      this.appleForm.get("roas" + campaign.campaignId).disable();
     }
   }
 }
