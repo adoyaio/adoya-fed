@@ -11,6 +11,10 @@ import { AmplifyAngularModule, AmplifyService } from "aws-amplify-angular";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { ChartsModule } from "ng2-charts";
 import { SecureLayoutModule } from "./layout/secure-layout/secure-layout.module";
+import { RegistrationModule } from "./features/registration/registration.module";
+import { SharedModule } from "./shared/shared.module";
+import { DynamicModalComponent } from "./shared/dynamic-modal/dynamic-modal.component";
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 @NgModule({
   declarations: [AppComponent],
@@ -24,8 +28,12 @@ import { SecureLayoutModule } from "./layout/secure-layout/secure-layout.module"
     HttpClientModule,
     DynamicFormModule,
     ChartsModule,
+    RegistrationModule,
+    SharedModule,
+    NgxSkeletonLoaderModule
   ],
   providers: [AmplifyService],
   bootstrap: [AppComponent],
+  entryComponents: [DynamicModalComponent],
 })
 export class AppModule {}

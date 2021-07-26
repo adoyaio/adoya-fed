@@ -1,0 +1,1318 @@
+<div class="registration__container container pt-2 pb-1">
+  <div class="row bottom-border justify-content-center">
+    <a href="/workbench/reporting"
+      ><img class="logo" src="/assets/images/adoya-client-portal.png" alt=""
+    /></a>
+    <div class="d-none d-print-block">
+      <span [innerHTML]="printViewText"></span>
+    </div>
+  </div>
+  <div class="row d-print-none">
+    <div class="workbench__loading" *ngIf="isLoadingResults">
+      <mat-spinner color="accent" strokeWidth="6.5"></mat-spinner>
+    </div>
+    <div class="workbench__sending" *ngIf="isSendingResults">
+      <mat-progress-bar color="accent" mode="indeterminate"></mat-progress-bar>
+    </div>
+    <mat-vertical-stepper [linear]="true" #stepper class="w-100">
+      <mat-step [stepControl]="step1Form">
+        <form [formGroup]="step1Form">
+          <ng-template matStepLabel
+            >Tell us about your Apple Search Ads Account</ng-template
+          >
+
+          <!-- skeleton loader -->
+          <div class="w-100 mt-2" *ngIf="isLoadingResults">
+            <ngx-skeleton-loader
+              count="4"
+              [theme]="{
+                'border-radius': '0',
+                height: '50px',
+                width: '100%',
+                'background-color': 'WhiteSmoke',
+                'margin-top': '5px'
+              }"
+            ></ngx-skeleton-loader>
+          </div>
+
+          <div *ngIf="!isLoadingResults" class="w-100 mt-2 d-flex flex-row">
+            <div class="col-6">
+              <div class="w-100 no-gutters">
+                <mat-form-field appearance="fill" color="accent" class="col-11">
+                  <mat-label>Client Id</mat-label>
+                  <input
+                    matInput
+                    placeholder="client id"
+                    required
+                    formControlName="clientId"
+                  />
+                </mat-form-field>
+
+                <button
+                  mat-icon-button
+                  class="float-left"
+                  (click)="handleTooltipClick($event, 'Client ID')"
+                >
+                  <mat-icon
+                    class="float-left"
+                    color="accent"
+                    matTooltip="Your client ID can be found on your Apple Search Ads Console. &#13; &#13;
+                      Click for exact details on where to find this
+                      information"
+                    >help</mat-icon
+                  >
+                </button>
+              </div>
+
+              <div class="w-100 no-gutters">
+                <mat-form-field appearance="fill" color="accent" class="col-11">
+                  <mat-label>Team Id</mat-label>
+                  <input
+                    matInput
+                    placeholder="team id"
+                    required
+                    formControlName="teamId"
+                  />
+                </mat-form-field>
+
+                <button
+                  mat-icon-button
+                  class="float-left"
+                  (click)="handleTooltipClick($event, 'Team ID')"
+                >
+                  <mat-icon
+                    class="float-left"
+                    color="accent"
+                    matTooltip="Your team id can be found on your Apple Search Ads Console. &#13; &#13;
+                      Click for exact details on where to find this
+                      information"
+                    >help</mat-icon
+                  >
+                </button>
+              </div>
+
+              <div class="w-100 no-gutters">
+                <mat-form-field appearance="fill" color="accent" class="col-11">
+                  <mat-label>Key ID</mat-label>
+                  <input
+                    matInput
+                    placeholder="key id"
+                    required
+                    formControlName="keyId"
+                  />
+                </mat-form-field>
+
+                <button
+                  class="float-left"
+                  mat-icon-button
+                  (click)="handleTooltipClick($event, 'Key ID')"
+                >
+                  <mat-icon
+                    class="float-left"
+                    color="accent"
+                    matTooltip="Your key id can be found on your Apple Search Ads Console. &#13; &#13;
+                      Click for exact details on where to find this
+                      information"
+                    >help</mat-icon
+                  >
+                </button>
+              </div>
+
+              <div class="w-100 no-gutters">
+                <mat-form-field appearance="fill" color="accent" class="col-11">
+                  <mat-label>Private Key</mat-label>
+
+                  <textarea
+                    matInput
+                    cdkTextareaAutosize
+                    formControlName="privateKey"
+                  >
+                  </textarea>
+                </mat-form-field>
+
+                <button
+                  mat-icon-button
+                  class="float-left"
+                  (click)="handleTooltipClick($event, 'Private Key')"
+                >
+                  <mat-icon
+                    class="float-left"
+                    color="accent"
+                    matTooltip="Your key id can be found on your Apple Search Ads Console. &#13; &#13;
+                      Click for exact details on where to find this
+                      information"
+                    >help</mat-icon
+                  >
+                </button>
+              </div>
+
+              <div class="w-100 no-gutters">
+                <mat-form-field appearance="fill" color="accent" class="col-11">
+                  <mat-label>Organization Id</mat-label>
+                  <input
+                    matInput
+                    placeholder="organization id"
+                    required
+                    formControlName="orgId"
+                  />
+                </mat-form-field>
+                <button
+                  mat-icon-button
+                  class="float-left"
+                  (click)="
+                    handleTooltipClick(
+                      $event,
+                      'Apple Search Ads Organiztion ID'
+                    )
+                  "
+                >
+                  <mat-icon
+                    class="float-left"
+                    color="accent"
+                    matTooltip="Your Apple Search Ads Organiztion ID can be found on your Apple Search Ads Console. &#13; &#13;
+                      Click for exact details on where to find this
+                      information"
+                    >help</mat-icon
+                  >
+                </button>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <mat-list>
+                <div class="mb-4 pb-2 border-bottom">
+                  <mat-list-item>
+                    <mat-icon color="accent" class="align-text-top mr-2"
+                      >done</mat-icon
+                    >
+
+                    We need to gather some details about your Apple Search Ads
+                    account, this allows our system to optimize bids for you
+                  </mat-list-item>
+                </div>
+
+                <div class="mb-4 pb-2 border-bottom">
+                  <mat-list-item>
+                    <mat-icon color="accent" class="align-text-top mr-2"
+                      >done</mat-icon
+                    >
+
+                    Enter the 3 ids provided when you uploaded your public key
+                    to the Apple Search console.
+                  </mat-list-item>
+                </div>
+
+                <div class="mb-4 pb-2 border-bottom">
+                  <mat-list-item>
+                    <mat-icon color="accent" class="align-text-top mr-2"
+                      >done</mat-icon
+                    >
+
+                    Hover and click on the help icons for exact details on where
+                    to find these details in Apple Search Ads
+                  </mat-list-item>
+                </div>
+
+                <div class="mb-4 pb-2 border-bottom">
+                  <mat-list-item>
+                    <mat-icon color="accent" class="align-text-top mr-2"
+                      >info</mat-icon
+                    >
+                    <mat-label class="font-weight-bold">
+                      We can handle this step for you, click below to open the
+                      Apple Search Ads web console to send us an invitation.
+                    </mat-label>
+                  </mat-list-item>
+                </div>
+              </mat-list>
+
+              <div class="d-flex w-100 justify-content-start pl-5 ml-2">
+                <button
+                  (click)="handleOpenConsole($event)"
+                  mat-flat-button
+                  color="accent"
+                  class="float-right"
+                >
+                  <span class="text-light pl-1">open console</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <button
+            mat-flat-button
+            matStepperNext
+            color="accent"
+            class="float-left ml-3"
+            [disabled]="step1Form.invalid || isLoadingResults"
+          >
+            <mat-icon class="text-light" aria-label="submit">done</mat-icon>
+            <span class="text-light pl-1">next</span>
+          </button>
+        </form>
+      </mat-step>
+      <mat-step [stepControl]="step2Form">
+        <form [formGroup]="step2Form">
+          <ng-template matStepLabel
+            >Create and Import your campaigns</ng-template
+          >
+
+          <!-- skeleton loader -->
+          <div class="w-100 mt-2" *ngIf="isLoadingResults">
+            <ngx-skeleton-loader
+              count="4"
+              [theme]="{
+                'border-radius': '0',
+                height: '50px',
+                width: '100%',
+                'background-color': 'WhiteSmoke',
+                'margin-top': '5px'
+              }"
+            ></ngx-skeleton-loader>
+          </div>
+          <!-- TODO create or import -->
+
+          <!-- 2.1 Select app, select country-->
+          <ng-container *ngIf="!isLoadingResults">
+            <div
+              formGroupName="substep1"
+              class="w-100 mt-2"
+              *ngIf="isOrdinalActive(1)"
+            >
+              <div class="w-100 row no-gutters">
+                <!-- form -->
+                <div class="col-6">
+                  <!-- field and icon -->
+                  <div class="w-100 no-gutters">
+                    <mat-form-field
+                      class="col-10 ml-1"
+                      appearance="fill"
+                      color="accent"
+                    >
+                      <mat-select formControlName="application">
+                        <ng-container *ngFor="let app of apps">
+                          <mat-option [value]="app.adamId">{{
+                            app.appName
+                          }}</mat-option>
+                        </ng-container>
+                      </mat-select>
+                      <mat-label>&nbsp;Select Application </mat-label>
+                    </mat-form-field>
+
+                    <mat-icon
+                      class="float-left pr-2"
+                      color="accent"
+                      matTooltip="Select the app you want to promote. &#13; &#13; If you have more than one app, you'll have a chance to create campaigns for those later."
+                      >help</mat-icon
+                    >
+                  </div>
+
+                  <!-- field and icon -->
+                  <div class="w-100 no-gutters">
+                    <mat-form-field
+                      class="col-10 ml-1"
+                      appearance="fill"
+                      color="accent"
+                    >
+                      <mat-select formControlName="country">
+                        <ng-container *ngFor="let country of countries">
+                          <mat-option [value]="country.code">{{
+                            country.name
+                          }}</mat-option>
+                        </ng-container>
+                      </mat-select>
+                      <mat-label>Select Country</mat-label>
+                    </mat-form-field>
+
+                    <mat-icon
+                      class="float-left"
+                      color="accent"
+                      matTooltip="Select the country where you want to promote your app. &#13; &#13; If you want to target additional countries, you'll have a chance to create country-specific campaigns later"
+                      >help</mat-icon
+                    >
+                  </div>
+
+                  <!-- field and icon -->
+                  <div class="w-100 no-gutters">
+                    <mat-form-field
+                      class="col-10 ml-1"
+                      appearance="fill"
+                      color="accent"
+                    >
+                      <mat-select formControlName="currency">
+                        <ng-container *ngFor="let currency of currencies">
+                          <mat-option [value]="currency.code">{{
+                            currency.code
+                          }}</mat-option>
+                        </ng-container>
+                      </mat-select>
+                      <mat-label>Select Currency</mat-label>
+                    </mat-form-field>
+
+                    <mat-icon
+                      class="float-left"
+                      color="accent"
+                      matTooltip="Select the currency you're using in Apple Search Ads."
+                      >help</mat-icon
+                    >
+                  </div>
+                </div>
+
+                <!-- explainer text -->
+                <div class="col-6">
+                  <mat-list class="p-0 m-0 pb-2">
+                    <mat-list-item class="pb-2 mb-2 border-bottom">
+                      <mat-icon color="accent" class="align-text-top mr-2"
+                        >done</mat-icon
+                      >
+                      <mat-label
+                        >To create campaigns we'll need the country and app name
+                      </mat-label>
+                    </mat-list-item>
+                    <mat-list-item class="pb-2 mb-2 border-bottom">
+                      <mat-icon color="accent" class="align-text-top mr-2"
+                        >done</mat-icon
+                      >
+                      <mat-label>
+                        Hover on the help icons for more information
+                      </mat-label>
+                    </mat-list-item>
+                  </mat-list>
+                </div>
+              </div>
+
+              <!-- buttons -->
+              <div class="w-100 row ml-2">
+                <button
+                  mat-flat-button
+                  matStepperPrevious
+                  class="float-left ml-2 border rounded"
+                >
+                  <mat-icon aria-label="back">arrow_left</mat-icon>
+                  <span>back</span>
+                </button>
+
+                <button
+                  mat-flat-button
+                  color="accent"
+                  class="float-left ml-2"
+                  (click)="submitStep(1)"
+                  [disabled]="substepDisabled()"
+                >
+                  <mat-icon class="text-light" aria-label="submit"
+                    >done</mat-icon
+                  >
+                  <span class="text-light pl-1">next</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- 2.2 Objective, CPI -->
+            <div
+              formGroupName="substep2"
+              class="w-100 mt-2"
+              *ngIf="isOrdinalActive(2)"
+            >
+              <div class="w-100 row no-gutters">
+                <!-- form -->
+                <div class="col-6">
+                  <!-- field and icon -->
+                  <div class="w-100 no-gutters">
+                    <!-- objective -->
+                    <mat-form-field
+                      appearance="fill"
+                      [hideRequiredMarker]="false"
+                      class="col-10 ml-1"
+                      color="accent"
+                    >
+                      <mat-select formControlName="objective">
+                        <mat-option
+                          matTooltip="Standard: &#13; Finds a balance between growth and efficiency goals and is recommended for most advertisers."
+                          value="standard"
+                          >Standard</mat-option
+                        >
+                        <mat-option
+                          matTooltip="Growth: &#13; You’ll be more likely to spend your daily budget but could exceed your cost per install target."
+                          value="aggressive"
+                          >Growth</mat-option
+                        >
+                        <mat-option
+                          matTooltip="Efficiency: &#13;  You’re more likely to stay within your cost per install target but you may not hit your daily budget."
+                          value="conservative"
+                          >Efficiency</mat-option
+                        >
+                      </mat-select>
+                      <mat-label
+                        ><mat-icon>settings</mat-icon>&nbsp;Objective</mat-label
+                      >
+                    </mat-form-field>
+
+                    <mat-icon
+                      class="float-left"
+                      color="accent"
+                      matTooltip="Objective: &#13; Determines how aggressive our system will bid to your cost per install target. &#13; &#13; We recommend allowing for 7 days of performance before changing your objective. &#13; &#13; Mouse over options for more detailed information on each strategy."
+                      >help</mat-icon
+                    >
+                  </div>
+
+                  <!-- field and icon -->
+                  <div class="w-100 no-gutters">
+                    <!--- max cpi  -->
+                    <mat-form-field
+                      appearance="fill"
+                      class="col-10 ml-1"
+                      color="accent"
+                    >
+                      <mat-label
+                        ><mat-icon>attach_money</mat-icon>&nbsp;Target Cost Per
+                        Install</mat-label
+                      >
+                      <input
+                        matInput
+                        type="number"
+                        formControlName="cpi"
+                        placeholder="Target Cost Per Install"
+                      />
+                      <mat-error>
+                        Must enter a number between .1 and 1,000
+                      </mat-error>
+                    </mat-form-field>
+
+                    <mat-icon
+                      class="float-left"
+                      color="accent"
+                      matTooltip="Target Cost Per Install: &#13;  Enter the most you’re willing to spend for an install. &#13; &#13; Be realistic. Setting target too low will severely restrict your volume.  &#13; &#13; Keep changes +/- 20% of the previous value (if applicable). This prevents volatility. &#13; &#13; Also, try to allow for 7 days of performance before making adjustments."
+                      >help</mat-icon
+                    >
+                  </div>
+                </div>
+
+                <!-- explainer text -->
+                <div class="col-6">
+                  <mat-list class="p-0 m-0 pb-2">
+                    <mat-list-item class="pb-2 mb-2 border-bottom">
+                      <mat-icon color="accent" class="align-text-top mr-2"
+                        >done</mat-icon
+                      >
+                      <mat-label
+                        >Set your objective and target cost per install
+                      </mat-label>
+                    </mat-list-item>
+                    <mat-list-item class="pb-2 mb-2 border-bottom">
+                      <mat-icon color="accent" class="align-text-top mr-2"
+                        >done</mat-icon
+                      >
+                      <mat-label>
+                        These values will determine the optimization strategy on
+                        this campaign
+                      </mat-label>
+                    </mat-list-item>
+                    <mat-list-item class="pb-2 mb-2 border-bottom">
+                      <mat-icon color="accent" class="align-text-top mr-2"
+                        >done</mat-icon
+                      >
+                      <mat-label>
+                        Hover on the help icons for more information
+                      </mat-label>
+                    </mat-list-item>
+                  </mat-list>
+                </div>
+
+                <!-- buttons -->
+                <div class="w-100 row ml-2">
+                  <button
+                    mat-flat-button
+                    (click)="goBack(2)"
+                    class="float-left ml-2 border rounded"
+                  >
+                    <mat-icon aria-label="back">arrow_left</mat-icon>
+                    <span>back</span>
+                  </button>
+                  <button
+                    mat-flat-button
+                    color="accent"
+                    class="float-left ml-2"
+                    (click)="submitStep(2)"
+                    [disabled]="substepDisabled()"
+                  >
+                    <mat-icon class="text-light" aria-label="submit"
+                      >done</mat-icon
+                    >
+                    <span class="text-light pl-1">next</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2.3 budget -->
+            <div
+              formGroupName="substep3"
+              class="w-100 mt-2"
+              *ngIf="isOrdinalActive(3)"
+            >
+              <div class="w-100 row no-gutters">
+                <!-- form -->
+                <div class="col-6">
+                  <!-- field and icon -->
+                  <div class="w-100 no-gutters">
+                    <!--- daily Budget -->
+                    <mat-form-field
+                      appearance="fill"
+                      class="col-10 ml-1"
+                      color="accent"
+                    >
+                      <mat-label
+                        ><mat-icon>attach_money</mat-icon>&nbsp;Daily Budget
+                        Cap</mat-label
+                      >
+                      <input
+                        formControlName="dailyBudget"
+                        matInput
+                        type="number"
+                        placeholder=""
+                      />
+
+                      <mat-error> {{ dailyBudgetError }} </mat-error>
+                    </mat-form-field>
+
+                    <mat-icon
+                      class="float-left"
+                      color="accent"
+                      matTooltip="Daily Budget Cap: &#13; Enter the amount you're willing to spend per day. &#13; &#13; You know your business so you should enter what you feel is best. But if you need a guide, we suggest the following approach: &#13; # of installs you want to get per day x maximum cost per install x 10-20% buffer. Let's say you're targeting 100 installs at a $2 maximum cost per install. Your budget should be $220-$240 (100 x $2 x 120%-140%). &#13; &#13; Don't worry! You can change your daily budget cap at any time."
+                      >help</mat-icon
+                    >
+                  </div>
+
+                  <!-- field and icon -->
+                  <div class="w-100 no-gutters">
+                    <!--- Lifetime Budget -->
+                    <mat-form-field
+                      appearance="fill"
+                      class="col-10 ml-1"
+                      color="accent"
+                    >
+                      <mat-label
+                        ><mat-icon>attach_money</mat-icon>&nbsp;Lifetime Budget
+                        Cap</mat-label
+                      >
+                      <input
+                        formControlName="lifetimeBudget"
+                        matInput
+                        type="number"
+                        placeholder=""
+                      />
+                      <mat-error>
+                        {{ lifetimeBudgetError }}
+                      </mat-error>
+                    </mat-form-field>
+
+                    <mat-icon
+                      class="float-left"
+                      color="accent"
+                      matTooltip="Lifetime Budget: &#13; Enter the amount you're willing to spend for the life of your Apple Search Ads campaigns. When starting, set it sufficiently high enough so it can run for a total of 30 days. This gives the system enough data and time to optimize. A simple formula, take your daily budget and multiply it by 30. So if your daily budget is $100, your lifetime budget should be $3,000. &#13; &#13; After your campaign has been running for some time you should raise your lifetime budget significantly higher. &#13; &#13; Don't worry! You can change your lifetime budget cap at any time. &#13; &#13; IMPORTANT: Your lifetime budget must be higher than your daily budget cap."
+                      >help</mat-icon
+                    >
+                  </div>
+                </div>
+
+                <!-- explainer text -->
+                <div class="col-6">
+                  <mat-list class="p-0 m-0 pb-2">
+                    <mat-list-item class="pb-2 mb-2 border-bottom">
+                      <mat-icon color="accent" class="align-text-top mr-2"
+                        >done</mat-icon
+                      >
+                      <mat-label
+                        >Enter the lifetime and daily budget amounts for this
+                        campaign
+                      </mat-label>
+                    </mat-list-item>
+                    <mat-list-item class="pb-2 mb-2 border-bottom">
+                      <mat-icon color="accent" class="align-text-top mr-2"
+                        >done</mat-icon
+                      >
+                      <mat-label>
+                        Hover on the help icons for more information
+                      </mat-label>
+                    </mat-list-item>
+                  </mat-list>
+                </div>
+
+                <!-- buttons -->
+                <div class="w-100 row ml-2">
+                  <button
+                    mat-flat-button
+                    (click)="goBack(3)"
+                    class="float-left ml-2 border rounded"
+                  >
+                    <mat-icon aria-label="back">arrow_left</mat-icon>
+                    <span>back</span>
+                  </button>
+                  <button
+                    mat-flat-button
+                    color="accent"
+                    class="float-left ml-2"
+                    (click)="submitStep(3)"
+                    [disabled]="substepDisabled()"
+                  >
+                    <mat-icon class="text-light" aria-label="submit"
+                      >done</mat-icon
+                    >
+                    <span class="text-light pl-1">next</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2.4 keywords, competitor category brand  -->
+            <div
+              formGroupName="substep4"
+              class="w-100 mt-2"
+              *ngIf="isOrdinalActive(4)"
+            >
+              <div class="w-100 row no-gutters">
+                <!-- form -->
+                <div class="col-6">
+                  <!-- field and icon -->
+                  <div class="w-100 no-gutters">
+                    <mat-form-field
+                      appearance="outline"
+                      class="col-9 ml-1"
+                      color="accent"
+                    >
+                      <mat-label>List your competitor's names</mat-label>
+                      <textarea matInput formControlName="competitors">
+                      </textarea>
+                    </mat-form-field>
+
+                    <mat-icon
+                      class="float-left"
+                      color="accent"
+                      matTooltip="Many app store searches are branded. &#13; &#13; Therefore, we recommend you bid on most, if not all, competitor terms. &#13; Try to include competitor name variants, acronyms and synonyms. &#13; &#13; You should also use top-performing keywords from your existing Apple Search Ads campaigns."
+                      >help</mat-icon
+                    >
+
+                    <button
+                      mat-icon-button
+                      (click)="handleAddKeywords($event, 'competitors')"
+                    >
+                      <mat-icon class="float-right" color="accent"
+                        >add_circle</mat-icon
+                      >
+                    </button>
+                  </div>
+
+                  <!-- chiplist -->
+                  <div class="w-100 no-gutters mb-4">
+                    <mat-chip-list #chipList>
+                      <mat-chip
+                        *ngFor="let keyword of keywordsCompetitors"
+                        [selectable]="true"
+                        [selected]="true"
+                        [removable]="true"
+                        color="primary"
+                        (removed)="handleRemoveKeywords('competitors', keyword)"
+                      >
+                        {{ keyword }}
+                        <mat-icon matChipRemove>cancel</mat-icon>
+                      </mat-chip>
+                    </mat-chip-list>
+                  </div>
+
+                  <mat-divider class="col-10 mb-4"></mat-divider>
+
+                  <!-- field and icon -->
+                  <div class="w-100 no-gutters">
+                    <mat-form-field
+                      appearance="outline"
+                      class="col-9 ml-1"
+                      color="accent"
+                    >
+                      <mat-label
+                        >List words and phrases that best describe your app and
+                        business</mat-label
+                      >
+                      <textarea matInput formControlName="category"> </textarea>
+                    </mat-form-field>
+
+                    <mat-icon
+                      class="float-left"
+                      color="accent"
+                      matTooltip="Try to keep the phrases between 1-4 words. &#13; &#13; Example: &#13; Say you have an automotive app. use terms like: automotive, car, automotive app, car app, etc. &#13; Do NOT include your brand name. You'll include that on the step below. &#13; &#13; You should also use top-performing keywords from your existing Apple Search Ads campaigns."
+                      >help</mat-icon
+                    >
+
+                    <button
+                      mat-icon-button
+                      (click)="handleAddKeywords($event, 'category')"
+                    >
+                      <mat-icon class="float-right" color="accent"
+                        >add_circle</mat-icon
+                      >
+                    </button>
+                  </div>
+
+                  <!-- chiplist -->
+                  <div class="w-100 no-gutters mb-4">
+                    <mat-chip-list>
+                      <mat-chip
+                        *ngFor="let keyword of keywordsCategory"
+                        [selectable]="true"
+                        [selected]="true"
+                        [removable]="true"
+                        color="primary"
+                        (removed)="handleRemoveKeywords('category', keyword)"
+                      >
+                        {{ keyword }}
+                        <mat-icon matChipRemove>cancel</mat-icon>
+                      </mat-chip>
+                    </mat-chip-list>
+                  </div>
+
+                  <mat-divider class="col-10 mb-4"></mat-divider>
+
+                  <!-- field and icon -->
+                  <div class="w-100 no-gutters">
+                    <mat-form-field
+                      appearance="outline"
+                      class="col-9 ml-1"
+                      color="accent"
+                    >
+                      <mat-label
+                        >List words and phrases that best describe your
+                        brand</mat-label
+                      >
+                      <textarea matInput formControlName="brand"> </textarea>
+                    </mat-form-field>
+
+                    <button
+                      mat-icon-button
+                      (click)="handleAddKeywords($event, 'brand')"
+                    >
+                      <mat-icon class="float-right" color="accent"
+                        >add_circle</mat-icon
+                      >
+                    </button>
+
+                    <mat-icon
+                      class="float-left"
+                      color="accent"
+                      matTooltip="List variants of your brand name. &#13; &#13; Tip: Keep each phrase between 1-4 words. example: &#13; Let's say your brand is acme. Include phrases ike ACME, ACME App, and Download Acme App. &#13; &#13; You should also use top-performing keywords from your existing Apple Search Ads campaigns."
+                      >help</mat-icon
+                    >
+                  </div>
+
+                  <!-- chiplist -->
+                  <div class="w-100 no-gutters mb-4">
+                    <mat-chip-list>
+                      <mat-chip
+                        *ngFor="let keyword of keywordsBrand"
+                        [selectable]="true"
+                        [selected]="true"
+                        [removable]="true"
+                        color="primary"
+                        (removed)="handleRemoveKeywords('brand', keyword)"
+                      >
+                        {{ keyword }}
+                        <mat-icon matChipRemove>cancel</mat-icon>
+                      </mat-chip>
+                    </mat-chip-list>
+                  </div>
+
+                  <mat-divider class="col-10 mb-4"></mat-divider>
+                </div>
+
+                <!-- explainer text -->
+                <div class="col-6">
+                  <mat-list class="p-0 m-0 pb-2">
+                    <mat-list-item class="pb-2 mb-2 border-bottom">
+                      <mat-icon color="accent" class="align-text-top mr-2"
+                        >done</mat-icon
+                      >
+                      <mat-label
+                        >Enter terms that will be used to create exact campaigns
+                      </mat-label>
+                    </mat-list-item>
+                    <mat-list-item class="pb-2 mb-2 border-bottom">
+                      <mat-icon color="accent" class="align-text-top mr-2"
+                        >done</mat-icon
+                      >
+                      <mat-label>
+                        Hover on the help icons for more information
+                      </mat-label>
+                    </mat-list-item>
+                  </mat-list>
+                </div>
+
+                <!-- buttons -->
+                <div class="w-100 row ml-2">
+                  <button
+                    mat-flat-button
+                    (click)="goBack(4)"
+                    class="float-left ml-2 border rounded"
+                  >
+                    <mat-icon aria-label="back">arrow_left</mat-icon>
+                    <span>back</span>
+                  </button>
+                  <button
+                    mat-flat-button
+                    color="accent"
+                    class="float-left ml-2"
+                    (click)="submitStep(4)"
+                    [disabled]="substepDisabled()"
+                  >
+                    <mat-icon class="text-light" aria-label="submit"
+                      >done</mat-icon
+                    >
+                    <span class="text-light pl-1">next</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2.5 genders and age groups -->
+            <div
+              formGroupName="substep5"
+              class="w-100 mt-2"
+              *ngIf="isOrdinalActive(5)"
+            >
+              <div class="w-100 row no-gutters">
+                <!-- form -->
+                <div class="col-6">
+                  <!-- field and icon -->
+                  <div class="w-100 no-gutters">
+                    <mat-form-field appearance="fill" class="col-10 ml-1">
+                      <mat-select formControlName="genders" class="p-1">
+                        <mat-option value="all">All (recommended)</mat-option>
+                        <mat-option value="female">Female</mat-option>
+                        <mat-option value="male">Male</mat-option>
+                      </mat-select>
+                      <mat-label
+                        ><mat-icon>settings</mat-icon>&nbsp;Which genders do you
+                        want to target?</mat-label
+                      >
+                    </mat-form-field>
+
+                    <mat-icon
+                      class="float-left"
+                      color="accent"
+                      matTooltip="Unless you have strict gender targeting restrictions, we recommend 'All' to maximize your reach."
+                      >help</mat-icon
+                    >
+                  </div>
+
+                  <!-- field and icon -->
+                  <div class="w-100 no-gutters">
+                    <mat-form-field appearance="fill" class="col-10 ml-1">
+                      <mat-select formControlName="ages" class="p-1">
+                        <mat-option value="all">All (recommended)</mat-option>
+                        <mat-option value="18">18 +</mat-option>
+                        <mat-option value="21">21 +</mat-option>
+                      </mat-select>
+                      <mat-label
+                        ><mat-icon>settings</mat-icon>&nbsp;What's your app's
+                        minimum age requirement?</mat-label
+                      >
+                    </mat-form-field>
+
+                    <mat-icon
+                      class="float-left"
+                      color="accent"
+                      matTooltip="Unless you have strict age targeting restrictions, we recommend 'All' to maximize your reach."
+                      >help</mat-icon
+                    >
+                  </div>
+                </div>
+
+                <!-- explainer text -->
+                <div class="col-6">
+                  <mat-list class="p-0 m-0 pb-2">
+                    <mat-list-item class="pb-2 mb-2 border-bottom">
+                      <mat-icon color="accent" class="align-text-top mr-2"
+                        >done</mat-icon
+                      >
+                      <mat-label
+                        >Enter information to allow a specific, or a more
+                        general targeting strategy
+                      </mat-label>
+                    </mat-list-item>
+                    <mat-list-item class="pb-2 mb-2 border-bottom">
+                      <mat-icon color="accent" class="align-text-top mr-2"
+                        >done</mat-icon
+                      >
+                      <mat-label>
+                        Hover on the help icons for more information
+                      </mat-label>
+                    </mat-list-item>
+                  </mat-list>
+                </div>
+
+                <!-- buttons -->
+                <div class="w-100 row ml-2">
+                  <button
+                    mat-flat-button
+                    (click)="goBack(5)"
+                    class="float-left ml-2 border rounded"
+                  >
+                    <mat-icon aria-label="back">arrow_left</mat-icon>
+                    <span>back</span>
+                  </button>
+                  <button
+                    mat-flat-button
+                    color="accent"
+                    class="float-left ml-2"
+                    (click)="submitStep(5)"
+                    [disabled]="substepDisabled()"
+                  >
+                    <mat-icon class="text-light" aria-label="submit"
+                      >done</mat-icon
+                    >
+                    <span class="text-light pl-1">next</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2.6 post-install/optional -->
+            <div
+              formGroupName="substep6"
+              class="w-100 mt-2"
+              *ngIf="isOrdinalActive(6)"
+            >
+              <div class="col-6">
+                <div
+                  class="mb-2"
+                  matTooltip="When enabling this feature, Adoya will use your MMP data when making bid adjustments. Reach out to us via Adoya Support for more information."
+                >
+                  <mat-checkbox
+                    formControlName="branchBidAdjusterEnabled"
+                    (change)="handleBranchCheckboxChange($event)"
+                  >
+                    Enable Bid Optimizations For Post-Install Events (optional)
+                  </mat-checkbox>
+                </div>
+
+                <!-- MMP Objective -->
+                <mat-form-field
+                  appearance="fill"
+                  class="w-100"
+                  matTooltip="MMP Objective: &#13; Use this option if you want our system to also optimize for in-app purchases. &#13; &#13; This will be a secondary objective as our system optimizes primarily for cost per install. &#13; &#13; If you have MMP enabled, we strongly recommend you select either Cost Per Purchase or Return On Ad Spend (ROAS). &#13; &#13; Mouse over options for more detailed information on each strategy."
+                >
+                  <mat-select formControlName="mmpObjective" class="p-1">
+                    <mat-option
+                      matTooltip="Cost Per Purchase: &#13;  Use this option if you’re looking to acquire/retain paying customers and less focused on the revenue amount. &#13; &#13; This option works best if you’re taking a longer-term strategy with a focus on customer lifetime value (LTV)."
+                      value="cost_per_purchase"
+                      >Cost Per Purchase</mat-option
+                    >
+                    <mat-option
+                      matTooltip="Return On Ad Spend (ROAS): &#13;  Use this option if you’re looking to generate immediate revenue. &#13; &#13; ROAS is calculated by dividing revenue by cost."
+                      value="revenue_over_ad_spend"
+                      >Revenue/Cost</mat-option
+                    >
+                  </mat-select>
+                  <mat-label
+                    ><mat-icon>settings</mat-icon>&nbsp;MMP Optimization
+                    Objective</mat-label
+                  >
+                </mat-form-field>
+
+                <!-- Target Cost Per Purchase -->
+                <mat-form-field appearance="fill" class="w-100">
+                  <mat-label>
+                    <mat-icon>attach_money</mat-icon>&nbsp;Target Cost Per
+                    Purchase
+                  </mat-label>
+                  <input
+                    class="p-1"
+                    formControlName="cpp"
+                    matInput
+                    type="number"
+                    placeholder="Target Cost Per Purchase"
+                    matTooltip="Enter the most you’re willing to spend for a purchase. &#13; &#13; Be realistic. Setting a target too low will severely restrict your volume. &#13; &#13; Keep changes within +/- 20% of the previous value (if applicable). This prevents volatility. Also, try to allow for 7 days of performance before making adjustments. &#13; &#13;
+                    Important: This factors in mobile measurement partner (MMP) data. &#13; &#13; Apple limits data passed through MMPs due to their privacy policies. Therefore, MMP data is often understated. &#13; &#13; Sometimes by 20% or more. Factor in that 20% when using this option. &#13; &#13; For example, if your target cost per purchase is $10, give it a 20% buffer and set the target to $12."
+                  />
+                  <mat-error>
+                    Must enter a number between .1 and 1,000
+                  </mat-error>
+                </mat-form-field>
+
+                <!-- Return on Ad spend -->
+                <mat-form-field appearance="fill" class="w-100">
+                  <mat-label
+                    ><mat-icon>attach_money</mat-icon>&nbsp;Target Return On Ad
+                    Spend</mat-label
+                  >
+                  <input
+                    class="p-1"
+                    formControlName="roas"
+                    matInput
+                    type="number"
+                    placeholder="Target Return On Ad Spend"
+                    matTooltip="Enter your target ROAS. ROAS formula = revenue / cost. &#13; &#13; Be realistic. Setting a target too high will severely restrict your volume. &#13; &#13; Keep changes within +/- 20% of the previous value (if applicable). This prevents volatility. &#13; &#13; Also, try to allow for 7 days of performance before making adjustments. &#13; &#13;
+                    Important: This factors in mobile measurement partner (MMP) data. &#13; &#13; Apple limits data passed through MMPs due to their privacy policies. Therefore, MMP data is often understated. &#13; &#13; Sometimes by 20% or more. Factor in that 20% when using this option. &#13; &#13; For example, if your target ROAS is $2.00, give it a 20% discount and set it to $1.60. Formula for ROAS discount = (100% - 20%) x ROAS target."
+                  />
+                  <mat-error>
+                    Must enter a number between .1 and 1,000
+                  </mat-error>
+                </mat-form-field>
+
+                <!-- branch -->
+                <mat-card-subtitle class="mt-2 mb-2">
+                  Branch Integration Parameters
+                </mat-card-subtitle>
+
+                <!-- branch key -->
+                <mat-form-field appearance="fill" class="w-100 mb-1">
+                  <mat-label> Branch Key </mat-label>
+                  <input
+                    class="p-1"
+                    formControlName="branchKey"
+                    matInput
+                    type="text"
+                    placeholder=""
+                  />
+                </mat-form-field>
+
+                <!-- branch secret -->
+                <mat-form-field appearance="fill" class="w-100 mb-1">
+                  <mat-label> Branch Secret </mat-label>
+                  <input
+                    class="p-1"
+                    formControlName="branchSecret"
+                    matInput
+                    type="text"
+                    placeholder=""
+                  />
+                </mat-form-field>
+
+                <!-- button panel-->
+                <div *ngIf="isOrdinalActive(6)">
+                  <button
+                    mat-flat-button
+                    (click)="goBack(6)"
+                    class="float-left ml-2 border rounded"
+                  >
+                    <mat-icon aria-label="back">arrow_left</mat-icon>
+                    <span>back</span>
+                  </button>
+                  <button
+                    mat-flat-button
+                    (click)="completeStep2()"
+                    color="accent"
+                    class="float-left ml-2"
+                    [disabled]="substepDisabled()"
+                  >
+                    <mat-icon class="text-light" aria-label="submit"
+                      >done</mat-icon
+                    >
+                    <span class="text-light pl-1">next</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </form>
+      </mat-step>
+
+      <!-- TODO step to add additional countries and apps -->
+
+      <mat-step [stepControl]="step3Form">
+        <form [formGroup]="step3Form">
+          <ng-template matStepLabel>Review and complete</ng-template>
+          <div *ngIf="isLoadingResults" class="w-100 mt-2">
+            <ngx-skeleton-loader
+              count="4"
+              [theme]="{
+                'border-radius': '0',
+                height: '50px',
+                width: '100%',
+                'background-color': 'WhiteSmoke',
+                'margin-top': '5px'
+              }"
+            ></ngx-skeleton-loader>
+          </div>
+          <div
+            class="w-100"
+            *ngIf="!isLoadingResults && stepper.selectedIndex > 0"
+          >
+            <mat-list class="p-0 m-0 pb-2">
+              <mat-list-item class="mb-1 pb-2">
+                <mat-icon color="accent" class="align-text-top mr-2"
+                  >done</mat-icon
+                >
+                <mat-label>Congrats, you're all done! </mat-label>
+              </mat-list-item>
+              <mat-list-item class="mb-1 pb-2">
+                <mat-icon color="accent" class="align-text-top mr-2"
+                  >done</mat-icon
+                >
+                <mat-label>
+                  Based on the info you've provided, we've created the following
+                  campaigns and recommended budgets.
+                </mat-label>
+              </mat-list-item>
+
+              <mat-list-item class="mb-1 pb-2">
+                <mat-icon color="accent" class="align-text-top mr-2"
+                  >build</mat-icon
+                >
+                <mat-label>
+                  Feel free to update budgets and enable the campaigns you want
+                  to run.
+                </mat-label>
+              </mat-list-item>
+            </mat-list>
+          </div>
+
+          <div
+            class="w-100 p-2 mt-2 border-top"
+            *ngIf="!isLoadingResults && stepper.selectedIndex > 0"
+          >
+            <table class="w-100">
+              <tr>
+                <td class="col-2">Enable</td>
+                <td class="col-8">Campaign Name</td>
+                <td class="col-1">Daily Budget Cap</td>
+                <td class="col-1">Lifetime Budget</td>
+              </tr>
+              <ng-container
+                *ngFor="let campaign of client.orgDetails.appleCampaigns"
+              >
+                <tr>
+                  <td class="col-2">
+                    <mat-slide-toggle
+                      color="accent"
+                      [formControlName]="'status|' + campaign.campaignId"
+                      >Enable</mat-slide-toggle
+                    >
+                  </td>
+                  <td class="col-8">{{ campaign.campaignName }}</td>
+                  <td class="col-1">
+                    <!--- daily Budget -->
+                    <mat-form-field
+                      appearance="fill"
+                      color="accent"
+                      class="pb-2"
+                    >
+                      <mat-label
+                        ><mat-icon>attach_money</mat-icon>&nbsp;Daily Budget
+                        Cap</mat-label
+                      >
+                      <input
+                        required
+                        matInput
+                        type="number"
+                        placeholder=""
+                        [formControlName]="'dailyBudget|' + campaign.campaignId"
+                      />
+                      <mat-error>
+                        {{
+                          step3DailyBudgetError(
+                            "dailyBudget|" + campaign.campaignId
+                          )
+                        }}
+                      </mat-error>
+                    </mat-form-field>
+                  </td>
+                  <td class="col-1">
+                    <!--- Lifetime Budget -->
+                    <mat-form-field
+                      appearance="fill"
+                      color="accent"
+                      class="pb-2"
+                    >
+                      <mat-label
+                        ><mat-icon>attach_money</mat-icon>&nbsp;Lifetime Budget
+                        Cap</mat-label
+                      >
+                      <input
+                        required
+                        matInput
+                        type="number"
+                        placeholder=""
+                        [formControlName]="
+                          'lifetimeBudget|' + campaign.campaignId
+                        "
+                      />
+                      <mat-error>
+                        {{
+                          step3LifetimeBudgetError(
+                            campaign.campaignType,
+                            "lifetimeBudget|" + campaign.campaignId
+                          )
+                        }}
+                      </mat-error>
+                    </mat-form-field>
+                  </td>
+                </tr>
+              </ng-container>
+            </table>
+          </div>
+          <div *ngIf="step3Form.dirty; else continueBlock">
+            <button
+              mat-flat-button
+              [disabled]="isLoadingResults"
+              class="float-left ml-2 border rounded"
+              (click)="undoStep3Changes()"
+            >
+              <mat-icon aria-label="undo">refresh</mat-icon>
+              <span class="pl-1">undo</span>
+            </button>
+            <button
+              mat-flat-button
+              color="accent"
+              class="float-left ml-2"
+              [disabled]="isLoadingResults || step3Invalid()"
+              (click)="updateAppleCampaign()"
+            >
+              <mat-icon class="text-light" aria-label="submit">done</mat-icon>
+              <span class="text-light pl-1">save</span>
+            </button>
+          </div>
+          <ng-template #continueBlock>
+            <div class="w-100 mt-3 mb-3">
+              <button
+                mat-flat-button
+                matStepperPrevious
+                [disabled]="isLoadingResults || isStep3BackDisabled"
+                class="float-left ml-2 border rounded"
+              >
+                <mat-icon aria-label="back">arrow_left</mat-icon>
+                <span>back</span>
+              </button>
+              <button
+                mat-flat-button
+                color="accent"
+                class="float-left ml-2"
+                [disabled]="isLoadingResults"
+                (click)="complete()"
+              >
+                <mat-icon class="text-light" aria-label="submit">done</mat-icon>
+                <span class="text-light pl-1">complete</span>
+              </button>
+            </div>
+          </ng-template>
+        </form>
+      </mat-step>
+    </mat-vertical-stepper>
+  </div>
+</div>
+
+<div
+  class="
+    position-absolute position-md-fixed
+    left-0
+    bottom-0
+    w-99
+    m-auto
+    text-center
+  "
+>
+  <a class="adoya-link" (click)="handleShowTermsClick($event)"
+    >Terms of service</a
+  >
+  |
+  <a class="adoya-link" href="mailto:info@adoya.io?subject=Adoya Support"
+    >Contact Us</a
+  >
+</div>

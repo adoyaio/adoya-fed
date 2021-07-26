@@ -1,5 +1,14 @@
-import { FormControl, FormGroup } from "@angular/forms";
-import { isNil as _isNil } from "lodash";
+import { FormArray, FormControl, FormGroup } from "@angular/forms";
+import {
+  chain,
+  each,
+  get,
+  isEmpty,
+  isNil,
+  isNil as _isNil,
+  some,
+  toInteger,
+} from "lodash";
 import { FormUtils } from "../utils/form-utils";
 
 export class CustomFormValidators {
@@ -24,7 +33,8 @@ export class CustomFormValidators {
     if (url.pristine) {
       return null;
     }
-    const URL_REGEXP = /^(http?|https?|ftp):\/\/([a-zA-Z0-9.-]+(:[a-zA-Z0-9.&%$-]+)*@)*((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}|([a-zA-Z0-9-]+\.)*[a-zA-Z0-9-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(:[0-9]+)*(\/($|[a-zA-Z0-9.,?'\\+&%$#=~_-]+))*$/;
+    const URL_REGEXP =
+      /^(http?|https?|ftp):\/\/([a-zA-Z0-9.-]+(:[a-zA-Z0-9.&%$-]+)*@)*((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}|([a-zA-Z0-9-]+\.)*[a-zA-Z0-9-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(:[0-9]+)*(\/($|[a-zA-Z0-9.,?'\\+&%$#=~_-]+))*$/;
     url.markAsTouched();
     if (URL_REGEXP.test(url.value)) {
       return null;
@@ -175,7 +185,8 @@ export class CustomFormValidators {
     if (ssn.pristine) {
       return null;
     }
-    const SSN_REGEXP = /^(?!219-09-9999|078-05-1120)(?!666|000|9\d{2})\d{3}-(?!00)\d{2}-(?!0{4})\d{4}$/;
+    const SSN_REGEXP =
+      /^(?!219-09-9999|078-05-1120)(?!666|000|9\d{2})\d{3}-(?!00)\d{2}-(?!0{4})\d{4}$/;
     ssn.markAsTouched();
     if (SSN_REGEXP.test(ssn.value)) {
       return null;
@@ -272,4 +283,129 @@ export class CustomFormValidators {
     }
     return null;
   }
+
+  // Validates the budget controls
+  static budgetValidator(form: FormGroup): any {
+    if (!form) {
+      return null;
+    }
+    if (form.untouched) {
+      return null;
+    }
+    const error = { invalidLifetimeBudget: true };
+    const dailyBudgetValue: number = +form.get("dailyBudget").value;
+    const lifetimeBudgetValue: number = +form.get("lifetimeBudget").value;
+
+    if (dailyBudgetValue >= lifetimeBudgetValue) {
+      form.get("lifetimeBudget").setErrors(error);
+      return error;
+    }
+
+    return null;
+  }
+
+  // Validates the budget controls
+  static budgetCpiValidator(form: FormGroup): any {
+    if (!form) {
+      return null;
+    }
+    if (form.untouched) {
+      return null;
+    }
+    const error = { invalidDailyBudget: true };
+    const dailyBudgetValue: number = +form.get("substep3").get("dailyBudget")
+      .value;
+    const cpi: number = +form.get("substep2").get("cpi").value;
+
+    if (dailyBudgetValue < cpi * 20) {
+      form.get("substep3").get("dailyBudget").setErrors(error);
+      return error;
+    }
+
+    return null;
+  }
+
+  // Validates the step3 budget controls
+  // static budgetValidatorStep3(form: FormGroup): any {
+  //   if (!form) {
+  //     return null;
+  //   }
+  //   if (form.untouched) {
+  //     return null;
+  //   }
+  //   const error = { invalidDailyBudget: true };
+
+  //   const budgetControlsByCampaign = chain(form.controls)
+  //     .keys()
+  //     .map((key) => {
+  //       if (key.startsWith("lifetimeBudget")) {
+  //         const campaign = key.split("|")[1];
+  //         return { campaign, lifetimeBudgetControl: form.get(key) };
+  //       }
+  //     })
+  //     .value();
+
+  //   const hasInvalidScenario = some(budgetControlsByCampaign, (pair) => {
+  //     if (!isNil(pair.campaign) && !isNil(pair.lifetimeBudgetControl)) {
+  //       const lifetimeBudget: number = pair.lifetimeBudgetControl.value;
+  //       const dailyBudget: number = form.get(
+  //         "dailyBudget|" + pair.campaign
+  //       ).value;
+
+  //       if (dailyBudget > lifetimeBudget) {
+  //         return true;
+  //       }
+  //     }
+  //   });
+
+  //   if (hasInvalidScenario) {
+  //     return error;
+  //   }
+
+  //   return null;
+  // }
+
+  // Validates the step 3 budget controls against step 2 cpi
+  // static budgetCpiValidatorStep3(form: FormGroup): any {
+  //   if (!form) {
+  //     return null;
+  //   }
+  //   if (form.untouched) {
+  //     return null;
+  //   }
+
+  //   const error = { invalidDailyBudget: true };
+  //   const cpi: number = +form.get("step2Form").get("substep2").get("cpi").value;
+
+  //   if (form.get("step3Form").untouched) {
+  //     return null;
+  //   }
+
+  //   const budgetControlsByCampaign = chain(form.get("step3Form"))
+  //     .keys()
+  //     .map((key) => {
+  //       if (key.startsWith("lifetimeBudget")) {
+  //         const campaign = key.split("|")[1];
+  //         return { campaign, lifetimeBudgetControl: form.get(key) };
+  //       }
+  //     })
+  //     .value();
+
+  //   if (isEmpty(budgetControlsByCampaign) || isNil(budgetControlsByCampaign)) {
+  //     return null;
+  //   }
+
+  //   each(budgetControlsByCampaign, (pair) => {
+  //     const lifetimeBudget: number = pair.lifetimeBudgetControl.value;
+  //     const dailyBudget: number = form.get(
+  //       "dailyBudget|" + pair.campaign
+  //     ).value;
+
+  //     if (cpi > dailyBudget) {
+  //       return error;
+  //     }
+  //   });
+
+  //   return null;
+  // }
 }

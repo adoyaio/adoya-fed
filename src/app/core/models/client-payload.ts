@@ -76,8 +76,8 @@ export class BidParametersPayload {
   HIGH_CPI_BID_DECREASE_THRESH: number;
   LOW_CPA_BID_BOOST: number;
   MAX_BID: number;
-  STALE_RAISE_BID_BOOST: string;
-  STALE_RAISE_IMPRESSION_THRESH: string;
+  STALE_RAISE_BID_BOOST: number;
+  STALE_RAISE_IMPRESSION_THRESH: number;
 
   static buildFromClient(params: BidParameters) {
     const response = new BidParametersPayload();
@@ -193,11 +193,11 @@ export class OrgDetailsPayload {
   currency: string;
   disabled: boolean;
   appleCampaigns: any[];
-  campaignName: string;
+  auth: any;
+  hasRegistered: boolean;
 
   static buildFromClient(response: OrgDetails) {
     const retVal = new OrgDetailsPayload();
-    retVal.campaignName = response.campaignName;
     retVal.appleCampaigns = response.appleCampaigns;
     retVal.disabled = response.disabled;
     retVal.currency = response.currency;
@@ -208,21 +208,26 @@ export class OrgDetailsPayload {
     retVal.pemFilename = response.pemFilename;
     retVal.appName = response.appName;
     retVal.clientName = response.clientName;
+    retVal.auth = response.auth;
+    retVal.hasRegistered = response.hasRegistered;
     retVal.branchBidParameters = BranchBidParametersPayload.buildFromClient(
       response.branchBidParameters
     );
-    retVal.branchIntegrationParameters = BranchIntegrationParametersPayload.buildFromClient(
-      response.branchIntegrationParameters
-    );
-    retVal.branchIntegrationParameters = BranchIntegrationParametersPayload.buildFromClient(
-      response.branchIntegrationParameters
-    );
+    retVal.branchIntegrationParameters =
+      BranchIntegrationParametersPayload.buildFromClient(
+        response.branchIntegrationParameters
+      );
+    retVal.branchIntegrationParameters =
+      BranchIntegrationParametersPayload.buildFromClient(
+        response.branchIntegrationParameters
+      );
     retVal.bidParameters = BidParametersPayload.buildFromClient(
       response.bidParameters
     );
-    retVal.keywordAdderParameters = KeywordAdderParametersPayload.buildFromClient(
-      response.keywordAdderParameters
-    );
+    retVal.keywordAdderParameters =
+      KeywordAdderParametersPayload.buildFromClient(
+        response.keywordAdderParameters
+      );
     retVal.adgroupBidParameters = AdgroupBidParametersPayload.buildFromClient(
       response.adgroupBidParameters
     );

@@ -13,6 +13,7 @@ import { environment } from "src/environments/environment";
 import { KeywordDayObject } from "src/app/features/reporting/models/keyword-day-object";
 import { OffsetObject } from "src/app/features/reporting/models/offset-object";
 import { ClientPayload } from "../models/client-payload";
+import { get as _get } from "lodash";
 
 @Injectable({
   providedIn: "root",
@@ -27,7 +28,12 @@ export class ClientService {
   clientGetUrl = this.baseUrl + `/client/get`;
   clientPostUrl = this.baseUrl + `/client/post`;
   clientAdminUrl = this.baseUrl + `/client/admin`;
+
   authKey = "GerGRueNWE3qCkPG8GfPV649wyVnQEQN2oJQUpnI";
+
+  // getAppleAppsUrl = this.baseUrl + `/apple/apps`;
+  // getAppleAclsUrl = this.baseUrl + `/apple/acls`;
+  // createAppleCampaignsUrl = this.baseUrl + `apple/campaign`;
 
   public postClient(client: ClientPayload): Observable<any> {
     const url = `${this.clientPostUrl}`;
@@ -46,9 +52,6 @@ export class ClientService {
       .pipe(
         map((response) => {
           return response;
-        }),
-        catchError((error: HttpErrorResponse) => {
-          throw new Error(error.message);
         })
       );
   }
@@ -57,16 +60,11 @@ export class ClientService {
     const url = `${this.clientGetUrl}?org_id=${orgId}`;
     let headers = new HttpHeaders();
     headers = headers.set("x-api-key", this.authKey);
-    return this.http
-      .get<any>(url, { headers: headers })
-      .pipe(
-        map((response) => {
-          return response[0];
-        }),
-        catchError((error: HttpErrorResponse) => {
-          throw new Error(error.message);
-        })
-      );
+    return this.http.get<any>(url, { headers: headers }).pipe(
+      map((response) => {
+        return response;
+      })
+    );
   }
 
   public getClientCostHistory(
@@ -76,16 +74,11 @@ export class ClientService {
     const url = `${this.clientCostHistoryUrl}?org_id=${orgId}&total_recs=${pageSize}`;
     let headers = new HttpHeaders();
     headers = headers.set("x-api-key", this.authKey);
-    return this.http
-      .get<any>(url, { headers: headers })
-      .pipe(
-        map((response) => {
-          return CostPerInstallDayObject.buildFromGetHistoryResponse(response);
-        }),
-        catchError((error: HttpErrorResponse) => {
-          throw new Error(error.message);
-        })
-      );
+    return this.http.get<any>(url, { headers: headers }).pipe(
+      map((response) => {
+        return CostPerInstallDayObject.buildFromGetHistoryResponse(response);
+      })
+    );
   }
 
   public getClientCostHistoryByTime(
@@ -96,16 +89,11 @@ export class ClientService {
     const url = `${this.clientCostHistoryUrl}?org_id=${orgId}&start_date=${endDate}&end_date=${startDate}`;
     let headers = new HttpHeaders();
     headers = headers.set("x-api-key", this.authKey);
-    return this.http
-      .get<any>(url, { headers: headers })
-      .pipe(
-        map((response) => {
-          return CostPerInstallDayObject.buildFromGetHistoryResponse(response);
-        }),
-        catchError((error: HttpErrorResponse) => {
-          throw new Error(error.message);
-        })
-      );
+    return this.http.get<any>(url, { headers: headers }).pipe(
+      map((response) => {
+        return CostPerInstallDayObject.buildFromGetHistoryResponse(response);
+      })
+    );
   }
 
   public getClientKeywordHistory(
@@ -129,16 +117,11 @@ export class ClientService {
     let headers = new HttpHeaders();
 
     headers = headers.set("x-api-key", this.authKey);
-    return this.http
-      .get<any>(url, { headers: headers })
-      .pipe(
-        map((response) => {
-          return response;
-        }),
-        catchError((error: HttpErrorResponse) => {
-          throw new Error(error.message);
-        })
-      );
+    return this.http.get<any>(url, { headers: headers }).pipe(
+      map((response) => {
+        return response;
+      })
+    );
   }
 
   // public getClientHistoryByTime(

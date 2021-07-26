@@ -70,8 +70,8 @@ export class BidParameters {
   highCPIBidDecreaseThresh: number;
   lowCPABidBoost: number;
   maxBid: number;
-  staleRaiseBidBoost: string;
-  staleRaiseImpresshionThresh: string;
+  staleRaiseBidBoost: number;
+  staleRaiseImpresshionThresh: number;
 
   static buildFromResponse(response: any) {
     const retVal = new BidParameters();
@@ -143,11 +143,13 @@ export class OrgDetails {
   currency: string;
   disabled: boolean;
   appleCampaigns: any[];
-  campaignName: string;
+  auth: any;
+  hasRegistered: boolean;
 
   static buildFromResponse(response: any) {
     const retVal = new OrgDetails();
-    retVal.campaignName = response.campaignName;
+    retVal.auth = response.auth;
+    retVal.hasRegistered = response.hasRegistered;
     retVal.appleCampaigns = response.appleCampaigns;
     retVal.disabled = response.disabled;
     retVal.currency = response.currency;
@@ -161,9 +163,10 @@ export class OrgDetails {
     retVal.branchBidParameters = BranchBidParameters.buildFromResponse(
       response.branchBidParameters
     );
-    retVal.branchIntegrationParameters = BranchIntegrationParameters.buildFromResponse(
-      response.branchIntegrationParameters
-    );
+    retVal.branchIntegrationParameters =
+      BranchIntegrationParameters.buildFromResponse(
+        response.branchIntegrationParameters
+      );
     retVal.bidParameters = BidParameters.buildFromResponse(
       response.bidParameters
     );
@@ -183,9 +186,8 @@ export class Client {
 
   static buildFromGetClientResponse(response: any): Client {
     const retVal = new Client();
-    retVal.orgDetails = OrgDetails.buildFromResponse(response.orgDetails);
-    retVal.orgId = response.orgId;
-
+    retVal.orgDetails = OrgDetails.buildFromResponse(response);
+    retVal.orgId = retVal.orgDetails.orgId;
     return retVal;
   }
 }

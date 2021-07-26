@@ -6,7 +6,7 @@
       <span class="ml-2">Aggregate Performance</span>
     </ng-template>
     <div class="reporting__loading-shade" *ngIf="isLoadingResults">
-      <mat-spinner color="accent" *ngIf="isLoadingResults"></mat-spinner>
+      <mat-spinner color="accent" strokeWidth="6.5"></mat-spinner>
     </div>
     <div class="mat-elevation-z8 mt-2 reporting-component__table-container">
       <div class="d-flex justify-content-start col-12 flex-wrap">
@@ -136,7 +136,9 @@
 
         <ng-container matColumnDef="spend">
           <th mat-header-cell mat-sort-header *matHeaderCellDef>Cost</th>
-          <td mat-cell *matCellDef="let element">{{ element.spend | number:'1.2-2' }}</td>
+          <td mat-cell *matCellDef="let element">
+            {{ element.spend | number: "1.2-2" }}
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="installs">
@@ -158,14 +160,18 @@
 
         <ng-container matColumnDef="revenue">
           <th mat-header-cell mat-sort-header *matHeaderCellDef>Revenue</th>
-          <td mat-cell *matCellDef="let element">{{ element.revenue | number:'1.2-2' }}</td>
+          <td mat-cell *matCellDef="let element">
+            {{ element.revenue | number: "1.2-2" }}
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="cpp">
           <th mat-header-cell mat-sort-header *matHeaderCellDef>
             Cost Per Purchase
           </th>
-          <td mat-cell *matCellDef="let element">{{ element.cpp | number:'1.2-2' }}</td>
+          <td mat-cell *matCellDef="let element">
+            {{ element.cpp | number: "1.2-2" }}
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="revenueOverCost">
@@ -173,7 +179,7 @@
             Return On Ad Spend
           </th>
           <td mat-cell *matCellDef="let element">
-            {{ element.revenueOverCost | number:'1.2-2' }}
+            {{ element.revenueOverCost | number: "1.2-2" }}
           </td>
         </ng-container>
 
@@ -191,10 +197,7 @@
       class="reporting__loading-shade"
       *ngIf="reportingService.isLoadingKeywords"
     >
-      <mat-spinner
-        color="accent"
-        *ngIf="reportingService.isLoadingKeywords"
-      ></mat-spinner>
+      <mat-spinner color="accent" strokeWidth="6.5"></mat-spinner>
     </div>
     <app-keyword-reporting></app-keyword-reporting>
   </mat-tab>

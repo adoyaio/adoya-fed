@@ -34,27 +34,6 @@
         </mat-icon>
         &nbsp;&nbsp;{{ link.title }}
       </button>
-
-      <button
-        *ngIf="!link.onclick && link.type === 'button'"
-        [routerLink]="link.routerLink"
-        routerLinkActive="active-page"
-        (click)="handleClick(link, link.index)"
-        [routerLinkActiveOptions]="{ exact: true }"
-        class="nav-links__button px-0"
-        mat-button
-      >
-        <mat-icon
-          color="accent"
-          *ngIf="isSvg(link.icon)"
-          [svgIcon]="link.icon.split('.')[1]"
-          class="pr-1"
-        ></mat-icon>
-        <mat-icon *ngIf="!isSvg(link.icon)" class="pr-1">
-          {{ link.icon }}
-        </mat-icon>
-        &nbsp;&nbsp;{{ link.title }}
-      </button>
     </div>
   </ng-container>
 </div>

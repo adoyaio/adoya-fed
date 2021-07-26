@@ -78,6 +78,6 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     setTimeout(() => {
       this.isAppLoading = false;
-    }, 0);
+    }, 500);
   }
 }
