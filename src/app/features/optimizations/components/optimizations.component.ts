@@ -1,9 +1,22 @@
 import { Router } from "@angular/router";
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { AmplifyService } from "aws-amplify-angular";
-import { map, tap, catchError, filter, take, takeUntil } from "rxjs/operators";
+import {
+  map,
+  tap,
+  catchError,
+  filter,
+  take,
+  takeUntil,
+  switchMap,
+} from "rxjs/operators";
 import { combineLatest, EMPTY, Subject } from "rxjs";
-import { FormBuilder, FormControl, Validators } from "@angular/forms";
+import {
+  AbstractControl,
+  FormBuilder,
+  FormControl,
+  Validators,
+} from "@angular/forms";
 import { UserAccountService } from "src/app/core/services/user-account.service";
 import { ClientService } from "src/app/core/services/client.service";
 import { Client } from "../../../core/models/client";
@@ -27,6 +40,7 @@ import {
   set,
 } from "lodash";
 import { ClientPayload } from "src/app/core/models/client-payload";
+import { AppleService } from "src/app/core/services/apple.service";
 
 @Component({
   selector: "app-optimizations",
@@ -43,7 +57,8 @@ export class OptimizationsComponent implements OnInit {
     private fb: FormBuilder,
     private userAccountService: UserAccountService,
     private clientService: ClientService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private appleService: AppleService
   ) {}
 
   appleForm = this.fb.group({
@@ -607,7 +622,15 @@ export class OptimizationsComponent implements OnInit {
   }
 
   appleSubmitDisabled(): boolean {
-    return this.appleForm.pristine || this.appleForm.invalid;
+    if (this.appleForm.pristine || this.appleForm.invalid) {
+      return true;
+    }
+
+    if (this.campaignsInvalid()) {
+      return true;
+    }
+
+    return false;
   }
 
   undoDisabled(): boolean {
@@ -670,5 +693,149 @@ export class OptimizationsComponent implements OnInit {
       this.appleForm.get("cpp" + campaign.campaignId).enable();
       this.appleForm.get("roas" + campaign.campaignId).disable();
     }
+  }
+
+  dailyBudgetError(formControlName: string): string {
+    const formControl: AbstractControl = this.appleForm.get(formControlName);
+    if (formControl.hasError("invalidDailyBudget")) {
+      return "Must be greater or equal to Target Cost Per Install";
+    }
+    if (formControl.invalid) {
+      return "Please enter a number between 1 and 10,000";
+    }
+  }
+
+  lifetimeBudgetError(campaignType: string, formControlName: string): string {
+    const formControl: AbstractControl = this.appleForm.get(formControlName);
+    if (formControl.hasError("invalidLifetimeBudget")) {
+      return "Lifetime budget must exceed daily budget cap";
+    }
+    if (formControl.invalid) {
+      switch (campaignType) {
+        case "competitor":
+          return "Please enter a number between 3 and 300,000";
+
+        case "category":
+          return "Please enter a number between 3 and 300,000";
+
+        case "brand":
+          return "Please enter a number between 1.5 and 150,000";
+
+        case "exact_discovery":
+          return "Please enter a number between 1.5 and 150,000";
+
+        case "broad_discovery":
+          return "Please enter a number between 2 and 100,000";
+
+        case "search_discovery":
+          return "Please enter a number between 2 and 100,000";
+      }
+    }
+  }
+
+  updateAppleCampaign() {
+    this.isLoadingResults = true;
+    const payload = [];
+    chain(this.client.orgDetails.appleCampaigns)
+      .each((campaign) => {
+        // const statusCtrl =
+        //   this.appleForm["controls"][`status|${campaign.campaignId}`];
+        const lifetimeBudgetCtrl =
+          this.appleForm["controls"][`lifetimeBudget|${campaign.campaignId}`];
+        const dailyBudgetCtrl =
+          this.appleForm["controls"][`dailyBudget|${campaign.campaignId}`];
+
+        if (lifetimeBudgetCtrl.dirty || dailyBudgetCtrl.dirty) {
+          payload.push({
+            campaignId: campaign.campaignId,
+            lifetimeBudget: lifetimeBudgetCtrl.value,
+            dailyBudget: dailyBudgetCtrl.value,
+          });
+        }
+      })
+      .value();
+
+    this.appleService
+      .patchAppleCampaign(this.orgId, payload)
+      .pipe(
+        take(1),
+        switchMap((val) => {
+          return this.clientService.getClient(this.orgId).pipe(
+            take(1),
+            tap((val) => {
+              this.isLoadingResults = false;
+              this.client = Client.buildFromGetClientResponse(val);
+              this.appleForm.markAsPristine();
+              this.openSnackBar(
+                "we've completed updating your campaigns! please review details and complete registration to finalize",
+                ""
+              );
+            })
+          );
+        }),
+        catchError(() => {
+          this.isLoadingResults = false;
+          this.openSnackBar(
+            "unable to process changes to settings at this time",
+            "dismiss"
+          );
+          return [];
+        })
+      )
+      .subscribe();
+  }
+
+  campaignsInvalid(): boolean {
+    if (this.appleForm.invalid) {
+      return true;
+    }
+
+    // const cpi: number = this.substep2.get("cpi").value;
+    const globalCpi: number =
+      this.client.orgDetails.bidParameters.highCPIBidDecreaseThresh;
+
+    if (isEmpty(this.appleForm["controls"])) {
+      return true;
+    }
+
+    if (isEmpty(this.client.orgDetails.appleCampaigns)) {
+      return true;
+    }
+
+    const hasInvalid = chain(this.client.orgDetails.appleCampaigns)
+      .some((campaign) => {
+        const lifetimeBudgetCtrl =
+          this.appleForm["controls"][`lifetimeBudget${campaign.campaignId}`];
+        const dailyBudgetCtrl =
+          this.appleForm["controls"][`dailyBudget${campaign.campaignId}`];
+
+        const cpiCtrl = this.appleForm["controls"][`cpi${campaign.campaignId}`];
+
+        const lifetimeBudgetCtrlValue: number = +lifetimeBudgetCtrl.value;
+        const dailyBudgetCtrlValue: number = +dailyBudgetCtrl.value;
+        const localCpi: number = +cpiCtrl.value;
+
+        const cpi: number = isNil(localCpi) ? globalCpi : localCpi;
+
+        let retVal = false;
+        if (dailyBudgetCtrlValue >= lifetimeBudgetCtrlValue) {
+          lifetimeBudgetCtrl.setErrors({ invalidLifetimeBudget: true });
+          retVal = true;
+        } else {
+          lifetimeBudgetCtrl.setErrors(null);
+        }
+
+        if (cpi > dailyBudgetCtrlValue) {
+          dailyBudgetCtrl.setErrors({ invalidDailyBudget: true });
+          retVal = true;
+        } else {
+          dailyBudgetCtrl.setErrors(null);
+        }
+
+        return retVal;
+      })
+      .value();
+
+    return hasInvalid;
   }
 }
