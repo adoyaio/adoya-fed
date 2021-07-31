@@ -74,6 +74,69 @@ export class OptimizationsComponent implements OnInit {
     branchSecret: [""],
   });
 
+  dailyBudgetValidators = [
+    Validators.required,
+    Validators.min(0.1),
+    Validators.max(1000),
+    Validators.minLength(1),
+  ];
+
+  lifetimeBudgetValidators = [
+    Validators.required,
+    Validators.min(10),
+    Validators.max(1000000),
+    Validators.minLength(1),
+  ];
+
+  lifetimeBudgetValidatorsCompetitor = [
+    Validators.required,
+    Validators.min(3),
+    Validators.max(300000),
+    Validators.minLength(1),
+  ];
+
+  lifetimeBudgetValidatorsCategory = [
+    Validators.required,
+    Validators.min(3),
+    Validators.max(300000),
+    Validators.minLength(1),
+  ];
+
+  lifetimeBudgetValidatorsBrand = [
+    Validators.required,
+    Validators.min(1.5),
+    Validators.max(150000),
+    Validators.minLength(1),
+  ];
+
+  lifetimeBudgetValidatorsExactDiscovery = [
+    Validators.required,
+    Validators.min(0.5),
+    Validators.max(150000),
+    Validators.minLength(1),
+  ];
+
+  lifetimeBudgetValidatorsBroadDiscovery = [
+    Validators.required,
+    Validators.min(2),
+    Validators.max(100000),
+    Validators.minLength(1),
+  ];
+
+  lifetimeBudgetValidatorsSearchDiscovery = [
+    Validators.required,
+    Validators.min(2),
+    Validators.max(100000),
+    Validators.minLength(1),
+  ];
+
+  costValidators = [
+    Validators.required,
+    Validators.min(0.1),
+    Validators.max(1000),
+    Validators.minLength(1),
+  ];
+
   client: Client = new Client();
   isLoadingResults = true;
   isSendingResults;
@@ -208,11 +271,34 @@ export class OptimizationsComponent implements OnInit {
       .get("appleCampaigns")
       .each((campaign) => {
         // campaign level bid param overrides
-        const cpi = new FormControl();
+        const cpi = new FormControl(undefined, [
+          Validators.min(0.1),
+          Validators.max(1000),
+          Validators.minLength(1),
+          Validators.required,
+        ]);
         const objective = new FormControl();
         const bidOverrides = new FormControl();
-        const lifetimeBudget = new FormControl();
-        const dailyBudget = new FormControl();
+        const lifetimeBudget = new FormControl(
+          undefined,
+          campaign.campaignType === "competitor"
+            ? this.lifetimeBudgetValidatorsCompetitor
+            : campaign.campaignType === "category"
+            ? this.lifetimeBudgetValidatorsCategory
+            : campaign.campaignType === "brand"
+            ? this.lifetimeBudgetValidatorsBrand
+            : campaign.campaignType === "exact_discovery"
+            ? this.lifetimeBudgetValidatorsExactDiscovery
+            : campaign.campaignType === "broad_discovery"
+            ? this.lifetimeBudgetValidatorsBroadDiscovery
+            : campaign.campaignType === "search_discovery"
+            ? this.lifetimeBudgetValidatorsSearchDiscovery
+            : this.lifetimeBudgetValidators
+        );
+        const dailyBudget = new FormControl(
+          undefined,
+          this.dailyBudgetValidators
+        );
         const genders = new FormControl();
         const ages = new FormControl();
 
@@ -234,17 +320,7 @@ export class OptimizationsComponent implements OnInit {
         );
 
         this.appleForm.addControl("gender" + campaign.campaignId, genders);
-
         this.appleForm.addControl("minAge" + campaign.campaignId, ages);
-
-        this.appleForm
-          .get("cpi" + campaign.campaignId)
-          .setValidators([
-            Validators.min(0.1),
-            Validators.max(1000),
-            Validators.minLength(1),
-            Validators.required,
-          ]);
 
         // campaign level mmp bid param overrides
         const cpp = new FormControl();
@@ -452,7 +528,11 @@ export class OptimizationsComponent implements OnInit {
       this.appleForm.get("cpp" + campaign.campaignId).dirty ||
       this.appleForm.get("roas" + campaign.campaignId).dirty ||
       this.appleForm.get("mmpObjective" + campaign.campaignId).dirty ||
-      this.appleForm.get("mmpCheckbox" + campaign.campaignId).dirty
+      this.appleForm.get("mmpCheckbox" + campaign.campaignId).dirty ||
+      this.appleForm.get("lifetimeBudget" + campaign.campaignId).dirty ||
+      this.appleForm.get("dailyBudget" + campaign.campaignId).dirty ||
+      this.appleForm.get("gender" + campaign.campaignId).dirty ||
+      this.appleForm.get("minAge" + campaign.campaignId).dirty
     );
   }
 
@@ -786,11 +866,6 @@ export class OptimizationsComponent implements OnInit {
   }
 
   campaignsInvalid(): boolean {
-    if (this.appleForm.invalid) {
-      return true;
-    }
-
-    // const cpi: number = this.substep2.get("cpi").value;
     const globalCpi: number =
       this.client.orgDetails.bidParameters.highCPIBidDecreaseThresh;
 
@@ -813,9 +888,13 @@ export class OptimizationsComponent implements OnInit {
 
         const lifetimeBudgetCtrlValue: number = +lifetimeBudgetCtrl.value;
         const dailyBudgetCtrlValue: number = +dailyBudgetCtrl.value;
-        const localCpi: number = +cpiCtrl.value;
 
-        const cpi: number = isNil(localCpi) ? globalCpi : localCpi;
+        const localCpi: number = +cpiCtrl.value;
+        console.log("local cpi");
+        console.log(localCpi);
+
+        const cpi: number =
+          isNil(localCpi) || isNaN(localCpi) ? globalCpi : localCpi;
 
         let retVal = false;
         if (dailyBudgetCtrlValue >= lifetimeBudgetCtrlValue) {
@@ -835,6 +914,8 @@ export class OptimizationsComponent implements OnInit {
         return retVal;
       })
       .value();
+
+    console.log("james test " + hasInvalid);
 
     return hasInvalid;
   }
