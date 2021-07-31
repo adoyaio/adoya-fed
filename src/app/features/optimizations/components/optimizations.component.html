@@ -224,6 +224,13 @@
                         justify-content-start
                       "
                     >
+                      <div class="w-100 d-flex justify-content-start p-2">
+                        <mat-slide-toggle
+                          color="accent"
+                          [formControlName]="'status' + campaign.campaignId"
+                          >Enable</mat-slide-toggle
+                        >
+                      </div>
                       <div class="col-6">
                         <!-- field and icon -->
                         <div class="w-100 no-gutters">

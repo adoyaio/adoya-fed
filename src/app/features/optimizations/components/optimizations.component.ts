@@ -301,6 +301,7 @@ export class OptimizationsComponent implements OnInit {
         );
         const genders = new FormControl();
         const ages = new FormControl();
+        const status = new FormControl();
 
         this.appleForm.addControl("cpi" + campaign.campaignId, cpi);
         this.appleForm.addControl("objective" + campaign.campaignId, objective);
@@ -321,6 +322,7 @@ export class OptimizationsComponent implements OnInit {
 
         this.appleForm.addControl("gender" + campaign.campaignId, genders);
         this.appleForm.addControl("minAge" + campaign.campaignId, ages);
+        this.appleForm.addControl("status" + campaign.campaignId, status);
 
         // campaign level mmp bid param overrides
         const cpp = new FormControl();
@@ -430,6 +432,7 @@ export class OptimizationsComponent implements OnInit {
         const budgetLifetime = get(campaign, "lifetimeBudget");
         const gender = get(campaign, "gender");
         const minAge = get(campaign, "minAge");
+        const status = get(campaign, "status");
 
         this.appleForm
           .get("dailyBudget" + campaign.campaignId)
@@ -449,6 +452,10 @@ export class OptimizationsComponent implements OnInit {
         this.appleForm
           .get("minAge" + campaign.campaignId)
           .setValue(isNil(minAge) ? "all" : minAge);
+
+        this.appleForm
+          .get("status" + campaign.campaignId)
+          .setValue(status === "ENABLED" ? true : false);
 
         // bid param overrides
         const cpi = get(campaign, "bidParameters.HIGH_CPI_BID_DECREASE_THRESH");
@@ -532,7 +539,8 @@ export class OptimizationsComponent implements OnInit {
       this.appleForm.get("lifetimeBudget" + campaign.campaignId).dirty ||
       this.appleForm.get("dailyBudget" + campaign.campaignId).dirty ||
       this.appleForm.get("gender" + campaign.campaignId).dirty ||
-      this.appleForm.get("minAge" + campaign.campaignId).dirty
+      this.appleForm.get("minAge" + campaign.campaignId).dirty ||
+      this.appleForm.get("status" + campaign.campaignId).dirty
     );
   }
 
