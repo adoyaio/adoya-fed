@@ -443,11 +443,13 @@ export class OptimizationsComponent implements OnInit {
         this.appleForm
           .get("gender" + campaign.campaignId)
           .setValue(
-            isEqual(["M", "F"], gender)
+            includes(gender, ["M", "F"])
               ? "all"
-              : includes(["M"], gender)
+              : isEqual(gender, ["M"])
               ? "male"
-              : includes(["F"], gender ? "female" : "all")
+              : isEqual(gender, ["F"])
+              ? "female"
+              : "all"
           );
         this.appleForm
           .get("minAge" + campaign.campaignId)
@@ -596,9 +598,34 @@ export class OptimizationsComponent implements OnInit {
         .get("orgDetails")
         .get("appleCampaigns")
         .each((campaign) => {
+          // budget gender age status values
+          const status = this.appleForm.get(
+            "status" + campaign.campaignId
+          ).value;
+          const lifetimeBudget = this.appleForm.get(
+            "lifetimeBudget" + campaign.campaignId
+          ).value;
+          const dailyBudget = this.appleForm.get(
+            "dailyBudget" + campaign.campaignId
+          ).value;
+          const gender = this.appleForm.get(
+            "gender" + campaign.campaignId
+          ).value;
+          const minAge = this.appleForm.get(
+            "minAge" + campaign.campaignId
+          ).value;
+
+          // set the values on the campaign
+          campaign.lifetimeBudget = lifetimeBudget;
+          campaign.dailyBudget = dailyBudget;
+          campaign.status = status === true ? "ENABLED" : "PAUSED";
+          campaign.gender =
+            gender === "all" ? ["M", "F"] : gender === "male" ? ["M"] : ["F"];
+          campaign.minAge = minAge === "all" ? undefined : minAge;
+
           // get the checkbox value to see if bid params overridden
           const hasOverrides = this.appleForm.get(
-            "checkbox_" + campaign.campaignId
+            "checkbox" + campaign.campaignId
           ).value;
 
           if (hasOverrides) {
@@ -662,13 +689,14 @@ export class OptimizationsComponent implements OnInit {
         .value();
 
       this.clientService
-        .postClient(ClientPayload.buildFromClient(this.client))
+        .patchClient(ClientPayload.buildFromClient(this.client), true)
         .pipe(
           take(1),
           tap(() => {
             this.isSendingResults = true;
           }),
           map((data) => {
+            // TODO get
             this.isSendingResults = false;
             this.appleForm.markAsPristine();
             this.branchForm.markAsPristine();

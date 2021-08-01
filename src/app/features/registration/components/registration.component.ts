@@ -428,7 +428,7 @@ export class RegistrationComponent implements OnInit {
             this.client.orgDetails.emailAddresses = [this.emailAddresses];
 
             this.clientService
-              .postClient(ClientPayload.buildFromClient(this.client))
+              .postClient(ClientPayload.buildFromClient(this.client), false)
               .pipe(
                 take(1),
                 switchMap((data) => {
@@ -884,7 +884,7 @@ export class RegistrationComponent implements OnInit {
           const client = Client.buildFromGetClientResponse(val);
           client.orgDetails.hasRegistered = true;
           return this.clientService
-            .postClient(ClientPayload.buildFromClient(client))
+            .postClient(ClientPayload.buildFromClient(client), false)
             .pipe(
               take(1),
               tap(() => {
@@ -1453,7 +1453,8 @@ export class RegistrationComponent implements OnInit {
                                                           .postClient(
                                                             ClientPayload.buildFromClient(
                                                               client
-                                                            )
+                                                            ),
+                                                            false
                                                           )
                                                           .pipe(
                                                             take(1),

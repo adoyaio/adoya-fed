@@ -27,11 +27,15 @@ export class ClientService {
   clientKeywordHistoryUrl = this.baseUrl + `/client/keyword/history`;
   clientGetUrl = this.baseUrl + `/client/get`;
   clientPostUrl = this.baseUrl + `/client/post`;
+  clientPatchUrl = this.baseUrl + `/client/patch`;
   clientAdminUrl = this.baseUrl + `/client/admin`;
 
   authKey = "GerGRueNWE3qCkPG8GfPV649wyVnQEQN2oJQUpnI";
 
-  public postClient(client: ClientPayload): Observable<any> {
+  public postClient(
+    client: ClientPayload,
+    updateApple: boolean
+  ): Observable<any> {
     const url = `${this.clientPostUrl}`;
     let headers = new HttpHeaders();
     headers = headers.set("x-api-key", this.authKey);
@@ -42,6 +46,30 @@ export class ClientService {
           operation: "create",
           tableName: "clients",
           payload: client,
+          updateApple,
+        },
+        { headers: headers }
+      )
+      .pipe(
+        map((response) => {
+          return response;
+        })
+      );
+  }
+
+  public patchClient(
+    client: ClientPayload,
+    updateApple: boolean
+  ): Observable<any> {
+    const url = `${this.clientPatchUrl}?org_id=${client.orgId}`;
+    let headers = new HttpHeaders();
+    headers = headers.set("x-api-key", this.authKey);
+    return this.http
+      .post<any>(
+        url,
+        {
+          client,
+          updateApple,
         },
         { headers: headers }
       )
