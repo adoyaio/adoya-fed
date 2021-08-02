@@ -8,7 +8,6 @@ export class BranchBidParameters {
   revenueOverAdSpendThresholdBuffer: number;
   costPerPurchaseThreshold: number;
   costPerPurchaseThresholdBuffer: number;
-  objective: string;
 
   static buildFromResponse(response: any) {
     const retVal = new BranchBidParameters();
@@ -25,7 +24,6 @@ export class BranchBidParameters {
     retVal.costPerPurchaseThreshold = response.cost_per_purchase_threshold;
     retVal.revenueOverAdSpendThresholdBuffer =
       response.revenue_over_ad_spend_threshold_buffer;
-    retVal.objective = response.objective;
 
     return retVal;
   }
@@ -35,7 +33,7 @@ export class AdgroupBidParameters {
   highCPABidDecrease: number;
   tapThreshold: number;
   lowCPIBidIncreaseThresh: number;
-  objective: number;
+  objective: string;
   minBid: number;
   noInstallBidDecreaseThresh: number;
   highCPIBidDecreaseThresh: number;

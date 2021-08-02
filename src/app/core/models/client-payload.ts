@@ -17,7 +17,6 @@ export class BranchBidParametersPayload {
   revenue_over_ad_spend_threshold_buffer: number;
   cost_per_purchase_threshold: number;
   cost_per_purchase_threshold_buffer: number;
-  objective: string;
 
   static buildFromClient(params: BranchBidParameters) {
     const retVal = new BranchBidParametersPayload();
@@ -32,7 +31,6 @@ export class BranchBidParametersPayload {
     retVal.cost_per_purchase_threshold = params.costPerPurchaseThreshold;
     retVal.cost_per_purchase_threshold_buffer =
       params.costPerPurchaseThresholdBuffer;
-    retVal.objective = params.objective;
     return retVal;
   }
 }
@@ -41,7 +39,7 @@ export class AdgroupBidParametersPayload {
   HIGH_CPA_BID_DECREASE: number;
   TAP_THRESHOLD: number;
   LOW_CPI_BID_INCREASE_THRESH: number;
-  OBJECTIVE: number;
+  OBJECTIVE: string;
   MIN_BID: number;
   NO_INSTALL_BID_DECREASE_THRESH: number;
   HIGH_CPI_BID_DECREASE_THRESH: number;

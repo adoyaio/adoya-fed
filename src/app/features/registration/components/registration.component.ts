@@ -708,11 +708,11 @@ export class RegistrationComponent implements OnInit {
     this.client.orgDetails.adgroupBidParameters = {
       highCPABidDecrease: 0.85,
       tapThreshold: 7,
+      objective: "standard",
       lowCPIBidIncreaseThresh: 0.4,
-      objective: undefined,
       minBid: 0.1,
       noInstallBidDecreaseThresh: 0,
-      highCPIBidDecreaseThresh: undefined,
+      highCPIBidDecreaseThresh: 0,
       lowCPABidBoost: 1.15,
       maxBid: 3,
       staleRaiseBidBoost: 1.025,
@@ -722,10 +722,10 @@ export class RegistrationComponent implements OnInit {
     this.client.orgDetails.bidParameters = {
       highCPABidDecrease: 0.85,
       tapThreshold: 7,
-      objective: undefined,
+      objective: "standard",
       minBid: 0.1,
       noInstallBidDecreaseThresh: 0,
-      highCPIBidDecreaseThresh: undefined,
+      highCPIBidDecreaseThresh: 0,
       lowCPABidBoost: 1.15,
       maxBid: 0.35,
       staleRaiseBidBoost: 1.025,
@@ -734,21 +734,20 @@ export class RegistrationComponent implements OnInit {
 
     this.client.orgDetails.branchIntegrationParameters = {
       branchBidAdjusterEnabled: false,
-      branchKey: undefined,
-      branchSecret: undefined,
+      branchKey: "",
+      branchSecret: "",
     };
 
     this.client.orgDetails.branchBidParameters = {
       branchBidAdjustment: 0.1,
-      branchOptimizationGoal: undefined,
+      branchOptimizationGoal: "cost_per_purchase",
       minAppleInstalls: 15,
       branchMinBid: 0.1,
       branchMaxBid: 25,
-      revenueOverAdSpendThreshold: undefined,
+      revenueOverAdSpendThreshold: 1,
       revenueOverAdSpendThresholdBuffer: 0.2,
-      costPerPurchaseThreshold: undefined,
+      costPerPurchaseThreshold: 20,
       costPerPurchaseThresholdBuffer: 0.2,
-      objective: undefined,
     };
 
     this.client.orgDetails.disabled = false;
@@ -1107,23 +1106,33 @@ export class RegistrationComponent implements OnInit {
                   this.substep2.get("cpi").value;
 
                 // branch fields
-                client.orgDetails.branchBidParameters.branchOptimizationGoal =
-                  this.substep6.get("mmpObjective").value;
+                if (!isNil(this.substep6.get("mmpObjective").value)) {
+                  client.orgDetails.branchBidParameters.branchOptimizationGoal =
+                    this.substep6.get("mmpObjective").value;
+                }
 
-                client.orgDetails.branchBidParameters.costPerPurchaseThreshold =
-                  this.substep6.get("cpp").value;
+                if (!isNil(this.substep6.get("cpp").value)) {
+                  client.orgDetails.branchBidParameters.costPerPurchaseThreshold =
+                    this.substep6.get("cpp").value;
+                }
 
-                client.orgDetails.branchBidParameters.revenueOverAdSpendThreshold =
-                  this.substep6.get("roas").value;
+                if (!isNil(this.substep6.get("roas").value)) {
+                  client.orgDetails.branchBidParameters.revenueOverAdSpendThreshold =
+                    this.substep6.get("roas").value;
+                }
 
                 client.orgDetails.branchIntegrationParameters.branchBidAdjusterEnabled =
                   this.substep6.get("branchBidAdjusterEnabled").value;
 
-                client.orgDetails.branchIntegrationParameters.branchKey =
-                  this.substep6.get("branchKey").value;
+                if (!isNil(this.substep6.get("branchKey").value)) {
+                  client.orgDetails.branchIntegrationParameters.branchKey =
+                    this.substep6.get("branchKey").value;
+                }
 
-                client.orgDetails.branchIntegrationParameters.branchSecret =
-                  this.substep6.get("branchSecret").value;
+                if (!isNil(this.substep6.get("branchSecret").value)) {
+                  client.orgDetails.branchIntegrationParameters.branchSecret =
+                    this.substep6.get("branchSecret").value;
+                }
 
                 // write the substep 1 values to client
                 client.orgDetails.appID =

@@ -36,7 +36,7 @@ export class ClientService {
     client: ClientPayload,
     updateApple: boolean
   ): Observable<any> {
-    const url = `${this.clientPostUrl}`;
+    const url = `${this.clientPostUrl}?org_id=${client.orgId}`;
     let headers = new HttpHeaders();
     headers = headers.set("x-api-key", this.authKey);
     return this.http
