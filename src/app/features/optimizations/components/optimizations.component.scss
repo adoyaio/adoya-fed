@@ -20,6 +20,7 @@
     border-width: 1px;
     // background-color: #f1f5ee;
     background-color: #dde5d4;
+    // background-color: #708d53;
   }
 
   &-dirty {
@@ -28,7 +29,11 @@
     // background-color: #c6d4b8;
     // background-color: #dde5d4;
     // background-color: #ccffa1;
-    background-color: #f1f5ee;
+    background-color: #f1f5ee !important;
+  }
+
+  &-disabled {
+    background-color: lightgray;
   }
 }
 

@@ -147,24 +147,4 @@ export class ClientService {
       })
     );
   }
-
-  // public getClientHistoryByTime(
-  //   orgId: string,
-  //   startDate: string,
-  //   endDate: string
-  // ): Observable<CostPerInstallDayObject[]> {
-  //   const url = `${this.clientCostHistoryUrl}?org_id=${orgId}&start_date=${endDate}&end_date=${startDate}`;
-  //   let headers = new HttpHeaders();
-  //   headers = headers.set("x-api-key", this.authKey);
-  //   return this.http
-  //     .get<any>(url, { headers: headers })
-  //     .pipe(
-  //       map((response) => {
-  //         return CostPerInstallDayObject.buildFromGetHistoryResponse(response);
-  //       }),
-  //       catchError((error: HttpErrorResponse) => {
-  //         throw new Error(error.message);
-  //       })
-  //     );
-  // }
 }

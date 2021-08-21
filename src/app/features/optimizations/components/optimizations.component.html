@@ -141,14 +141,14 @@
               <button
                 class="float-right"
                 mat-button
-                (click)="accordion.openAll()"
+                (click)="$event.preventDefault(); accordion.openAll()"
               >
                 <mat-icon color="accent">expand_more</mat-icon>Expand All
               </button>
               <button
                 class="float-right"
                 mat-button
-                (click)="accordion.closeAll()"
+                (click)="$event.preventDefault(); accordion.closeAll()"
               >
                 <mat-icon color="accent">expand_less</mat-icon>Collapse All
               </button>
@@ -168,10 +168,14 @@
                   <!-- campaigns panels -->
                   <mat-expansion-panel
                     class="mat-elevation-z0 mt-1 m-2 text-center"
+                    [class.disabled]="campaign.status === ''"
                     [ngClass]="[
                       hasBidParameters(campaign)
                         ? 'workbench_campaign__card-active'
                         : 'workbench_campaign__card',
+                      campaign.status === 'PAUSED'
+                        ? 'workbench_campaign__card-disabled'
+                        : '',
                       isCampaignDirty(campaign)
                         ? 'workbench_campaign__card-dirty'
                         : ''
@@ -180,6 +184,15 @@
                   >
                     <mat-expansion-panel-header>
                       <div>
+                        <mat-icon
+                          *ngIf="campaign.status === 'ENABLED'; else pausedIcon"
+                          color="accent"
+                          class="align-middle"
+                          >play_arrow</mat-icon
+                        >
+                        <ng-template #pausedIcon>
+                          <mat-icon class="align-middle">pause</mat-icon>
+                        </ng-template>
                         {{ campaign.campaignName }} ({{ campaign.campaignId }})
                       </div>
                     </mat-expansion-panel-header>
