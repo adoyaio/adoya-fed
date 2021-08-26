@@ -41,6 +41,7 @@ body {
 @import "~@angular/material/theming";
 @import "~aws-amplify-angular/Theme.css";
 @import "./utilities.scss";
+@import "variables.scss";
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
@@ -360,4 +361,11 @@ $altTheme: mat-dark-theme($theme-primary, $theme-accent, $theme-warn);
 
 .mat-list-base .mat-list-item {
   height: auto !important;
+}
+
+.workbench__card {
+  border-style: solid;
+  border-color: mat-color($adoya-web-accent);
+  border-radius: 0.5;
+  border-width: 1px;
 }
