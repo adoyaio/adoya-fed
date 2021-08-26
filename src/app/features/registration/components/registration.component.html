@@ -675,12 +675,24 @@
                 <div class="col-6">
                   <!-- field and icon -->
                   <div class="w-100 no-gutters">
+                    <mat-label class="ml-4 pl-2">
+                      List your competitor's names
+                      <mat-icon
+                        class="font-size-14 text-muted"
+                        *ngIf="keywordsCompetitors.length === 0"
+                        >radio_button_unchecked</mat-icon
+                      >
+                      <mat-icon
+                        class="font-size-14 text-muted"
+                        *ngIf="keywordsCompetitors.length > 0"
+                        >radio_button_checked</mat-icon
+                      >
+                    </mat-label>
                     <mat-form-field
                       appearance="outline"
                       class="col-9 ml-1"
                       color="accent"
                     >
-                      <mat-label>List your competitor's names</mat-label>
                       <textarea matInput formControlName="competitors">
                       </textarea>
                     </mat-form-field>
@@ -723,15 +735,26 @@
 
                   <!-- field and icon -->
                   <div class="w-100 no-gutters">
+                    <mat-label class="ml-4 pl-2">
+                      List words and phrases that best describe your app and
+                      business
+                      <mat-icon
+                        class="font-size-14 text-muted"
+                        *ngIf="keywordsCategory.length === 0"
+                        >radio_button_unchecked</mat-icon
+                      >
+                      <mat-icon
+                        class="font-size-14 text-muted"
+                        *ngIf="keywordsCategory.length > 0"
+                        >radio_button_checked</mat-icon
+                      >
+                    </mat-label>
+
                     <mat-form-field
                       appearance="outline"
                       class="col-9 ml-1"
                       color="accent"
                     >
-                      <mat-label
-                        >List words and phrases that best describe your app and
-                        business</mat-label
-                      >
                       <textarea matInput formControlName="category"> </textarea>
                     </mat-form-field>
 
@@ -773,15 +796,24 @@
 
                   <!-- field and icon -->
                   <div class="w-100 no-gutters">
+                    <mat-label class="ml-4 pl-2">
+                      List words and phrases that best describe your brand
+                      <mat-icon
+                        class="font-size-14 text-muted"
+                        *ngIf="keywordsBrand.length === 0"
+                        >radio_button_unchecked</mat-icon
+                      >
+                      <mat-icon
+                        class="font-size-14 text-muted"
+                        *ngIf="keywordsBrand.length > 0"
+                        >radio_button_checked</mat-icon
+                      >
+                    </mat-label>
                     <mat-form-field
                       appearance="outline"
                       class="col-9 ml-1"
                       color="accent"
                     >
-                      <mat-label
-                        >List words and phrases that best describe your
-                        brand</mat-label
-                      >
                       <textarea matInput formControlName="brand"> </textarea>
                     </mat-form-field>
 

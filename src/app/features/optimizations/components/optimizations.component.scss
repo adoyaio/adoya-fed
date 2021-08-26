@@ -1,10 +1,6 @@
 @import "variables.scss";
 
 .workbench__card {
-  //background-color: mat-color($adoya-web-accent);
-  // background-color: #f1f5ee;
-  //background-color: #dde5d4;
-  // color: mat-color($adoya-web-primary);
   border-style: solid;
   border-color: mat-color($adoya-web-accent);
   border-radius: 0.5;
@@ -12,9 +8,6 @@
 }
 
 .workbench_campaign__card {
-  //background-color: mat-color($adoya-web-accent);
-  //background-color: #dde5d4;
-  // color: mat-color($adoya-web-primary);
   border-style: solid;
   border-color: mat-color($adoya-web-accent);
   border-radius: 0.5;
@@ -27,6 +20,7 @@
     border-width: 1px;
     // background-color: #f1f5ee;
     background-color: #dde5d4;
+    // background-color: #708d53;
   }
 
   &-dirty {
@@ -35,7 +29,11 @@
     // background-color: #c6d4b8;
     // background-color: #dde5d4;
     // background-color: #ccffa1;
-    background-color: #f1f5ee;
+    background-color: #f1f5ee !important;
+  }
+
+  &-disabled {
+    background-color: lightgray;
   }
 }
 
@@ -46,10 +44,6 @@
 .workbench_campaign__card:hover:not(.workbench_campaign__card-dirty) {
   background-color: #f1f5ee;
 }
-
-// .workbench_campaign__card-dirty {
-//   background-color: red;
-// }
 
 .workbench__accent-field {
   background-color: mat-color($adoya-web-accent);
@@ -66,17 +60,3 @@
 .workbench__buttons {
   width: 125px;
 }
-
-// .workbench__loading-shade {
-//   position: absolute;
-//   top: 0;
-//   left: 0;
-//   bottom: 0px;
-//   right: 0;
-//   background: rgba(0, 0, 0, 0.05);
-//   // background: #5d7d41, 0.15;
-//   z-index: 5;
-//   display: flex;
-//   align-items: top;
-//   justify-content: center;
-// }

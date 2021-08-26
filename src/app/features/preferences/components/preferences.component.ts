@@ -103,7 +103,7 @@ export class PreferencesComponent implements OnInit {
       );
 
       this.clientService
-        .postClient(ClientPayload.buildFromClient(this.client))
+        .postClient(ClientPayload.buildFromClient(this.client), false)
         .pipe(
           tap((_) => {
             this.isSendingResults = true;
