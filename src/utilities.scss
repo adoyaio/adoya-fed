@@ -16,6 +16,42 @@ html {
   margin-left: auto;
 }
 
+.top-2 {
+  top: 2rem;
+}
+
+.top-112 {
+  top: 112px;
+}
+
+.top-160 {
+  top: 160px;
+}
+
+.left-0 {
+  left: 0;
+}
+
+.right-24 {
+  right: 24px;
+}
+
+.right-0 {
+  right: 0;
+}
+
+.top-0 {
+  top: 0;
+}
+
+.bottom-10 {
+  bottom: 10px;
+}
+
+.bottom-0 {
+  bottom: 0;
+}
+
 @media (min-width: 576px) {
   .container {
     max-width: 540px;
@@ -4700,7 +4736,8 @@ html {
 }
 
 .text-primary {
-  color: #007bff !important;
+  // color: #007bff !important;
+  color: #5d7d41 !important;
 }
 
 .text-secondary {
