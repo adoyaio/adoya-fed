@@ -1,0 +1,37 @@
+.logo {
+  max-width: 75px;
+}
+
+.splash__container {
+  ::ng-deep {
+    .mat-list-base .mat-list-item {
+      height: 40px !important;
+    }
+  }
+}
+
+.card-green {
+  background-image: url("../../../assets/images/green.jpg");
+  background-repeat: repeat-y;
+}
+
+.card-dark {
+  // background-color: #a3ff54 !important;
+  background-color: #7a975d !important;
+
+  // background-color: #c6d4b8 !important;
+  // background-color: #9eb585 !important;
+  // background-color: #e8ffd4 !important;
+}
+
+.card-light {
+  // background-color: #afc29b !important;
+  background-color: #ccffa1 !important;
+}
+
+.card-med {
+  background-color: #9eb585 !important;
+}
+.large-image {
+  max-width: 600px;
+}

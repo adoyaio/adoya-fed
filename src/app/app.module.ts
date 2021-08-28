@@ -15,9 +15,10 @@ import { RegistrationModule } from "./features/registration/registration.module"
 import { SharedModule } from "./shared/shared.module";
 import { DynamicModalComponent } from "./shared/dynamic-modal/dynamic-modal.component";
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+import { SplashComponent } from './features/splash/splash.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, SplashComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
