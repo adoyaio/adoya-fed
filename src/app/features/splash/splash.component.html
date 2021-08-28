@@ -217,11 +217,31 @@
                   </mat-card-subtitle>
                   <mat-divider></mat-divider>
                   <mat-card-content>
-                    <div class="d-flex flex-row justify-content-left">
-                      <img
-                        src="../../../assets/images/optimize-1.png"
-                        class="large-image"
-                      />
+                    <div class="carousel__container">
+                      <mat-carousel
+                        timings="250ms ease-in"
+                        [slideHeight]="300"
+                        [autoplay]="true"
+                        interval="3500"
+                        color="accent"
+                        maxWidth="auto"
+                        proportion="50"
+                        maintainAspectRatio="true"
+                        slides="4"
+                        [loop]="false"
+                        [hideArrows]="true"
+                        [hideIndicators]="false"
+                        [useKeyboard]="true"
+                        [useMouseWheel]="false"
+                        orientation="ltr"
+                      >
+                        <mat-carousel-slide
+                          #matCarouselSlide
+                          *ngFor="let slide of optimizeSlides; let i = index"
+                          [image]="slide.image"
+                          [hideOverlay]="true"
+                        ></mat-carousel-slide>
+                      </mat-carousel>
                     </div>
                   </mat-card-content>
                 </mat-card>
@@ -249,14 +269,14 @@
                         timings="250ms ease-in"
                         [slideHeight]="300"
                         [autoplay]="true"
-                        interval="3500"
+                        interval="4000"
                         color="accent"
                         maxWidth="auto"
                         proportion="50"
                         maintainAspectRatio="true"
                         slides="2"
-                        [loop]="true"
-                        [hideArrows]="false"
+                        [loop]="false"
+                        [hideArrows]="true"
                         [hideIndicators]="false"
                         [useKeyboard]="true"
                         [useMouseWheel]="false"
@@ -291,15 +311,31 @@
                   </mat-card-subtitle>
                   <mat-divider></mat-divider>
                   <mat-card-content>
-                    <div class="d-flex flex-row justify-content-left">
-                      <img
-                        src="../../../assets/images/reporting-2.png"
-                        class="large-image border mr-1"
-                      />
-                      <img
-                        src="../../../assets/images/reporting-3.png"
-                        class="large-image border"
-                      />
+                    <div class="carousel__container">
+                      <mat-carousel
+                        timings="250ms ease-in"
+                        [slideHeight]="300"
+                        [autoplay]="true"
+                        interval="4000"
+                        color="accent"
+                        maxWidth="auto"
+                        proportion="50"
+                        maintainAspectRatio="true"
+                        slides="2"
+                        [loop]="false"
+                        [hideArrows]="true"
+                        [hideIndicators]="false"
+                        [useKeyboard]="true"
+                        [useMouseWheel]="false"
+                        orientation="ltr"
+                      >
+                        <mat-carousel-slide
+                          #matCarouselSlide
+                          *ngFor="let slide of visulizeSlides; let i = index"
+                          [image]="slide.image"
+                          [hideOverlay]="true"
+                        ></mat-carousel-slide>
+                      </mat-carousel>
                     </div>
                   </mat-card-content>
                 </mat-card>
@@ -322,11 +358,31 @@
                 </mat-card-subtitle>
                 <mat-divider></mat-divider>
                 <mat-card-content>
-                  <div class="d-flex flex-row justify-content-left">
-                    <img
-                      src="../../../assets/images/reporting-1.png"
-                      class="large-image"
-                    />
+                  <div class="carousel__container">
+                    <mat-carousel
+                      timings="250ms ease-in"
+                      [slideHeight]="300"
+                      [autoplay]="true"
+                      interval="4000"
+                      color="accent"
+                      maxWidth="auto"
+                      proportion="50"
+                      maintainAspectRatio="true"
+                      slides="2"
+                      [loop]="false"
+                      [hideArrows]="true"
+                      [hideIndicators]="false"
+                      [useKeyboard]="true"
+                      [useMouseWheel]="false"
+                      orientation="ltr"
+                    >
+                      <mat-carousel-slide
+                        #matCarouselSlide
+                        *ngFor="let slide of integrationSlides; let i = index"
+                        [image]="slide.image"
+                        [hideOverlay]="true"
+                      ></mat-carousel-slide>
+                    </mat-carousel>
                   </div>
                 </mat-card-content>
               </mat-card>
