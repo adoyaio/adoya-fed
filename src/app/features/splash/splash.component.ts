@@ -31,4 +31,10 @@ export class SplashComponent implements OnInit {
     { image: "../../../assets/images/integration-1.png" },
     { image: "../../../assets/images/integration-2.png" },
   ];
+
+  testimonialSlides = [
+    { image: "../../../assets/images/testimonial-1.png" },
+    { image: "../../../assets/images/testimonial-2.png" },
+    { image: "../../../assets/images/testimonial-3.png" },
+  ];
 }
