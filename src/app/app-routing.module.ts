@@ -18,7 +18,7 @@ const routes: Routes = [
     data: { title: "adoya" },
   },
   {
-    path: "splash",
+    path: "start",
     component: SplashComponent,
     data: { title: "Get Started with Adoya" },
   },
