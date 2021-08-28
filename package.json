@@ -21,6 +21,7 @@
     "@angular/platform-browser": "~8.0.3",
     "@angular/platform-browser-dynamic": "~8.0.3",
     "@angular/router": "~8.0.3",
+    "@ngmodule/material-carousel": "^0.6.0",
     "@ngxs/store": "^3.6.2",
     "@types/lodash": "^4.14.159",
     "aws-amplify": "^2.2.6",
