@@ -1,0 +1,52 @@
+<div class="mat-elevation-z0 position-fixed mb-5 z-index-10 w-100">
+  <mat-toolbar class="card-med text-center m-0">
+    <div class="text-white font-size-14 font-weight-bold text-center w-100">
+      Ready to level up your apple search ads campaigns? Checkout a practical
+      guide to Apple Search Ads.
+      <a href="/start" class="ml-3 text-white">Get the Free Whitepaper</a>
+    </div>
+  </mat-toolbar>
+  <mat-action-list class="d-flex flex-row py-4 bg-white">
+    <button mat-list-item>
+      <img class="logo pt-2 pb-3" src="../../../assets/images/adoya-logo.png" />
+    </button>
+    <button
+      [ngClass]="activeButton === 'Home' ? 'active' : ''"
+      mat-list-item
+      (click)="handleClick('Home')"
+    >
+      Home
+    </button>
+    <button
+      [ngClass]="activeButton === 'Partners' ? 'active' : ''"
+      mat-list-item
+      (click)="handleClick('Partners')"
+    >
+      Partners
+    </button>
+    <button [ngClass]="activeButton === 'About' ? 'active' : ''" mat-list-item>
+      About
+    </button>
+    <button
+      [ngClass]="activeButton === 'Resources' ? 'active' : ''"
+      mat-list-item
+    >
+      Resources
+    </button>
+    <button
+      [ngClass]="activeButton === 'Contact' ? 'active' : ''"
+      mat-list-item
+      (click)="handleClick('Contact')"
+    >
+      Contact
+    </button>
+    <button
+      [ngClass]="activeButton === 'Start' ? 'active' : ''"
+      mat-list-item
+      (click)="handleClick('Start')"
+    >
+      Try Adoya Free
+      <mat-icon class="text-muted ml-1">auto_awesome</mat-icon>
+    </button>
+  </mat-action-list>
+</div>

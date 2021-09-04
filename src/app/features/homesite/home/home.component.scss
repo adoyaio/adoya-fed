@@ -1,0 +1,12 @@
+.splash__container {
+  ::ng-deep {
+    .mat-list-base .mat-list-item {
+      height: 60px !important;
+    }
+  }
+
+  .list-item-larger {
+    height: 100px;
+    line-height: 100px;
+  }
+}

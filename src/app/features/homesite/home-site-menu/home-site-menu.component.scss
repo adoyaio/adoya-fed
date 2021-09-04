@@ -1,0 +1,17 @@
+@import "variables.scss";
+
+.splash__container {
+  ::ng-deep {
+    .mat-list-base .mat-list-item {
+      height: 60px !important;
+    }
+  }
+}
+
+.logo {
+  max-width: 75px;
+}
+
+.active {
+  color: mat-color($adoya-web-primary);
+}

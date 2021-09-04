@@ -4,7 +4,8 @@ import { Routes, RouterModule, PreloadAllModules } from "@angular/router";
 import { AuthGuard } from "./core/guards/auth.guard";
 import { RegistrationComponent } from "./features/registration/components/registration.component";
 import { HasRegisteredGuard } from "./core/guards/has-registered.guard";
-import { SplashComponent } from "./features/splash/splash.component";
+import { SplashComponent } from "./features/homesite/splash/splash.component";
+import { HomeComponent } from "./features/homesite/home/home.component";
 
 const routes: Routes = [
   {
@@ -20,6 +21,11 @@ const routes: Routes = [
   {
     path: "start",
     component: SplashComponent,
+    data: { title: "Get Started with Adoya" },
+  },
+  {
+    path: "home",
+    component: HomeComponent,
     data: { title: "Get Started with Adoya" },
   },
   {

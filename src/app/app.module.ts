@@ -10,16 +10,17 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { AmplifyAngularModule, AmplifyService } from "aws-amplify-angular";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { ChartsModule } from "ng2-charts";
-import { SecureLayoutModule } from "./layout/secure-layout/secure-layout.module";
+
 import { RegistrationModule } from "./features/registration/registration.module";
 import { SharedModule } from "./shared/shared.module";
 import { DynamicModalComponent } from "./shared/dynamic-modal/dynamic-modal.component";
 import { NgxSkeletonLoaderModule } from "ngx-skeleton-loader";
-import { SplashComponent } from "./features/splash/splash.component";
+
 import { MatCarouselModule } from "@ngmodule/material-carousel";
+import { HomesiteModule } from "./features/homesite/homesite.module";
 
 @NgModule({
-  declarations: [AppComponent, SplashComponent],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -32,6 +33,7 @@ import { MatCarouselModule } from "@ngmodule/material-carousel";
     ChartsModule,
     RegistrationModule,
     SharedModule,
+    HomesiteModule,
     NgxSkeletonLoaderModule,
     MatCarouselModule.forRoot(),
   ],

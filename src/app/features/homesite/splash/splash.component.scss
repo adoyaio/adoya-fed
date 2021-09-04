@@ -1,0 +1,11 @@
+.logo {
+  max-width: 75px;
+}
+
+.splash__container {
+  ::ng-deep {
+    .mat-list-base .mat-list-item {
+      height: 60px !important;
+    }
+  }
+}

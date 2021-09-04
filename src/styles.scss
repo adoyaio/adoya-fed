@@ -32,6 +32,7 @@ html {
 }
 body {
   min-height: 100%;
+  margin: 0;
 }
 // body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
@@ -370,4 +371,51 @@ $altTheme: mat-dark-theme($theme-primary, $theme-accent, $theme-warn);
   border-color: mat-color($adoya-web-accent);
   border-radius: 1;
   border-width: 1px;
+}
+
+.card-green {
+  // background-image: url("../../../assets/images/green.jpg");
+  background-repeat: repeat-y;
+  background-image: linear-gradient(#5d7d41, #edf8e8);
+}
+
+.card-dark {
+  // background-color: #a3ff54 !important;
+  background-color: #7a975d !important;
+
+  // background-color: #c6d4b8 !important;
+  // background-color: #9eb585 !important;
+  // background-color: #e8ffd4 !important;
+}
+
+.card-light {
+  // background-color: #afc29b !important;
+  background-color: #ccffa1 !important;
+}
+
+.card-med {
+  background-color: #9eb585 !important;
+  border-style: solid;
+  border-width: 1px;
+  border-color: black;
+}
+.large-image {
+  max-width: 600px;
+}
+
+.med-image {
+  max-width: 450px;
+}
+
+.small-image {
+  max-width: 300px;
+}
+
+.carousel__container {
+  width: 600px;
+  height: 300px;
+}
+
+.mat-card-title {
+  font-size: 35px !important;
 }
