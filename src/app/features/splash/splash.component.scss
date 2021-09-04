@@ -5,7 +5,7 @@
 .splash__container {
   ::ng-deep {
     .mat-list-base .mat-list-item {
-      height: 40px !important;
+      height: 60px !important;
     }
   }
 }
@@ -31,7 +31,23 @@
 
 .card-med {
   background-color: #9eb585 !important;
+  border-style: solid;
+  border-width: 1px;
+  border-color: black;
 }
 .large-image {
   max-width: 600px;
+}
+
+.med-image {
+  max-width: 450px;
+}
+
+.small-image {
+  max-width: 300px;
+}
+
+.carousel__container {
+  width: 600px;
+  height: 300px;
 }

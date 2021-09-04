@@ -14,8 +14,9 @@ import { SecureLayoutModule } from "./layout/secure-layout/secure-layout.module"
 import { RegistrationModule } from "./features/registration/registration.module";
 import { SharedModule } from "./shared/shared.module";
 import { DynamicModalComponent } from "./shared/dynamic-modal/dynamic-modal.component";
-import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
-import { SplashComponent } from './features/splash/splash.component';
+import { NgxSkeletonLoaderModule } from "ngx-skeleton-loader";
+import { SplashComponent } from "./features/splash/splash.component";
+import { MatCarouselModule } from "@ngmodule/material-carousel";
 
 @NgModule({
   declarations: [AppComponent, SplashComponent],
@@ -31,7 +32,8 @@ import { SplashComponent } from './features/splash/splash.component';
     ChartsModule,
     RegistrationModule,
     SharedModule,
-    NgxSkeletonLoaderModule
+    NgxSkeletonLoaderModule,
+    MatCarouselModule.forRoot(),
   ],
   providers: [AmplifyService],
   bootstrap: [AppComponent],

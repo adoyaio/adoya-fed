@@ -1,6 +1,6 @@
 <div class="d-flex flex-row flex-wrap px-0 splash__container">
   <div class="col-12 px-0">
-    <div class="mat-elevation-z4 position-fixed mb-5 z-index-10 w-100">
+    <div class="mat-elevation-z0 position-fixed mb-5 z-index-10 w-100">
       <mat-toolbar class="card-med text-center mt-2">
         <div class="text-white font-size-14 font-weight-bold text-center w-100">
           Ready to level up your apple search ads campaigns? Checkout a
@@ -27,48 +27,71 @@
       </mat-action-list>
     </div>
     <div class="z-index-1" [ngStyle]="{ 'margin-top': '185px' }">
-      <div class="card-med">
-        <mat-card class="mat-elevation-z0 mt-3 w-100 col-12">
-          <mat-card-title class="py-1 ml-2"
-            >Enhance Apple Search Ads ROI</mat-card-title
-          >
+      <div class="p-0">
+        <div class="d-flex flex-row mt-0 justify-content-center">
+          <div class="col-12 workbench__card p-2">
+            <mat-card class="mat-elevation-z0 w-100">
+              <mat-card-title class="py-1 ml-2 text-muted"
+                >Enhance Apple Search Ads ROI, with Adoya.</mat-card-title
+              >
 
-          <mat-list>
-            <mat-list-item>
-              <mat-icon color="accent" class="mr-1"
-                >sentiment_satisfied</mat-icon
-              >
-              <span class="font-size-larger"
-                >Look Beyond Installs, Focus on Profitability.
-              </span>
-            </mat-list-item>
-            <mat-list-item>
-              <mat-icon color="accent" class="mr-1">data_exploration</mat-icon>
-              <span class="font-size-larger">
-                Adoya optimizes Apple Search Ads installs and in-app
-                performance.</span
-              >
-            </mat-list-item>
-            <mat-list-item>
-              <mat-icon color="accent" class="mr-1">build</mat-icon>
-              <span class="font-size-larger">
-                Our software provides you with built-in best practices and our
-                web based tools are simple-to-use and intuitive.</span
-              >
-            </mat-list-item>
-          </mat-list>
+              <mat-divider></mat-divider>
+              <div class="d-flex flex-row">
+                <div class="col-6">
+                  <mat-list>
+                    <mat-list-item>
+                      <mat-icon color="accent" class="pr-2"
+                        >sentiment_satisfied</mat-icon
+                      >
+                      <span class="font-size-larger pl-2"
+                        >Look Beyond Installs, Focus on Profitability.
+                      </span>
+                    </mat-list-item>
+                    <mat-list-item>
+                      <mat-icon color="accent" class="pr-2"
+                        >data_exploration</mat-icon
+                      >
+                      <span class="font-size-larger pl-2">
+                        Adoya optimizes Apple Search Ads installs and in-app
+                        performance.</span
+                      >
+                    </mat-list-item>
+                    <mat-list-item>
+                      <mat-icon color="accent" class="pr-2">build</mat-icon>
+                      <span class="font-size-larger pl-2">
+                        Our software provides you with built-in best practices
+                        and our web based tools are simple-to-use and
+                        intuitive.</span
+                      >
+                    </mat-list-item>
+                  </mat-list>
+                </div>
 
-          <!-- <mat-divider></mat-divider> -->
-        </mat-card>
+                <div class="col-6 text-center">
+                  <!-- <img
+                      class="border small-image float-right"
+                      src="../../../assets/images/app.png"
+                    /> -->
+
+                  <img
+                    class="border med-image mt-3 pt-2"
+                    src="../../../assets/images/hero-1.png"
+                  />
+                </div>
+              </div>
+            </mat-card>
+          </div>
+        </div>
       </div>
 
       <div class="col-12">
         <div class="d-flex flex-row flex-wrap px-0 splash__container">
           <!-- plans -->
-          <div class="col-6 pb-3">
+          <div class="col-6 pb-3 mt-5 p-4">
             <mat-card class="workbench__card mat-elevation-z0 mt-3 pb-3 w-100">
               <mat-card-title class="py-2 text-muted">
-                Free Plan <mat-icon class="mr-2">try</mat-icon></mat-card-title
+                Get the Free Plan.
+                <mat-icon class="mr-2">try</mat-icon></mat-card-title
               >
 
               <mat-card-subtitle class="py-2 text-muted font-weight-bold">
@@ -119,12 +142,12 @@
             </mat-card>
           </div>
 
-          <div class="col-6 pb-3 card-light border">
+          <div class="col-6 p-3 pb-3 mt-5 card-light workbench__card">
             <mat-card
               class="workbench__card mat-elevation-z0 mt-3 w-100 py-2 pb-3"
             >
-              <mat-card-title class="py-2 align-middle text-primary">
-                Full Access
+              <mat-card-title class="py-2 align-middle text-muted">
+                Get the Full Suite.
                 <mat-icon class="mr-2">try</mat-icon>
               </mat-card-title>
               <mat-card-subtitle class="py-2 font-weight-bold text-primary">
@@ -202,26 +225,48 @@
           </div>
 
           <!-- optimization -->
-          <div class="col-12 pt-3">
+          <div class="col-12 pt-3 mt-5">
             <div class="d-flex flex-row justify-content-center">
               <div class="col-12">
                 <mat-card class="workbench__card mat-elevation-z0 mt-3 w-100">
                   <mat-card-title class="py-2 text-muted">
-                    Optimize campaign performance
-                    <mat-icon>auto_graph</mat-icon>
+                    Optimize campaigns.
+                    <mat-icon color="accent">auto_graph</mat-icon>
                   </mat-card-title>
                   <mat-card-subtitle class="py-2 text-muted font-weight-bold">
-                    Choose from pre-defined campaign strategies. Our algorithms
-                    provide you with built in best practices that will help you
-                    maximize growth, lower cost of installs, and save time.
+                    Choose from pre-defined campaign strategies. Our algorithm
+                    provides you with
+                    <a class="adoya-link" href="#">built in best practices</a>
+                    that will help maximize growth, lower cost per install, and
+                    save time.
                   </mat-card-subtitle>
                   <mat-divider></mat-divider>
                   <mat-card-content>
-                    <div class="d-flex flex-row justify-content-left">
-                      <img
-                        src="../../../assets/images/optimize-1.png"
-                        class="large-image"
-                      />
+                    <div class="carousel__container mt-3 pt-3">
+                      <mat-carousel
+                        timings="250ms ease-in"
+                        [slideHeight]="300"
+                        [autoplay]="true"
+                        interval="3500"
+                        color="accent"
+                        maxWidth="auto"
+                        proportion="50"
+                        maintainAspectRatio="true"
+                        slides="4"
+                        [loop]="false"
+                        [hideArrows]="true"
+                        [hideIndicators]="false"
+                        [useKeyboard]="true"
+                        [useMouseWheel]="false"
+                        orientation="ltr"
+                      >
+                        <mat-carousel-slide
+                          #matCarouselSlide
+                          *ngFor="let slide of optimizeSlides; let i = index"
+                          [image]="slide.image"
+                          [hideOverlay]="true"
+                        ></mat-carousel-slide>
+                      </mat-carousel>
                     </div>
                   </mat-card-content>
                 </mat-card>
@@ -230,12 +275,13 @@
           </div>
 
           <!-- reporting -->
-          <div class="col-12 pt-3">
+          <div class="col-12 pt-3 mt-5">
             <div class="d-flex flex-row justify-content-center">
               <div class="col-12">
                 <mat-card class="workbench__card mat-elevation-z0 mt-3 w-100">
                   <mat-card-title class="py-2 text-muted">
-                    Reporting <mat-icon>insert_chart</mat-icon>
+                    Comprehensive Reporting.
+                    <mat-icon color="accent">insert_chart</mat-icon>
                   </mat-card-title>
                   <mat-card-subtitle class="py-2 text-muted font-weight-bold">
                     Daily email reports and on-demand reporting in the Adoya web
@@ -244,15 +290,31 @@
                   </mat-card-subtitle>
                   <mat-divider></mat-divider>
                   <mat-card-content>
-                    <div class="d-flex flex-row justify-content-left">
-                      <img
-                        src="../../../assets/images/reporting-1.png"
-                        class="large-image border mr-1"
-                      />
-                      <!-- <img
-                        src="../../../assets/images/reporting-5.png"
-                        class="large-image border"
-                      /> -->
+                    <div class="carousel__container mt-3 pt-3">
+                      <mat-carousel
+                        timings="250ms ease-in"
+                        [slideHeight]="300"
+                        [autoplay]="true"
+                        interval="4000"
+                        color="accent"
+                        maxWidth="auto"
+                        proportion="50"
+                        maintainAspectRatio="true"
+                        slides="2"
+                        [loop]="false"
+                        [hideArrows]="true"
+                        [hideIndicators]="false"
+                        [useKeyboard]="true"
+                        [useMouseWheel]="false"
+                        orientation="ltr"
+                      >
+                        <mat-carousel-slide
+                          #matCarouselSlide
+                          *ngFor="let slide of reportingSlides; let i = index"
+                          [image]="slide.image"
+                          [hideOverlay]="true"
+                        ></mat-carousel-slide>
+                      </mat-carousel>
                     </div>
                   </mat-card-content>
                 </mat-card>
@@ -261,12 +323,13 @@
           </div>
 
           <!-- data vis -->
-          <div class="col-12 pt-3">
+          <div class="col-12 pt-3 mt-5">
             <div class="d-flex flex-row justify-content-center">
               <div class="col-12">
                 <mat-card class="workbench__card mat-elevation-z0 mt-3 w-100">
                   <mat-card-title class="py-2 text-muted">
-                    Data visualization <mat-icon>pie_chart</mat-icon>
+                    Data visualization tooling.
+                    <mat-icon color="accent">pie_chart</mat-icon>
                   </mat-card-title>
                   <mat-card-subtitle class="py-2 text-muted font-weight-bold">
                     Simple to use web tools let you visualize and analyze your
@@ -275,15 +338,31 @@
                   </mat-card-subtitle>
                   <mat-divider></mat-divider>
                   <mat-card-content>
-                    <div class="d-flex flex-row justify-content-left">
-                      <img
-                        src="../../../assets/images/reporting-2.png"
-                        class="large-image border mr-1"
-                      />
-                      <img
-                        src="../../../assets/images/reporting-3.png"
-                        class="large-image border"
-                      />
+                    <div class="carousel__container mt-3 pt-3">
+                      <mat-carousel
+                        timings="250ms ease-in"
+                        [slideHeight]="300"
+                        [autoplay]="true"
+                        interval="4000"
+                        color="accent"
+                        maxWidth="auto"
+                        proportion="50"
+                        maintainAspectRatio="true"
+                        slides="2"
+                        [loop]="false"
+                        [hideArrows]="true"
+                        [hideIndicators]="false"
+                        [useKeyboard]="true"
+                        [useMouseWheel]="false"
+                        orientation="ltr"
+                      >
+                        <mat-carousel-slide
+                          #matCarouselSlide
+                          *ngFor="let slide of visulizeSlides; let i = index"
+                          [image]="slide.image"
+                          [hideOverlay]="true"
+                        ></mat-carousel-slide>
+                      </mat-carousel>
                     </div>
                   </mat-card-content>
                 </mat-card>
@@ -292,12 +371,12 @@
           </div>
 
           <!-- mmps -->
-          <div class="col-12 pt-3">
+          <div class="col-12 pt-3 mt-5">
             <div class="d-flex flex-row justify-content-center">
               <mat-card class="workbench__card mat-elevation-z0 mt-3 w-100">
                 <mat-card-title class="py-2 text-muted">
-                  Supported MMP Integrations
-                  <mat-icon>drive_file_move</mat-icon>
+                  Integrations.
+                  <mat-icon color="accent">drive_file_move</mat-icon>
                 </mat-card-title>
 
                 <mat-card-subtitle class="py-2 text-muted font-weight-bold">
@@ -306,11 +385,76 @@
                 </mat-card-subtitle>
                 <mat-divider></mat-divider>
                 <mat-card-content>
-                  <div class="d-flex flex-row justify-content-left">
-                    <img
-                      src="../../../assets/images/reporting-1.png"
-                      class="large-image"
-                    />
+                  <div class="carousel__container mt-3 pt-3">
+                    <mat-carousel
+                      timings="250ms ease-in"
+                      [slideHeight]="300"
+                      [autoplay]="true"
+                      interval="4000"
+                      color="accent"
+                      maxWidth="auto"
+                      proportion="50"
+                      maintainAspectRatio="true"
+                      slides="2"
+                      [loop]="false"
+                      [hideArrows]="true"
+                      [hideIndicators]="false"
+                      [useKeyboard]="true"
+                      [useMouseWheel]="false"
+                      orientation="ltr"
+                    >
+                      <mat-carousel-slide
+                        #matCarouselSlide
+                        *ngFor="let slide of integrationSlides; let i = index"
+                        [image]="slide.image"
+                        [hideOverlay]="true"
+                      ></mat-carousel-slide>
+                    </mat-carousel>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            </div>
+          </div>
+
+          <!-- testimonial -->
+          <div class="col-12 pt-3 mt-5">
+            <div class="d-flex flex-row justify-content-center">
+              <mat-card class="workbench__card mat-elevation-z0 mt-3 w-100">
+                <mat-card-title class="py-2 text-muted">
+                  Testimonials.
+                  <mat-icon color="accent">comment</mat-icon>
+                </mat-card-title>
+
+                <mat-card-subtitle class="py-2 text-muted font-weight-bold">
+                  See what some of our customers are saying about Adoya:
+                </mat-card-subtitle>
+                <mat-divider></mat-divider>
+                <mat-card-content>
+                  <div class="carousel__container mt-3 pt-3 px-5">
+                    <mat-carousel
+                      timings="250ms ease-in"
+                      [slideHeight]="300"
+                      [autoplay]="true"
+                      interval="4000"
+                      color="accent"
+                      maxWidth="auto"
+                      proportion="40"
+                      maintainAspectRatio="true"
+                      slides="3"
+                      [loop]="false"
+                      [hideArrows]="true"
+                      [hideIndicators]="false"
+                      [useKeyboard]="true"
+                      [useMouseWheel]="false"
+                      orientation="ltr"
+                    >
+                      <mat-carousel-slide
+                        #matCarouselSlide
+                        *ngFor="let slide of testimonialSlides; let i = index"
+                        [image]="slide.image"
+                        [hideOverlay]="true"
+                      ></mat-carousel-slide>
+                    </mat-carousel>
                   </div>
                 </mat-card-content>
               </mat-card>
@@ -318,11 +462,11 @@
           </div>
 
           <!-- plans -->
-
-          <div class="col-6 pb-3">
+          <div class="col-6 pb-3 mt-5">
             <mat-card class="workbench__card mat-elevation-z0 mt-3 pb-3 w-100">
               <mat-card-title class="py-2 text-muted">
-                Free Plan <mat-icon class="mr-2">try</mat-icon></mat-card-title
+                Get the Free Plan.
+                <mat-icon class="mr-2">try</mat-icon></mat-card-title
               >
 
               <mat-card-subtitle class="py-2 text-muted font-weight-bold">
@@ -373,12 +517,12 @@
             </mat-card>
           </div>
 
-          <div class="col-6 pb-3 card-light border">
+          <div class="col-6 pb-3 mt-5 card-light border">
             <mat-card
               class="workbench__card mat-elevation-z0 mt-3 w-100 py-2 pb-3"
             >
               <mat-card-title class="py-2 align-middle text-primary">
-                Full Access
+                Get the full suite.
                 <mat-icon class="mr-2">try</mat-icon>
               </mat-card-title>
               <mat-card-subtitle class="py-2 font-weight-bold text-primary">
