@@ -3,56 +3,56 @@
   <div class="z-index-1" [ngStyle]="{ 'margin-top': '185px' }" class="w-100">
     <div class="d-flex flex-row mt-0 justify-content-center w-100">
       <div class="col-12 p-2">
-        <mat-card class="mat-elevation-z0 w-100 card-green pb-5">
+        <mat-card class="mat-elevation-z0 w-100 pb-5 pt-5">
           <div class="d-flex flex-row">
-            <div class="col-6">
-              <!-- <mat-list>
-                <mat-list-item>
-                  <span class="font-size-larger text-light pl-2"
-                    >Enhance Apple Search Ads ROI.
-                  </span>
-                </mat-list-item>
-                <mat-list-item class="list-item-large">
-                  <span class="font-size-larger text-light pl-2 font-size-35"
-                    >Look Beyond Installs, Focus on Profitability.
-                  </span>
-                </mat-list-item>
-                <mat-list-item>
-                  <mat-icon class="pr-2 text-light">data_exploration</mat-icon>
-                  <span class="font-size-larger pl-2 text-light">
-                    Adoya optimizes Apple Search Ads installs and in-app
-                    performance.</span
-                  >
-                </mat-list-item>
-                <mat-list-item>
-                  <mat-icon class="pr-2 text-light">build</mat-icon>
-                  <span class="font-size-larger pl-2 text-light">
-                    Our software provides you with built-in best practices and
-                    our web based tools are simple-to-use and intuitive.</span
-                  >
-                </mat-list-item>
-              </mat-list> -->
-
-              <div class="font-size-larger text-light pl-2 mt-3">
-                Enhance Apple Search Ads ROI.
+            <div class="col-6 text-center">
+              <div class="font-size-20 text-muted pl-3 mt-3">
+                Look Beyond Installs, Focus on Profitability.
               </div>
 
-              <div class="list-item-large mt-3">
-                <span class="font-size-larger text-light pl-2 font-size-35"
-                  >Look Beyond Installs, Focus on Profitability.
+              <div class="list-item-large mt-4">
+                <span class="text-muted pl-3 font-size-38 font-weight-bold"
+                  >Enhance Apple Search Ads ROI
                 </span>
               </div>
-              <div class="mt-3">
-                <span class="font-size-larger pl-2 text-light">
-                  Adoya optimizes Apple Search Ads installs and in-app
-                  performance.</span
+              <div class="mt-4">
+                <span class="font-size-20 pl-3 text-muted">
+                  Optimize installs and in-app performance.</span
                 >
               </div>
-              <div class="mt-3">
-                <span class="font-size-larger pl-2 text-light">
-                  Our software provides you with built-in best practices and our
-                  web based tools are simple-to-use and intuitive.</span
+
+              <div
+                class="mt-5 pt-4 pb-5 d-flex flex-row justify-content-center"
+              >
+                <button
+                  mat-raised-button
+                  color="accent"
+                  class="
+                    w-auto
+                    ml-4
+                    mt-2
+                    rounded-pill
+                    p-2
+                    border border-secondary
+                  "
                 >
+                  <span class="text-light px-5 font-size-20">How it works</span>
+                </button>
+
+                <button
+                  mat-raised-button
+                  color="accent"
+                  class="
+                    w-auto
+                    ml-4
+                    mt-2
+                    rounded-pill
+                    p-2
+                    border border-secondary
+                  "
+                >
+                  <span class="text-light px-5 font-size-20">Who We Are</span>
+                </button>
               </div>
             </div>
 
@@ -62,13 +62,48 @@
                       src="../../../assets/images/app.png"
                     /> -->
 
-              <img
+              <!-- <img
                 class="border med-image mt-3 pt-2"
                 src="../../../assets/images/hero-1.png"
-              />
+              /> -->
+
+              <div class="carousel__container-large mt-3 pt-3 px-5">
+                <mat-carousel
+                  timings="250ms ease-in"
+                  [slideHeight]="500"
+                  [autoplay]="true"
+                  interval="4000"
+                  color="accent"
+                  maxWidth="auto"
+                  proportion="40"
+                  maintainAspectRatio="true"
+                  slides="13"
+                  [loop]="false"
+                  [hideArrows]="false"
+                  [hideIndicators]="true"
+                  [useKeyboard]="true"
+                  [useMouseWheel]="false"
+                  orientation="ltr"
+                >
+                  <mat-carousel-slide
+                    #matCarouselSlide
+                    *ngFor="let slide of allSlides; let i = index"
+                    [image]="slide.image"
+                    [hideOverlay]="true"
+                  ></mat-carousel-slide>
+                </mat-carousel>
+              </div>
             </div>
           </div>
+
+          <div class="fader pb-5 pt-5"></div>
+
+          <!-- <img
+              class="border med-image mt-3 pt-2"
+              src="../../../../assets/images/fader.webp"
+            />  -->
         </mat-card>
+        <!-- <div class="w-100 fader pt-5 pb-5"></div> -->
       </div>
     </div>
   </div>

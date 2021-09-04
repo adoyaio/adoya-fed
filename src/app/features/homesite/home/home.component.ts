@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { chain } from "lodash";
 
 @Component({
   selector: "app-home",
@@ -7,6 +8,18 @@ import { Component, OnInit } from "@angular/core";
 })
 export class HomeComponent implements OnInit {
   constructor() {}
+
+  get allSlides() {
+    return chain([
+      this.reportingSlides,
+      this.optimizeSlides,
+      this.integrationSlides,
+      this.optimizeSlides,
+      this.testimonialSlides,
+    ])
+      .flatMap()
+      .value();
+  }
 
   ngOnInit() {}
 

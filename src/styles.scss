@@ -416,6 +416,11 @@ $altTheme: mat-dark-theme($theme-primary, $theme-accent, $theme-warn);
   height: 300px;
 }
 
+.carousel__container-large {
+  width: 600px;
+  height: 400px;
+}
+
 .mat-card-title {
   font-size: 35px !important;
 }

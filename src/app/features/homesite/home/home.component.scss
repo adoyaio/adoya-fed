@@ -5,8 +5,24 @@
     }
   }
 
-  .list-item-larger {
-    height: 100px;
-    line-height: 100px;
+  .list-item-large {
+    line-height: 50px;
+  }
+  .fader {
+    background-image: url("../../../../assets/images/green.jpg");
+    background-size: cover;
+    opacity: 100%;
+    box-shadow: inset 0 0 0 2000px rgba(164, 219, 157, 0.705);
+    //transform: rotate(180deg);
+    // ::before {
+    //   content: "";
+    //   position: absolute;
+    //   width: 200%;
+    //   height: 200%;
+    //   top: -50%;
+    //   left: -50%;
+    //   z-index: -1;
+    //   background-image: url("../../../../assets/images/green.jpg");
+    //   transform: rotate(180deg);
   }
 }
