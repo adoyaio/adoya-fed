@@ -49,7 +49,11 @@
       class="rounded-pill border"
     >
       Try Adoya Free
-      <mat-icon class="text-muted ml-1">auto_awesome</mat-icon>
+      <mat-icon
+        class="ml-1"
+        [ngClass]="activeButton === 'Start' ? '' : 'text-muted'"
+        >auto_awesome</mat-icon
+      >
     </button>
   </mat-action-list>
 </div>

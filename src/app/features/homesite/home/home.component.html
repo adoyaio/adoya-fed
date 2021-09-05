@@ -4,7 +4,7 @@
     <div class="d-flex flex-row mt-0 justify-content-center w-100">
       <div class="col-12 p-2">
         <mat-card class="mat-elevation-z0 w-100 pb-5 pt-5">
-          <div class="d-flex flex-row border-bottom">
+          <div class="d-flex flex-row">
             <div class="col-6 text-left ml-5 pl-5">
               <div class="font-size-20 text-muted pl-3 mt-3">
                 Look Beyond Installs, Focus on Profitability.
@@ -55,16 +55,6 @@
             </div>
 
             <div class="col-6 text-center">
-              <!-- <img
-                      class="border small-image float-right"
-                      src="../../../assets/images/app.png"
-                    /> -->
-
-              <!-- <img
-                class="border med-image mt-3 pt-2"
-                src="../../../assets/images/hero-1.png"
-              /> -->
-
               <div class="carousel__container-large mt-3 pt-3 px-5">
                 <mat-carousel
                   timings="250ms ease-in"
@@ -105,37 +95,55 @@
 
             <div class="col-12 text-center border-bottom">
               <mat-action-list class="d-flex flex-row py-4 bg-white">
-                <button mat-list-item>
+                <button
+                  mat-list-item
+                  (click)="handleClick('https://www.hellobonsai.com/')"
+                >
                   <img
                     class="small-image mt-3 pt-2"
                     src="../../../../assets/images/bonsai.svg"
                   />
                 </button>
-                <button mat-list-item>
+                <button
+                  mat-list-item
+                  (click)="handleClick('https://www.covetly.com/')"
+                >
                   <img
                     class="small-image mt-3 pt-2"
                     src="../../../../assets/images/covetly logo.webp"
                   />
                 </button>
-                <button mat-list-item>
+                <button
+                  mat-list-item
+                  (click)="handleClick('https://hugah.com/')"
+                >
                   <img
                     class="small-image mt-3 pt-2"
                     src="../../../../assets/images/hugah-logo-400x100.webp"
                   />
                 </button>
-                <button mat-list-item>
+                <button
+                  mat-list-item
+                  (click)="handleClick('https://weareher.com/')"
+                >
                   <img
                     class="small-image mt-3 pt-2"
                     src="../../../../assets/images/her logo.webp"
                   />
                 </button>
-                <button mat-list-item>
+                <button
+                  mat-list-item
+                  (click)="handleClick('https://www.apptweak.com/')"
+                >
                   <img
                     class="small-image mt-3 pt-2"
                     src="../../../../assets/images/AppTweak_logo_1920.webp"
                   />
                 </button>
-                <button mat-list-item>
+                <button
+                  mat-list-item
+                  (click)="handleClick('https://branch.io/')"
+                >
                   <img
                     class="small-image mt-3 pt-2"
                     src="../../../../assets/images/branch-logo-color-dark.webp"

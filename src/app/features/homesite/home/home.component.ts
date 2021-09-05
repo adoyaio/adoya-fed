@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
 import { chain } from "lodash";
 
 @Component({
@@ -48,4 +49,8 @@ export class HomeComponent implements OnInit {
     { image: "../../../assets/images/testimonial-2.png" },
     { image: "../../../assets/images/testimonial-3.png" },
   ];
+
+  handleClick(endpoint: string) {
+    window.open(endpoint, "_blank");
+  }
 }
