@@ -7,9 +7,10 @@ import { SplashComponent } from "./splash/splash.component";
 import { HomeComponent } from "./home/home.component";
 import { MaterialModule } from "src/app/shared/material-design/material.module";
 import { HomeSiteMenuComponent } from "./home-site-menu/home-site-menu.component";
+import { ProductsComponent } from './products/products.component';
 
 @NgModule({
-  declarations: [SplashComponent, HomeComponent, HomeSiteMenuComponent],
+  declarations: [SplashComponent, HomeComponent, HomeSiteMenuComponent, ProductsComponent],
   imports: [
     CommonModule,
     SharedModule,

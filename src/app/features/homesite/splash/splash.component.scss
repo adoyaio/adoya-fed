@@ -12,3 +12,11 @@
     }
   }
 }
+
+.splash__subcontainer {
+  ::ng-deep {
+    .mat-list-item-content {
+      justify-content: flex-start;
+    }
+  }
+}

@@ -19,12 +19,14 @@
     <button
       [ngClass]="activeButton === 'Products' ? 'active' : ''"
       mat-list-item
+      (click)="handleClick('Products')"
     >
+      <mat-icon color="accent" class="mr-2">whatshot</mat-icon>
       Products
-      <mat-icon color="accent" class="pl-1">whatshot</mat-icon>
     </button>
     <button
       [ngClass]="activeButton === 'Resources' ? 'active' : ''"
+      [matMenuTriggerFor]="menu"
       mat-list-item
     >
       Resources
@@ -38,7 +40,7 @@
       Contact Us
     </button>
     <button
-      [ngClass]="activeButton === 'Start' ? 'active' : 'border-dark'"
+      [ngClass]="activeButton === 'Start' ? 'active' : 'border-secondary'"
       mat-list-item
       (click)="handleClick('Start')"
       class="rounded-pill border"
@@ -52,3 +54,12 @@
     </button>
   </mat-action-list>
 </div>
+<mat-menu #menu="matMenu">
+  <button mat-menu-item>Apple Search Ads Whitepaper 1</button>
+  <button mat-menu-item>Apple Search Ads Whitepaper 2</button>
+  <button mat-menu-item>Blog</button>
+  <button mat-menu-item>Case Studies</button>
+  <button mat-menu-item>Glossary</button>
+  <button mat-menu-item>Mobile Marketing News</button>
+  <button mat-menu-item>Useful Links</button>
+</mat-menu>

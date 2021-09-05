@@ -6,6 +6,7 @@ import { RegistrationComponent } from "./features/registration/components/regist
 import { HasRegisteredGuard } from "./core/guards/has-registered.guard";
 import { SplashComponent } from "./features/homesite/splash/splash.component";
 import { HomeComponent } from "./features/homesite/home/home.component";
+import { ProductsComponent } from "./features/homesite/products/products.component";
 
 const routes: Routes = [
   {
@@ -26,7 +27,12 @@ const routes: Routes = [
   {
     path: "home",
     component: HomeComponent,
-    data: { title: "Get Started with Adoya" },
+    data: { title: "Adoya" },
+  },
+  {
+    path: "products",
+    component: ProductsComponent,
+    data: { title: "Products" },
   },
   {
     path: "workbench",
