@@ -1,4 +1,6 @@
-<div class="mat-elevation-z0 position-fixed mb-5 z-index-10 w-100">
+<div
+  class="mat-elevation-z0 position-fixed mb-5 z-index-10 w-100 border-bottom"
+>
   <mat-toolbar class="card-med text-center m-0">
     <div class="text-white font-size-14 font-weight-bold text-center w-100">
       Ready to level up your apple search ads campaigns? Checkout a practical
@@ -44,6 +46,7 @@
       [ngClass]="activeButton === 'Start' ? 'active' : ''"
       mat-list-item
       (click)="handleClick('Start')"
+      class="rounded-pill border"
     >
       Try Adoya Free
       <mat-icon class="text-muted ml-1">auto_awesome</mat-icon>

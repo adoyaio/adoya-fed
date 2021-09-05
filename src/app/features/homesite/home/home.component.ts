@@ -12,9 +12,7 @@ export class HomeComponent implements OnInit {
   get allSlides() {
     return chain([
       this.reportingSlides,
-      this.optimizeSlides,
-      this.integrationSlides,
-      this.optimizeSlides,
+      this.visulizeSlides,
       this.testimonialSlides,
     ])
       .flatMap()
