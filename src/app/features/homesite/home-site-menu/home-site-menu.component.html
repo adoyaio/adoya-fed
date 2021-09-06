@@ -7,9 +7,18 @@
       guide to Apple Search Ads.
       <a href="/start" class="ml-3 text-white">Get the Free Whitepaper</a>
 
-      <button class="float-right text-white pr-2 w-auto" mat-icon-button>
+      <button
+        class="float-right text-white pr-2 w-auto"
+        mat-icon-button
+        [matMenuTriggerFor]="accountMenu"
+      >
         <mat-icon class="text-white">account_circle</mat-icon>
       </button>
+      <mat-menu #accountMenu="matMenu">
+        <button (click)="onProfileClicked()" mat-menu-item>
+          <mat-icon color="accent">face</mat-icon> Login
+        </button>
+      </mat-menu>
     </div>
   </mat-toolbar>
   <mat-action-list class="d-flex flex-row py-4 bg-white">

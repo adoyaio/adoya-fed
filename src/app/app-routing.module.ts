@@ -27,12 +27,7 @@ const routes: Routes = [
   {
     path: "home",
     component: HomeComponent,
-    data: { title: "Adoya" },
-  },
-  {
-    path: "products",
-    component: ProductsComponent,
-    data: { title: "Products" },
+    data: { title: "adoya" },
   },
   {
     path: "workbench",

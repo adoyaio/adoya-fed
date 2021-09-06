@@ -16,4 +16,8 @@ export class HomeSiteMenuComponent implements OnInit {
   handleClick(path: string) {
     this.router.navigate([`${path.toLowerCase()}`]);
   }
+
+  onProfileClicked() {
+    this.router.navigate(["portal"]);
+  }
 }

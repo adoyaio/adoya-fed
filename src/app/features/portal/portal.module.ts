@@ -5,17 +5,14 @@ import { PortalRoutingModule } from "./portal-routing.module";
 import { PortalComponent } from "./components/portal.component";
 
 import { AmplifyAngularModule, AmplifyService } from "aws-amplify-angular";
-import { NavLinksComponent } from "src/app/layout/secure-layout/components/nav-links/nav-links.component";
+
 import { MaterialModule } from "src/app/shared/material-design/material.module";
+import { SharedModule } from "src/app/shared/shared.module";
 
 @NgModule({
   declarations: [PortalComponent],
-  imports: [
-    CommonModule,
-    PortalRoutingModule,
-    AmplifyAngularModule,
-    MaterialModule,
-  ],
+  imports: [PortalRoutingModule, AmplifyAngularModule, SharedModule],
   providers: [AmplifyService],
+  exports: [PortalComponent],
 })
 export class PortalModule {}

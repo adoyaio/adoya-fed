@@ -1,27 +1,27 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, Inject, Input, OnInit } from "@angular/core";
 import { AmplifyService } from "aws-amplify-angular";
 import { Router } from "@angular/router";
 import { tap } from "rxjs/operators";
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
 
+export interface PortalDialogData {
+  signUpType?: string;
+  isSignUp;
+}
 @Component({
   selector: "app-portal",
   templateUrl: "./portal.component.html",
   styleUrls: ["./portal.component.scss"],
 })
 export class PortalComponent implements OnInit {
-  constructor(private amplifyService: AmplifyService, private router: Router) {
-    this.amplifyService.authStateChange$
-      .pipe(
-        tap((authState) => {
-          if (authState.state === "signedIn") {
-            this.router.navigateByUrl("/workbench");
-          } else {
-            this.router.navigateByUrl("/portal");
-          }
-        })
-      )
-      .subscribe();
-  }
+  @Input() signUpType: string;
+  @Input() isSignUp: boolean;
+  constructor(
+    private amplifyService: AmplifyService,
+    private router: Router
+  ) // public dialogRef: MatDialogRef<PortalComponent> // @Inject(MAT_DIALOG_DATA) public data: PortalDialogData
+  {}
+
   user: any;
   greeting: string;
   usernameAttributes = "email";
@@ -78,5 +78,25 @@ export class PortalComponent implements OnInit {
     ],
   };
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // if (this.data.isSignUp) {
+    //   this.isSignUp = true;
+    // }
+    // if (this.data.signUpType) {
+    //   this.signUpType = this.data.signUpType;
+    // }
+    // if (!this.isSignUp) {
+    //   this.amplifyService.authStateChange$
+    //     .pipe(
+    //       tap((authState) => {
+    //         if (authState.state === "signedIn") {
+    //           this.router.navigateByUrl("/workbench");
+    //         } else {
+    //           this.router.navigateByUrl("/portal");
+    //         }
+    //       })
+    //     )
+    //     .subscribe();
+    // }
+  }
 }

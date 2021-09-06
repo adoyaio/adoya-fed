@@ -7,7 +7,7 @@
       >
         <div class="col-12 p-2">
           <mat-card class="mat-elevation-z0 w-100">
-            <mat-card-title class="py-1 ml-2 text-muted"
+            <mat-card-title class="py-1 ml-4 text-muted"
               >Enhance Apple Search Ads ROI</mat-card-title
             >
 
@@ -62,7 +62,7 @@
     <div class="col-12">
       <div class="d-flex flex-row flex-wrap px-0 splash__container">
         <!-- plans -->
-        <div class="col-6 pb-3 mt-5 p-4">
+        <div class="col-6 pb-3 mt-5">
           <mat-card class="workbench__card mat-elevation-z0 mt-3 pb-3 w-100">
             <mat-card-title class="py-2 text-muted">
               Get the Free Plan.
@@ -107,6 +107,7 @@
                     mat-stroked-button
                     color="accent"
                     class="w-auto ml-4 mt-2"
+                    (click)="handleSignUpClick($event, 'free')"
                   >
                     <span class="pl-1">Get Free Plan</span>
                     <mat-icon>navigate_next</mat-icon>
@@ -117,7 +118,7 @@
           </mat-card>
         </div>
 
-        <div class="col-6 p-3 pb-3 mt-5">
+        <div class="col-6 pb-3 mt-5">
           <mat-card
             class="workbench__card mat-elevation-z0 mt-3 w-100 py-2 pb-3"
           >
@@ -187,6 +188,7 @@
                     mat-raised-button
                     color="accent"
                     class="w-auto ml-4 mt-2"
+                    (click)="handleSignUpClick($event, 'full')"
                   >
                     <span class="text-light pl-1"
                       >Start Free One Month Trial</span
@@ -237,7 +239,10 @@
                     >
                       <mat-carousel-slide
                         #matCarouselSlide
-                        *ngFor="let slide of optimizeSlides; let i = index"
+                        *ngFor="
+                          let slide of homesiteFacade.optimizeSlides;
+                          let i = index
+                        "
                         [image]="slide.image"
                         [hideOverlay]="true"
                       ></mat-carousel-slide>
@@ -284,7 +289,10 @@
                     >
                       <mat-carousel-slide
                         #matCarouselSlide
-                        *ngFor="let slide of reportingSlides; let i = index"
+                        *ngFor="
+                          let slide of homesiteFacade.reportingSlides;
+                          let i = index
+                        "
                         [image]="slide.image"
                         [hideOverlay]="true"
                       ></mat-carousel-slide>
@@ -332,7 +340,10 @@
                     >
                       <mat-carousel-slide
                         #matCarouselSlide
-                        *ngFor="let slide of visulizeSlides; let i = index"
+                        *ngFor="
+                          let slide of homesiteFacade.visulizeSlides;
+                          let i = index
+                        "
                         [image]="slide.image"
                         [hideOverlay]="true"
                       ></mat-carousel-slide>
@@ -379,7 +390,10 @@
                   >
                     <mat-carousel-slide
                       #matCarouselSlide
-                      *ngFor="let slide of integrationSlides; let i = index"
+                      *ngFor="
+                        let slide of homesiteFacade.integrationSlides;
+                        let i = index
+                      "
                       [image]="slide.image"
                       [hideOverlay]="true"
                     ></mat-carousel-slide>
@@ -424,7 +438,10 @@
                   >
                     <mat-carousel-slide
                       #matCarouselSlide
-                      *ngFor="let slide of testimonialSlides; let i = index"
+                      *ngFor="
+                        let slide of homesiteFacade.testimonialSlides;
+                        let i = index
+                      "
                       [image]="slide.image"
                       [hideOverlay]="true"
                     ></mat-carousel-slide>
@@ -481,6 +498,7 @@
                     mat-stroked-button
                     color="accent"
                     class="w-auto ml-4 mt-2"
+                    (click)="handleSignUpClick($event, 'free')"
                   >
                     <span class="pl-1">Get Free Plan</span>
                     <mat-icon>navigate_next</mat-icon>
@@ -491,9 +509,17 @@
           </mat-card>
         </div>
 
-        <div class="col-6 pb-3 mt-5 card-light border">
+        <div class="col-6 pb-3 mt-5 card-light border border-secondary">
           <mat-card
-            class="workbench__card mat-elevation-z0 mt-3 w-100 py-2 pb-3"
+            class="
+              workbench__card
+              mat-elevation-z0
+              mt-3
+              w-100
+              py-2
+              pb-3
+              border border-secondary
+            "
           >
             <mat-card-title class="py-2 align-middle text-primary">
               Get the full suite.
@@ -561,6 +587,7 @@
                     mat-raised-button
                     color="accent"
                     class="w-auto ml-4 mt-2"
+                    (click)="handleSignUpClick($event, 'full')"
                   >
                     <span class="text-light pl-1"
                       >Start Free One Month Trial</span
