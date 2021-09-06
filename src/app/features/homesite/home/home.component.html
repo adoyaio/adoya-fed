@@ -3,6 +3,7 @@
   <div class="z-index-1" [ngStyle]="{ 'margin-top': '185px' }" class="w-100">
     <div class="d-flex flex-row mt-0 justify-content-center w-100">
       <div class="col-12 p-2">
+        <!-- header and partners block -->
         <mat-card class="mat-elevation-z0 w-100 pb-3 pt-5">
           <div class="d-flex flex-row col-11">
             <div class="col-6 text-left ml-5 pl-5">
@@ -68,6 +69,7 @@
 
           <mat-divider></mat-divider>
 
+          <!-- partners block -->
           <div class="pb-5 pt-5 ml-5 pl-5 d-flex flex-row flex-wrap">
             <div class="col-12 text-left">
               <div
@@ -145,8 +147,10 @@
             </div>
           </div>
         </mat-card>
-        <!-- <div class="w-100 fader pt-5 pb-5"></div> -->
+
         <div class="w-100"><mat-divider></mat-divider></div>
+
+        <!-- hero image block-->
         <div class="d-flex flex-row justify-content-start ml-5 pl-5">
           <div class="col-6">
             <img
@@ -155,6 +159,85 @@
             />
           </div>
           <div class="col-6 background-image-1"></div>
+        </div>
+
+        <!-- 3 col about us-->
+        <div class="fader">
+          <div class="pt-5 pb-5 px-3 d-flex flex-row">
+            <div class="col-4 font-size-25 font-weight-bold">
+              <mat-card class="bg-light text-muted h-100">
+                <div class="w-100 text-center">
+                  <img
+                    mat-card-sm-image
+                    src="../../../../assets/images/about icon.webp"
+                  />
+                </div>
+                <div class="w-100 text-center mt-3">Our Story</div>
+                <div
+                  class="
+                    w-100
+                    text-center
+                    mt-3
+                    font-size-larger font-weight-normal
+                  "
+                >
+                  After years of managing search campaigns for top brands, we
+                  realized something needed to change. There’s too much manual
+                  work, too many spreadsheets, and not enough time. So, we did
+                  something about it. We built Adoya.
+                </div>
+              </mat-card>
+            </div>
+            <div class="col-4 font-size-25 font-weight-bold">
+              <mat-card class="bg-light text-muted h-100">
+                <div class="w-100 text-center">
+                  <img
+                    mat-card-sm-image
+                    src="../../../../assets/images/mission icon.webp"
+                  />
+                </div>
+                <div class="w-100 text-center mt-3">Our Mission</div>
+                <div
+                  class="
+                    w-100
+                    text-center
+                    mt-3
+                    font-size-larger font-weight-normal
+                  "
+                >
+                  We're about saving our customer's time and increasing app
+                  campaign ROI. It's 2020, and we feel that customers should
+                  focus on strategy, not the nitty-gritty of search optimization
+                  and campaign management. Our platform is purpose-built to
+                  drive efficiencies and results.
+                </div>
+              </mat-card>
+            </div>
+            <div class="col-4 font-size-25 font-weight-bold">
+              <mat-card class="bg-light text-muted h-100 p-4">
+                <div class="w-100 text-center">
+                  <img
+                    mat-card-sm-image
+                    src="../../../../assets/images/green tech icon.webp"
+                  />
+                </div>
+                <div class="w-100 text-center mt-3">Our Technology</div>
+                <div
+                  class="
+                    w-100
+                    text-center
+                    mt-3
+                    font-size-larger font-weight-normal
+                  "
+                >
+                  Adoya uses data-driven algorithms and the cloud to offer
+                  no-code, automated solutions for our customers. Our secret
+                  sauce goes beyond the tech, it's about our people and deep
+                  expertise in app marketing.
+                </div>
+              </mat-card>
+            </div>
+          </div>
         </div>
       </div>
     </div>
