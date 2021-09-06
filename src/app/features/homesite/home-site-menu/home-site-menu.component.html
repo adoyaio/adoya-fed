@@ -25,25 +25,25 @@
       Products
     </button>
     <button
-      [ngClass]="activeButton === 'Resources' ? 'active' : ''"
-      [matMenuTriggerFor]="menu"
-      mat-list-item
-    >
-      Resources
-      <mat-icon color="accent" class="pl-1">keyboard_arrow_down</mat-icon>
-    </button>
-    <button
       [ngClass]="activeButton === 'Contact' ? 'active' : ''"
       mat-list-item
       (click)="handleClick('Contact')"
     >
-      Contact Us
+      <mat-icon color="accent" class="mr-2">perm_phone_msg</mat-icon>
+      Contact
     </button>
     <button
-      [ngClass]="activeButton === 'Start' ? 'active' : 'border-secondary'"
+      [ngClass]="activeButton === 'Resources' ? 'active' : ''"
+      [matMenuTriggerFor]="menu"
+      mat-list-item
+    >
+      <mat-icon color="accent" class="mr-2">keyboard_arrow_down</mat-icon>
+      Resources
+    </button>
+    <button
+      [ngClass]="activeButton === 'Start' ? 'active' : ''"
       mat-list-item
       (click)="handleClick('Start')"
-      class="rounded-pill border"
     >
       Try Adoya Free
       <mat-icon
