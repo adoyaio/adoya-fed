@@ -62,33 +62,6 @@
                   class="small-image"
                   src="../../../../assets/images/hero-2.jpg"
                 />
-                <!-- <mat-carousel
-                  timings="250ms ease-in"
-                  [slideHeight]="500"
-                  [autoplay]="true"
-                  interval="4000"
-                  color="accent"
-                  maxWidth="auto"
-                  proportion="40"
-                  maintainAspectRatio="true"
-                  slides="13"
-                  [loop]="false"
-                  [hideArrows]="false"
-                  [hideIndicators]="true"
-                  [useKeyboard]="true"
-                  [useMouseWheel]="false"
-                  orientation="ltr"
-                >
-                  <mat-carousel-slide
-                    #matCarouselSlide
-                    *ngFor="
-                      let slide of homesiteFacade.allSlides;
-                      let i = index
-                    "
-                    [image]="slide.image"
-                    [hideOverlay]="true"
-                  ></mat-carousel-slide>
-                </mat-carousel> -->
               </div>
             </div>
           </div>
@@ -174,8 +147,14 @@
         </mat-card>
         <!-- <div class="w-100 fader pt-5 pb-5"></div> -->
         <div class="w-100"><mat-divider></mat-divider></div>
-        <div class="w-100 d-flex flex-row justify-content-center">
-          <!-- <img class="large-image" src="../../../../assets/images/hero-1.png" /> -->
+        <div class="d-flex flex-row justify-content-start ml-5 pl-5">
+          <div class="col-6">
+            <img
+              class="hero-image"
+              src="../../../../assets/images/hero-1.png"
+            />
+          </div>
+          <div class="col-6 background-image-1"></div>
         </div>
       </div>
     </div>
