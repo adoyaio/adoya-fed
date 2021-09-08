@@ -16,7 +16,7 @@
       </button>
       <mat-menu #accountMenu="matMenu">
         <button (click)="onProfileClicked()" mat-menu-item>
-          <mat-icon color="accent">face</mat-icon> Login
+          <mat-icon color="primary">face</mat-icon> Login
         </button>
       </mat-menu>
     </div>
@@ -30,7 +30,7 @@
       mat-list-item
       (click)="handleClick('Products')"
     >
-      <mat-icon color="accent" class="mr-2">whatshot</mat-icon>
+      <mat-icon color="primary" class="mr-2">whatshot</mat-icon>
       Products
     </button> -->
     <button
@@ -38,7 +38,7 @@
       mat-list-item
       (click)="handleContactClick()"
     >
-      <mat-icon color="accent" class="mr-2">perm_phone_msg</mat-icon>
+      <mat-icon color="primary" class="mr-2">perm_phone_msg</mat-icon>
       Contact
     </button>
     <button
@@ -46,7 +46,7 @@
       [matMenuTriggerFor]="menu"
       mat-list-item
     >
-      <mat-icon color="accent" class="mr-2">keyboard_arrow_down</mat-icon>
+      <mat-icon color="primary" class="mr-2">keyboard_arrow_down</mat-icon>
       Resources
     </button>
     <button

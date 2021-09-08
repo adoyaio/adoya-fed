@@ -13,13 +13,13 @@
 
             <mat-divider></mat-divider>
             <div class="d-flex flex-row">
-              <div class="col-6">
+              <div class="col-6 pl-0 ml-0">
                 <mat-list>
                   <mat-list-item>
                     <span class="font-size-larger pl-2"
                       >Look Beyond Installs, Focus on Profitability
                     </span>
-                    <mat-icon color="accent" class="pl-2"
+                    <mat-icon class="pl-2 text-muted"
                       >sentiment_satisfied</mat-icon
                     >
                   </mat-list-item>
@@ -28,7 +28,7 @@
                       Adoya optimizes Apple Search Ads installs and in-app
                       performance</span
                     >
-                    <mat-icon color="accent" class="pl-2"
+                    <mat-icon class="pl-2 text-muted"
                       >data_exploration</mat-icon
                     >
                   </mat-list-item>
@@ -37,9 +37,20 @@
                       Built-in best practices and simple, intuitive management
                       tools</span
                     >
-                    <mat-icon color="accent" class="pl-2">build</mat-icon>
+                    <mat-icon class="pl-2 text-muted">build_circle</mat-icon>
                   </mat-list-item>
                 </mat-list>
+                <div class="mt-2">
+                  <button
+                    mat-raised-button
+                    color="primary"
+                    class="w-auto ml-4 mt-2"
+                    (click)="handleContactClick()"
+                  >
+                    <span class="text-light pl-1">Request a demo</span>
+                    <mat-icon class="text-light">navigate_next</mat-icon>
+                  </button>
+                </div>
               </div>
 
               <div class="col-6 text-center background-image-1">
@@ -66,7 +77,9 @@
           <mat-card class="workbench__card mat-elevation-z0 mt-3 pb-3 w-100">
             <mat-card-title class="py-2 text-muted">
               Get the Free Plan.
-              <mat-icon class="mr-2">try</mat-icon></mat-card-title
+              <mat-icon color="primary" class="mr-2"
+                >try</mat-icon
+              ></mat-card-title
             >
 
             <mat-card-subtitle class="py-2 text-muted font-weight-bold">
@@ -77,21 +90,21 @@
               <div class="d-flex flex-row justify-content-left">
                 <mat-list>
                   <mat-list-item>
-                    <mat-icon class="text-muted">verified</mat-icon>
+                    <mat-icon color="primary">verified</mat-icon>
                     <span class="text-secondary"
                       >Lorem ipsum dolor sit amet, consectetur adipiscing elit,
                       sed
                     </span>
                   </mat-list-item>
                   <mat-list-item>
-                    <mat-icon class="text-muted">verified</mat-icon>
+                    <mat-icon color="primary">verified</mat-icon>
                     <span class="text-secondary"
                       >Lorem ipsum dolor sit amet, consectetur adipiscing elit,
                       sed
                     </span>
                   </mat-list-item>
                   <mat-list-item>
-                    <mat-icon class="text-muted">verified</mat-icon>
+                    <mat-icon color="primary">verified</mat-icon>
                     <span class="text-secondary"
                       >Lorem ipsum dolor sit amet, consectetur adipiscing elit,
                       sed
@@ -105,7 +118,7 @@
                 <div>
                   <button
                     mat-stroked-button
-                    color="accent"
+                    color="primary"
                     class="w-auto ml-4 mt-2"
                     (click)="handleSignUpClick($event, 'free')"
                   >
@@ -124,54 +137,53 @@
           >
             <mat-card-title class="py-2 align-middle text-muted">
               Get the Full Suite.
-              <mat-icon class="mr-2">try</mat-icon>
+              <mat-icon color="accent" class="mr-2">try</mat-icon>
             </mat-card-title>
-            <mat-card-subtitle class="py-2 font-weight-bold text-primary">
+            <mat-card-subtitle class="py-2 font-weight-bold text-muted">
               Do more with advanced features
-              <mat-icon>auto_graph</mat-icon></mat-card-subtitle
-            >
+            </mat-card-subtitle>
             <mat-divider></mat-divider>
             <mat-card-content>
               <div class="d-flex flex-row justify-content-left">
                 <mat-card-subtitle class="mb-2">
                   <mat-list>
                     <mat-list-item>
-                      <mat-icon color="accent">verified</mat-icon>
+                      <mat-icon color="primary">verified</mat-icon>
                       <span class="text-muted"
                         >Lorem ipsum dolor sit amet, consectetur adipiscing
                         elit, sed</span
                       >
                     </mat-list-item>
                     <mat-list-item>
-                      <mat-icon color="accent">verified</mat-icon>
+                      <mat-icon color="primary">verified</mat-icon>
                       <span class="text-muted"
                         >Lorem ipsum dolor sit amet, consectetur adipiscing
                         elit, sed</span
                       >
                     </mat-list-item>
                     <mat-list-item>
-                      <mat-icon color="accent">verified</mat-icon>
+                      <mat-icon color="primary">verified</mat-icon>
                       <span class="text-muted"
                         >Lorem ipsum dolor sit amet, consectetur adipiscing
                         elit, sed</span
                       >
                     </mat-list-item>
                     <mat-list-item>
-                      <mat-icon color="accent">verified</mat-icon>
+                      <mat-icon color="primary">verified</mat-icon>
                       <span class="text-muted"
                         >Lorem ipsum dolor sit amet, consectetur adipiscing
                         elit, sed</span
                       >
                     </mat-list-item>
                     <mat-list-item>
-                      <mat-icon color="accent">verified</mat-icon>
+                      <mat-icon color="primary">verified</mat-icon>
                       <span class="text-muted"
                         >Lorem ipsum dolor sit amet, consectetur adipiscing
                         elit, sed</span
                       >
                     </mat-list-item>
                     <mat-list-item>
-                      <mat-icon color="accent">verified</mat-icon>
+                      <mat-icon color="primary">verified</mat-icon>
                       <span class="text-muted"
                         >Lorem ipsum dolor sit amet, consectetur adipiscing
                         elit, sed</span
@@ -186,7 +198,7 @@
                 <div class="mt-2">
                   <button
                     mat-raised-button
-                    color="accent"
+                    color="primary"
                     class="w-auto ml-4 mt-2"
                     (click)="handleSignUpClick($event, 'full')"
                   >
@@ -208,7 +220,7 @@
               <mat-card class="workbench__card mat-elevation-z0 mt-3 w-100">
                 <mat-card-title class="py-2 text-muted">
                   Optimize campaigns.
-                  <mat-icon color="accent">auto_graph</mat-icon>
+                  <mat-icon color="primary">auto_graph</mat-icon>
                 </mat-card-title>
                 <mat-card-subtitle class="py-2 text-muted font-weight-bold">
                   Choose from pre-defined campaign strategies. Our algorithm
@@ -225,7 +237,7 @@
                       [slideHeight]="300"
                       [autoplay]="true"
                       interval="3500"
-                      color="accent"
+                      color="primary"
                       maxWidth="auto"
                       proportion="50"
                       maintainAspectRatio="true"
@@ -261,7 +273,7 @@
               <mat-card class="workbench__card mat-elevation-z0 mt-3 w-100">
                 <mat-card-title class="py-2 text-muted">
                   Comprehensive Reporting.
-                  <mat-icon color="accent">insert_chart</mat-icon>
+                  <mat-icon color="primary">insert_chart</mat-icon>
                 </mat-card-title>
                 <mat-card-subtitle class="py-2 text-muted font-weight-bold">
                   Daily email reports and on-demand reporting in the Adoya web
@@ -275,7 +287,7 @@
                       [slideHeight]="300"
                       [autoplay]="true"
                       interval="4000"
-                      color="accent"
+                      color="primary"
                       maxWidth="auto"
                       proportion="50"
                       maintainAspectRatio="true"
@@ -311,7 +323,7 @@
               <mat-card class="workbench__card mat-elevation-z0 mt-3 w-100">
                 <mat-card-title class="py-2 text-muted">
                   Data visualization tooling.
-                  <mat-icon color="accent">pie_chart</mat-icon>
+                  <mat-icon color="primary">pie_chart</mat-icon>
                 </mat-card-title>
                 <mat-card-subtitle class="py-2 text-muted font-weight-bold">
                   Simple to use web tools let you visualize and analyze your
@@ -326,7 +338,7 @@
                       [slideHeight]="300"
                       [autoplay]="true"
                       interval="4000"
-                      color="accent"
+                      color="primary"
                       maxWidth="auto"
                       proportion="50"
                       maintainAspectRatio="true"
@@ -361,7 +373,7 @@
             <mat-card class="workbench__card mat-elevation-z0 mt-3 w-100">
               <mat-card-title class="py-2 text-muted">
                 Integrations.
-                <mat-icon color="accent">drive_file_move</mat-icon>
+                <mat-icon color="primary">drive_file_move</mat-icon>
               </mat-card-title>
 
               <mat-card-subtitle class="py-2 text-muted font-weight-bold">
@@ -376,7 +388,7 @@
                     [slideHeight]="300"
                     [autoplay]="true"
                     interval="4000"
-                    color="accent"
+                    color="primary"
                     maxWidth="auto"
                     proportion="50"
                     maintainAspectRatio="true"
@@ -410,7 +422,7 @@
             <mat-card class="workbench__card mat-elevation-z0 mt-3 w-100">
               <mat-card-title class="py-2 text-muted">
                 Testimonials.
-                <mat-icon color="accent">comment</mat-icon>
+                <mat-icon color="primary">comment</mat-icon>
               </mat-card-title>
 
               <mat-card-subtitle class="py-2 text-muted font-weight-bold">
@@ -424,7 +436,7 @@
                     [slideHeight]="300"
                     [autoplay]="true"
                     interval="4000"
-                    color="accent"
+                    color="primary"
                     maxWidth="auto"
                     proportion="40"
                     maintainAspectRatio="true"
@@ -457,7 +469,9 @@
           <mat-card class="workbench__card mat-elevation-z0 mt-3 pb-3 w-100">
             <mat-card-title class="py-2 text-muted">
               Get the Free Plan.
-              <mat-icon class="mr-2">try</mat-icon></mat-card-title
+              <mat-icon color="primary" class="mr-2"
+                >try</mat-icon
+              ></mat-card-title
             >
 
             <mat-card-subtitle class="py-2 text-muted font-weight-bold">
@@ -468,21 +482,21 @@
               <div class="d-flex flex-row justify-content-left">
                 <mat-list>
                   <mat-list-item>
-                    <mat-icon class="text-muted">verified</mat-icon>
+                    <mat-icon color="primary">verified</mat-icon>
                     <span class="text-secondary"
                       >Lorem ipsum dolor sit amet, consectetur adipiscing elit,
                       sed
                     </span>
                   </mat-list-item>
                   <mat-list-item>
-                    <mat-icon class="text-muted">verified</mat-icon>
+                    <mat-icon color="primary">verified</mat-icon>
                     <span class="text-secondary"
                       >Lorem ipsum dolor sit amet, consectetur adipiscing elit,
                       sed
                     </span>
                   </mat-list-item>
                   <mat-list-item>
-                    <mat-icon class="text-muted">verified</mat-icon>
+                    <mat-icon color="primary">verified</mat-icon>
                     <span class="text-secondary"
                       >Lorem ipsum dolor sit amet, consectetur adipiscing elit,
                       sed
@@ -496,7 +510,7 @@
                 <div>
                   <button
                     mat-stroked-button
-                    color="accent"
+                    color="primary"
                     class="w-auto ml-4 mt-2"
                     (click)="handleSignUpClick($event, 'free')"
                   >
@@ -509,68 +523,60 @@
           </mat-card>
         </div>
 
-        <div class="col-6 pb-3 mt-5 card-light border border-secondary">
+        <!-- <div class="col-6 pb-3 mt-5 card-light border border-secondary"> -->
+        <div class="col-6 pb-3 mt-5">
           <mat-card
-            class="
-              workbench__card
-              mat-elevation-z0
-              mt-3
-              w-100
-              py-2
-              pb-3
-              border border-secondary
-            "
+            class="workbench__card mat-elevation-z0 mt-3 w-100 py-2 pb-3"
           >
-            <mat-card-title class="py-2 align-middle text-primary">
-              Get the full suite.
-              <mat-icon class="mr-2">try</mat-icon>
+            <mat-card-title class="py-2 align-middle text-muted">
+              Get the Full Suite.
+              <mat-icon color="accent" class="mr-2">try</mat-icon>
             </mat-card-title>
-            <mat-card-subtitle class="py-2 font-weight-bold text-primary">
+            <mat-card-subtitle class="py-2 font-weight-bold text-muted">
               Do more with advanced features
-              <mat-icon>auto_graph</mat-icon></mat-card-subtitle
-            >
+            </mat-card-subtitle>
             <mat-divider></mat-divider>
             <mat-card-content>
               <div class="d-flex flex-row justify-content-left">
                 <mat-card-subtitle class="mb-2">
                   <mat-list>
                     <mat-list-item>
-                      <mat-icon color="accent">verified</mat-icon>
+                      <mat-icon color="primary">verified</mat-icon>
                       <span class="text-muted"
                         >Lorem ipsum dolor sit amet, consectetur adipiscing
                         elit, sed</span
                       >
                     </mat-list-item>
                     <mat-list-item>
-                      <mat-icon color="accent">verified</mat-icon>
+                      <mat-icon color="primary">verified</mat-icon>
                       <span class="text-muted"
                         >Lorem ipsum dolor sit amet, consectetur adipiscing
                         elit, sed</span
                       >
                     </mat-list-item>
                     <mat-list-item>
-                      <mat-icon color="accent">verified</mat-icon>
+                      <mat-icon color="primary">verified</mat-icon>
                       <span class="text-muted"
                         >Lorem ipsum dolor sit amet, consectetur adipiscing
                         elit, sed</span
                       >
                     </mat-list-item>
                     <mat-list-item>
-                      <mat-icon color="accent">verified</mat-icon>
+                      <mat-icon color="primary">verified</mat-icon>
                       <span class="text-muted"
                         >Lorem ipsum dolor sit amet, consectetur adipiscing
                         elit, sed</span
                       >
                     </mat-list-item>
                     <mat-list-item>
-                      <mat-icon color="accent">verified</mat-icon>
+                      <mat-icon color="primary">verified</mat-icon>
                       <span class="text-muted"
                         >Lorem ipsum dolor sit amet, consectetur adipiscing
                         elit, sed</span
                       >
                     </mat-list-item>
                     <mat-list-item>
-                      <mat-icon color="accent">verified</mat-icon>
+                      <mat-icon color="primary">verified</mat-icon>
                       <span class="text-muted"
                         >Lorem ipsum dolor sit amet, consectetur adipiscing
                         elit, sed</span
@@ -585,16 +591,14 @@
                 <div class="mt-2">
                   <button
                     mat-raised-button
-                    color="accent"
+                    color="primary"
                     class="w-auto ml-4 mt-2"
                     (click)="handleSignUpClick($event, 'full')"
                   >
                     <span class="text-light pl-1"
                       >Start Free One Month Trial</span
                     >
-                    <mat-icon class="text-light" aria-label="submit"
-                      >navigate_next</mat-icon
-                    >
+                    <mat-icon class="text-light">navigate_next</mat-icon>
                   </button>
                 </div>
               </mat-action-row>

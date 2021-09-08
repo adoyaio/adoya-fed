@@ -1,14 +1,14 @@
-<mat-tab-group color="accent">
+<mat-tab-group color="primary">
   <mat-tab>
     <ng-template mat-tab-label>
       <mat-icon>build</mat-icon>
       <span class="ml-2">Preferences</span>
     </ng-template>
     <div class="workbench__loading-shade" *ngIf="isLoadingResults">
-      <mat-spinner color="accent" strokeWidth="6.5"></mat-spinner>
+      <mat-spinner color="primary" strokeWidth="6.5"></mat-spinner>
     </div>
     <div class="workbench__sending" *ngIf="isSendingResults">
-      <mat-progress-bar color="accent" mode="indeterminate"></mat-progress-bar>
+      <mat-progress-bar color="primary" mode="indeterminate"></mat-progress-bar>
     </div>
     <div class="d-flex col-12 px-0">
       <mat-card class="workbench__card mat-elevation-z0 mt-3 w-100">
@@ -42,7 +42,7 @@
               <mat-form-field
                 appearance="fill"
                 class="w-100 workbench__accent-field"
-                color="accent"
+                color="primary"
               >
                 <mat-label
                   ><mat-icon>settings</mat-icon>&nbsp;Reporting

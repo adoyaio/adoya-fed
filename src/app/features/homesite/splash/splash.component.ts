@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { MatDialog } from "@angular/material";
 import { take, tap } from "rxjs/operators";
 import { PortalComponent } from "../../portal/components/portal.component";
+import { ContactUsComponent } from "../contact-us/contact-us.component";
 import { HomesiteFacade } from "../facades/homesite.facade";
 
 @Component({
@@ -22,6 +23,23 @@ export class SplashComponent implements OnInit {
     $event.stopPropagation();
     this.dialog
       .open(PortalComponent, {
+        data: {},
+        maxWidth: "800px",
+        width: "800px",
+        panelClass: "tooltip-dialog-box",
+        autoFocus: false,
+      })
+      .afterClosed()
+      .pipe(
+        take(1),
+        tap((val) => {})
+      )
+      .subscribe();
+  }
+
+  handleContactClick() {
+    this.dialog
+      .open(ContactUsComponent, {
         data: {},
         maxWidth: "800px",
         width: "800px",
