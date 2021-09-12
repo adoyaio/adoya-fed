@@ -59,13 +59,45 @@
               </div>
             </div>
 
-            <div class="col-6 text-center">
-              <div class="mt-3 pt-3 px-5">
+            <div
+              class="
+                col-6
+                text-center
+                rounded
+                border-top border-left border-right
+              "
+            >
+              <!-- <div class="mt-3 pt-3 px-5">
                 <img
                   class="small-image"
                   src="../../../../assets/images/hero-2.jpg"
                 />
               </div>
+              -->
+              <mat-carousel
+                timings="250ms ease-in"
+                [slideHeight]="400"
+                [autoplay]="true"
+                interval="3500"
+                color="primary"
+                maxWidth="auto"
+                proportion="50"
+                maintainAspectRatio="false"
+                [slides]="homesiteFacade.allSlidesNumber"
+                [loop]="false"
+                [hideArrows]="true"
+                [hideIndicators]="false"
+                [useKeyboard]="true"
+                [useMouseWheel]="false"
+                orientation="ltr"
+              >
+                <mat-carousel-slide
+                  #matCarouselSlide
+                  *ngFor="let slide of homesiteFacade.allSlides; let i = index"
+                  [image]="slide.image"
+                  [hideOverlay]="true"
+                ></mat-carousel-slide>
+              </mat-carousel>
             </div>
           </div>
 
@@ -155,12 +187,29 @@
         <!-- hero image block-->
         <div class="d-flex flex-row justify-content-start ml-5 pl-5">
           <div class="col-6">
+            <div class="d-flex flex-column">
+              <img
+                class="hero-image"
+                src="../../../../assets/images/hero-1.png"
+              />
+              <!-- <img
+                class="small-image"
+                src="../../../../assets/images/hero-2.jpg"
+              /> -->
+            </div>
+          </div>
+          <!-- <div class="col-6 background-image-1">
+            <div class="h-100"></div>
+          </div> -->
+          <!-- <div class="col-6 background-image-2">
+            <div class="h-100"></div>
+          </div> -->
+          <div class="col-6">
             <img
-              class="hero-image"
-              src="../../../../assets/images/hero-1.png"
+              class="small-image"
+              src="../../../../assets/images/hero-2.jpg"
             />
           </div>
-          <div class="col-6 background-image-1"></div>
         </div>
 
         <!-- 3 col about us-->
@@ -345,63 +394,12 @@
           </div>
         </div>
 
-        <!-- data vis -->
-        <div class="col-12 pt-3 mt-5">
-          <div class="d-flex flex-row justify-content-center">
-            <div class="col-12">
-              <mat-card class="workbench__card mat-elevation-z0 mt-3 w-100">
-                <mat-card-title class="py-2 text-muted">
-                  Data visualization tooling.
-                  <mat-icon color="primary">pie_chart</mat-icon>
-                </mat-card-title>
-                <mat-card-subtitle class="py-2 text-muted font-weight-bold">
-                  Simple to use web tools let you visualize and analyze your
-                  data metrics. Slice and dice data with ease to maximize
-                  insights.
-                </mat-card-subtitle>
-                <mat-divider></mat-divider>
-                <mat-card-content>
-                  <div class="carousel__container mt-3 pt-3">
-                    <mat-carousel
-                      timings="250ms ease-in"
-                      [slideHeight]="300"
-                      [autoplay]="true"
-                      interval="4000"
-                      color="primary"
-                      maxWidth="auto"
-                      proportion="50"
-                      maintainAspectRatio="true"
-                      slides="2"
-                      [loop]="false"
-                      [hideArrows]="true"
-                      [hideIndicators]="false"
-                      [useKeyboard]="true"
-                      [useMouseWheel]="false"
-                      orientation="ltr"
-                    >
-                      <mat-carousel-slide
-                        #matCarouselSlide
-                        *ngFor="
-                          let slide of homesiteFacade.visulizeSlides;
-                          let i = index
-                        "
-                        [image]="slide.image"
-                        [hideOverlay]="true"
-                      ></mat-carousel-slide>
-                    </mat-carousel>
-                  </div>
-                </mat-card-content>
-              </mat-card>
-            </div>
-          </div>
-        </div>
-
         <!-- mmps -->
         <div class="col-12 pt-3 mt-5">
           <div class="d-flex flex-row justify-content-center">
             <mat-card class="workbench__card mat-elevation-z0 mt-3 w-100">
               <mat-card-title class="py-2 text-muted">
-                Integrations.
+                MMP Integrations.
                 <mat-icon color="primary">drive_file_move</mat-icon>
               </mat-card-title>
 
@@ -454,9 +452,6 @@
                 <mat-icon color="primary">comment</mat-icon>
               </mat-card-title>
 
-              <mat-card-subtitle class="py-2 text-muted font-weight-bold">
-                See what some of our customers are saying about Adoya:
-              </mat-card-subtitle>
               <mat-divider></mat-divider>
               <mat-card-content>
                 <div class="carousel__container mt-3 pt-3 px-5">

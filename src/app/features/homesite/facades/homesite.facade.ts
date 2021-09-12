@@ -8,18 +8,20 @@ export class HomesiteFacade {
   constructor() {}
 
   get allSlides() {
-    return chain([
-      this.reportingSlides,
-      this.visulizeSlides,
-      this.testimonialSlides,
-    ])
-      .flatMap()
+    return chain([this.reportingSlides, this.optimizeSlides]).flatMap().value();
+  }
+
+  get allSlidesNumber() {
+    return chain([this.reportingSlides, this.optimizeSlides])
+      .toLength()
       .value();
   }
 
   reportingSlides = [
     { image: "../../../assets/images/reporting-1.png" },
     { image: "../../../assets/images/reporting-7.png" },
+    { image: "../../../assets/images/reporting-2.png" },
+    { image: "../../../assets/images/reporting-3.png" },
   ];
 
   optimizeSlides = [
@@ -27,11 +29,6 @@ export class HomesiteFacade {
     { image: "../../../assets/images/optimize-4.png" },
     { image: "../../../assets/images/optimize-5.png" },
     { image: "../../../assets/images/optimize-6.png" },
-  ];
-
-  visulizeSlides = [
-    { image: "../../../assets/images/reporting-2.png" },
-    { image: "../../../assets/images/reporting-3.png" },
   ];
 
   integrationSlides = [
