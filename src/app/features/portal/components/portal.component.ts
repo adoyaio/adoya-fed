@@ -1,13 +1,8 @@
-import { Component, Inject, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import { AmplifyService } from "aws-amplify-angular";
 import { Router } from "@angular/router";
 import { tap } from "rxjs/operators";
-import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
 
-export interface PortalDialogData {
-  signUpType?: string;
-  isSignUp;
-}
 @Component({
   selector: "app-portal",
   templateUrl: "./portal.component.html",
@@ -18,9 +13,8 @@ export class PortalComponent implements OnInit {
   @Input() isSignUp: boolean;
   constructor(
     private amplifyService: AmplifyService,
-    private router: Router
-  ) // public dialogRef: MatDialogRef<PortalComponent> // @Inject(MAT_DIALOG_DATA) public data: PortalDialogData
-  {}
+    private router: Router // public dialogRef: MatDialogRef<PortalComponent> // @Inject(MAT_DIALOG_DATA) public data: PortalDialogData
+  ) {}
 
   user: any;
   greeting: string;
@@ -79,24 +73,21 @@ export class PortalComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    // if (this.data.isSignUp) {
-    //   this.isSignUp = true;
-    // }
-    // if (this.data.signUpType) {
-    //   this.signUpType = this.data.signUpType;
-    // }
-    // if (!this.isSignUp) {
-    //   this.amplifyService.authStateChange$
-    //     .pipe(
-    //       tap((authState) => {
-    //         if (authState.state === "signedIn") {
-    //           this.router.navigateByUrl("/workbench");
-    //         } else {
-    //           this.router.navigateByUrl("/portal");
-    //         }
-    //       })
-    //     )
-    //     .subscribe();
-    // }
+    if (
+      !window.location.href.includes("home") &&
+      !window.location.href.includes("start")
+    ) {
+      this.amplifyService.authStateChange$
+        .pipe(
+          tap((authState) => {
+            if (authState.state === "signedIn") {
+              this.router.navigateByUrl("/workbench");
+            } else {
+              this.router.navigateByUrl("/portal");
+            }
+          })
+        )
+        .subscribe();
+    }
   }
 }
