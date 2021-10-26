@@ -79,6 +79,7 @@
       <!-- <div class="d-flex justify-content-start w-100"> -->
       <mat-action-row class="w-100">
         <button
+          [disabled]="supportForm.invalid"
           (click)="onSupportSubmit()"
           mat-raised-button
           color="primary"

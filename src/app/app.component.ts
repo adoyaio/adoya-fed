@@ -18,8 +18,9 @@ import {
   NavigationStart,
   Router,
 } from "@angular/router";
+import { AmplifyService } from "aws-amplify-angular";
 import { Subject } from "rxjs";
-import { filter, map, mergeMap, takeUntil } from "rxjs/operators";
+import { filter, map, mergeMap, takeUntil, tap } from "rxjs/operators";
 
 @Component({
   selector: "app-root",
@@ -34,7 +35,8 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private titleService: Title,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private amplifyService: AmplifyService
   ) {
     this.titleService.setTitle("adoya client portal");
     this.router.events
@@ -67,6 +69,17 @@ export class AppComponent implements AfterViewInit, OnDestroy {
         mergeMap((r) => r.data),
         map((event) => this.titleService.setTitle(event["title"])),
         takeUntil(this.destroyed$)
+      )
+      .subscribe();
+
+    this.amplifyService
+      .authState()
+      .pipe(
+        tap((authState) => {
+          if (!(authState.state === "signedIn")) {
+            this.router.navigateByUrl("/portal");
+          }
+        })
       )
       .subscribe();
   }

@@ -65,7 +65,8 @@
       </mat-card-content>
       <mat-action-row class="w-100">
         <button
-          (click)="onSubmit()"
+          [disabled]="supportForm.invalid"
+          (click)="onSupportSubmit()"
           mat-raised-button
           color="primary"
           class="float-left"
@@ -73,10 +74,11 @@
           <mat-icon class="text-light" aria-label="submit">done</mat-icon>
           <span class="text-light pl-1">submit</span>
         </button>
-        <!-- <mat-checkbox class="float-right"
-            >premium support member</mat-checkbox
-          > -->
       </mat-action-row>
     </mat-card>
+  </div>
+  <div class="ml-3">
+    By submitting this form you agree to our Privacy Policy and Terms of
+    Service.
   </div>
 </div>

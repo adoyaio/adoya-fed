@@ -19,12 +19,11 @@ export class SupportComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private userAccountService: UserAccountService,
-    private amplifyService: AmplifyService,
     private supportService: SupportService,
     private snackBar: MatSnackBar
   ) {}
 
-  supportForm = this.fb.group({
+  public supportForm = this.fb.group({
     subject: [""],
     description: [""],
     username: [""],
@@ -40,17 +39,6 @@ export class SupportComponent implements OnInit {
   today: Date;
 
   ngOnInit() {
-    this.amplifyService
-      .authState()
-      .pipe(
-        tap((authState) => {
-          if (!(authState.state === "signedIn")) {
-            this.router.navigateByUrl("/portal");
-          }
-        })
-      )
-      .subscribe();
-
     this.orgId = this.userAccountService
       .getCurrentUser()
       .UserAttributes.find((val) => {
@@ -75,48 +63,39 @@ export class SupportComponent implements OnInit {
       .setValidators([Validators.minLength(1), Validators.required]);
   }
   onSupportSubmit() {
-    if (this.supportForm.valid) {
-      this.isSendingResults = true;
-      this.supportItem.description = this.supportForm.get("description").value;
-      this.supportItem.username = this.supportForm.get("username").value;
-      this.supportItem.subject = this.supportForm.get("subject").value;
-      this.supportItem.orgId = this.supportForm.get("orgId").value;
+    this.isSendingResults = true;
+    this.supportItem.description = this.supportForm.get("description").value;
+    this.supportItem.username = this.supportForm.get("username").value;
+    this.supportItem.subject = this.supportForm.get("subject").value;
+    this.supportItem.orgId = this.supportForm.get("orgId").value;
+    this.supportItem.type = "support";
 
-      this.supportService
-        .postSupportItem(this.supportItem)
-        .pipe(
-          tap((_) => {
-            this.isSendingResults = true;
-          }),
-          map((data) => {
-            this.isSendingResults = false;
-            this.openSnackBar(
-              "successfully sumbitted your support ticket. thank you for contacting adoya support!",
-              "dismiss"
-            );
-            return data;
-          }),
-          catchError(() => {
-            this.isSendingResults = false;
-            this.openSnackBar(
-              "unable to submit your support ticket, please enter required fields.",
-              "dismiss"
-            );
-            return [];
-          })
-        )
-        .subscribe();
-    } else {
-      this.openSnackBar(
-        "unable to submit your support ticket, please enter required fields.",
-        "dismiss"
-      );
-    }
+    this.supportService
+      .postSupportItem(this.supportItem)
+      .pipe(
+        tap((_) => {
+          this.isSendingResults = true;
+        }),
+        map((data) => {
+          this.isSendingResults = false;
+          this.openSnackBar(
+            "successfully sumbitted your support ticket. thank you for contacting adoya support!",
+            "dismiss"
+          );
+          this.supportForm.reset();
+          return data;
+        }),
+        catchError(() => {
+          this.isSendingResults = false;
+          this.openSnackBar(
+            "unable to submit your support ticket, please enter required fields.",
+            "dismiss"
+          );
+          return [];
+        })
+      )
+      .subscribe();
   }
-
-  // openSnackBar(arg0: string, arg1: string) {
-  //   throw new Error("Method not implemented.");
-  // }
 
   openSnackBar(message: string, action: string) {
     this.snackBar.open(message, action, {
