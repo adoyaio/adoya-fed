@@ -17,40 +17,4 @@ export class SplashComponent implements OnInit {
   ) {}
 
   ngOnInit() {}
-
-  handleSignUpClick($event, signupType: string) {
-    $event.preventDefault();
-    $event.stopPropagation();
-    this.dialog
-      .open(PortalComponent, {
-        data: {},
-        maxWidth: "800px",
-        width: "800px",
-        panelClass: "tooltip-dialog-box",
-        autoFocus: false,
-      })
-      .afterClosed()
-      .pipe(
-        take(1),
-        tap((val) => {})
-      )
-      .subscribe();
-  }
-
-  handleContactClick() {
-    this.dialog
-      .open(ContactUsComponent, {
-        data: {},
-        maxWidth: "800px",
-        width: "800px",
-        panelClass: "tooltip-dialog-box",
-        autoFocus: false,
-      })
-      .afterClosed()
-      .pipe(
-        take(1),
-        tap((val) => {})
-      )
-      .subscribe();
-  }
 }

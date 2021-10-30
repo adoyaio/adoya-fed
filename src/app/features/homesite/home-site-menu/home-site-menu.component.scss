@@ -1,9 +1,12 @@
 @import "variables.scss";
 
-.splash__container {
+.home-site-menu__container {
   ::ng-deep {
     .mat-list-base .mat-list-item {
       height: 60px !important;
+    }
+    .mat-list-item-content {
+      justify-content: center;
     }
   }
 }

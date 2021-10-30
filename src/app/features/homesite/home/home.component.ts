@@ -19,10 +19,6 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {}
 
-  handleClick(endpoint: string) {
-    window.open(endpoint, "_blank");
-  }
-
   scrollToSectionHook(elementId: string) {
     const yOffset = -185;
     const element = document.getElementById(elementId);

@@ -1,0 +1,50 @@
+<div class="col-12 pt-3 mt-5" id="how">
+  <div class="d-flex flex-row justify-content-center">
+    <div class="col-12">
+      <mat-card class="workbench__card mat-elevation-z0 mt-3 w-100">
+        <mat-card-title class="py-2 text-muted">
+          Optimize campaigns.
+          <mat-icon color="primary">auto_graph</mat-icon>
+        </mat-card-title>
+        <mat-card-subtitle class="py-2 text-muted font-weight-bold">
+          Choose from pre-defined campaign strategies. Our algorithm provides
+          you with
+          <a class="adoya-link" href="#">built in best practices</a>
+          that will help maximize growth, lower cost per install, and save time.
+        </mat-card-subtitle>
+        <mat-divider></mat-divider>
+        <mat-card-content>
+          <div class="carousel__container mt-3 pt-3">
+            <mat-carousel
+              timings="250ms ease-in"
+              [slideHeight]="300"
+              [autoplay]="true"
+              interval="3500"
+              color="primary"
+              maxWidth="auto"
+              proportion="50"
+              maintainAspectRatio="true"
+              slides="4"
+              [loop]="false"
+              [hideArrows]="true"
+              [hideIndicators]="false"
+              [useKeyboard]="true"
+              [useMouseWheel]="false"
+              orientation="ltr"
+            >
+              <mat-carousel-slide
+                #matCarouselSlide
+                *ngFor="
+                  let slide of homesiteFacade.optimizeSlides;
+                  let i = index
+                "
+                [image]="slide.image"
+                [hideOverlay]="true"
+              ></mat-carousel-slide>
+            </mat-carousel>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

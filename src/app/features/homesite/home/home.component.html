@@ -104,81 +104,8 @@
           <mat-divider></mat-divider>
 
           <!-- partners block -->
-          <div class="pb-5 pt-5 ml-5 pl-5 d-flex flex-row flex-wrap">
-            <div class="col-12 text-left">
-              <div
-                class="
-                  font-size-38
-                  text-muted
-                  font-weight-bold
-                  pl-3
-                  mt-3
-                  mb-3
-                  pt-3
-                "
-              >
-                Our Proud Partners
-              </div>
-            </div>
-
-            <div class="col-12 text-center">
-              <mat-action-list class="d-flex flex-row py-4 bg-white">
-                <button
-                  mat-list-item
-                  (click)="handleClick('https://www.hellobonsai.com/')"
-                >
-                  <img
-                    class="small-image mt-3 pt-2"
-                    src="../../../../assets/images/bonsai.svg"
-                  />
-                </button>
-                <button
-                  mat-list-item
-                  (click)="handleClick('https://www.covetly.com/')"
-                >
-                  <img
-                    class="small-image mt-3 pt-2"
-                    src="../../../../assets/images/covetly logo.webp"
-                  />
-                </button>
-                <button
-                  mat-list-item
-                  (click)="handleClick('https://hugah.com/')"
-                >
-                  <img
-                    class="small-image mt-3 pt-2"
-                    src="../../../../assets/images/hugah-logo-400x100.webp"
-                  />
-                </button>
-                <button
-                  mat-list-item
-                  (click)="handleClick('https://weareher.com/')"
-                >
-                  <img
-                    class="small-image mt-3 pt-2"
-                    src="../../../../assets/images/her logo.webp"
-                  />
-                </button>
-                <button
-                  mat-list-item
-                  (click)="handleClick('https://www.apptweak.com/')"
-                >
-                  <img
-                    class="small-image mt-3 pt-2"
-                    src="../../../../assets/images/AppTweak_logo_1920.webp"
-                  />
-                </button>
-                <button
-                  mat-list-item
-                  (click)="handleClick('https://branch.io/')"
-                >
-                  <img
-                    class="small-image mt-3 pt-2"
-                    src="../../../../assets/images/branch-logo-color-dark.webp"
-                  />
-                </button>
-              </mat-action-list>
-            </div>
+          <div class="ml-5 pl-5">
+            <app-homesite-partners></app-homesite-partners>
           </div>
         </mat-card>
 
@@ -282,211 +209,26 @@
                   "
                 >
                   Adoya uses data-driven algorithms and the cloud to offer
-                  no-code, automated solutions for our customers. Our secret
-                  sauce goes beyond the tech, it's about our people and deep
-                  expertise in app marketing.
+                  automated solutions for our customers. Our secret sauce goes
+                  beyond the tech, it's about our people and deep expertise in
+                  app marketing.
                 </div>
               </mat-card>
             </div>
           </div>
         </div>
 
-        <!-- optimization -->
-        <div class="col-12 pt-3 mt-5" id="how">
-          <div class="d-flex flex-row justify-content-center">
-            <div class="col-12">
-              <mat-card class="workbench__card mat-elevation-z0 mt-3 w-100">
-                <mat-card-title class="py-2 text-muted">
-                  Optimize campaigns.
-                  <mat-icon color="primary">auto_graph</mat-icon>
-                </mat-card-title>
-                <mat-card-subtitle class="py-2 text-muted font-weight-bold">
-                  Choose from pre-defined campaign strategies. Our algorithm
-                  provides you with
-                  <a class="adoya-link" href="#">built in best practices</a>
-                  that will help maximize growth, lower cost per install, and
-                  save time.
-                </mat-card-subtitle>
-                <mat-divider></mat-divider>
-                <mat-card-content>
-                  <div class="carousel__container mt-3 pt-3">
-                    <mat-carousel
-                      timings="250ms ease-in"
-                      [slideHeight]="300"
-                      [autoplay]="true"
-                      interval="3500"
-                      color="primary"
-                      maxWidth="auto"
-                      proportion="50"
-                      maintainAspectRatio="true"
-                      slides="4"
-                      [loop]="false"
-                      [hideArrows]="true"
-                      [hideIndicators]="false"
-                      [useKeyboard]="true"
-                      [useMouseWheel]="false"
-                      orientation="ltr"
-                    >
-                      <mat-carousel-slide
-                        #matCarouselSlide
-                        *ngFor="
-                          let slide of homesiteFacade.optimizeSlides;
-                          let i = index
-                        "
-                        [image]="slide.image"
-                        [hideOverlay]="true"
-                      ></mat-carousel-slide>
-                    </mat-carousel>
-                  </div>
-                </mat-card-content>
-              </mat-card>
-            </div>
-          </div>
-        </div>
+        <!-- optimizations -->
+        <app-optimizations-carousel></app-optimizations-carousel>
 
         <!-- reporting -->
-        <div class="col-12 pt-3 mt-5">
-          <div class="d-flex flex-row justify-content-center">
-            <div class="col-12">
-              <mat-card class="workbench__card mat-elevation-z0 mt-3 w-100">
-                <mat-card-title class="py-2 text-muted">
-                  Comprehensive Reporting.
-                  <mat-icon color="primary">insert_chart</mat-icon>
-                </mat-card-title>
-                <mat-card-subtitle class="py-2 text-muted font-weight-bold">
-                  Daily email reports and on-demand reporting in the Adoya web
-                  application console. Download reports in a variety of formats.
-                </mat-card-subtitle>
-                <mat-divider></mat-divider>
-                <mat-card-content>
-                  <div class="carousel__container mt-3 pt-3">
-                    <mat-carousel
-                      timings="250ms ease-in"
-                      [slideHeight]="300"
-                      [autoplay]="true"
-                      interval="4000"
-                      color="primary"
-                      maxWidth="auto"
-                      proportion="50"
-                      maintainAspectRatio="true"
-                      slides="2"
-                      [loop]="false"
-                      [hideArrows]="true"
-                      [hideIndicators]="false"
-                      [useKeyboard]="true"
-                      [useMouseWheel]="false"
-                      orientation="ltr"
-                    >
-                      <mat-carousel-slide
-                        #matCarouselSlide
-                        *ngFor="
-                          let slide of homesiteFacade.reportingSlides;
-                          let i = index
-                        "
-                        [image]="slide.image"
-                        [hideOverlay]="true"
-                      ></mat-carousel-slide>
-                    </mat-carousel>
-                  </div>
-                </mat-card-content>
-              </mat-card>
-            </div>
-          </div>
-        </div>
+        <app-reporting-carousel></app-reporting-carousel>
 
         <!-- mmps -->
-        <div class="col-12 pt-3 mt-5">
-          <div class="d-flex flex-row justify-content-center">
-            <mat-card class="workbench__card mat-elevation-z0 mt-3 w-100">
-              <mat-card-title class="py-2 text-muted">
-                MMP Integrations.
-                <mat-icon color="primary">drive_file_move</mat-icon>
-              </mat-card-title>
-
-              <mat-card-subtitle class="py-2 text-muted font-weight-bold">
-                Use post-install data from mobile measurement partners to
-                optimize revenue. Go beyond installs and maximize profit.
-              </mat-card-subtitle>
-              <mat-divider></mat-divider>
-              <mat-card-content>
-                <div class="carousel__container mt-3 pt-3">
-                  <mat-carousel
-                    timings="250ms ease-in"
-                    [slideHeight]="300"
-                    [autoplay]="true"
-                    interval="4000"
-                    color="primary"
-                    maxWidth="auto"
-                    proportion="50"
-                    maintainAspectRatio="true"
-                    slides="2"
-                    [loop]="false"
-                    [hideArrows]="true"
-                    [hideIndicators]="false"
-                    [useKeyboard]="true"
-                    [useMouseWheel]="false"
-                    orientation="ltr"
-                  >
-                    <mat-carousel-slide
-                      #matCarouselSlide
-                      *ngFor="
-                        let slide of homesiteFacade.integrationSlides;
-                        let i = index
-                      "
-                      [image]="slide.image"
-                      [hideOverlay]="true"
-                    ></mat-carousel-slide>
-                  </mat-carousel>
-                </div>
-              </mat-card-content>
-            </mat-card>
-          </div>
-        </div>
+        <app-mmp-carousel></app-mmp-carousel>
 
         <!-- testimonial -->
-        <div class="col-12 pt-3 mt-5">
-          <div class="d-flex flex-row justify-content-center">
-            <mat-card class="workbench__card mat-elevation-z0 mt-3 w-100">
-              <mat-card-title class="py-2 text-muted">
-                Testimonials.
-                <mat-icon color="primary">comment</mat-icon>
-              </mat-card-title>
-
-              <mat-divider></mat-divider>
-              <mat-card-content>
-                <div class="carousel__container mt-3 pt-3 px-5">
-                  <mat-carousel
-                    timings="250ms ease-in"
-                    [slideHeight]="300"
-                    [autoplay]="true"
-                    interval="4000"
-                    color="primary"
-                    maxWidth="auto"
-                    proportion="40"
-                    maintainAspectRatio="true"
-                    slides="3"
-                    [loop]="false"
-                    [hideArrows]="true"
-                    [hideIndicators]="false"
-                    [useKeyboard]="true"
-                    [useMouseWheel]="false"
-                    orientation="ltr"
-                  >
-                    <mat-carousel-slide
-                      #matCarouselSlide
-                      *ngFor="
-                        let slide of homesiteFacade.testimonialSlides;
-                        let i = index
-                      "
-                      [image]="slide.image"
-                      [hideOverlay]="true"
-                    ></mat-carousel-slide>
-                  </mat-carousel>
-                </div>
-              </mat-card-content>
-            </mat-card>
-          </div>
-        </div>
+        <app-testimonial-carousel></app-testimonial-carousel>
       </div>
     </div>
   </div>

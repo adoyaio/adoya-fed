@@ -82,7 +82,7 @@ export class SupportComponent implements OnInit {
             "successfully sumbitted your support ticket. thank you for contacting adoya support!",
             "dismiss"
           );
-          this.supportForm.reset();
+          this.supportForm.get("description").reset();
           return data;
         }),
         catchError(() => {
