@@ -1,4 +1,4 @@
-<mat-tab-group color="accent">
+<mat-tab-group color="primary">
   <!--CPI reporting-->
   <mat-tab>
     <ng-template mat-tab-label>
@@ -6,7 +6,7 @@
       <span class="ml-2">Aggregate Performance</span>
     </ng-template>
     <div class="reporting__loading-shade" *ngIf="isLoadingResults">
-      <mat-spinner color="accent" strokeWidth="6.5"></mat-spinner>
+      <mat-spinner color="primary" strokeWidth="6.5"></mat-spinner>
     </div>
     <div class="mat-elevation-z8 mt-2 reporting-component__table-container">
       <div class="d-flex justify-content-start col-12 flex-wrap">
@@ -197,7 +197,7 @@
       class="reporting__loading-shade"
       *ngIf="reportingService.isLoadingKeywords"
     >
-      <mat-spinner color="accent" strokeWidth="6.5"></mat-spinner>
+      <mat-spinner color="primary" strokeWidth="6.5"></mat-spinner>
     </div>
     <app-keyword-reporting></app-keyword-reporting>
   </mat-tab>

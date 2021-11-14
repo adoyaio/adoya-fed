@@ -18,6 +18,7 @@ import { NgxSkeletonLoaderModule } from "ngx-skeleton-loader";
 
 import { MatCarouselModule } from "@ngmodule/material-carousel";
 import { HomesiteModule } from "./features/homesite/homesite.module";
+import { ContactUsComponent } from "./features/homesite/contact-us/contact-us.component";
 
 @NgModule({
   declarations: [AppComponent],
@@ -39,6 +40,6 @@ import { HomesiteModule } from "./features/homesite/homesite.module";
   ],
   providers: [AmplifyService],
   bootstrap: [AppComponent],
-  entryComponents: [DynamicModalComponent],
+  entryComponents: [DynamicModalComponent, ContactUsComponent],
 })
 export class AppModule {}

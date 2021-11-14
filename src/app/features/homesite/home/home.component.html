@@ -3,6 +3,7 @@
   <div class="z-index-1" [ngStyle]="{ 'margin-top': '185px' }" class="w-100">
     <div class="d-flex flex-row mt-0 justify-content-center w-100">
       <div class="col-12 p-2">
+        <!-- header and partners block -->
         <mat-card class="mat-elevation-z0 w-100 pb-3 pt-5">
           <div class="d-flex flex-row col-11">
             <div class="col-6 text-left ml-5 pl-5">
@@ -26,7 +27,8 @@
               <div class="mt-5 pt-4 pb-5 d-flex flex-row justify-content-left">
                 <button
                   mat-raised-button
-                  color="accent"
+                  (click)="scrollToSectionHook('how')"
+                  color="primary"
                   class="
                     w-auto
                     ml-4
@@ -41,7 +43,8 @@
 
                 <button
                   mat-raised-button
-                  color="accent"
+                  (click)="scrollToSectionHook('who')"
+                  color="primary"
                   class="
                     w-auto
                     ml-4
@@ -56,127 +59,176 @@
               </div>
             </div>
 
-            <div class="col-6 text-center">
-              <div class="mt-3 pt-3 px-5">
+            <div
+              class="
+                col-6
+                text-center
+                rounded
+                border-top border-left border-right
+              "
+            >
+              <!-- <div class="mt-3 pt-3 px-5">
                 <img
                   class="small-image"
                   src="../../../../assets/images/hero-2.jpg"
                 />
-                <!-- <mat-carousel
-                  timings="250ms ease-in"
-                  [slideHeight]="500"
-                  [autoplay]="true"
-                  interval="4000"
-                  color="accent"
-                  maxWidth="auto"
-                  proportion="40"
-                  maintainAspectRatio="true"
-                  slides="13"
-                  [loop]="false"
-                  [hideArrows]="false"
-                  [hideIndicators]="true"
-                  [useKeyboard]="true"
-                  [useMouseWheel]="false"
-                  orientation="ltr"
-                >
-                  <mat-carousel-slide
-                    #matCarouselSlide
-                    *ngFor="
-                      let slide of homesiteFacade.allSlides;
-                      let i = index
-                    "
-                    [image]="slide.image"
-                    [hideOverlay]="true"
-                  ></mat-carousel-slide>
-                </mat-carousel> -->
               </div>
+              -->
+              <mat-carousel
+                timings="250ms ease-in"
+                [slideHeight]="400"
+                [autoplay]="true"
+                interval="3500"
+                color="primary"
+                maxWidth="auto"
+                proportion="50"
+                maintainAspectRatio="false"
+                [slides]="homesiteFacade.allSlidesNumber"
+                [loop]="false"
+                [hideArrows]="true"
+                [hideIndicators]="false"
+                [useKeyboard]="true"
+                [useMouseWheel]="false"
+                orientation="ltr"
+              >
+                <mat-carousel-slide
+                  #matCarouselSlide
+                  *ngFor="let slide of homesiteFacade.allSlides; let i = index"
+                  [image]="slide.image"
+                  [hideOverlay]="true"
+                ></mat-carousel-slide>
+              </mat-carousel>
             </div>
           </div>
 
           <mat-divider></mat-divider>
 
-          <div class="pb-5 pt-5 ml-5 pl-5 d-flex flex-row flex-wrap">
-            <div class="col-12 text-left">
-              <div
-                class="
-                  font-size-38
-                  text-muted
-                  font-weight-bold
-                  pl-3
-                  mt-3
-                  mb-3
-                  pt-3
-                "
-              >
-                Our Proud Partners
-              </div>
-            </div>
-
-            <div class="col-12 text-center">
-              <mat-action-list class="d-flex flex-row py-4 bg-white">
-                <button
-                  mat-list-item
-                  (click)="handleClick('https://www.hellobonsai.com/')"
-                >
-                  <img
-                    class="small-image mt-3 pt-2"
-                    src="../../../../assets/images/bonsai.svg"
-                  />
-                </button>
-                <button
-                  mat-list-item
-                  (click)="handleClick('https://www.covetly.com/')"
-                >
-                  <img
-                    class="small-image mt-3 pt-2"
-                    src="../../../../assets/images/covetly logo.webp"
-                  />
-                </button>
-                <button
-                  mat-list-item
-                  (click)="handleClick('https://hugah.com/')"
-                >
-                  <img
-                    class="small-image mt-3 pt-2"
-                    src="../../../../assets/images/hugah-logo-400x100.webp"
-                  />
-                </button>
-                <button
-                  mat-list-item
-                  (click)="handleClick('https://weareher.com/')"
-                >
-                  <img
-                    class="small-image mt-3 pt-2"
-                    src="../../../../assets/images/her logo.webp"
-                  />
-                </button>
-                <button
-                  mat-list-item
-                  (click)="handleClick('https://www.apptweak.com/')"
-                >
-                  <img
-                    class="small-image mt-3 pt-2"
-                    src="../../../../assets/images/AppTweak_logo_1920.webp"
-                  />
-                </button>
-                <button
-                  mat-list-item
-                  (click)="handleClick('https://branch.io/')"
-                >
-                  <img
-                    class="small-image mt-3 pt-2"
-                    src="../../../../assets/images/branch-logo-color-dark.webp"
-                  />
-                </button>
-              </mat-action-list>
-            </div>
+          <!-- partners block -->
+          <div class="ml-5 pl-5">
+            <app-homesite-partners></app-homesite-partners>
           </div>
         </mat-card>
-        <!-- <div class="w-100 fader pt-5 pb-5"></div> -->
+
         <div class="w-100"><mat-divider></mat-divider></div>
-        <div class="w-100 d-flex flex-row justify-content-center">
-          <!-- <img class="large-image" src="../../../../assets/images/hero-1.png" /> -->
+
+        <!-- hero image block-->
+        <div class="d-flex flex-row justify-content-start ml-5 pl-5">
+          <div class="col-6">
+            <div class="d-flex flex-column">
+              <img
+                class="hero-image"
+                src="../../../../assets/images/hero-1.png"
+              />
+              <!-- <img
+                class="small-image"
+                src="../../../../assets/images/hero-2.jpg"
+              /> -->
+            </div>
+          </div>
+          <!-- <div class="col-6 background-image-1">
+            <div class="h-100"></div>
+          </div> -->
+          <!-- <div class="col-6 background-image-2">
+            <div class="h-100"></div>
+          </div> -->
+          <div class="col-6">
+            <img
+              class="small-image"
+              src="../../../../assets/images/hero-2.jpg"
+            />
+          </div>
         </div>
+
+        <!-- 3 col about us-->
+        <div class="fader" id="who">
+          <div class="pt-5 pb-5 px-3 d-flex flex-row">
+            <div class="col-4 font-size-25 font-weight-bold">
+              <mat-card class="bg-light text-muted h-100">
+                <div class="w-100 text-center">
+                  <img
+                    mat-card-sm-image
+                    src="../../../../assets/images/about icon.webp"
+                  />
+                </div>
+                <div class="w-100 text-center mt-3">Our Story</div>
+                <div
+                  class="
+                    w-100
+                    text-center
+                    mt-3
+                    font-size-larger font-weight-normal
+                  "
+                >
+                  After years of managing search campaigns for top brands, we
+                  realized something needed to change. There’s too much manual
+                  work, too many spreadsheets, and not enough time. So, we did
+                  something about it. We built Adoya.
+                </div>
+              </mat-card>
+            </div>
+            <div class="col-4 font-size-25 font-weight-bold">
+              <mat-card class="bg-light text-muted h-100">
+                <div class="w-100 text-center">
+                  <img
+                    mat-card-sm-image
+                    src="../../../../assets/images/mission icon.webp"
+                  />
+                </div>
+                <div class="w-100 text-center mt-3">Our Mission</div>
+                <div
+                  class="
+                    w-100
+                    text-center
+                    mt-3
+                    font-size-larger font-weight-normal
+                  "
+                >
+                  We're about saving our customer's time and increasing app
+                  campaign ROI. It's 2020, and we feel that customers should
+                  focus on strategy, not the nitty-gritty of search optimization
+                  and campaign management. Our platform is purpose-built to
+                  drive efficiencies and results.
+                </div>
+              </mat-card>
+            </div>
+            <div class="col-4 font-size-25 font-weight-bold">
+              <mat-card class="bg-light text-muted h-100 p-4">
+                <div class="w-100 text-center">
+                  <img
+                    mat-card-sm-image
+                    src="../../../../assets/images/green tech icon.webp"
+                  />
+                </div>
+                <div class="w-100 text-center mt-3">Our Technology</div>
+                <div
+                  class="
+                    w-100
+                    text-center
+                    mt-3
+                    font-size-larger font-weight-normal
+                  "
+                >
+                  Adoya uses data-driven algorithms and the cloud to offer
+                  automated solutions for our customers. Our secret sauce goes
+                  beyond the tech, it's about our people and deep expertise in
+                  app marketing.
+                </div>
+              </mat-card>
+            </div>
+          </div>
+        </div>
+
+        <!-- optimizations -->
+        <app-optimizations-carousel></app-optimizations-carousel>
+
+        <!-- reporting -->
+        <app-reporting-carousel></app-reporting-carousel>
+
+        <!-- mmps -->
+        <app-mmp-carousel></app-mmp-carousel>
+
+        <!-- testimonial -->
+        <app-testimonial-carousel></app-testimonial-carousel>
       </div>
     </div>
   </div>

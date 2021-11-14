@@ -1,45 +1,56 @@
 <div class="d-flex flex-row flex-wrap px-0 splash__container">
   <app-home-site-menu activeButton="Start"></app-home-site-menu>
-  <div class="z-index-1" [ngStyle]="{ 'margin-top': '185px' }">
+  <div class="z-index-1" class="w-100" [ngStyle]="{ 'margin-top': '185px' }">
     <div class="p-0">
       <div
         class="d-flex flex-row mt-0 justify-content-center splash__subcontainer"
       >
         <div class="col-12 p-2">
           <mat-card class="mat-elevation-z0 w-100">
-            <mat-card-title class="py-1 ml-2 text-muted"
+            <mat-card-title class="py-1 ml-4 text-muted"
               >Enhance Apple Search Ads ROI</mat-card-title
             >
 
             <mat-divider></mat-divider>
             <div class="d-flex flex-row">
-              <div class="col-6">
+              <div class="col-6 pl-0 ml-0">
                 <mat-list>
                   <mat-list-item>
-                    <mat-icon color="accent" class="pr-2"
+                    <span class="font-size-larger pl-2"
+                      >Look Beyond Installs, Focus on Profitability
+                    </span>
+                    <mat-icon class="pl-2 text-muted"
                       >sentiment_satisfied</mat-icon
                     >
-                    <span class="font-size-larger pl-2"
-                      >Look Beyond Installs, Focus on Profitability.
-                    </span>
                   </mat-list-item>
                   <mat-list-item>
-                    <mat-icon color="accent" class="pr-2"
-                      >data_exploration</mat-icon
-                    >
                     <span class="font-size-larger pl-2">
                       Adoya optimizes Apple Search Ads installs and in-app
-                      performance.</span
+                      performance</span
+                    >
+                    <mat-icon class="pl-2 text-muted"
+                      >data_exploration</mat-icon
                     >
                   </mat-list-item>
                   <mat-list-item>
-                    <mat-icon color="accent" class="pr-2">build</mat-icon>
                     <span class="font-size-larger pl-2">
-                      Our software provides you with built-in best practices and
-                      our web based tools are simple-to-use and intuitive.</span
+                      Built-in best practices and simple, intuitive management
+                      tools</span
                     >
+                    <mat-icon class="pl-2 text-muted">build_circle</mat-icon>
                   </mat-list-item>
                 </mat-list>
+                <div class="mt-2">
+                  <button
+                    mat-raised-button
+                    color="primary"
+                    class="w-auto ml-4 mt-2"
+                    (click)="homesiteFacade.handleContactClick()"
+                  >
+                    <span class="text-light pl-1">Request a demo</span>
+                    <mat-icon class="text-light">navigate_next</mat-icon>
+                  </button>
+                </div>
               </div>
 
               <div class="col-6 text-center background-image-1">
@@ -59,521 +70,34 @@
       </div>
     </div>
 
-    <div class="col-12">
-      <div class="d-flex flex-row flex-wrap px-0 splash__container">
-        <!-- plans -->
-        <div class="col-6 pb-3 mt-5 p-4">
-          <mat-card class="workbench__card mat-elevation-z0 mt-3 pb-3 w-100">
-            <mat-card-title class="py-2 text-muted">
-              Get the Free Plan.
-              <mat-icon class="mr-2">try</mat-icon></mat-card-title
-            >
+    <div class="d-flex flex-row flex-wrap px-0 w-100">
+      <!-- plans -->
+      <div class="col-12">
+        <app-plans></app-plans>
+      </div>
 
-            <mat-card-subtitle class="py-2 text-muted font-weight-bold">
-              Get started with the basics
-            </mat-card-subtitle>
-            <mat-divider></mat-divider>
-            <mat-card-content>
-              <div class="d-flex flex-row justify-content-left">
-                <mat-list>
-                  <mat-list-item>
-                    <mat-icon class="text-muted">verified</mat-icon>
-                    <span class="text-secondary"
-                      >Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                      sed
-                    </span>
-                  </mat-list-item>
-                  <mat-list-item>
-                    <mat-icon class="text-muted">verified</mat-icon>
-                    <span class="text-secondary"
-                      >Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                      sed
-                    </span>
-                  </mat-list-item>
-                  <mat-list-item>
-                    <mat-icon class="text-muted">verified</mat-icon>
-                    <span class="text-secondary"
-                      >Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                      sed
-                    </span>
-                  </mat-list-item>
-                </mat-list>
-              </div>
-            </mat-card-content>
-            <mat-card-actions>
-              <mat-action-row class="w-100">
-                <div>
-                  <button
-                    mat-stroked-button
-                    color="accent"
-                    class="w-auto ml-4 mt-2"
-                  >
-                    <span class="pl-1">Get Free Plan</span>
-                    <mat-icon>navigate_next</mat-icon>
-                  </button>
-                </div>
-              </mat-action-row>
-            </mat-card-actions>
-          </mat-card>
-        </div>
+      <div class="col-12">
+        <app-homesite-partners></app-homesite-partners>
+      </div>
 
-        <div class="col-6 p-3 pb-3 mt-5">
-          <mat-card
-            class="workbench__card mat-elevation-z0 mt-3 w-100 py-2 pb-3"
-          >
-            <mat-card-title class="py-2 align-middle text-muted">
-              Get the Full Suite.
-              <mat-icon class="mr-2">try</mat-icon>
-            </mat-card-title>
-            <mat-card-subtitle class="py-2 font-weight-bold text-primary">
-              Do more with advanced features
-              <mat-icon>auto_graph</mat-icon></mat-card-subtitle
-            >
-            <mat-divider></mat-divider>
-            <mat-card-content>
-              <div class="d-flex flex-row justify-content-left">
-                <mat-card-subtitle class="mb-2">
-                  <mat-list>
-                    <mat-list-item>
-                      <mat-icon color="accent">verified</mat-icon>
-                      <span class="text-muted"
-                        >Lorem ipsum dolor sit amet, consectetur adipiscing
-                        elit, sed</span
-                      >
-                    </mat-list-item>
-                    <mat-list-item>
-                      <mat-icon color="accent">verified</mat-icon>
-                      <span class="text-muted"
-                        >Lorem ipsum dolor sit amet, consectetur adipiscing
-                        elit, sed</span
-                      >
-                    </mat-list-item>
-                    <mat-list-item>
-                      <mat-icon color="accent">verified</mat-icon>
-                      <span class="text-muted"
-                        >Lorem ipsum dolor sit amet, consectetur adipiscing
-                        elit, sed</span
-                      >
-                    </mat-list-item>
-                    <mat-list-item>
-                      <mat-icon color="accent">verified</mat-icon>
-                      <span class="text-muted"
-                        >Lorem ipsum dolor sit amet, consectetur adipiscing
-                        elit, sed</span
-                      >
-                    </mat-list-item>
-                    <mat-list-item>
-                      <mat-icon color="accent">verified</mat-icon>
-                      <span class="text-muted"
-                        >Lorem ipsum dolor sit amet, consectetur adipiscing
-                        elit, sed</span
-                      >
-                    </mat-list-item>
-                    <mat-list-item>
-                      <mat-icon color="accent">verified</mat-icon>
-                      <span class="text-muted"
-                        >Lorem ipsum dolor sit amet, consectetur adipiscing
-                        elit, sed</span
-                      >
-                    </mat-list-item>
-                  </mat-list>
-                </mat-card-subtitle>
-              </div>
-            </mat-card-content>
-            <mat-card-actions>
-              <mat-action-row class="w-100">
-                <div class="mt-2">
-                  <button
-                    mat-raised-button
-                    color="accent"
-                    class="w-auto ml-4 mt-2"
-                  >
-                    <span class="text-light pl-1"
-                      >Start Free One Month Trial</span
-                    >
-                    <mat-icon class="text-light">navigate_next</mat-icon>
-                  </button>
-                </div>
-              </mat-action-row>
-            </mat-card-actions>
-          </mat-card>
-        </div>
+      <!-- optimization -->
+      <div class="col-12">
+        <app-optimizations-carousel></app-optimizations-carousel>
+      </div>
 
-        <!-- optimization -->
-        <div class="col-12 pt-3 mt-5">
-          <div class="d-flex flex-row justify-content-center">
-            <div class="col-12">
-              <mat-card class="workbench__card mat-elevation-z0 mt-3 w-100">
-                <mat-card-title class="py-2 text-muted">
-                  Optimize campaigns.
-                  <mat-icon color="accent">auto_graph</mat-icon>
-                </mat-card-title>
-                <mat-card-subtitle class="py-2 text-muted font-weight-bold">
-                  Choose from pre-defined campaign strategies. Our algorithm
-                  provides you with
-                  <a class="adoya-link" href="#">built in best practices</a>
-                  that will help maximize growth, lower cost per install, and
-                  save time.
-                </mat-card-subtitle>
-                <mat-divider></mat-divider>
-                <mat-card-content>
-                  <div class="carousel__container mt-3 pt-3">
-                    <mat-carousel
-                      timings="250ms ease-in"
-                      [slideHeight]="300"
-                      [autoplay]="true"
-                      interval="3500"
-                      color="accent"
-                      maxWidth="auto"
-                      proportion="50"
-                      maintainAspectRatio="true"
-                      slides="4"
-                      [loop]="false"
-                      [hideArrows]="true"
-                      [hideIndicators]="false"
-                      [useKeyboard]="true"
-                      [useMouseWheel]="false"
-                      orientation="ltr"
-                    >
-                      <mat-carousel-slide
-                        #matCarouselSlide
-                        *ngFor="let slide of optimizeSlides; let i = index"
-                        [image]="slide.image"
-                        [hideOverlay]="true"
-                      ></mat-carousel-slide>
-                    </mat-carousel>
-                  </div>
-                </mat-card-content>
-              </mat-card>
-            </div>
-          </div>
-        </div>
+      <!-- reporting -->
+      <div class="col-12">
+        <app-reporting-carousel></app-reporting-carousel>
+      </div>
 
-        <!-- reporting -->
-        <div class="col-12 pt-3 mt-5">
-          <div class="d-flex flex-row justify-content-center">
-            <div class="col-12">
-              <mat-card class="workbench__card mat-elevation-z0 mt-3 w-100">
-                <mat-card-title class="py-2 text-muted">
-                  Comprehensive Reporting.
-                  <mat-icon color="accent">insert_chart</mat-icon>
-                </mat-card-title>
-                <mat-card-subtitle class="py-2 text-muted font-weight-bold">
-                  Daily email reports and on-demand reporting in the Adoya web
-                  application console. Download reports in a variety of formats.
-                </mat-card-subtitle>
-                <mat-divider></mat-divider>
-                <mat-card-content>
-                  <div class="carousel__container mt-3 pt-3">
-                    <mat-carousel
-                      timings="250ms ease-in"
-                      [slideHeight]="300"
-                      [autoplay]="true"
-                      interval="4000"
-                      color="accent"
-                      maxWidth="auto"
-                      proportion="50"
-                      maintainAspectRatio="true"
-                      slides="2"
-                      [loop]="false"
-                      [hideArrows]="true"
-                      [hideIndicators]="false"
-                      [useKeyboard]="true"
-                      [useMouseWheel]="false"
-                      orientation="ltr"
-                    >
-                      <mat-carousel-slide
-                        #matCarouselSlide
-                        *ngFor="let slide of reportingSlides; let i = index"
-                        [image]="slide.image"
-                        [hideOverlay]="true"
-                      ></mat-carousel-slide>
-                    </mat-carousel>
-                  </div>
-                </mat-card-content>
-              </mat-card>
-            </div>
-          </div>
-        </div>
+      <!-- mmps -->
+      <div class="col-12">
+        <app-mmp-carousel></app-mmp-carousel>
+      </div>
 
-        <!-- data vis -->
-        <div class="col-12 pt-3 mt-5">
-          <div class="d-flex flex-row justify-content-center">
-            <div class="col-12">
-              <mat-card class="workbench__card mat-elevation-z0 mt-3 w-100">
-                <mat-card-title class="py-2 text-muted">
-                  Data visualization tooling.
-                  <mat-icon color="accent">pie_chart</mat-icon>
-                </mat-card-title>
-                <mat-card-subtitle class="py-2 text-muted font-weight-bold">
-                  Simple to use web tools let you visualize and analyze your
-                  data metrics. Slice and dice data with ease to maximize
-                  insights.
-                </mat-card-subtitle>
-                <mat-divider></mat-divider>
-                <mat-card-content>
-                  <div class="carousel__container mt-3 pt-3">
-                    <mat-carousel
-                      timings="250ms ease-in"
-                      [slideHeight]="300"
-                      [autoplay]="true"
-                      interval="4000"
-                      color="accent"
-                      maxWidth="auto"
-                      proportion="50"
-                      maintainAspectRatio="true"
-                      slides="2"
-                      [loop]="false"
-                      [hideArrows]="true"
-                      [hideIndicators]="false"
-                      [useKeyboard]="true"
-                      [useMouseWheel]="false"
-                      orientation="ltr"
-                    >
-                      <mat-carousel-slide
-                        #matCarouselSlide
-                        *ngFor="let slide of visulizeSlides; let i = index"
-                        [image]="slide.image"
-                        [hideOverlay]="true"
-                      ></mat-carousel-slide>
-                    </mat-carousel>
-                  </div>
-                </mat-card-content>
-              </mat-card>
-            </div>
-          </div>
-        </div>
-
-        <!-- mmps -->
-        <div class="col-12 pt-3 mt-5">
-          <div class="d-flex flex-row justify-content-center">
-            <mat-card class="workbench__card mat-elevation-z0 mt-3 w-100">
-              <mat-card-title class="py-2 text-muted">
-                Integrations.
-                <mat-icon color="accent">drive_file_move</mat-icon>
-              </mat-card-title>
-
-              <mat-card-subtitle class="py-2 text-muted font-weight-bold">
-                Use post-install data from mobile measurement partners to
-                optimize revenue. Go beyond installs and maximize profit.
-              </mat-card-subtitle>
-              <mat-divider></mat-divider>
-              <mat-card-content>
-                <div class="carousel__container mt-3 pt-3">
-                  <mat-carousel
-                    timings="250ms ease-in"
-                    [slideHeight]="300"
-                    [autoplay]="true"
-                    interval="4000"
-                    color="accent"
-                    maxWidth="auto"
-                    proportion="50"
-                    maintainAspectRatio="true"
-                    slides="2"
-                    [loop]="false"
-                    [hideArrows]="true"
-                    [hideIndicators]="false"
-                    [useKeyboard]="true"
-                    [useMouseWheel]="false"
-                    orientation="ltr"
-                  >
-                    <mat-carousel-slide
-                      #matCarouselSlide
-                      *ngFor="let slide of integrationSlides; let i = index"
-                      [image]="slide.image"
-                      [hideOverlay]="true"
-                    ></mat-carousel-slide>
-                  </mat-carousel>
-                </div>
-              </mat-card-content>
-            </mat-card>
-          </div>
-        </div>
-
-        <!-- testimonial -->
-        <div class="col-12 pt-3 mt-5">
-          <div class="d-flex flex-row justify-content-center">
-            <mat-card class="workbench__card mat-elevation-z0 mt-3 w-100">
-              <mat-card-title class="py-2 text-muted">
-                Testimonials.
-                <mat-icon color="accent">comment</mat-icon>
-              </mat-card-title>
-
-              <mat-card-subtitle class="py-2 text-muted font-weight-bold">
-                See what some of our customers are saying about Adoya:
-              </mat-card-subtitle>
-              <mat-divider></mat-divider>
-              <mat-card-content>
-                <div class="carousel__container mt-3 pt-3 px-5">
-                  <mat-carousel
-                    timings="250ms ease-in"
-                    [slideHeight]="300"
-                    [autoplay]="true"
-                    interval="4000"
-                    color="accent"
-                    maxWidth="auto"
-                    proportion="40"
-                    maintainAspectRatio="true"
-                    slides="3"
-                    [loop]="false"
-                    [hideArrows]="true"
-                    [hideIndicators]="false"
-                    [useKeyboard]="true"
-                    [useMouseWheel]="false"
-                    orientation="ltr"
-                  >
-                    <mat-carousel-slide
-                      #matCarouselSlide
-                      *ngFor="let slide of testimonialSlides; let i = index"
-                      [image]="slide.image"
-                      [hideOverlay]="true"
-                    ></mat-carousel-slide>
-                  </mat-carousel>
-                </div>
-              </mat-card-content>
-            </mat-card>
-          </div>
-        </div>
-
-        <!-- plans -->
-        <div class="col-6 pb-3 mt-5">
-          <mat-card class="workbench__card mat-elevation-z0 mt-3 pb-3 w-100">
-            <mat-card-title class="py-2 text-muted">
-              Get the Free Plan.
-              <mat-icon class="mr-2">try</mat-icon></mat-card-title
-            >
-
-            <mat-card-subtitle class="py-2 text-muted font-weight-bold">
-              Get started with the basics
-            </mat-card-subtitle>
-            <mat-divider></mat-divider>
-            <mat-card-content>
-              <div class="d-flex flex-row justify-content-left">
-                <mat-list>
-                  <mat-list-item>
-                    <mat-icon class="text-muted">verified</mat-icon>
-                    <span class="text-secondary"
-                      >Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                      sed
-                    </span>
-                  </mat-list-item>
-                  <mat-list-item>
-                    <mat-icon class="text-muted">verified</mat-icon>
-                    <span class="text-secondary"
-                      >Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                      sed
-                    </span>
-                  </mat-list-item>
-                  <mat-list-item>
-                    <mat-icon class="text-muted">verified</mat-icon>
-                    <span class="text-secondary"
-                      >Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                      sed
-                    </span>
-                  </mat-list-item>
-                </mat-list>
-              </div>
-            </mat-card-content>
-            <mat-card-actions>
-              <mat-action-row class="w-100">
-                <div>
-                  <button
-                    mat-stroked-button
-                    color="accent"
-                    class="w-auto ml-4 mt-2"
-                  >
-                    <span class="pl-1">Get Free Plan</span>
-                    <mat-icon>navigate_next</mat-icon>
-                  </button>
-                </div>
-              </mat-action-row>
-            </mat-card-actions>
-          </mat-card>
-        </div>
-
-        <div class="col-6 pb-3 mt-5 card-light border">
-          <mat-card
-            class="workbench__card mat-elevation-z0 mt-3 w-100 py-2 pb-3"
-          >
-            <mat-card-title class="py-2 align-middle text-primary">
-              Get the full suite.
-              <mat-icon class="mr-2">try</mat-icon>
-            </mat-card-title>
-            <mat-card-subtitle class="py-2 font-weight-bold text-primary">
-              Do more with advanced features
-              <mat-icon>auto_graph</mat-icon></mat-card-subtitle
-            >
-            <mat-divider></mat-divider>
-            <mat-card-content>
-              <div class="d-flex flex-row justify-content-left">
-                <mat-card-subtitle class="mb-2">
-                  <mat-list>
-                    <mat-list-item>
-                      <mat-icon color="accent">verified</mat-icon>
-                      <span class="text-muted"
-                        >Lorem ipsum dolor sit amet, consectetur adipiscing
-                        elit, sed</span
-                      >
-                    </mat-list-item>
-                    <mat-list-item>
-                      <mat-icon color="accent">verified</mat-icon>
-                      <span class="text-muted"
-                        >Lorem ipsum dolor sit amet, consectetur adipiscing
-                        elit, sed</span
-                      >
-                    </mat-list-item>
-                    <mat-list-item>
-                      <mat-icon color="accent">verified</mat-icon>
-                      <span class="text-muted"
-                        >Lorem ipsum dolor sit amet, consectetur adipiscing
-                        elit, sed</span
-                      >
-                    </mat-list-item>
-                    <mat-list-item>
-                      <mat-icon color="accent">verified</mat-icon>
-                      <span class="text-muted"
-                        >Lorem ipsum dolor sit amet, consectetur adipiscing
-                        elit, sed</span
-                      >
-                    </mat-list-item>
-                    <mat-list-item>
-                      <mat-icon color="accent">verified</mat-icon>
-                      <span class="text-muted"
-                        >Lorem ipsum dolor sit amet, consectetur adipiscing
-                        elit, sed</span
-                      >
-                    </mat-list-item>
-                    <mat-list-item>
-                      <mat-icon color="accent">verified</mat-icon>
-                      <span class="text-muted"
-                        >Lorem ipsum dolor sit amet, consectetur adipiscing
-                        elit, sed</span
-                      >
-                    </mat-list-item>
-                  </mat-list>
-                </mat-card-subtitle>
-              </div>
-            </mat-card-content>
-            <mat-card-actions>
-              <mat-action-row class="w-100">
-                <div class="mt-2">
-                  <button
-                    mat-raised-button
-                    color="accent"
-                    class="w-auto ml-4 mt-2"
-                  >
-                    <span class="text-light pl-1"
-                      >Start Free One Month Trial</span
-                    >
-                    <mat-icon class="text-light" aria-label="submit"
-                      >navigate_next</mat-icon
-                    >
-                  </button>
-                </div>
-              </mat-action-row>
-            </mat-card-actions>
-          </mat-card>
-        </div>
+      <!-- testimonial -->
+      <div class="col-12">
+        <app-testimonial-carousel></app-testimonial-carousel>
       </div>
     </div>
   </div>

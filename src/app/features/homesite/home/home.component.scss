@@ -28,4 +28,20 @@
     //   background-image: url("../../../../assets/images/green.jpg");
     //   transform: rotate(180deg);
   }
+
+  .hero-image {
+    max-width: 600px;
+  }
+
+  .background-image-1 {
+    background-image: url("../../../../assets/images/woman-using-smartphone.jpg");
+    background-size: cover;
+    height: 500px;
+  }
+
+  .background-image-2 {
+    background-image: url("../../../../assets/images/background-2.jpg");
+    background-size: cover;
+    height: 650px;
+  }
 }

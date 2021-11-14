@@ -16,7 +16,7 @@
   </mat-card> -->
 
   <div class="d-flex col-12 w-100 px-0" *ngIf="isSendingResults">
-    <mat-progress-bar color="accent" mode="indeterminate"></mat-progress-bar>
+    <mat-progress-bar color="primary" mode="indeterminate"></mat-progress-bar>
   </div>
   <div class="d-flex col-12 px-0">
     <mat-card class="adoya__card mat-elevation-z0 mt-3 w-100">
@@ -68,7 +68,7 @@
                 placeholder="Username"
               />
             </mat-form-field>
-            <mat-form-field appearance="outline" class="w-100" color="accent">
+            <mat-form-field appearance="outline" class="w-100" color="primary">
               <mat-label>Description</mat-label>
               <textarea matInput formControlName="description" class="">
               </textarea>
@@ -79,9 +79,10 @@
       <!-- <div class="d-flex justify-content-start w-100"> -->
       <mat-action-row class="w-100">
         <button
+          [disabled]="supportForm.invalid"
           (click)="onSupportSubmit()"
           mat-raised-button
-          color="accent"
+          color="primary"
           class="float-left"
         >
           <mat-icon class="text-light" aria-label="submit">done</mat-icon>

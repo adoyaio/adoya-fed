@@ -1,0 +1,47 @@
+<div class="col-12 pt-3 mt-5">
+  <div class="d-flex flex-row justify-content-center">
+    <mat-card class="workbench__card mat-elevation-z0 mt-3 w-100">
+      <mat-card-title class="py-2 text-muted">
+        MMP Integrations.
+        <mat-icon color="primary">drive_file_move</mat-icon>
+      </mat-card-title>
+
+      <mat-card-subtitle class="py-2 text-muted font-weight-bold">
+        Use post-install data from mobile measurement partners to optimize
+        revenue. Go beyond installs and maximize profit.
+      </mat-card-subtitle>
+      <mat-divider></mat-divider>
+      <mat-card-content>
+        <div class="carousel__container mt-3 pt-3">
+          <mat-carousel
+            timings="250ms ease-in"
+            [slideHeight]="300"
+            [autoplay]="true"
+            interval="4000"
+            color="primary"
+            maxWidth="auto"
+            proportion="50"
+            maintainAspectRatio="true"
+            slides="2"
+            [loop]="false"
+            [hideArrows]="true"
+            [hideIndicators]="false"
+            [useKeyboard]="true"
+            [useMouseWheel]="false"
+            orientation="ltr"
+          >
+            <mat-carousel-slide
+              #matCarouselSlide
+              *ngFor="
+                let slide of homesiteFacade.integrationSlides;
+                let i = index
+              "
+              [image]="slide.image"
+              [hideOverlay]="true"
+            ></mat-carousel-slide>
+          </mat-carousel>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

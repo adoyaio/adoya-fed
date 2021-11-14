@@ -6,6 +6,6 @@ import { MaterialModule } from "./material-design/material.module";
 @NgModule({
   declarations: [DynamicModalComponent],
   imports: [CommonModule, MaterialModule],
-  exports: [],
+  exports: [MaterialModule],
 })
 export class SharedModule {}

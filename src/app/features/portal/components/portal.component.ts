@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import { AmplifyService } from "aws-amplify-angular";
 import { Router } from "@angular/router";
 import { tap } from "rxjs/operators";
@@ -9,19 +9,13 @@ import { tap } from "rxjs/operators";
   styleUrls: ["./portal.component.scss"],
 })
 export class PortalComponent implements OnInit {
-  constructor(private amplifyService: AmplifyService, private router: Router) {
-    this.amplifyService.authStateChange$
-      .pipe(
-        tap((authState) => {
-          if (authState.state === "signedIn") {
-            this.router.navigateByUrl("/workbench");
-          } else {
-            this.router.navigateByUrl("/portal");
-          }
-        })
-      )
-      .subscribe();
-  }
+  @Input() signUpType: string;
+  @Input() isSignUp: boolean;
+  constructor(
+    private amplifyService: AmplifyService,
+    private router: Router // public dialogRef: MatDialogRef<PortalComponent> // @Inject(MAT_DIALOG_DATA) public data: PortalDialogData
+  ) {}
+
   user: any;
   greeting: string;
   usernameAttributes = "email";
@@ -78,5 +72,22 @@ export class PortalComponent implements OnInit {
     ],
   };
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (
+      !window.location.href.includes("home") &&
+      !window.location.href.includes("start")
+    ) {
+      this.amplifyService.authStateChange$
+        .pipe(
+          tap((authState) => {
+            if (authState.state === "signedIn") {
+              this.router.navigateByUrl("/workbench");
+            } else {
+              this.router.navigateByUrl("/portal");
+            }
+          })
+        )
+        .subscribe();
+    }
+  }
 }

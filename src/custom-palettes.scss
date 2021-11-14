@@ -66,3 +66,37 @@ $md-adoya-green2: (
     A700: #000000,
   ),
 );
+
+/* For use in src/lib/core/theming/_palette.scss */
+$md-adoya-purple: (
+  50: #f4e7fc,
+  100: #e5c2f9,
+  200: #d39af5,
+  300: #c171f0,
+  400: #b452ed,
+  500: #a734ea,
+  600: #9f2fe7,
+  700: #9627e4,
+  800: #8c21e1,
+  900: #7c15db,
+  A100: #ffffff,
+  A200: #ebd8ff,
+  A400: #d1a5ff,
+  A700: #c38bff,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #000000,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #000000,
+  ),
+);

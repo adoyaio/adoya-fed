@@ -1,0 +1,84 @@
+<div class="d-flex flex-column col-12 px-0">
+  <!-- <mat-card class="account__card mat-elevation-z0 mt-3 w-100">
+    <mat-card-content>
+      <div class="example-container w-100">
+        <mat-card-subtitle class="pb-1">
+          Having Issues? Email us at
+          <a
+            class="adoya-link"
+            href="mailto:info@adoya.io?subject=Adoya Support"
+            >info@adoya.io</a
+          >
+          or call/text (415) 610-5421. Expect a response within 24-48 hours.
+        </mat-card-subtitle>
+      </div>
+    </mat-card-content>
+  </mat-card> -->
+
+  <div class="d-flex col-12 w-100 px-0" *ngIf="isSendingResults">
+    <mat-progress-bar color="primary" mode="indeterminate"></mat-progress-bar>
+  </div>
+  <div class="d-flex col-12 px-0">
+    <mat-card class="adoya__card mat-elevation-z0 mt-3 w-100">
+      <!-- <mat-card-title class="pb-2">
+        Having Issues? Enter a description of your issue we'll respond within
+        24-48 hours.
+      </mat-card-title> -->
+
+      <mat-card-subtitle class="pb-1 font-weight-bold">
+        We'll respond within 24-48 hours.
+      </mat-card-subtitle>
+
+      <mat-card-content>
+        <div class="w-100">
+          <mat-card-subtitle class="mt-2 mb-2"> </mat-card-subtitle>
+
+          <form
+            [formGroup]="supportForm"
+            class="font-weight-bold font-size-larger"
+          >
+            <mat-form-field appearance="fill" class="w-100">
+              <mat-label>Email</mat-label>
+              <input
+                formControlName="username"
+                required
+                matInput
+                placeholder="Email"
+              />
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="w-100">
+              <mat-label>Organization ID (Optional)</mat-label>
+              <input
+                formControlName="orgId"
+                matInput
+                placeholder="Organization ID"
+              />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="w-100" color="primary">
+              <mat-label>Description</mat-label>
+              <textarea matInput formControlName="description" class="">
+              </textarea>
+            </mat-form-field>
+          </form>
+        </div>
+      </mat-card-content>
+      <mat-action-row class="w-100">
+        <button
+          [disabled]="supportForm.invalid"
+          (click)="onSupportSubmit()"
+          mat-raised-button
+          color="primary"
+          class="float-left"
+        >
+          <mat-icon class="text-light" aria-label="submit">done</mat-icon>
+          <span class="text-light pl-1">submit</span>
+        </button>
+      </mat-action-row>
+    </mat-card>
+  </div>
+  <div class="ml-3">
+    By submitting this form you agree to our Privacy Policy and Terms of
+    Service.
+  </div>
+</div>

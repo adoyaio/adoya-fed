@@ -1,15 +1,32 @@
 <div
-  class="mat-elevation-z0 position-fixed mb-5 z-index-10 w-100 border-bottom"
+  class="
+    mat-elevation-z0
+    position-fixed
+    mb-5
+    z-index-10
+    w-100
+    border-bottom
+    home-site-menu__container
+  "
 >
   <mat-toolbar class="card-med text-center m-0">
     <div class="text-white font-size-14 font-weight-bold text-center w-100">
-      Ready to level up your apple search ads campaigns? Checkout a practical
-      guide to Apple Search Ads.
+      Ready to level-up your Apple Search Ads campaigns? Check out “A Practical
+      Guide to Apple Search Ads.”
       <a href="/start" class="ml-3 text-white">Get the Free Whitepaper</a>
 
-      <button class="float-right text-white pr-2 w-auto" mat-icon-button>
+      <button
+        class="float-right text-white pr-2 w-auto"
+        mat-icon-button
+        [matMenuTriggerFor]="accountMenu"
+      >
         <mat-icon class="text-white">account_circle</mat-icon>
       </button>
+      <mat-menu #accountMenu="matMenu">
+        <button (click)="onProfileClicked()" mat-menu-item>
+          <mat-icon color="primary">face</mat-icon> Login
+        </button>
+      </mat-menu>
     </div>
   </mat-toolbar>
   <mat-action-list class="d-flex flex-row py-4 bg-white">
@@ -21,15 +38,15 @@
       mat-list-item
       (click)="handleClick('Products')"
     >
-      <mat-icon color="accent" class="mr-2">whatshot</mat-icon>
+      <mat-icon color="primary" class="mr-2">whatshot</mat-icon>
       Products
     </button> -->
     <button
       [ngClass]="activeButton === 'Contact' ? 'active' : ''"
       mat-list-item
-      (click)="handleClick('Contact')"
+      (click)="handleContactClick()"
     >
-      <mat-icon color="accent" class="mr-2">perm_phone_msg</mat-icon>
+      <mat-icon color="primary" class="mr-2">perm_phone_msg</mat-icon>
       Contact
     </button>
     <button
@@ -37,7 +54,7 @@
       [matMenuTriggerFor]="menu"
       mat-list-item
     >
-      <mat-icon color="accent" class="mr-2">keyboard_arrow_down</mat-icon>
+      <mat-icon color="primary" class="mr-2">keyboard_arrow_down</mat-icon>
       Resources
     </button>
     <button
