@@ -13,12 +13,16 @@ import {
   CampaignData,
   CampaignUpdateData,
 } from "src/app/features/registration/model/campaign-data";
+import { UserAccountService } from "./user-account.service";
 
 @Injectable({
   providedIn: "root",
 })
 export class AppleService {
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private userAccountservice: UserAccountService
+  ) {}
   authKey = "GerGRueNWE3qCkPG8GfPV649wyVnQEQN2oJQUpnI";
 
   baseUrl = environment.baseUrl;
@@ -32,6 +36,7 @@ export class AppleService {
     const url = `${this.getAppleAppsUrl}?org_id=${orgId}`;
     let headers = new HttpHeaders();
     headers = headers.set("x-api-key", this.authKey);
+    headers = headers.set("Authorization", this.userAccountservice.jwtToken);
     return this.http.get<any>(url, { headers: headers }).pipe(
       map((response) => {
         return response;
@@ -43,6 +48,7 @@ export class AppleService {
     const url = `${this.getAppleAclsUrl}?org_id=${orgId}`;
     let headers = new HttpHeaders();
     headers = headers.set("x-api-key", this.authKey);
+    headers = headers.set("Authorization", this.userAccountservice.jwtToken);
     return this.http.get<any>(url, { headers: headers }).pipe(
       map((response) => {
         return response;
@@ -54,6 +60,7 @@ export class AppleService {
     const url = `${this.getAppleAuthUrl}?org_id=${orgId}`;
     let headers = new HttpHeaders();
     headers = headers.set("x-api-key", this.authKey);
+    headers = headers.set("Authorization", this.userAccountservice.jwtToken);
     return this.http.get<any>(url, { headers: headers }).pipe(
       map((response) => {
         return response;
@@ -68,6 +75,7 @@ export class AppleService {
     const url = `${this.createAppleCampaignsUrl}?org_id=${orgId}`;
     let headers = new HttpHeaders();
     headers = headers.set("x-api-key", this.authKey);
+    headers = headers.set("Authorization", this.userAccountservice.jwtToken);
     return this.http.post<any>(url, campaignData, { headers: headers }).pipe(
       map((response) => {
         return response;
@@ -82,6 +90,7 @@ export class AppleService {
     const url = `${this.updateAppleCampaignsUrl}?org_id=${orgId}`;
     let headers = new HttpHeaders();
     headers = headers.set("x-api-key", this.authKey);
+    headers = headers.set("Authorization", this.userAccountservice.jwtToken);
     return this.http.patch<any>(url, updateData, { headers: headers }).pipe(
       map((response) => {
         return response;
