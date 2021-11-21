@@ -35,6 +35,7 @@ import { ClientPayload } from "src/app/core/models/client-payload";
 import { AppService } from "src/app/core/services/app.service";
 import { AppleService } from "src/app/core/services/apple.service";
 import { ClientService } from "src/app/core/services/client.service";
+import { UserAccountService } from "src/app/core/services/user-account.service";
 import { CustomFormValidators } from "src/app/shared/dynamic-form/validators/CustomFormValidators";
 import { DynamicModalComponent } from "src/app/shared/dynamic-modal/dynamic-modal.component";
 import { CampaignData } from "../model/campaign-data";
@@ -363,6 +364,7 @@ export class RegistrationComponent implements OnInit {
 
   ngOnInit() {
     Auth.currentUserInfo().then((val) => {
+      // TODO pull from userAccountService?
       this.orgId = get(val.attributes, "custom:org_id");
       this.emailAddresses = get(val.attributes, "email");
       this.clientService

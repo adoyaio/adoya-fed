@@ -19,8 +19,10 @@ import {
   Router,
 } from "@angular/router";
 import { AmplifyService } from "aws-amplify-angular";
+import { get } from "lodash";
 import { Subject } from "rxjs";
 import { filter, map, mergeMap, takeUntil, tap } from "rxjs/operators";
+import { UserAccountService } from "./core/services/user-account.service";
 
 @Component({
   selector: "app-root",
@@ -36,7 +38,8 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     private route: ActivatedRoute,
     private titleService: Title,
     private activatedRoute: ActivatedRoute,
-    private amplifyService: AmplifyService
+    private amplifyService: AmplifyService,
+    private userAccountService: UserAccountService
   ) {
     this.titleService.setTitle("adoya client portal");
     this.router.events
@@ -77,8 +80,21 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       .pipe(
         tap((authState) => {
           if (!(authState.state === "signedIn")) {
+            this.userAccountService.jwtToken = undefined;
+            this.userAccountService.orgId = undefined;
             this.router.navigateByUrl("/portal");
           }
+          const jwtToken = get(
+            authState,
+            "user.signInUserSession.idToken.jwtToken"
+          );
+          const orgId = get(
+            authState,
+            "user.signInUserSession.idToken.payload.custom:org_id"
+          );
+
+          this.userAccountService.jwtToken = jwtToken;
+          this.userAccountService.orgId = orgId;
         })
       )
       .subscribe();

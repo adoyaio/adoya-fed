@@ -9,13 +9,13 @@ import { isNil } from "lodash";
   providedIn: "root",
 })
 export class UserAccountService {
-  private storedUser: UserAccount;
-  private currentUserSubject: BehaviorSubject<UserAccount> = new BehaviorSubject<UserAccount>(
-    this.storedUser
-  );
+  private storedUser: UserAccount = new UserAccount();
+  private currentUserSubject: BehaviorSubject<UserAccount> =
+    new BehaviorSubject<UserAccount>(this.storedUser);
   public currentUser$: Observable<UserAccount>;
 
-  // signedIn: boolean = false;
+  public jwtToken: string;
+  public orgId: string;
 
   constructor(private amplifyService: AmplifyService) {
     this.currentUserSubject = new BehaviorSubject<UserAccount>(this.storedUser);

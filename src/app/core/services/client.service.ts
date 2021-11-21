@@ -14,12 +14,16 @@ import { KeywordDayObject } from "src/app/features/reporting/models/keyword-day-
 import { OffsetObject } from "src/app/features/reporting/models/offset-object";
 import { ClientPayload } from "../models/client-payload";
 import { get as _get } from "lodash";
+import { UserAccountService } from "./user-account.service";
 
 @Injectable({
   providedIn: "root",
 })
 export class ClientService {
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private userAccountservice: UserAccountService
+  ) {}
 
   baseUrl = environment.baseUrl;
 
@@ -38,6 +42,7 @@ export class ClientService {
   ): Observable<any> {
     const url = `${this.clientPostUrl}?org_id=${client.orgId}`;
     let headers = new HttpHeaders();
+    headers = headers.set("Authorization", this.userAccountservice.jwtToken);
     headers = headers.set("x-api-key", this.authKey);
     return this.http
       .post<any>(
@@ -63,7 +68,9 @@ export class ClientService {
   ): Observable<any> {
     const url = `${this.clientPatchUrl}?org_id=${client.orgId}`;
     let headers = new HttpHeaders();
+    headers = headers.set("Authorization", this.userAccountservice.jwtToken);
     headers = headers.set("x-api-key", this.authKey);
+
     return this.http
       .post<any>(
         url,
@@ -84,6 +91,7 @@ export class ClientService {
     const url = `${this.clientGetUrl}?org_id=${orgId}`;
     let headers = new HttpHeaders();
     headers = headers.set("x-api-key", this.authKey);
+    headers = headers.set("Authorization", this.userAccountservice.jwtToken);
     return this.http.get<any>(url, { headers: headers }).pipe(
       map((response) => {
         return response;
@@ -98,6 +106,7 @@ export class ClientService {
     const url = `${this.clientCostHistoryUrl}?org_id=${orgId}&total_recs=${pageSize}`;
     let headers = new HttpHeaders();
     headers = headers.set("x-api-key", this.authKey);
+    headers = headers.set("Authorization", this.userAccountservice.jwtToken);
     return this.http.get<any>(url, { headers: headers }).pipe(
       map((response) => {
         return CostPerInstallDayObject.buildFromGetHistoryResponse(response);
@@ -113,6 +122,7 @@ export class ClientService {
     const url = `${this.clientCostHistoryUrl}?org_id=${orgId}&start_date=${endDate}&end_date=${startDate}`;
     let headers = new HttpHeaders();
     headers = headers.set("x-api-key", this.authKey);
+    headers = headers.set("Authorization", this.userAccountservice.jwtToken);
     return this.http.get<any>(url, { headers: headers }).pipe(
       map((response) => {
         return CostPerInstallDayObject.buildFromGetHistoryResponse(response);
@@ -139,8 +149,8 @@ export class ClientService {
     const keywordStatusParam = keywordStatus.length > 0 ? keywordStatus : "all";
     const url = `${this.clientKeywordHistoryUrl}?org_id=${orgId}&total_recs=${pageSize}&offsetOrgId=${offsetOrgId}&offsetKeywordId=${offsetKeywordId}&offsetDate=${offsetDate}&start_date=${startDateParam}&end_date=${endDateParam}&matchType=${matchTypeParam}&keywordStatus=${keywordStatusParam}`;
     let headers = new HttpHeaders();
-
     headers = headers.set("x-api-key", this.authKey);
+    headers = headers.set("Authorization", this.userAccountservice.jwtToken);
     return this.http.get<any>(url, { headers: headers }).pipe(
       map((response) => {
         return response;
