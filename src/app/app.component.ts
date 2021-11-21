@@ -84,8 +84,6 @@ export class AppComponent implements AfterViewInit, OnDestroy {
             this.userAccountService.orgId = undefined;
             this.router.navigateByUrl("/portal");
           }
-          // debugger;
-
           const jwtToken = get(
             authState,
             "user.signInUserSession.idToken.jwtToken"
