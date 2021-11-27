@@ -11,8 +11,8 @@ import { catchError, map, tap } from "rxjs/operators";
 import { AppService } from "src/app/core/services/app.service";
 import { ClientService } from "src/app/core/services/client.service";
 import { UserAccountService } from "src/app/core/services/user-account.service";
-import { CostPerInstallDayObject } from "../../../models/cost-per-install-day-object";
-import { ReportingService } from "../../../reporting.service";
+import { CostPerInstallDayObject } from "../../models/cost-per-install-day-object";
+import { ReportingService } from "../../reporting.service";
 
 @Component({
   selector: "app-campaign-reporting",

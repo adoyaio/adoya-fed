@@ -11,14 +11,22 @@ import { AmplifyAngularModule } from "aws-amplify-angular";
 import { MaterialModule } from "src/app/shared/material-design/material.module";
 import { ChartsModule } from "ng2-charts";
 import { LineChartComponent } from "./components/line-chart/line-chart.component";
-import { KeywordReportingComponent } from './components/keyword-reporting/keyword-reporting.component';
-import { KeywordReportingLineChartComponent } from './components/keyword-reporting-line-chart/keyword-reporting-line-chart.component';
-import { KeywordReportingPieChartComponent } from './components/keyword-reporting-pie-chart/keyword-reporting-pie-chart.component';
-import { CampaignReportingComponent } from './components/reporting/campaign-reporting/campaign-reporting.component';
-import { AdgroupReportingComponent } from './components/reporting/adgroup-reporting/adgroup-reporting.component';
+import { KeywordReportingComponent } from "./components/keyword-reporting/keyword-reporting.component";
+import { KeywordReportingLineChartComponent } from "./components/keyword-reporting-line-chart/keyword-reporting-line-chart.component";
+import { KeywordReportingPieChartComponent } from "./components/keyword-reporting-pie-chart/keyword-reporting-pie-chart.component";
+import { CampaignReportingComponent } from "./components/campaign-reporting/campaign-reporting.component";
+import { AdgroupReportingComponent } from "./components/adgroup-reporting/adgroup-reporting.component";
 
 @NgModule({
-  declarations: [ReportingComponent, LineChartComponent, KeywordReportingComponent, KeywordReportingLineChartComponent, KeywordReportingPieChartComponent, CampaignReportingComponent, AdgroupReportingComponent],
+  declarations: [
+    ReportingComponent,
+    LineChartComponent,
+    KeywordReportingComponent,
+    KeywordReportingLineChartComponent,
+    KeywordReportingPieChartComponent,
+    CampaignReportingComponent,
+    AdgroupReportingComponent,
+  ],
   imports: [
     CommonModule,
     ReportingRoutingModule,
