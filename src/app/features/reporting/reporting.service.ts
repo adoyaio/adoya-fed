@@ -12,7 +12,7 @@ import { KeywordDayObject } from "./models/keyword-day-object";
   providedIn: "root",
 })
 export class ReportingService {
-  isLoadingCPI = true; //TODO implement
+  isLoadingCPI = true;
   costPerInstallDayObject$ = new BehaviorSubject<CostPerInstallDayObject[]>([]);
   activeLineChartLabel$ = new BehaviorSubject<ChartLabelObject[]>([
     { name: "Installs", state: true },
@@ -31,6 +31,14 @@ export class ReportingService {
     { name: "Cost Per Install", value: "avg_cpa", state: false },
     { name: "Cost", value: "local_spend", state: false },
   ]);
+
+  isLoadingAdgroups = true;
+  // keywordDayObject$ = new BehaviorSubject<KeywordDayObject[]>([]);
+  // activeKeywordLineChartMetric$ = new BehaviorSubject<ChartMetricObject[]>([
+  //   { name: "Installs", value: "installs", state: true },
+  //   { name: "Cost Per Install", value: "avg_cpa", state: false },
+  //   { name: "Cost", value: "local_spend", state: false },
+  // ]);
 
   constructor(public appService: AppService) {}
 }

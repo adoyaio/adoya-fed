@@ -15,9 +15,10 @@ import { KeywordReportingComponent } from './components/keyword-reporting/keywor
 import { KeywordReportingLineChartComponent } from './components/keyword-reporting-line-chart/keyword-reporting-line-chart.component';
 import { KeywordReportingPieChartComponent } from './components/keyword-reporting-pie-chart/keyword-reporting-pie-chart.component';
 import { CampaignReportingComponent } from './components/reporting/campaign-reporting/campaign-reporting.component';
+import { AdgroupReportingComponent } from './components/reporting/adgroup-reporting/adgroup-reporting.component';
 
 @NgModule({
-  declarations: [ReportingComponent, LineChartComponent, KeywordReportingComponent, KeywordReportingLineChartComponent, KeywordReportingPieChartComponent, CampaignReportingComponent],
+  declarations: [ReportingComponent, LineChartComponent, KeywordReportingComponent, KeywordReportingLineChartComponent, KeywordReportingPieChartComponent, CampaignReportingComponent, AdgroupReportingComponent],
   imports: [
     CommonModule,
     ReportingRoutingModule,
