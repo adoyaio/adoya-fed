@@ -1,5 +1,10 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { FormBuilder, FormControl } from "@angular/forms";
+import {
+  AbstractControl,
+  FormBuilder,
+  FormControl,
+  Validators,
+} from "@angular/forms";
 import {
   MatChipList,
   MatPaginator,
@@ -38,15 +43,26 @@ export class CampaignReportingComponent implements OnInit {
   maxDate: Date = new Date();
   minDate: Date = new Date();
 
+  campaignForm = this.fb.group({
+    lookback: new FormControl(),
+    startPickerInput: new FormControl(),
+    endPickerInput: new FormControl(),
+  });
+
+  get startPickerControl(): AbstractControl {
+    return this.campaignForm.get("startPickerInput");
+  }
+
+  get endPickerControl(): AbstractControl {
+    return this.campaignForm.get("endPickerInput");
+  }
+
   @ViewChild("aggregatePaginator", { static: false })
   aggregatePaginator: MatPaginator;
 
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatChipList, { static: false })
   lineChartLabelChipList: MatChipList;
-
-  startPickerInputControl: FormControl = this.fb.control("");
-  endPickerInputControl: FormControl = this.fb.control("");
 
   constructor(
     private clientService: ClientService,
@@ -183,8 +199,8 @@ export class CampaignReportingComponent implements OnInit {
 
   resetDateForms() {
     this.reportingService.isLoadingCPI = true;
-    this.endPickerInputControl.reset();
-    this.startPickerInputControl.reset();
+    this.startPickerControl.reset();
+    this.endPickerControl.reset();
     this.aggregatePaginator.pageIndex = 0;
     this.sort.active = "timestamp";
     this.sort.direction = "asc";
@@ -221,8 +237,8 @@ export class CampaignReportingComponent implements OnInit {
     this.sort.direction = "asc";
     this.sort.sortChange.emit({ active: "timestamp", direction: "asc" });
     this.sort._stateChanges.next();
-    const start: Date = this.startPickerInputControl.value;
-    const end: Date = this.endPickerInputControl.value;
+    const start: Date = this.startPickerControl.value;
+    const end: Date = this.endPickerControl.value;
 
     this.clientService
       .getClientCostHistoryByTime(
@@ -252,10 +268,7 @@ export class CampaignReportingComponent implements OnInit {
   }
 
   filterByDateDisabled() {
-    if (
-      this.endPickerInputControl.value &&
-      this.startPickerInputControl.value
-    ) {
+    if (this.startPickerControl.value && this.endPickerControl.value) {
       return false;
     }
     return true;

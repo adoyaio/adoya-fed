@@ -2,82 +2,102 @@
   <mat-spinner color="primary" strokeWidth="6.5"></mat-spinner>
 </div> -->
 <div class="mat-elevation-z8 mt-2 reporting-component__table-container">
-  <div class="d-flex justify-content-start col-12 flex-wrap">
-    <mat-form-field class="mr-4">
-      <mat-label>start date</mat-label>
-      <input
-        matInput
-        [max]="minDate"
-        [formControl]="startPickerInputControl"
-        [matDatepicker]="startpicker"
-      />
-      <mat-datepicker-toggle
-        matSuffix
-        [for]="startpicker"
-      ></mat-datepicker-toggle>
-      <mat-datepicker #startpicker></mat-datepicker>
-    </mat-form-field>
-
-    <mat-form-field class="mr-4">
-      <mat-label>end date</mat-label>
-      <input
-        matInput
-        [max]="maxDate"
-        [formControl]="endPickerInputControl"
-        [matDatepicker]="endpicker"
-      />
-      <mat-datepicker-toggle
-        matSuffix
-        [for]="endpicker"
-      ></mat-datepicker-toggle>
-      <mat-datepicker #endpicker></mat-datepicker>
-    </mat-form-field>
-
-    <div>
-      <button
-        mat-button
-        [disabled]="filterByDateDisabled()"
-        (click)="filterByDate()"
+  <form [formGroup]="campaignForm">
+    <div
+      class="d-flex justify-content-start col-12 flex-wrap align-items-center"
+    >
+      <mat-form-field
+        appearance="standard"
+        [hideRequiredMarker]="false"
+        color="primary"
+        class="mr-4"
       >
-        <mat-icon aria-label="save">filter_alt</mat-icon>
-        apply filters
-      </button>
-    </div>
+        <mat-select formControlName="lookback">
+          <mat-option value="1">Yesterday</mat-option>
+          <mat-option value="7">Last Seven Days</mat-option>
+          <mat-option value="30">Last 30 Days</mat-option>
+          <mat-option value="month-to-date">This Month</mat-option>
+          <mat-option value="last-month-to-date">Last Month</mat-option>
+        </mat-select>
+        <mat-label>&nbsp;date range</mat-label>
+      </mat-form-field>
 
-    <div>
-      <button mat-button (click)="resetDateForms()">
-        <mat-icon aria-label="clear">clear</mat-icon>
-        clear filters
-      </button>
-    </div>
+      <mat-form-field class="mr-4 mt-2">
+        <mat-label>start date</mat-label>
+        <input
+          matInput
+          [max]="minDate"
+          formControlName="startPickerInput"
+          [matDatepicker]="startpicker"
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="startpicker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #startpicker></mat-datepicker>
+      </mat-form-field>
 
-    <div>
-      <button mat-button (click)="downloadAggregateCsv()" class="ml-2">
-        <mat-icon class="ml-2" aria-label="download">save_alt</mat-icon>
-        csv download
-      </button>
-    </div>
+      <mat-form-field class="mr-4 mt-2">
+        <mat-label>end date</mat-label>
+        <input
+          matInput
+          [max]="maxDate"
+          [matDatepicker]="endpicker"
+          formControlName="endPickerInput"
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="endpicker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #endpicker></mat-datepicker>
+      </mat-form-field>
 
-    <div>
-      <button
-        mat-button
-        (click)="showAggregateDataView()"
-        *ngIf="!isAggregateDataVisMode"
-      >
-        <mat-icon class="ml-2" aria-label="download">show_chart</mat-icon>
-        data visualization
-      </button>
+      <div>
+        <button
+          mat-button
+          [disabled]="filterByDateDisabled()"
+          (click)="filterByDate()"
+        >
+          <mat-icon aria-label="save">filter_alt</mat-icon>
+          apply filters
+        </button>
+      </div>
 
-      <button
-        mat-button
-        (click)="showAggregateTableView()"
-        *ngIf="isAggregateDataVisMode"
-      >
-        <mat-icon class="ml-2" aria-label="download">table_view</mat-icon>
-        table view
-      </button>
+      <div>
+        <button mat-button (click)="resetDateForms()">
+          <mat-icon aria-label="clear">clear</mat-icon>
+          clear filters
+        </button>
+      </div>
+
+      <div>
+        <button mat-button (click)="downloadAggregateCsv()" class="ml-2">
+          <mat-icon class="ml-2" aria-label="download">save_alt</mat-icon>
+          csv download
+        </button>
+      </div>
+
+      <div>
+        <button
+          mat-button
+          (click)="showAggregateDataView()"
+          *ngIf="!isAggregateDataVisMode"
+        >
+          <mat-icon class="ml-2" aria-label="download">show_chart</mat-icon>
+          data visualization
+        </button>
+
+        <button
+          mat-button
+          (click)="showAggregateTableView()"
+          *ngIf="isAggregateDataVisMode"
+        >
+          <mat-icon class="ml-2" aria-label="download">table_view</mat-icon>
+          table view
+        </button>
+      </div>
     </div>
-  </div>
+  </form>
 
   <!-- data view -->
   <div *ngIf="isAggregateDataVisMode">
