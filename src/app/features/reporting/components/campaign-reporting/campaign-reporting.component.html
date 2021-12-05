@@ -129,7 +129,8 @@
 
   <mat-paginator
     #aggregatePaginator
-    [pageSizeOptions]="[25, 50, 100, 365]"
+    [ngClass]="isAggregateDataVisMode ? 'd-none' : ''"
+    [pageSizeOptions]="[100, 250, 500, 1000, 5000, 10000]"
     showFirstLastButtons
     class="reporting__paginator"
   >
@@ -140,7 +141,7 @@
     [dataSource]="dataSource"
     matSort
     matSortActive="timestamp"
-    matSortDirection="asc"
+    matSortDirection="desc"
   >
     <ng-container matColumnDef="timestamp">
       <th mat-header-cell mat-sort-header *matHeaderCellDef>Date</th>

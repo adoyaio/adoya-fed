@@ -4,6 +4,7 @@ import {
   HttpClient,
   HttpErrorResponse,
   HttpHeaders,
+  HttpParams,
 } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { CostPerInstallDayObject } from "src/app/features/reporting/models/cost-per-install-day-object";
@@ -11,9 +12,12 @@ import { map, catchError } from "rxjs/operators";
 
 import { environment } from "src/environments/environment";
 import { KeywordDayObject } from "src/app/features/reporting/models/keyword-day-object";
-import { OffsetObject } from "src/app/features/reporting/models/offset-object";
+import {
+  CpiOffsetObject,
+  OffsetObject,
+} from "src/app/features/reporting/models/offset-object";
 import { ClientPayload } from "../models/client-payload";
-import { get as _get } from "lodash";
+import { get as _get, isNil } from "lodash";
 import { UserAccountService } from "./user-account.service";
 
 @Injectable({
@@ -99,33 +103,42 @@ export class ClientService {
     );
   }
 
-  public getClientCostHistory(
-    orgId: string,
-    pageSize: number
-  ): Observable<CostPerInstallDayObject[]> {
-    const url = `${this.clientCostHistoryUrl}?org_id=${orgId}&total_recs=${pageSize}`;
-    let headers = new HttpHeaders();
-    headers = headers.set("x-api-key", this.authKey);
-    headers = headers.set("Authorization", this.userAccountservice.jwtToken);
-    return this.http.get<any>(url, { headers: headers }).pipe(
-      map((response) => {
-        return CostPerInstallDayObject.buildFromGetHistoryResponse(response);
-      })
-    );
-  }
+  // public getClientCostHistory(
+  //   orgId: string,
+  //   pageSize: number
+  // ): Observable<CostPerInstallDayObject[]> {
+  //   const sort = "desc";
+  //   const url = `${this.clientCostHistoryUrl}?org_id=${orgId}&total_recs=${pageSize}&sort=${sort}`;
+  //   let headers = new HttpHeaders();
+  //   headers = headers.set("x-api-key", this.authKey);
+  //   headers = headers.set("Authorization", this.userAccountservice.jwtToken);
+  //   return this.http.get<any>(url, { headers: headers }).pipe(
+  //     map((response) => {
+  //       return CostPerInstallDayObject.buildFromGetHistoryResponse(response);
+  //     })
+  //   );
+  // }
 
   public getClientCostHistoryByTime(
     orgId: string,
+    pageSize: number,
+    offsetKey: string,
     startDate: string,
     endDate: string
-  ): Observable<CostPerInstallDayObject[]> {
-    const url = `${this.clientCostHistoryUrl}?org_id=${orgId}&start_date=${endDate}&end_date=${startDate}`;
+  ): Observable<[CostPerInstallDayObject[], CpiOffsetObject[], number]> {
+    let offsetIndexComposite = offsetKey.split("|");
+    const offsetOrgId = offsetIndexComposite[0];
+    const offsetDate = offsetIndexComposite[1];
+    const startDateParam = isNil(startDate) ? "all" : startDate;
+    const endDateParam = isNil(endDate) ? "all" : endDate;
+    const url = `${this.clientCostHistoryUrl}?org_id=${orgId}&total_recs=${pageSize}&offsetOrgId=${offsetOrgId}&offsetDate=${offsetDate}&start_date=${endDateParam}&end_date=${startDateParam}`;
     let headers = new HttpHeaders();
     headers = headers.set("x-api-key", this.authKey);
     headers = headers.set("Authorization", this.userAccountservice.jwtToken);
     return this.http.get<any>(url, { headers: headers }).pipe(
       map((response) => {
-        return CostPerInstallDayObject.buildFromGetHistoryResponse(response);
+        // return CostPerInstallDayObject.buildFromGetHistoryResponse(response);
+        return response;
       })
     );
   }

@@ -42,6 +42,7 @@ export class CampaignReportingComponent implements OnInit {
   isAggregateDataVisMode = false;
   maxDate: Date = new Date();
   minDate: Date = new Date();
+  offsetKeys: string[] = ["init|init"]; // dynamo paging by key
 
   campaignForm = this.fb.group({
     lookback: new FormControl(),
@@ -85,20 +86,35 @@ export class CampaignReportingComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.aggregatePaginator;
+    //this.dataSource.paginator = this.aggregatePaginator;
 
     this.clientService
-      .getClientCostHistory(this.orgId, 1000)
+      .getClientCostHistoryByTime(
+        this.orgId,
+        this.aggregatePaginator.pageSize,
+        this.offsetKeys[this.aggregatePaginator.pageIndex],
+        undefined,
+        undefined
+      )
       .pipe(
         map((data) => {
           this.reportingService.isLoadingCPI = false;
-          this.cpiHistory =
-            CostPerInstallDayObject.buildFromGetHistoryResponse(data);
+          this.cpiHistory = CostPerInstallDayObject.buildFromGetHistoryResponse(
+            data["history"]
+          );
           this.dataSource.data = this.cpiHistory;
           this.reportingService.costPerInstallDayObject$.next({
             ...this.cpiHistory,
           });
-          this.aggregatePaginator.length = this.cpiHistory.length;
+
+          this.offsetKeys.push(
+            String(data["offset"]["org_id"]) +
+              "|" +
+              String(data["offset"]["date"])
+          );
+
+          this.aggregatePaginator.length = data["count"];
+
           return data;
         }),
         catchError(() => {
@@ -208,19 +224,25 @@ export class CampaignReportingComponent implements OnInit {
     this.sort._stateChanges.next();
 
     this.clientService
-      .getClientCostHistory(this.orgId, 2000)
+      .getClientCostHistoryByTime(
+        this.orgId,
+        this.aggregatePaginator.pageSize,
+        this.offsetKeys[this.aggregatePaginator.pageIndex],
+        undefined,
+        undefined
+      )
       .pipe(
         map((data) => {
-          this.cpiHistory =
-            CostPerInstallDayObject.buildFromGetHistoryResponse(data);
+          this.cpiHistory = CostPerInstallDayObject.buildFromGetHistoryResponse(
+            data["history"]
+          );
           this.dataSource.data = this.cpiHistory;
-          this.aggregatePaginator.length = this.cpiHistory.length;
+          this.aggregatePaginator.length = data["count"];
+          this.reportingService.isLoadingCPI = false;
 
           this.reportingService.costPerInstallDayObject$.next({
             ...this.cpiHistory,
           });
-
-          this.reportingService.isLoadingCPI = false;
           return data;
         }),
         catchError(() => {
@@ -243,6 +265,8 @@ export class CampaignReportingComponent implements OnInit {
     this.clientService
       .getClientCostHistoryByTime(
         this.orgId,
+        this.aggregatePaginator.pageSize,
+        this.offsetKeys[this.aggregatePaginator.pageIndex],
         start.toISOString().split("T")[0],
         end.toISOString().split("T")[0]
       )
