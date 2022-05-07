@@ -149,11 +149,10 @@ export class KeywordReportingComponent implements OnInit {
           let keywordOffsetKey = this.keywordOffsetKeys[val.pageIndex];
           let start: Date = this.keywordFilterForm.get("start").value;
           let end: Date = this.keywordFilterForm.get("end").value;
-          const keywordStatus: string = this.keywordFilterForm.get(
-            "keywordStatus"
-          ).value;
-          const matchType: string = this.keywordFilterForm.get("matchType")
-            .value;
+          const keywordStatus: string =
+            this.keywordFilterForm.get("keywordStatus").value;
+          const matchType: string =
+            this.keywordFilterForm.get("matchType").value;
 
           return this.clientService
             .getClientKeywordHistory(
@@ -225,8 +224,8 @@ export class KeywordReportingComponent implements OnInit {
     let start: Date = this.keywordFilterForm.get("start").value;
     let end: Date = this.keywordFilterForm.get("end").value;
 
-    const keywordStatus: string = this.keywordFilterForm.get("keywordStatus")
-      .value;
+    const keywordStatus: string =
+      this.keywordFilterForm.get("keywordStatus").value;
     const matchType: string = this.keywordFilterForm.get("matchType").value;
 
     // get table view data with page of records
@@ -271,9 +270,8 @@ export class KeywordReportingComponent implements OnInit {
                 this.reportingService.keywordDayObject$.next(history);
 
                 // set table
-                this.keywordAggregatedDataSource.data = this.getAggregateDataForTable(
-                  data["history"]
-                );
+                this.keywordAggregatedDataSource.data =
+                  this.getAggregateDataForTable(data["history"]);
 
                 return data;
               })
@@ -301,8 +299,8 @@ export class KeywordReportingComponent implements OnInit {
     let start: Date = this.keywordFilterForm.get("start").value;
     let end: Date = this.keywordFilterForm.get("end").value;
 
-    const keywordStatus: string = this.keywordFilterForm.get("keywordStatus")
-      .value;
+    const keywordStatus: string =
+      this.keywordFilterForm.get("keywordStatus").value;
     const matchType: string = this.keywordFilterForm.get("matchType").value;
 
     // get table view data with page of records
@@ -347,9 +345,8 @@ export class KeywordReportingComponent implements OnInit {
                 this.reportingService.keywordDayObject$.next(history);
 
                 // set table
-                this.keywordAggregatedDataSource.data = this.getAggregateDataForTable(
-                  data["history"]
-                );
+                this.keywordAggregatedDataSource.data =
+                  this.getAggregateDataForTable(data["history"]);
 
                 return data;
               })
