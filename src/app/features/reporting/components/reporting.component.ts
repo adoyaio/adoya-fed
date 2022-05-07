@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { ReportingService } from "../../reporting.service";
+
 import {
   chain as _chain,
   includes as _includes,
@@ -8,6 +8,7 @@ import {
   clone as _clone,
   cloneDeep as _cloneDeep,
 } from "lodash";
+import { ReportingService } from "../reporting.service";
 
 @Component({
   selector: "app-reporting",

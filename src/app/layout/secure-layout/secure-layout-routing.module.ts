@@ -7,9 +7,10 @@ import { AccountComponent } from "src/app/features/account/components/account.co
 import { SupportComponent } from "src/app/features/support/components/support.component";
 
 import { NewsfeedComponent } from "src/app/features/newsfeed/components/newsfeed.component";
-import { ReportingComponent } from "src/app/features/reporting/components/reporting/reporting.component";
+
 import { OptimizationsComponent } from "src/app/features/optimizations/components/optimizations.component";
 import { PreferencesComponent } from "src/app/features/preferences/components/preferences.component";
+import { ReportingComponent } from "src/app/features/reporting/components/reporting.component";
 
 const routes: Routes = [
   {

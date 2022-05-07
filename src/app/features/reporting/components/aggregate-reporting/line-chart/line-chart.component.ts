@@ -1,14 +1,14 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { ChartDataSets, ChartOptions, ChartType } from "chart.js";
 import { Color, Label } from "ng2-charts";
-import { CostPerInstallDayObject } from "../../models/cost-per-install-day-object";
+import { CostPerInstallDayObject } from "../../../models/cost-per-install-day-object";
 import {
   chain as _chain,
   includes as _includes,
   each as _each,
   map as _map,
 } from "lodash";
-import { ReportingService } from "../../reporting.service";
+import { ReportingService } from "../../../reporting.service";
 import { tap } from "rxjs/internal/operators/tap";
 import { combineLatest } from "rxjs";
 
