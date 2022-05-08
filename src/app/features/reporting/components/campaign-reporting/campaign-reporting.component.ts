@@ -3,7 +3,7 @@ import { FormBuilder, FormControl } from "@angular/forms";
 import { MatPaginator, MatSort, MatTableDataSource } from "@angular/material";
 import { chain, first, get } from "lodash";
 import { EMPTY } from "rxjs";
-import { catchError, map, switchMap, take, tap } from "rxjs/operators";
+import { catchError, delay, map, switchMap, take, tap } from "rxjs/operators";
 import { Client } from "src/app/core/models/client";
 import { AppService } from "src/app/core/services/app.service";
 import { ClientService } from "src/app/core/services/client.service";
@@ -28,8 +28,8 @@ export class CampaignReportingComponent implements OnInit {
 
   campaignFilterForm = this.fb.group({
     lookback: new FormControl(),
-    startPickerInput: new FormControl(),
-    endPickerInput: new FormControl(),
+    start: new FormControl(),
+    end: new FormControl(),
     campaign: new FormControl(),
   });
 
@@ -48,6 +48,8 @@ export class CampaignReportingComponent implements OnInit {
     "local_spend",
     "installs",
     "avg_cpa",
+    "branch_revenue",
+    "branch_commerce_event_count",
   ];
 
   // displayedAggregatedKeywordColumns: string[] = [
@@ -100,46 +102,6 @@ export class CampaignReportingComponent implements OnInit {
           this.campaignFilterForm.controls["campaign"].setValue(
             defaultCampaignId
           );
-
-          // return this.clientService
-          //   .getClientCampaignHistory(
-          //     defaultCampaignId,
-          //     100,
-          //     this.campaignOffsetKeys[0],
-          //     "all",
-          //     "all"
-          //   )
-          //   .pipe(
-          //     take(1),
-          //     map((data) => {
-          //       this.reportingService.isLoadingCampaigns = false; // TODO
-
-          //       this.campaignOffsetKeys.push(
-          //         String(data["offset"]["campaign_id"]) +
-          //           "|" +
-          //           String(data["offset"]["timestamp"])
-          //       );
-          //       //this.keywordDataSource.data = data["history"];
-          //       // this.keywordsPaginator.length = data["count"];
-
-          //       // set line graph
-          //       // this.reportingService.keywordDayObject$.next(data["history"]);
-
-          //       // set table
-          //       //this.keywordAggregatedDataSource.data = this.getAggregateDataForTable(
-          //       //  data["history"]
-          //       //);
-
-          //       this.dataSource.data = data["history"];
-          //       this.paginator.length = data["count"];
-
-          //       return data;
-          //     }),
-          //     catchError(() => {
-          //       this.reportingService.isLoadingCampaigns = false;
-          //       return [];
-          //     })
-          //   );
         }),
         take(1),
         catchError(() => {
@@ -152,7 +114,6 @@ export class CampaignReportingComponent implements OnInit {
     this.campaignFilterForm.controls["campaign"].valueChanges
       .pipe(
         tap((val) => {
-          debugger;
           this.reportingService.isLoadingCampaigns = true;
         }),
         switchMap((val) => {
@@ -167,7 +128,6 @@ export class CampaignReportingComponent implements OnInit {
             .pipe(
               take(1),
               map((data) => {
-                debugger;
                 this.reportingService.isLoadingCampaigns = false; // TODO
 
                 // pagination
@@ -208,67 +168,59 @@ export class CampaignReportingComponent implements OnInit {
       )
       .subscribe();
 
-    // this.keywordsPaginator.page
-    //   .pipe(
-    //     delay(0),
-    //     tap((val) => {
-    //       this.reportingService.isLoadingKeywords = true;
-    //     }),
-    //     switchMap((val) => {
-    //       let keywordOffsetKey = this.keywordOffsetKeys[val.pageIndex];
-    //       let start: Date = this.keywordFilterForm.get("start").value;
-    //       let end: Date = this.keywordFilterForm.get("end").value;
-    //       const keywordStatus: string =
-    //         this.keywordFilterForm.get("keywordStatus").value;
-    //       const matchType: string =
-    //         this.keywordFilterForm.get("matchType").value;
+    this.paginator.page
+      .pipe(
+        delay(0),
+        tap((val) => {
+          this.reportingService.isLoadingCampaigns = true;
+        }),
+        switchMap((val) => {
+          let campaign = this.campaignFilterForm.get("campaign").value;
+          let offsetKey = this.campaignOffsetKeys[val.pageIndex];
+          let start: Date = this.campaignFilterForm.get("start").value;
+          let end: Date = this.campaignFilterForm.get("end").value;
 
-    //       return this.clientService
-    //         .getClientKeywordHistory(
-    //           this.orgId,
-    //           this.keywordsPaginator.pageSize,
-    //           keywordOffsetKey,
-    //           this.formatDate(start),
-    //           this.formatDate(end),
-    //           matchType,
-    //           keywordStatus
-    //         )
-    //         .pipe(
-    //           map((data) => {
-    //             this.reportingService.isLoadingKeywords = false;
+          return this.clientService
+            .getClientCampaignHistory(
+              campaign,
+              this.paginator.pageSize,
+              offsetKey,
+              "all",
+              "all"
+            )
+            .pipe(
+              map((data) => {
+                this.reportingService.isLoadingCampaigns = false;
 
-    //             // handle dynamo paging
-    //             if (val.pageIndex > val.previousPageIndex) {
-    //               this.keywordOffsetKeys.push(
-    //                 String(data["offset"]["org_id"]) +
-    //                   "|" +
-    //                   String(data["offset"]["keyword_id"]) +
-    //                   "|" +
-    //                   String(data["offset"]["date"])
-    //               );
+                // handle dynamo paging
+                if (val.pageIndex > val.previousPageIndex) {
+                  this.campaignOffsetKeys.push(
+                    String(data["offset"]["campaign_id"]) +
+                      "|" +
+                      String(data["offset"]["timestamp"])
+                  );
 
-    //               // items per page change
-    //             } else if (val.pageIndex == val.previousPageIndex) {
-    //               this.keywordOffsetKeys = ["init|init|init"];
-    //               this.keywordOffsetKeys.push(
-    //                 String(data["offset"]["org_id"]) +
-    //                   "|" +
-    //                   String(data["offset"]["keyword_id"]) +
-    //                   "|" +
-    //                   String(data["offset"]["date"])
-    //               );
-    //             }
-    //             this.keywordDataSource.data = data["history"];
-    //             this.keywordsPaginator.length = data["count"];
-    //           }),
-    //           catchError(() => {
-    //             this.reportingService.isLoadingKeywords = false;
-    //             return [];
-    //           })
-    //         );
-    //     })
-    //   )
-    //   .subscribe();
+                  // items per page change
+                } else if (val.pageIndex == val.previousPageIndex) {
+                  this.campaignOffsetKeys = ["init|init"];
+                  this.campaignOffsetKeys.push(
+                    String(data["offset"]["campaign_id"]) +
+                      "|" +
+                      String(data["offset"]["timestamp"])
+                  );
+                }
+
+                this.dataSource.data = data["history"];
+                this.paginator.length = data["count"];
+              }),
+              catchError(() => {
+                this.reportingService.isLoadingCampaigns = false;
+                return [];
+              })
+            );
+        })
+      )
+      .subscribe();
 
     // this.keywordAggregatedDataSource.sort = this.sort;
   }

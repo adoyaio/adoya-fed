@@ -41,7 +41,7 @@
         <input
           matInput
           [max]="minDate"
-          formControlName="startPickerInput"
+          formControlName="start"
           [matDatepicker]="startpicker"
         />
         <mat-datepicker-toggle
@@ -56,7 +56,7 @@
         <input
           matInput
           [max]="maxDate"
-          formControlName="endPickerInput"
+          formControlName="end"
           [matDatepicker]="endpicker"
         />
         <mat-datepicker-toggle
@@ -207,6 +207,20 @@
       <th mat-header-cell *matHeaderCellDef>Cost Per Install</th>
       <td mat-cell *matCellDef="let element">
         {{ element.avg_cpa | number: "1.2-2" }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="branch_revenue">
+      <th mat-header-cell *matHeaderCellDef>Revenue</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.branch_revenue | number: "1.2-2" }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="branch_commerce_event_count">
+      <th mat-header-cell *matHeaderCellDef>Purchases</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.branch_commerce_event_count }}
       </td>
     </ng-container>
 

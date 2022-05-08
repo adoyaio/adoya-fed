@@ -12,7 +12,7 @@ import {
   MatTableDataSource,
 } from "@angular/material";
 import { chain, cloneDeep } from "lodash";
-import { catchError, map, tap } from "rxjs/operators";
+import { catchError, map, switchMap, tap } from "rxjs/operators";
 import { AppService } from "src/app/core/services/app.service";
 import { ClientService } from "src/app/core/services/client.service";
 import { UserAccountService } from "src/app/core/services/user-account.service";
@@ -110,7 +110,7 @@ export class AggregateReportingComponent implements OnInit {
           this.offsetKeys.push(
             String(data["offset"]["org_id"]) +
               "|" +
-              String(data["offset"]["date"])
+              String(data["offset"]["timestamp"])
           );
 
           this.aggregatePaginator.length = data["count"];
@@ -120,6 +120,57 @@ export class AggregateReportingComponent implements OnInit {
         catchError(() => {
           this.reportingService.isLoadingCPI = false;
           return [];
+        })
+      )
+      .subscribe();
+
+    this.aggregatePaginator.page
+      .pipe(
+        tap((val) => {
+          this.reportingService.isLoadingCPI = true;
+        }),
+        switchMap((val) => {
+          let offsetKey = this.offsetKeys[val.pageIndex];
+          let start: Date = this.startPickerControl.value;
+          let end: Date = this.endPickerControl.value;
+
+          return this.clientService
+            .getClientCostHistoryByTime(
+              this.orgId,
+              this.aggregatePaginator.pageSize,
+              this.offsetKeys[this.aggregatePaginator.pageIndex],
+              undefined,
+              undefined
+            )
+            .pipe(
+              map((data) => {
+                this.reportingService.isLoadingCPI = false;
+                this.cpiHistory =
+                  CostPerInstallDayObject.buildFromGetHistoryResponse(
+                    data["history"]
+                  );
+                this.dataSource.data = this.cpiHistory;
+                this.reportingService.costPerInstallDayObject$.next({
+                  ...this.cpiHistory,
+                });
+
+                if (val.pageIndex > val.previousPageIndex) {
+                  this.offsetKeys.push(
+                    String(data["offset"]["org_id"]) +
+                      "|" +
+                      String(data["offset"]["timestamp"])
+                  );
+                }
+
+                this.aggregatePaginator.length = data["count"];
+
+                return data;
+              }),
+              catchError(() => {
+                this.reportingService.isLoadingCPI = false;
+                return [];
+              })
+            );
         })
       )
       .subscribe();
