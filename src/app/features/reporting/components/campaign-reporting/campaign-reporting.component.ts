@@ -1,9 +1,15 @@
 import { Component, OnInit } from "@angular/core";
-import { FormBuilder } from "@angular/forms";
-import { catchError, map, take } from "rxjs/operators";
+import { FormBuilder, FormControl } from "@angular/forms";
+import { MatTableDataSource } from "@angular/material";
+import { chain, first, get } from "lodash";
+import { EMPTY } from "rxjs";
+import { catchError, map, switchMap, take, tap } from "rxjs/operators";
+import { Client } from "src/app/core/models/client";
 import { AppService } from "src/app/core/services/app.service";
 import { ClientService } from "src/app/core/services/client.service";
 import { UserAccountService } from "src/app/core/services/user-account.service";
+import { CampaignDayObject } from "../../models/campaign-day";
+import { KeywordDayObject } from "../../models/keyword-day-object";
 import { ReportingService } from "../../reporting.service";
 
 @Component({
@@ -17,6 +23,40 @@ export class CampaignReportingComponent implements OnInit {
 
   maxDate: Date;
   minDate: Date;
+
+  campaignIds = ["527588685"];
+  appleCampaigns = [];
+
+  campaignFilterForm = this.fb.group({
+    lookback: new FormControl(),
+    startPickerInput: new FormControl(),
+    endPickerInput: new FormControl(),
+    campaign: new FormControl(),
+  });
+
+  isAggDataVisMode;
+  isDataVisMode;
+
+  dataSource = new MatTableDataSource<CampaignDayObject>([]);
+  // keywordAggregatedDataSource = new MatTableDataSource<KeywordAggregatedObject>(
+  //   []
+  // );
+
+  displayedColumns: string[] = [
+    "timestamp",
+    "campaign_id",
+    "campaignName",
+    "local_spend",
+    "installs",
+    "avg_cpa",
+  ];
+
+  // displayedAggregatedKeywordColumns: string[] = [
+  //   "keyword",
+  //   "installs",
+  //   "avg_cpa",
+  //   "local_spend",
+  // ];
 
   constructor(
     private clientService: ClientService,
@@ -42,43 +82,109 @@ export class CampaignReportingComponent implements OnInit {
   ngAfterViewInit() {
     // let start: Date = this.keywordFilterForm.get("start").value;
     // let end: Date = this.keywordFilterForm.get("end").value;
+    // this.campaignFilterForm.controls["campaign"].setValue(
+    //   first(this.appleCampaigns)
+    // );
+
     this.clientService
-      .getClientCampaignHistory(
-        "527588685",
-        100,
-        this.campaignOffsetKeys[0],
-        "all",
-        "all"
-      )
+      .getClient(this.orgId)
       .pipe(
-        take(1),
-        map((data) => {
-          this.reportingService.isLoadingKeywords = false; // TODO
+        switchMap((data: Client) => {
+          this.appleCampaigns = chain(data).get("appleCampaigns").value();
 
-          this.campaignOffsetKeys.push(
-            String(data["offset"]["campaign_id"]) +
-              "|" +
-              String(data["offset"]["timestamp"])
+          //this.isLoadingResults = false;
+          const defaultCampaign = chain(this.appleCampaigns).first().value();
+          const defaultCampaignId = get(defaultCampaign, "campaignId");
+
+          this.campaignFilterForm.controls["campaign"].setValue(
+            defaultCampaignId
           );
-          //this.keywordDataSource.data = data["history"];
-          // this.keywordsPaginator.length = data["count"];
 
-          // set line graph
-          // this.reportingService.keywordDayObject$.next(data["history"]);
+          return this.clientService
+            .getClientCampaignHistory(
+              defaultCampaignId,
+              100,
+              this.campaignOffsetKeys[0],
+              "all",
+              "all"
+            )
+            .pipe(
+              take(1),
+              map((data) => {
+                this.reportingService.isLoadingKeywords = false; // TODO
 
-          // set table
-          //this.keywordAggregatedDataSource.data = this.getAggregateDataForTable(
-          //  data["history"]
-          //);
+                this.campaignOffsetKeys.push(
+                  String(data["offset"]["campaign_id"]) +
+                    "|" +
+                    String(data["offset"]["timestamp"])
+                );
+                //this.keywordDataSource.data = data["history"];
+                // this.keywordsPaginator.length = data["count"];
 
-          return data;
+                // set line graph
+                // this.reportingService.keywordDayObject$.next(data["history"]);
+
+                // set table
+                //this.keywordAggregatedDataSource.data = this.getAggregateDataForTable(
+                //  data["history"]
+                //);
+
+                this.dataSource.data = data["history"];
+                //this.paginator.length = data["count"];
+
+                return data;
+              }),
+              catchError(() => {
+                this.reportingService.isLoadingKeywords = false;
+                return [];
+              })
+            );
         }),
+        take(1),
         catchError(() => {
-          this.reportingService.isLoadingKeywords = false;
-          return [];
+          // this.isLoadingResults = false;
+          return EMPTY;
         })
       )
       .subscribe();
+
+    // this.clientService
+    //   .getClientCampaignHistory(
+    //     "527588685",
+    //     100,
+    //     this.campaignOffsetKeys[0],
+    //     "all",
+    //     "all"
+    //   )
+    //   .pipe(
+    //     take(1),
+    //     map((data) => {
+    //       this.reportingService.isLoadingKeywords = false; // TODO
+
+    //       this.campaignOffsetKeys.push(
+    //         String(data["offset"]["campaign_id"]) +
+    //           "|" +
+    //           String(data["offset"]["timestamp"])
+    //       );
+    //       //this.keywordDataSource.data = data["history"];
+    //       // this.keywordsPaginator.length = data["count"];
+
+    //       // set line graph
+    //       // this.reportingService.keywordDayObject$.next(data["history"]);
+
+    //       // set table
+    //       //this.keywordAggregatedDataSource.data = this.getAggregateDataForTable(
+    //       //  data["history"]
+    //       //);
+
+    //       return data;
+    //     }),
+    //     catchError(() => {
+    //       this.reportingService.isLoadingKeywords = false;
+    //       return [];
+    //     })
+    //   )
+    //   .subscribe();
 
     // this.keywordsPaginator.page
     //   .pipe(
@@ -156,4 +262,20 @@ export class CampaignReportingComponent implements OnInit {
 
     return [year, month, day].join("-");
   }
+
+  applyFilterDisabled() {}
+
+  applyFilter() {}
+
+  resetCampaignFilters() {}
+
+  downloadCampaignCsv() {}
+
+  showDataView() {}
+
+  showTableView() {}
+
+  showAggregateDataView() {}
+
+  onChipClicked() {}
 }
