@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, FormControl } from "@angular/forms";
 import { MatPaginator, MatSort, MatTableDataSource } from "@angular/material";
-import { chain, first, get } from "lodash";
+import { chain, first, get, isNil, isNumber } from "lodash";
 import { EMPTY } from "rxjs";
 import { catchError, delay, map, switchMap, take, tap } from "rxjs/operators";
 import { Client } from "src/app/core/models/client";
@@ -21,8 +21,8 @@ export class CampaignReportingComponent implements OnInit {
   campaignOffsetKeys: string[] = ["init|init"]; // dynamo paging by key
   orgId: string;
 
-  maxDate: Date;
-  minDate: Date;
+  maxEndDate: Date;
+  maxStartDate: Date;
 
   appleCampaigns = [];
 
@@ -73,10 +73,10 @@ export class CampaignReportingComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.minDate = new Date();
-    this.maxDate = new Date();
-    this.minDate.setDate(this.minDate.getDate() - 2);
-    this.maxDate.setDate(this.maxDate.getDate() - 1);
+    this.maxStartDate = new Date();
+    this.maxEndDate = new Date();
+    this.maxStartDate.setDate(this.maxStartDate.getDate() - 2);
+    this.maxEndDate.setDate(this.maxEndDate.getDate() - 1);
 
     this.orgId = this.userAccountService
       .getCurrentUser()
@@ -88,9 +88,6 @@ export class CampaignReportingComponent implements OnInit {
   ngAfterViewInit() {
     // let start: Date = this.keywordFilterForm.get("start").value;
     // let end: Date = this.keywordFilterForm.get("end").value;
-    // this.campaignFilterForm.controls["campaign"].setValue(
-    //   first(this.appleCampaigns)
-    // );
 
     this.clientService
       .getClient(this.orgId)
@@ -138,9 +135,6 @@ export class CampaignReportingComponent implements OnInit {
                     String(data["offset"]["timestamp"])
                 );
 
-                //this.keywordDataSource.data = data["history"];
-                // this.keywordsPaginator.length = data["count"];
-
                 // set line graph
                 // this.reportingService.keywordDayObject$.next(data["history"]);
 
@@ -177,16 +171,20 @@ export class CampaignReportingComponent implements OnInit {
         switchMap((val) => {
           let campaign = this.campaignFilterForm.get("campaign").value;
           let offsetKey = this.campaignOffsetKeys[val.pageIndex];
-          let start: Date = this.campaignFilterForm.get("start").value;
-          let end: Date = this.campaignFilterForm.get("end").value;
+          let start: Date = this.campaignFilterForm.get("start").value
+            ? this.campaignFilterForm.get("start").value
+            : "all";
+          let end: Date = this.campaignFilterForm.get("end").value
+            ? this.campaignFilterForm.get("end").value
+            : "all";
 
           return this.clientService
             .getClientCampaignHistory(
               campaign,
               this.paginator.pageSize,
               offsetKey,
-              "all",
-              "all"
+              this.formatDate(start),
+              this.formatDate(end)
             )
             .pipe(
               map((data) => {
@@ -226,6 +224,9 @@ export class CampaignReportingComponent implements OnInit {
   }
 
   formatDate(date) {
+    if (!isNumber(date) && date === "all") {
+      return date;
+    }
     let d = new Date(date),
       month = "" + (d.getMonth() + 1),
       day = "" + d.getDate(),
@@ -241,7 +242,49 @@ export class CampaignReportingComponent implements OnInit {
     return !this.campaignFilterForm.valid;
   }
 
-  applyFilter() {}
+  applyFilter() {
+    let campaign = this.campaignFilterForm.get("campaign").value;
+    this.reportingService.isLoadingCampaigns = true;
+    this.paginator.pageIndex = 0;
+    this.campaignOffsetKeys = ["init|init"];
+
+    let start: Date = this.campaignFilterForm.get("start").value
+      ? this.campaignFilterForm.get("start").value
+      : "all";
+    let end: Date = this.campaignFilterForm.get("end").value
+      ? this.campaignFilterForm.get("end").value
+      : "all";
+
+    this.clientService
+      .getClientCampaignHistory(
+        campaign,
+        this.paginator.pageSize,
+        this.campaignOffsetKeys[0],
+        this.formatDate(start),
+        this.formatDate(end)
+      )
+      .pipe(
+        take(1),
+        map((data) => {
+          this.reportingService.isLoadingCampaigns = false;
+
+          // handle dynamo paging
+          this.campaignOffsetKeys.push(
+            String(data["offset"]["campaign_id"]) +
+              "|" +
+              String(data["offset"]["timestamp"])
+          );
+
+          this.dataSource.data = data["history"];
+          this.paginator.length = data["count"];
+        }),
+        catchError(() => {
+          this.reportingService.isLoadingCampaigns = false;
+          return [];
+        })
+      )
+      .subscribe();
+  }
 
   resetCampaignFilters() {}
 

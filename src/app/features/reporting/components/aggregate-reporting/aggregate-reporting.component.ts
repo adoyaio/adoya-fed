@@ -11,7 +11,7 @@ import {
   MatSort,
   MatTableDataSource,
 } from "@angular/material";
-import { chain, cloneDeep } from "lodash";
+import { chain, cloneDeep, isNumber } from "lodash";
 import { catchError, map, switchMap, tap } from "rxjs/operators";
 import { AppService } from "src/app/core/services/app.service";
 import { ClientService } from "src/app/core/services/client.service";
@@ -40,8 +40,8 @@ export class AggregateReportingComponent implements OnInit {
   dataSource = new MatTableDataSource<CostPerInstallDayObject>(this.cpiHistory);
   orgId: string;
   isAggregateDataVisMode = false;
-  maxDate: Date = new Date();
-  minDate: Date = new Date();
+  maxEndDate: Date = new Date();
+  maxStartDate: Date = new Date();
   offsetKeys: string[] = ["init|init"]; // dynamo paging by key
 
   campaignForm = this.fb.group({
@@ -75,8 +75,8 @@ export class AggregateReportingComponent implements OnInit {
 
   ngOnInit() {
     this.reportingService.isLoadingCPI = true;
-    this.minDate.setDate(this.minDate.getDate() - 2);
-    this.maxDate.setDate(this.maxDate.getDate() - 1);
+    this.maxStartDate.setDate(this.maxStartDate.getDate() - 2);
+    this.maxEndDate.setDate(this.maxEndDate.getDate() - 1);
 
     this.orgId = this.userAccountService
       .getCurrentUser()
@@ -131,16 +131,20 @@ export class AggregateReportingComponent implements OnInit {
         }),
         switchMap((val) => {
           let offsetKey = this.offsetKeys[val.pageIndex];
-          let start: Date = this.startPickerControl.value;
-          let end: Date = this.endPickerControl.value;
+          let start: Date = this.startPickerControl.value
+            ? this.startPickerControl.value
+            : "all";
+          let end: Date = this.endPickerControl.value
+            ? this.endPickerControl.value
+            : "all";
 
           return this.clientService
             .getClientCostHistoryByTime(
               this.orgId,
               this.aggregatePaginator.pageSize,
               this.offsetKeys[this.aggregatePaginator.pageIndex],
-              undefined,
-              undefined
+              this.formatDate(start),
+              this.formatDate(end)
             )
             .pipe(
               map((data) => {
@@ -241,6 +245,21 @@ export class AggregateReportingComponent implements OnInit {
       .subscribe();
   }
 
+  formatDate(date) {
+    if (!isNumber(date) && date === "all") {
+      return date;
+    }
+    let d = new Date(date),
+      month = "" + (d.getMonth() + 1),
+      day = "" + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2) month = "0" + month;
+    if (day.length < 2) day = "0" + day;
+
+    return [year, month, day].join("-");
+  }
+
   onChipClicked(updated) {
     const updatedLineChartLabel = cloneDeep(
       this.reportingService.activeLineChartLabel$.getValue()
@@ -269,10 +288,11 @@ export class AggregateReportingComponent implements OnInit {
     this.startPickerControl.reset();
     this.endPickerControl.reset();
     this.aggregatePaginator.pageIndex = 0;
-    this.sort.active = "timestamp";
-    this.sort.direction = "asc";
-    this.sort.sortChange.emit({ active: "timestamp", direction: "asc" });
-    this.sort._stateChanges.next();
+    this.offsetKeys = ["init|init"];
+    // this.sort.active = "timestamp";
+    // this.sort.direction = "asc";
+    // this.sort.sortChange.emit({ active: "timestamp", direction: "asc" });
+    // this.sort._stateChanges.next();
 
     this.clientService
       .getClientCostHistoryByTime(
@@ -294,6 +314,13 @@ export class AggregateReportingComponent implements OnInit {
           this.reportingService.costPerInstallDayObject$.next({
             ...this.cpiHistory,
           });
+
+          this.offsetKeys.push(
+            String(data["offset"]["org_id"]) +
+              "|" +
+              String(data["offset"]["timestamp"])
+          );
+
           return data;
         }),
         catchError(() => {
@@ -306,13 +333,14 @@ export class AggregateReportingComponent implements OnInit {
 
   filterByDate() {
     this.reportingService.isLoadingCPI = true;
-    this.sort.active = "timestamp";
-    this.sort.direction = "asc";
-    this.sort.sortChange.emit({ active: "timestamp", direction: "asc" });
-    this.sort._stateChanges.next();
+    // this.sort.active = "timestamp";
+    // this.sort.direction = "asc";
+    // this.sort.sortChange.emit({ active: "timestamp", direction: "asc" });
+    // this.sort._stateChanges.next();
     const start: Date = this.startPickerControl.value;
     const end: Date = this.endPickerControl.value;
-
+    this.aggregatePaginator.pageIndex = 0;
+    this.offsetKeys = ["init|init"];
     this.clientService
       .getClientCostHistoryByTime(
         this.orgId,
@@ -323,16 +351,24 @@ export class AggregateReportingComponent implements OnInit {
       )
       .pipe(
         map((data) => {
-          this.cpiHistory =
-            CostPerInstallDayObject.buildFromGetHistoryResponse(data);
+          this.cpiHistory = CostPerInstallDayObject.buildFromGetHistoryResponse(
+            data["history"]
+          );
 
           // JF TODO combine these
           this.dataSource.data = this.cpiHistory;
           this.reportingService.costPerInstallDayObject$.next({
             ...this.cpiHistory,
           });
+          this.aggregatePaginator.length = data["count"];
+          // TODO
 
-          this.aggregatePaginator.length = this.cpiHistory.length;
+          this.offsetKeys.push(
+            String(data["offset"]["org_id"]) +
+              "|" +
+              String(data["offset"]["timestamp"])
+          );
+
           return data;
         }),
         tap(() => {

@@ -183,10 +183,12 @@ export class ClientService {
     let offsetIndexComposite = offsetKey.split("|");
     const offsetCampaignId = offsetIndexComposite[0];
     const offsetDate = offsetIndexComposite[1];
-    const startDateParam = startDate.length > 0 ? startDate : "all";
-    const endDateParam = endDate.length > 0 ? endDate : "all";
+    startDate;
+    const startDateParam =
+      isNil(startDate) || startDate.length > 0 ? startDate : "all";
+    const endDateParam = isNil(endDate) || endDate.length > 0 ? endDate : "all";
 
-    const url = `${this.clientCampaignHistoryUrl}?campaign_id=${campaignId}&total_recs=${pageSize}&offsetCampaignId=${offsetCampaignId}&offsetDate=${offsetDate}&start_date=${startDateParam}&end_date=${endDateParam}`;
+    const url = `${this.clientCampaignHistoryUrl}?campaign_id=${campaignId}&total_recs=${pageSize}&offsetCampaignId=${offsetCampaignId}&offsetDate=${offsetDate}&start_date=${endDateParam}&end_date=${startDateParam}`;
     let headers = new HttpHeaders();
     headers = headers.set("x-api-key", this.authKey);
     headers = headers.set("Authorization", this.userAccountservice.jwtToken);
