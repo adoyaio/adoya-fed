@@ -17,7 +17,10 @@
       <!-- <mat-icon>leaderboard</mat-icon> -->
       <span class="ml-2">Campaign Performance</span>
     </ng-template>
-    <div class="reporting__loading-shade" *ngIf="reportingService.isLoadingCPI">
+    <div
+      class="reporting__loading-shade"
+      *ngIf="reportingService.isLoadingCampaigns"
+    >
       <mat-spinner color="primary" strokeWidth="6.5"></mat-spinner>
     </div>
     <app-campaign-reporting></app-campaign-reporting>

@@ -33,6 +33,9 @@ export class ReportingService {
   ]);
 
   isLoadingAdgroups = true;
+
+  isLoadingCampaigns = true;
+
   // keywordDayObject$ = new BehaviorSubject<KeywordDayObject[]>([]);
   // activeKeywordLineChartMetric$ = new BehaviorSubject<ChartMetricObject[]>([
   //   { name: "Installs", value: "installs", state: true },

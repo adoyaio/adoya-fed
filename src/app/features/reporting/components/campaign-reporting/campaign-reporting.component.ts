@@ -1,6 +1,6 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, FormControl } from "@angular/forms";
-import { MatTableDataSource } from "@angular/material";
+import { MatPaginator, MatSort, MatTableDataSource } from "@angular/material";
 import { chain, first, get } from "lodash";
 import { EMPTY } from "rxjs";
 import { catchError, map, switchMap, take, tap } from "rxjs/operators";
@@ -24,7 +24,6 @@ export class CampaignReportingComponent implements OnInit {
   maxDate: Date;
   minDate: Date;
 
-  campaignIds = ["527588685"];
   appleCampaigns = [];
 
   campaignFilterForm = this.fb.group({
@@ -58,6 +57,11 @@ export class CampaignReportingComponent implements OnInit {
   //   "local_spend",
   // ];
 
+  @ViewChild("paginator", { static: false })
+  paginator: MatPaginator;
+
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
+
   constructor(
     private clientService: ClientService,
     private fb: FormBuilder,
@@ -89,20 +93,72 @@ export class CampaignReportingComponent implements OnInit {
     this.clientService
       .getClient(this.orgId)
       .pipe(
-        switchMap((data: Client) => {
+        tap((data: Client) => {
           this.appleCampaigns = chain(data).get("appleCampaigns").value();
-
-          //this.isLoadingResults = false;
           const defaultCampaign = chain(this.appleCampaigns).first().value();
           const defaultCampaignId = get(defaultCampaign, "campaignId");
-
           this.campaignFilterForm.controls["campaign"].setValue(
             defaultCampaignId
           );
 
+          // return this.clientService
+          //   .getClientCampaignHistory(
+          //     defaultCampaignId,
+          //     100,
+          //     this.campaignOffsetKeys[0],
+          //     "all",
+          //     "all"
+          //   )
+          //   .pipe(
+          //     take(1),
+          //     map((data) => {
+          //       this.reportingService.isLoadingCampaigns = false; // TODO
+
+          //       this.campaignOffsetKeys.push(
+          //         String(data["offset"]["campaign_id"]) +
+          //           "|" +
+          //           String(data["offset"]["timestamp"])
+          //       );
+          //       //this.keywordDataSource.data = data["history"];
+          //       // this.keywordsPaginator.length = data["count"];
+
+          //       // set line graph
+          //       // this.reportingService.keywordDayObject$.next(data["history"]);
+
+          //       // set table
+          //       //this.keywordAggregatedDataSource.data = this.getAggregateDataForTable(
+          //       //  data["history"]
+          //       //);
+
+          //       this.dataSource.data = data["history"];
+          //       this.paginator.length = data["count"];
+
+          //       return data;
+          //     }),
+          //     catchError(() => {
+          //       this.reportingService.isLoadingCampaigns = false;
+          //       return [];
+          //     })
+          //   );
+        }),
+        take(1),
+        catchError(() => {
+          this.reportingService.isLoadingCampaigns = false;
+          return EMPTY;
+        })
+      )
+      .subscribe();
+
+    this.campaignFilterForm.controls["campaign"].valueChanges
+      .pipe(
+        tap((val) => {
+          debugger;
+          this.reportingService.isLoadingCampaigns = true;
+        }),
+        switchMap((val) => {
           return this.clientService
             .getClientCampaignHistory(
-              defaultCampaignId,
+              val,
               100,
               this.campaignOffsetKeys[0],
               "all",
@@ -111,13 +167,17 @@ export class CampaignReportingComponent implements OnInit {
             .pipe(
               take(1),
               map((data) => {
-                this.reportingService.isLoadingKeywords = false; // TODO
+                debugger;
+                this.reportingService.isLoadingCampaigns = false; // TODO
 
+                // pagination
+                this.campaignOffsetKeys = ["init|init"];
                 this.campaignOffsetKeys.push(
                   String(data["offset"]["campaign_id"]) +
                     "|" +
                     String(data["offset"]["timestamp"])
                 );
+
                 //this.keywordDataSource.data = data["history"];
                 // this.keywordsPaginator.length = data["count"];
 
@@ -130,61 +190,23 @@ export class CampaignReportingComponent implements OnInit {
                 //);
 
                 this.dataSource.data = data["history"];
-                //this.paginator.length = data["count"];
+                this.paginator.length = data["count"];
 
                 return data;
               }),
               catchError(() => {
-                this.reportingService.isLoadingKeywords = false;
+                this.reportingService.isLoadingCampaigns = false;
                 return [];
               })
             );
         }),
-        take(1),
+
         catchError(() => {
-          // this.isLoadingResults = false;
+          this.reportingService.isLoadingCampaigns = false;
           return EMPTY;
         })
       )
       .subscribe();
-
-    // this.clientService
-    //   .getClientCampaignHistory(
-    //     "527588685",
-    //     100,
-    //     this.campaignOffsetKeys[0],
-    //     "all",
-    //     "all"
-    //   )
-    //   .pipe(
-    //     take(1),
-    //     map((data) => {
-    //       this.reportingService.isLoadingKeywords = false; // TODO
-
-    //       this.campaignOffsetKeys.push(
-    //         String(data["offset"]["campaign_id"]) +
-    //           "|" +
-    //           String(data["offset"]["timestamp"])
-    //       );
-    //       //this.keywordDataSource.data = data["history"];
-    //       // this.keywordsPaginator.length = data["count"];
-
-    //       // set line graph
-    //       // this.reportingService.keywordDayObject$.next(data["history"]);
-
-    //       // set table
-    //       //this.keywordAggregatedDataSource.data = this.getAggregateDataForTable(
-    //       //  data["history"]
-    //       //);
-
-    //       return data;
-    //     }),
-    //     catchError(() => {
-    //       this.reportingService.isLoadingKeywords = false;
-    //       return [];
-    //     })
-    //   )
-    //   .subscribe();
 
     // this.keywordsPaginator.page
     //   .pipe(
@@ -263,7 +285,9 @@ export class CampaignReportingComponent implements OnInit {
     return [year, month, day].join("-");
   }
 
-  applyFilterDisabled() {}
+  applyFilterDisabled() {
+    return !this.campaignFilterForm.valid;
+  }
 
   applyFilter() {}
 
@@ -271,11 +295,23 @@ export class CampaignReportingComponent implements OnInit {
 
   downloadCampaignCsv() {}
 
-  showDataView() {}
+  showDataView() {
+    this.isDataVisMode = true;
+    this.isAggDataVisMode = false;
+  }
 
-  showTableView() {}
+  showTableView() {
+    this.isDataVisMode = false;
+    this.isAggDataVisMode = false;
+  }
 
-  showAggregateDataView() {}
+  showAggregateDataView() {
+    this.isAggDataVisMode = true;
+    this.isDataVisMode = false;
+    // this.keywordAggregatedDataSource.data = this.getAggregateDataForTable(
+    //   this.reportingService.keywordDayObject$.getValue()
+    // );
+  }
 
   onChipClicked() {}
 }
