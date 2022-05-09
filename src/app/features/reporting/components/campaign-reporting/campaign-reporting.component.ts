@@ -349,7 +349,9 @@ export class CampaignReportingComponent implements OnInit {
       .subscribe();
   }
 
-  downloadCampaignCsv() {}
+  downloadCampaignCsv() {
+    this.appService.downloadCampaignFile(this.dataSource.data, "campaign");
+  }
 
   showDataView() {
     this.isDataVisMode = true;
