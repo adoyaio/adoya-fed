@@ -46,16 +46,16 @@ export class AggregateReportingComponent implements OnInit {
 
   campaignForm = this.fb.group({
     lookback: new FormControl(),
-    startPickerInput: new FormControl(),
-    endPickerInput: new FormControl(),
+    start: new FormControl(),
+    end: new FormControl(),
   });
 
   get startPickerControl(): AbstractControl {
-    return this.campaignForm.get("startPickerInput");
+    return this.campaignForm.get("start");
   }
 
   get endPickerControl(): AbstractControl {
-    return this.campaignForm.get("endPickerInput");
+    return this.campaignForm.get("end");
   }
 
   @ViewChild("aggregatePaginator", { static: false })

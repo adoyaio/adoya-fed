@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { FormBuilder, FormControl } from "@angular/forms";
+import { AbstractControl, FormBuilder, FormControl } from "@angular/forms";
 import { MatPaginator, MatSort, MatTableDataSource } from "@angular/material";
 import { chain, first, get, isNil, isNumber } from "lodash";
 import { EMPTY } from "rxjs";
@@ -32,6 +32,18 @@ export class CampaignReportingComponent implements OnInit {
     end: new FormControl(),
     campaign: new FormControl(),
   });
+
+  get startPickerControl(): AbstractControl {
+    return this.campaignFilterForm.get("start");
+  }
+
+  get endPickerControl(): AbstractControl {
+    return this.campaignFilterForm.get("end");
+  }
+
+  get campaignControl(): AbstractControl {
+    return this.campaignFilterForm.get("campaign");
+  }
 
   isAggDataVisMode;
   isDataVisMode;
@@ -239,7 +251,10 @@ export class CampaignReportingComponent implements OnInit {
   }
 
   applyFilterDisabled() {
-    return !this.campaignFilterForm.valid;
+    if (this.startPickerControl.value && this.endPickerControl.value) {
+      return false;
+    }
+    return true;
   }
 
   applyFilter() {
@@ -286,7 +301,53 @@ export class CampaignReportingComponent implements OnInit {
       .subscribe();
   }
 
-  resetCampaignFilters() {}
+  resetCampaignFilters() {
+    this.reportingService.isLoadingCampaigns = true;
+    this.startPickerControl.reset();
+    this.endPickerControl.reset();
+    this.paginator.pageIndex = 0;
+    this.campaignOffsetKeys = ["init|init"];
+
+    this.clientService
+      .getClientCampaignHistory(
+        this.campaignControl.value,
+        this.paginator.pageSize,
+        this.campaignOffsetKeys[0],
+        "all",
+        "all"
+      )
+      .pipe(
+        take(1),
+        map((data) => {
+          this.reportingService.isLoadingCampaigns = false;
+
+          // pagination
+          this.campaignOffsetKeys.push(
+            String(data["offset"]["campaign_id"]) +
+              "|" +
+              String(data["offset"]["timestamp"])
+          );
+
+          // set line graph
+          // this.reportingService.keywordDayObject$.next(data["history"]);
+
+          // set table
+          //this.keywordAggregatedDataSource.data = this.getAggregateDataForTable(
+          //  data["history"]
+          //);
+
+          this.dataSource.data = data["history"];
+          this.paginator.length = data["count"];
+
+          return data;
+        }),
+        catchError(() => {
+          this.reportingService.isLoadingCampaigns = false;
+          return [];
+        })
+      )
+      .subscribe();
+  }
 
   downloadCampaignCsv() {}
 
