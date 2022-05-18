@@ -17,6 +17,7 @@ import { AdgroupReportingComponent } from "./components/adgroup-reporting/adgrou
 import { AggregateReportingComponent } from "./components/aggregate-reporting/aggregate-reporting.component";
 import { CampaignReportingComponent } from "./components/campaign-reporting/campaign-reporting.component";
 import { ReportingComponent } from "./components/reporting.component";
+import { CampaignReportingLineChartComponent } from './components/campaign-reporting/campaign-reporting-line-chart/campaign-reporting-line-chart.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { ReportingComponent } from "./components/reporting.component";
     AggregateReportingComponent,
     AdgroupReportingComponent,
     CampaignReportingComponent,
+    CampaignReportingLineChartComponent,
   ],
   imports: [
     CommonModule,

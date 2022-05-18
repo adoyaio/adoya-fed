@@ -137,7 +137,7 @@ export class CampaignReportingComponent implements OnInit {
             .pipe(
               take(1),
               map((data) => {
-                this.reportingService.isLoadingCampaigns = false; // TODO
+                this.reportingService.isLoadingCampaigns = false;
 
                 // pagination
                 this.campaignOffsetKeys = ["init|init"];
@@ -148,7 +148,7 @@ export class CampaignReportingComponent implements OnInit {
                 );
 
                 // set line graph
-                // this.reportingService.keywordDayObject$.next(data["history"]);
+                this.reportingService.campaignDayObject$.next(data["history"]);
 
                 // set table
                 //this.keywordAggregatedDataSource.data = this.getAggregateDataForTable(
@@ -329,7 +329,7 @@ export class CampaignReportingComponent implements OnInit {
           );
 
           // set line graph
-          // this.reportingService.keywordDayObject$.next(data["history"]);
+          this.reportingService.campaignDayObject$.next(data["history"]);
 
           // set table
           //this.keywordAggregatedDataSource.data = this.getAggregateDataForTable(

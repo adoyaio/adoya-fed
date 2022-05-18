@@ -7,6 +7,7 @@ import {
 } from "./models/chart-label-object";
 import { AppService } from "src/app/core/services/app.service";
 import { KeywordDayObject } from "./models/keyword-day-object";
+import { CampaignDayObject } from "./models/campaign-day";
 
 @Injectable({
   providedIn: "root",
@@ -36,7 +37,7 @@ export class ReportingService {
 
   isLoadingCampaigns = true;
 
-  // keywordDayObject$ = new BehaviorSubject<KeywordDayObject[]>([]);
+  campaignDayObject$ = new BehaviorSubject<CampaignDayObject[]>([]);
   // activeKeywordLineChartMetric$ = new BehaviorSubject<ChartMetricObject[]>([
   //   { name: "Installs", value: "installs", state: true },
   //   { name: "Cost Per Install", value: "avg_cpa", state: false },
