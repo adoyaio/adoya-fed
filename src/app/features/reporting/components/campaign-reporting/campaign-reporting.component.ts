@@ -222,6 +222,8 @@ export class CampaignReportingComponent implements OnInit {
 
                 this.dataSource.data = data["history"];
                 this.paginator.length = data["count"];
+
+                this.reportingService.campaignDayObject$.next(data["history"]);
               }),
               catchError(() => {
                 this.reportingService.isLoadingCampaigns = false;
@@ -292,6 +294,7 @@ export class CampaignReportingComponent implements OnInit {
 
           this.dataSource.data = data["history"];
           this.paginator.length = data["count"];
+          this.reportingService.campaignDayObject$.next(data["history"]);
         }),
         catchError(() => {
           this.reportingService.isLoadingCampaigns = false;
