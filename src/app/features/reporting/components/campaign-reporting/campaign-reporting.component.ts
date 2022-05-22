@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { AbstractControl, FormBuilder, FormControl } from "@angular/forms";
 import { MatPaginator, MatSort, MatTableDataSource } from "@angular/material";
-import { chain, first, get, isNil, isNumber } from "lodash";
+import { chain, cloneDeep, first, get, isNil, isNumber } from "lodash";
 import { EMPTY } from "rxjs";
 import { catchError, delay, map, switchMap, take, tap } from "rxjs/operators";
 import { Client } from "src/app/core/models/client";
@@ -9,6 +9,7 @@ import { AppService } from "src/app/core/services/app.service";
 import { ClientService } from "src/app/core/services/client.service";
 import { UserAccountService } from "src/app/core/services/user-account.service";
 import { CampaignDayObject } from "../../models/campaign-day";
+import { ChartMetricObject } from "../../models/chart-label-object";
 import { KeywordDayObject } from "../../models/keyword-day-object";
 import { ReportingService } from "../../reporting.service";
 
@@ -374,5 +375,27 @@ export class CampaignReportingComponent implements OnInit {
     // );
   }
 
-  onChipClicked() {}
+  onChipClicked(updated: ChartMetricObject) {
+    const updatedLineChartMetric = cloneDeep(
+      this.reportingService.activeKeywordLineChartMetric$.getValue()
+    );
+
+    chain(updatedLineChartMetric)
+      .find((metric) => {
+        return metric.state === true;
+      })
+      .set("state", false)
+      .value();
+
+    chain(updatedLineChartMetric)
+      .find((metric) => {
+        return metric.name === updated.name;
+      })
+      .set("state", !updated.state)
+      .value();
+
+    this.reportingService.activeKeywordLineChartMetric$.next(
+      updatedLineChartMetric
+    );
+  }
 }
