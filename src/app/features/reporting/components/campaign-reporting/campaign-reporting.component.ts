@@ -127,8 +127,10 @@ export class CampaignReportingComponent implements OnInit {
           this.reportingService.isLoadingCampaigns = true;
         }),
         switchMap((val) => {
+          debugger;
           return this.clientService
             .getClientCampaignHistory(
+              this.orgId,
               val,
               100,
               this.campaignOffsetKeys[0],
@@ -193,6 +195,7 @@ export class CampaignReportingComponent implements OnInit {
 
           return this.clientService
             .getClientCampaignHistory(
+              this.orgId,
               campaign,
               this.paginator.pageSize,
               offsetKey,
@@ -261,6 +264,7 @@ export class CampaignReportingComponent implements OnInit {
   }
 
   applyFilter() {
+    debugger;
     let campaign = this.campaignFilterForm.get("campaign").value;
     this.reportingService.isLoadingCampaigns = true;
     this.paginator.pageIndex = 0;
@@ -275,6 +279,7 @@ export class CampaignReportingComponent implements OnInit {
 
     this.clientService
       .getClientCampaignHistory(
+        this.orgId,
         campaign,
         this.paginator.pageSize,
         this.campaignOffsetKeys[0],
@@ -314,6 +319,7 @@ export class CampaignReportingComponent implements OnInit {
 
     this.clientService
       .getClientCampaignHistory(
+        this.orgId,
         this.campaignControl.value,
         this.paginator.pageSize,
         this.campaignOffsetKeys[0],

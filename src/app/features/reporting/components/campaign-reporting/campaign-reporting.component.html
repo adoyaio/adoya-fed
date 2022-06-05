@@ -10,7 +10,7 @@
         class="mr-3 campaign-reporting__campaign-control"
         color="primary"
       >
-        <mat-select formControlName="campaign">
+        <mat-select multiple formControlName="campaign">
           <ng-container *ngFor="let campaign of this.appleCampaigns">
             <mat-option [value]="campaign.campaignId">{{
               campaign.campaignName

@@ -18,7 +18,7 @@ import {
   OffsetObject,
 } from "src/app/features/reporting/models/offset-object";
 import { ClientPayload } from "../models/client-payload";
-import { get as _get, isNil } from "lodash";
+import { get as _get, isNil, reduce } from "lodash";
 import { UserAccountService } from "./user-account.service";
 
 @Injectable({
@@ -174,7 +174,8 @@ export class ClientService {
   }
 
   public getClientCampaignHistory(
-    campaignId: string,
+    orgId: string,
+    campaignIds: string[],
     pageSize: number,
     offsetKey: string,
     startDate: string,
@@ -183,19 +184,32 @@ export class ClientService {
     let offsetIndexComposite = offsetKey.split("|");
     const offsetCampaignId = offsetIndexComposite[0];
     const offsetDate = offsetIndexComposite[1];
-    startDate;
     const startDateParam =
       isNil(startDate) || startDate.length > 0 ? startDate : "all";
     const endDateParam = isNil(endDate) || endDate.length > 0 ? endDate : "all";
 
-    const url = `${this.clientCampaignHistoryUrl}?campaign_id=${campaignId}&total_recs=${pageSize}&offsetCampaignId=${offsetCampaignId}&offsetDate=${offsetDate}&start_date=${endDateParam}&end_date=${startDateParam}`;
+    let params = new HttpParams();
+
+    params = reduce(campaignIds, (m, i) => m.append("campaign_id", i), params);
+    params = params.append("total_recs", pageSize.toString());
+    params = params.append("offsetCampaignId", offsetCampaignId);
+    params = params.append("offsetDate", offsetDate);
+    params = params.append("start_date", startDateParam);
+    params = params.append("end_date", endDateParam);
+    params = params.append("org_id", orgId);
+
+    debugger;
+
+    // const url = `${this.clientCampaignHistoryUrl}?campaign_id=${campaignId}&total_recs=${pageSize}&offsetCampaignId=${offsetCampaignId}&offsetDate=${offsetDate}&start_date=${endDateParam}&end_date=${startDateParam}`;
     let headers = new HttpHeaders();
     headers = headers.set("x-api-key", this.authKey);
     headers = headers.set("Authorization", this.userAccountservice.jwtToken);
-    return this.http.get<any>(url, { headers: headers }).pipe(
-      map((response) => {
-        return response;
-      })
-    );
+    return this.http
+      .get<any>(this.clientCampaignHistoryUrl, { headers: headers, params })
+      .pipe(
+        map((response) => {
+          return response;
+        })
+      );
   }
 }
