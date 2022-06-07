@@ -29,3 +29,13 @@ export class CampaignDayObject {
   campaignName: string;
   adamId: string;
 }
+
+export class CampaignAggregatedObject {
+  avg_cpa: number;
+  branch_commerce_event_count: number;
+  branch_revenue: number;
+  local_spend: number;
+  installs: number;
+  campaignId: string;
+  campaignName: string;
+}

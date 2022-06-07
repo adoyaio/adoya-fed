@@ -1,14 +1,27 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { AbstractControl, FormBuilder, FormControl } from "@angular/forms";
 import { MatPaginator, MatSort, MatTableDataSource } from "@angular/material";
-import { chain, cloneDeep, first, get, isNil, isNumber } from "lodash";
+import {
+  chain,
+  cloneDeep,
+  each,
+  filter,
+  first,
+  get,
+  isNil,
+  isNumber,
+  reduce,
+} from "lodash";
 import { EMPTY } from "rxjs";
 import { catchError, delay, map, switchMap, take, tap } from "rxjs/operators";
 import { Client } from "src/app/core/models/client";
 import { AppService } from "src/app/core/services/app.service";
 import { ClientService } from "src/app/core/services/client.service";
 import { UserAccountService } from "src/app/core/services/user-account.service";
-import { CampaignDayObject } from "../../models/campaign-day";
+import {
+  CampaignAggregatedObject,
+  CampaignDayObject,
+} from "../../models/campaign-day";
 import { ChartMetricObject } from "../../models/chart-label-object";
 import { KeywordDayObject } from "../../models/keyword-day-object";
 import { ReportingService } from "../../reporting.service";
@@ -50,9 +63,7 @@ export class CampaignReportingComponent implements OnInit {
   isDataVisMode;
 
   dataSource = new MatTableDataSource<CampaignDayObject>([]);
-  // keywordAggregatedDataSource = new MatTableDataSource<KeywordAggregatedObject>(
-  //   []
-  // );
+  aggregatedDataSource = new MatTableDataSource<CampaignAggregatedObject>([]);
 
   displayedColumns: string[] = [
     "timestamp",
@@ -65,12 +76,15 @@ export class CampaignReportingComponent implements OnInit {
     "branch_commerce_event_count",
   ];
 
-  // displayedAggregatedKeywordColumns: string[] = [
-  //   "keyword",
-  //   "installs",
-  //   "avg_cpa",
-  //   "local_spend",
-  // ];
+  displayedAggregatedColumns: string[] = [
+    "campaignName",
+    "campaign_id",
+    "installs",
+    "avg_cpa",
+    "local_spend",
+    "branch_revenue",
+    "branch_commerce_event_count",
+  ];
 
   @ViewChild("paginator", { static: false })
   paginator: MatPaginator;
@@ -121,61 +135,61 @@ export class CampaignReportingComponent implements OnInit {
       )
       .subscribe();
 
-    this.campaignFilterForm.controls["campaign"].valueChanges
-      .pipe(
-        tap((val) => {
-          this.reportingService.isLoadingCampaigns = true;
-        }),
-        switchMap((val) => {
-          debugger;
-          return this.clientService
-            .getClientCampaignHistory(
-              this.orgId,
-              val,
-              100,
-              this.campaignOffsetKeys[0],
-              "all",
-              "all"
-            )
-            .pipe(
-              take(1),
-              map((data) => {
-                this.reportingService.isLoadingCampaigns = false;
+    // this.campaignFilterForm.controls["campaign"].valueChanges
+    //   .pipe(
+    //     tap((val) => {
+    //       this.reportingService.isLoadingCampaigns = true;
+    //     }),
+    //     switchMap((val) => {
+    //       debugger;
+    //       return this.clientService
+    //         .getClientCampaignHistory(
+    //           this.orgId,
+    //           val,
+    //           100,
+    //           this.campaignOffsetKeys[0],
+    //           "all",
+    //           "all"
+    //         )
+    //         .pipe(
+    //           take(1),
+    //           map((data) => {
+    //             this.reportingService.isLoadingCampaigns = false;
 
-                // pagination
-                this.campaignOffsetKeys = ["init|init"];
-                this.campaignOffsetKeys.push(
-                  String(data["offset"]["campaign_id"]) +
-                    "|" +
-                    String(data["offset"]["timestamp"])
-                );
+    //             // pagination
+    //             this.campaignOffsetKeys = ["init|init"];
+    //             this.campaignOffsetKeys.push(
+    //               String(data["offset"]["campaign_id"]) +
+    //                 "|" +
+    //                 String(data["offset"]["timestamp"])
+    //             );
 
-                // set line graph
-                this.reportingService.campaignDayObject$.next(data["history"]);
+    //             // set line graph
+    //             this.reportingService.campaignDayObject$.next(data["history"]);
 
-                // set table
-                //this.keywordAggregatedDataSource.data = this.getAggregateDataForTable(
-                //  data["history"]
-                //);
+    //             // set table
+    //             //this.keywordAggregatedDataSource.data = this.getAggregateDataForTable(
+    //             //  data["history"]
+    //             //);
 
-                this.dataSource.data = data["history"];
-                this.paginator.length = data["count"];
+    //             this.dataSource.data = data["history"];
+    //             this.paginator.length = data["count"];
 
-                return data;
-              }),
-              catchError(() => {
-                this.reportingService.isLoadingCampaigns = false;
-                return [];
-              })
-            );
-        }),
+    //             return data;
+    //           }),
+    //           catchError(() => {
+    //             this.reportingService.isLoadingCampaigns = false;
+    //             return [];
+    //           })
+    //         );
+    //     }),
 
-        catchError(() => {
-          this.reportingService.isLoadingCampaigns = false;
-          return EMPTY;
-        })
-      )
-      .subscribe();
+    //     catchError(() => {
+    //       this.reportingService.isLoadingCampaigns = false;
+    //       return EMPTY;
+    //     })
+    //   )
+    //   .subscribe();
 
     this.paginator.page
       .pipe(
@@ -228,6 +242,9 @@ export class CampaignReportingComponent implements OnInit {
                 this.paginator.length = data["count"];
 
                 this.reportingService.campaignDayObject$.next(data["history"]);
+                this.aggregatedDataSource.data = this.getAggregateDataForTable(
+                  data["history"]
+                );
               }),
               catchError(() => {
                 this.reportingService.isLoadingCampaigns = false;
@@ -238,7 +255,7 @@ export class CampaignReportingComponent implements OnInit {
       )
       .subscribe();
 
-    // this.keywordAggregatedDataSource.sort = this.sort;
+    this.aggregatedDataSource.sort = this.sort;
   }
 
   formatDate(date) {
@@ -257,9 +274,12 @@ export class CampaignReportingComponent implements OnInit {
   }
 
   applyFilterDisabled() {
-    if (this.startPickerControl.value && this.endPickerControl.value) {
+    if (this.campaignControl.value) {
       return false;
     }
+    // if (this.startPickerControl.value && this.endPickerControl.value) {
+    //   return false;
+    // }
     return true;
   }
 
@@ -301,6 +321,10 @@ export class CampaignReportingComponent implements OnInit {
           this.dataSource.data = data["history"];
           this.paginator.length = data["count"];
           this.reportingService.campaignDayObject$.next(data["history"]);
+
+          this.aggregatedDataSource.data = this.getAggregateDataForTable(
+            data["history"]
+          );
         }),
         catchError(() => {
           this.reportingService.isLoadingCampaigns = false;
@@ -342,9 +366,9 @@ export class CampaignReportingComponent implements OnInit {
           this.reportingService.campaignDayObject$.next(data["history"]);
 
           // set table
-          //this.keywordAggregatedDataSource.data = this.getAggregateDataForTable(
-          //  data["history"]
-          //);
+          this.aggregatedDataSource.data = this.getAggregateDataForTable(
+            data["history"]
+          );
 
           this.dataSource.data = data["history"];
           this.paginator.length = data["count"];
@@ -376,9 +400,9 @@ export class CampaignReportingComponent implements OnInit {
   showAggregateDataView() {
     this.isAggDataVisMode = true;
     this.isDataVisMode = false;
-    // this.keywordAggregatedDataSource.data = this.getAggregateDataForTable(
-    //   this.reportingService.keywordDayObject$.getValue()
-    // );
+    this.aggregatedDataSource.data = this.getAggregateDataForTable(
+      this.reportingService.campaignDayObject$.getValue()
+    );
   }
 
   onChipClicked(updated: ChartMetricObject) {
@@ -403,5 +427,84 @@ export class CampaignReportingComponent implements OnInit {
     this.reportingService.activeKeywordLineChartMetric$.next(
       updatedLineChartMetric
     );
+  }
+
+  getAggregateDataForTable(
+    currentData: CampaignDayObject[]
+  ): CampaignAggregatedObject[] {
+    // build list of keywords
+    const history: CampaignAggregatedObject[] = [];
+    let campaignIds = [];
+    campaignIds = chain(currentData)
+      .uniqBy("campaign_id")
+      .map((campaign) => {
+        return campaign.campaign_id;
+      })
+      .value();
+
+    each(campaignIds, (campaignId) => {
+      let campaignName = "";
+      // pull all kw's for the date and summarize for the dataline
+      const valuesForACampaign = filter(currentData, (line) => {
+        if (line.campaign_id === campaignId) {
+          campaignName = line.campaignName;
+          return true;
+        }
+      });
+
+      const local_spend = reduce(
+        valuesForACampaign,
+        (acc, day) => {
+          const val = get(day, "local_spend");
+          return +val + acc;
+        },
+        0.0
+      );
+
+      const installs = reduce(
+        valuesForACampaign,
+        (acc, day) => {
+          const val = get(day, "installs");
+          return +val + acc;
+        },
+        0
+      );
+
+      const branch_commerce_event_count = reduce(
+        valuesForACampaign,
+        (acc, day) => {
+          const val = get(day, "branch_commerce_event_count");
+          return +val + acc;
+        },
+        0
+      );
+
+      const branch_revenue = reduce(
+        valuesForACampaign,
+        (acc, day) => {
+          const val = get(day, "branch_commerce_revenue");
+          return +val + acc;
+        },
+        0
+      );
+
+      let cpi = 0.0;
+      if (installs != 0) {
+        cpi = +local_spend / +installs;
+      }
+
+      const campaign: CampaignAggregatedObject = {
+        campaignName: campaignName,
+        campaignId: campaignId,
+        avg_cpa: cpi,
+        local_spend: local_spend,
+        installs: installs,
+        branch_commerce_event_count,
+        branch_revenue,
+      };
+
+      history.push(campaign);
+    });
+    return history;
   }
 }
