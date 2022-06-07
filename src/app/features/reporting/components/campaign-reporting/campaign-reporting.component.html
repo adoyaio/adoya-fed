@@ -227,4 +227,63 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
+
+  <table
+    [ngClass]="!isAggDataVisMode ? 'd-none' : ''"
+    mat-table
+    matSort
+    matSortActive="installs"
+    matSortDirection="desc"
+    [dataSource]="aggregatedDataSource"
+  >
+    <ng-container matColumnDef="campaignName">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Campaign Name</th>
+      <td mat-cell *matCellDef="let element">{{ element.campaignName }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="campaign_id">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Campaign Id</th>
+      <td mat-cell *matCellDef="let element">{{ element.campaign_id }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="installs">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Installs</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.installs }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="avg_cpa">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>
+        Cost Per Install
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.avg_cpa | number: "1.2-2" }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="local_spend">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Cost</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.local_spend | number: "1.2-2" }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="branch_revenue">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Revenue</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.branch_revenue | number: "1.2-2" }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="branch_commerce_event_count">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Purchases</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.branch_commerce_event_count | number: "1.2-2" }}
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedAggregatedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedAggregatedColumns"></tr>
+  </table>
 </div>

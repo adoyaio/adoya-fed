@@ -104,6 +104,7 @@ export class CampaignReportingComponent implements OnInit {
     this.maxEndDate = new Date();
     this.maxStartDate.setDate(this.maxStartDate.getDate() - 2);
     this.maxEndDate.setDate(this.maxEndDate.getDate() - 1);
+    this.isAggDataVisMode = true;
 
     this.orgId = this.userAccountService
       .getCurrentUser()
