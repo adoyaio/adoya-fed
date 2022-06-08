@@ -112,8 +112,6 @@ export class CampaignReportingComponent implements OnInit {
       .UserAttributes.find((val) => {
         return val.Name === "custom:org_id";
       }).Value;
-
-    // init date ranges
   }
 
   ngAfterViewInit() {
@@ -132,12 +130,61 @@ export class CampaignReportingComponent implements OnInit {
           this.campaignFilterForm.controls["campaign"].setValue(
             _map(this.appleCampaigns, (campaign) => campaign.campaignId)
           );
+
+          this.campaignFilterForm.controls["lookback"].setValue("1");
+
           this.reportingService.isLoadingCampaigns = false;
         }),
         take(1),
         catchError(() => {
           this.reportingService.isLoadingCampaigns = false;
           return EMPTY;
+        })
+      )
+      .subscribe();
+
+    this.campaignFilterForm.controls["lookback"].valueChanges
+      .pipe(
+        tap((val) => {
+          const startDate = new Date();
+          const endDate = new Date();
+
+          switch (val) {
+            case "1":
+              // set start picker today endpicker yesterday
+              startDate.setDate(startDate.getDate() - 1);
+              endDate.setDate(endDate.getDate() - 2);
+              this.startPickerControl.setValue(startDate);
+              this.endPickerControl.setValue(endDate);
+              return;
+
+            case "7":
+              // set start picker today endpicker yesterday
+
+              startDate.setDate(startDate.getDate() - 1);
+              endDate.setDate(endDate.getDate() - 8);
+              this.startPickerControl.setValue(startDate);
+              this.endPickerControl.setValue(endDate);
+
+              return;
+
+            case "30":
+              // set start picker today endpicker 30 days ago
+              startDate.setDate(startDate.getDate() - 1);
+              endDate.setDate(endDate.getDate() - 31);
+              this.startPickerControl.setValue(startDate);
+              this.endPickerControl.setValue(endDate);
+
+              return;
+
+            case "month-to-date":
+              // TODO
+              return;
+
+            case "last-month-to-date":
+              // TODO
+              return;
+          }
         })
       )
       .subscribe();

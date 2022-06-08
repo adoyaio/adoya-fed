@@ -162,7 +162,9 @@
 
   <!-- table view -->
   <mat-paginator
-    [ngClass]="isAggDataVisMode ? 'd-none' : ''"
+    [ngClass]="
+      isAggDataVisMode || reportingService.isLoadingCampaigns ? 'd-none' : ''
+    "
     #paginator
     [pageSizeOptions]="[100, 250, 500, 1000, 5000, 10000]"
     class="reporting__paginator"
@@ -170,7 +172,9 @@
   </mat-paginator>
 
   <table
-    [ngClass]="isAggDataVisMode ? 'd-none' : ''"
+    [ngClass]="
+      isAggDataVisMode || reportingService.isLoadingCampaigns ? 'd-none' : ''
+    "
     mat-table
     [dataSource]="dataSource"
   >
@@ -229,7 +233,9 @@
   </table>
 
   <table
-    [ngClass]="!isAggDataVisMode ? 'd-none' : ''"
+    [ngClass]="
+      !isAggDataVisMode || reportingService.isLoadingCampaigns ? 'd-none' : ''
+    "
     mat-table
     matSort
     matSortActive="installs"
