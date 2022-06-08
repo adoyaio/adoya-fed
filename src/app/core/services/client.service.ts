@@ -93,7 +93,7 @@ export class ClientService {
       );
   }
 
-  public getClient(orgId: string): Observable<Client> {
+  public getClient(orgId: string): Observable<any> {
     const url = `${this.clientGetUrl}?org_id=${orgId}`;
     let headers = new HttpHeaders();
     headers = headers.set("x-api-key", this.authKey);
@@ -187,9 +187,7 @@ export class ClientService {
     const startDateParam =
       isNil(startDate) || startDate.length > 0 ? startDate : "all";
     const endDateParam = isNil(endDate) || endDate.length > 0 ? endDate : "all";
-
     let params = new HttpParams();
-
     params = reduce(campaignIds, (m, i) => m.append("campaign_id", i), params);
     params = params.append("total_recs", pageSize.toString());
     params = params.append("offsetCampaignId", offsetCampaignId);
@@ -198,9 +196,6 @@ export class ClientService {
     params = params.append("end_date", endDateParam);
     params = params.append("org_id", orgId);
 
-    debugger;
-
-    // const url = `${this.clientCampaignHistoryUrl}?campaign_id=${campaignId}&total_recs=${pageSize}&offsetCampaignId=${offsetCampaignId}&offsetDate=${offsetDate}&start_date=${endDateParam}&end_date=${startDateParam}`;
     let headers = new HttpHeaders();
     headers = headers.set("x-api-key", this.authKey);
     headers = headers.set("Authorization", this.userAccountservice.jwtToken);

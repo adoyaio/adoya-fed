@@ -11,10 +11,11 @@ import {
   isNil,
   isNumber,
   reduce,
+  map as _map,
 } from "lodash";
 import { EMPTY } from "rxjs";
 import { catchError, delay, map, switchMap, take, tap } from "rxjs/operators";
-import { Client } from "src/app/core/models/client";
+import { Client, OrgDetails } from "src/app/core/models/client";
 import { AppService } from "src/app/core/services/app.service";
 import { ClientService } from "src/app/core/services/client.service";
 import { UserAccountService } from "src/app/core/services/user-account.service";
@@ -102,8 +103,8 @@ export class CampaignReportingComponent implements OnInit {
   ngOnInit() {
     this.maxStartDate = new Date();
     this.maxEndDate = new Date();
-    this.maxStartDate.setDate(this.maxStartDate.getDate() - 2);
-    this.maxEndDate.setDate(this.maxEndDate.getDate() - 1);
+    this.maxStartDate.setDate(this.maxStartDate.getDate() - 1);
+    this.maxEndDate.setDate(this.maxEndDate.getDate() - 2);
     this.isAggDataVisMode = true;
 
     this.orgId = this.userAccountService
@@ -111,6 +112,8 @@ export class CampaignReportingComponent implements OnInit {
       .UserAttributes.find((val) => {
         return val.Name === "custom:org_id";
       }).Value;
+
+    // init date ranges
   }
 
   ngAfterViewInit() {
@@ -120,13 +123,16 @@ export class CampaignReportingComponent implements OnInit {
     this.clientService
       .getClient(this.orgId)
       .pipe(
-        tap((data: Client) => {
-          this.appleCampaigns = chain(data).get("appleCampaigns").value();
-          const defaultCampaign = chain(this.appleCampaigns).first().value();
-          const defaultCampaignId = get(defaultCampaign, "campaignId");
+        tap((data: OrgDetails) => {
+          this.appleCampaigns = chain(data)
+            .get("appleCampaigns")
+            .filter((campaign) => campaign.status === "ENABLED")
+            .value();
+
           this.campaignFilterForm.controls["campaign"].setValue(
-            defaultCampaignId
+            _map(this.appleCampaigns, (campaign) => campaign.campaignId)
           );
+          this.reportingService.isLoadingCampaigns = false;
         }),
         take(1),
         catchError(() => {
@@ -285,7 +291,6 @@ export class CampaignReportingComponent implements OnInit {
   }
 
   applyFilter() {
-    debugger;
     let campaign = this.campaignFilterForm.get("campaign").value;
     this.reportingService.isLoadingCampaigns = true;
     this.paginator.pageIndex = 0;
