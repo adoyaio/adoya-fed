@@ -1,16 +1,4 @@
 <mat-tab-group color="primary">
-  <!--aggregate reporting-->
-  <mat-tab *ngIf="false">
-    <ng-template mat-tab-label>
-      <!-- <mat-icon>leaderboard</mat-icon> -->
-      <span class="ml-2">Aggregate Performance</span>
-    </ng-template>
-    <div class="reporting__loading-shade" *ngIf="reportingService.isLoadingCPI">
-      <mat-spinner color="primary" strokeWidth="6.5"></mat-spinner>
-    </div>
-    <app-aggregate-reporting></app-aggregate-reporting>
-  </mat-tab>
-
   <!--campaign reporting-->
   <mat-tab>
     <ng-template mat-tab-label>
@@ -40,6 +28,18 @@
       <mat-spinner color="primary" strokeWidth="6.5"></mat-spinner>
     </div>
     <app-keyword-reporting></app-keyword-reporting>
+  </mat-tab>
+
+  <!--aggregate reporting-->
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <!-- <mat-icon>leaderboard</mat-icon> -->
+      <span class="ml-2">Aggregate Performance</span>
+    </ng-template>
+    <div class="reporting__loading-shade" *ngIf="reportingService.isLoadingCPI">
+      <mat-spinner color="primary" strokeWidth="6.5"></mat-spinner>
+    </div>
+    <app-aggregate-reporting></app-aggregate-reporting>
   </mat-tab>
 
   <!--adgroup reporting-->

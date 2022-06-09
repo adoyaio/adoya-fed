@@ -68,7 +68,7 @@ export class CampaignReportingComponent implements OnInit {
 
   displayedColumns: string[] = [
     "timestamp",
-    "campaign_id",
+    "campaignId",
     "campaignName",
     "local_spend",
     "installs",
@@ -79,7 +79,7 @@ export class CampaignReportingComponent implements OnInit {
 
   displayedAggregatedColumns: string[] = [
     "campaignName",
-    "campaign_id",
+    "campaignId",
     "installs",
     "avg_cpa",
     "local_spend",
@@ -535,7 +535,7 @@ export class CampaignReportingComponent implements OnInit {
       const branch_revenue = reduce(
         valuesForACampaign,
         (acc, day) => {
-          const val = get(day, "branch_commerce_revenue");
+          const val = get(day, "branch_revenue");
           return +val + acc;
         },
         0
