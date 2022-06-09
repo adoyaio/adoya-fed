@@ -105,7 +105,6 @@ export class CampaignReportingComponent implements OnInit {
     this.maxEndDate = new Date();
     this.maxStartDate.setDate(this.maxStartDate.getDate() - 1);
     this.maxEndDate.setDate(this.maxEndDate.getDate() - 2);
-    this.isAggDataVisMode = true;
 
     this.orgId = this.userAccountService
       .getCurrentUser()
@@ -143,6 +142,7 @@ export class CampaignReportingComponent implements OnInit {
             .pipe(
               take(1),
               tap(() => {
+                this.isAggDataVisMode = true;
                 this.reportingService.isLoadingCampaigns = false;
               })
             )
@@ -201,62 +201,6 @@ export class CampaignReportingComponent implements OnInit {
         })
       )
       .subscribe();
-
-    // this.campaignFilterForm.controls["campaign"].valueChanges
-    //   .pipe(
-    //     tap((val) => {
-    //       this.reportingService.isLoadingCampaigns = true;
-    //     }),
-    //     switchMap((val) => {
-    //       debugger;
-    //       return this.clientService
-    //         .getClientCampaignHistory(
-    //           this.orgId,
-    //           val,
-    //           100,
-    //           this.campaignOffsetKeys[0],
-    //           "all",
-    //           "all"
-    //         )
-    //         .pipe(
-    //           take(1),
-    //           map((data) => {
-    //             this.reportingService.isLoadingCampaigns = false;
-
-    //             // pagination
-    //             this.campaignOffsetKeys = ["init|init"];
-    //             this.campaignOffsetKeys.push(
-    //               String(data["offset"]["campaign_id"]) +
-    //                 "|" +
-    //                 String(data["offset"]["timestamp"])
-    //             );
-
-    //             // set line graph
-    //             this.reportingService.campaignDayObject$.next(data["history"]);
-
-    //             // set table
-    //             //this.keywordAggregatedDataSource.data = this.getAggregateDataForTable(
-    //             //  data["history"]
-    //             //);
-
-    //             this.dataSource.data = data["history"];
-    //             this.paginator.length = data["count"];
-
-    //             return data;
-    //           }),
-    //           catchError(() => {
-    //             this.reportingService.isLoadingCampaigns = false;
-    //             return [];
-    //           })
-    //         );
-    //     }),
-
-    //     catchError(() => {
-    //       this.reportingService.isLoadingCampaigns = false;
-    //       return EMPTY;
-    //     })
-    //   )
-    //   .subscribe();
 
     this.paginator.page
       .pipe(

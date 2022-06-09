@@ -184,9 +184,6 @@ export class ClientService {
     let offsetIndexComposite = offsetKey.split("|");
     const offsetCampaignId = offsetIndexComposite[0];
     const offsetDate = offsetIndexComposite[1];
-    // const startDateParam =
-    //   isNil(startDate) || startDate.length > 0 ? startDate : "all";
-    // const endDateParam = isNil(endDate) || endDate.length > 0 ? endDate : "all";
 
     let params = new HttpParams();
     params = reduce(campaignIds, (m, i) => m.append("campaign_id", i), params);
