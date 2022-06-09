@@ -184,16 +184,17 @@ export class ClientService {
     let offsetIndexComposite = offsetKey.split("|");
     const offsetCampaignId = offsetIndexComposite[0];
     const offsetDate = offsetIndexComposite[1];
-    const startDateParam =
-      isNil(startDate) || startDate.length > 0 ? startDate : "all";
-    const endDateParam = isNil(endDate) || endDate.length > 0 ? endDate : "all";
+    // const startDateParam =
+    //   isNil(startDate) || startDate.length > 0 ? startDate : "all";
+    // const endDateParam = isNil(endDate) || endDate.length > 0 ? endDate : "all";
+
     let params = new HttpParams();
     params = reduce(campaignIds, (m, i) => m.append("campaign_id", i), params);
     params = params.append("total_recs", pageSize.toString());
     params = params.append("offsetCampaignId", offsetCampaignId);
     params = params.append("offsetDate", offsetDate);
-    params = params.append("start_date", startDateParam);
-    params = params.append("end_date", endDateParam);
+    params = params.append("start_date", startDate);
+    params = params.append("end_date", endDate);
     params = params.append("org_id", orgId);
 
     let headers = new HttpHeaders();

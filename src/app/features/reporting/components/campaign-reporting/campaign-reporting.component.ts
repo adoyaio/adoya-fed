@@ -13,7 +13,7 @@ import {
   reduce,
   map as _map,
 } from "lodash";
-import { EMPTY } from "rxjs";
+import { EMPTY, Observable, of } from "rxjs";
 import { catchError, delay, map, switchMap, take, tap } from "rxjs/operators";
 import { Client, OrgDetails } from "src/app/core/models/client";
 import { AppService } from "src/app/core/services/app.service";
@@ -115,8 +115,16 @@ export class CampaignReportingComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    // let start: Date = this.keywordFilterForm.get("start").value;
-    // let end: Date = this.keywordFilterForm.get("end").value;
+    this.campaignFilterForm.controls["lookback"].setValue("1");
+
+    const startDate = new Date();
+    const endDate = new Date();
+
+    // set start picker today endpicker yesterday
+    startDate.setDate(startDate.getDate() - 1);
+    endDate.setDate(endDate.getDate() - 2);
+    this.startPickerControl.setValue(startDate);
+    this.endPickerControl.setValue(endDate);
 
     this.clientService
       .getClient(this.orgId)
@@ -131,9 +139,14 @@ export class CampaignReportingComponent implements OnInit {
             _map(this.appleCampaigns, (campaign) => campaign.campaignId)
           );
 
-          this.campaignFilterForm.controls["lookback"].setValue("1");
-
-          this.reportingService.isLoadingCampaigns = false;
+          this.getHistoryData()
+            .pipe(
+              take(1),
+              tap(() => {
+                this.reportingService.isLoadingCampaigns = false;
+              })
+            )
+            .subscribe();
         }),
         take(1),
         catchError(() => {
@@ -335,6 +348,49 @@ export class CampaignReportingComponent implements OnInit {
     //   return false;
     // }
     return true;
+  }
+
+  getHistoryData(): Observable<any> {
+    return this.clientService
+      .getClientCampaignHistory(
+        this.orgId,
+        this.campaignControl.value,
+        1000000, // TOODO
+        this.campaignOffsetKeys[0],
+        this.formatDate(this.startPickerControl.value),
+        this.formatDate(this.endPickerControl.value)
+      )
+      .pipe(
+        take(1),
+        map((data) => {
+          this.reportingService.isLoadingCampaigns = false;
+
+          // pagination
+          this.campaignOffsetKeys = ["init|init"];
+          this.campaignOffsetKeys.push(
+            String(data["offset"]["campaign_id"]) +
+              "|" +
+              String(data["offset"]["timestamp"])
+          );
+
+          // set line graph
+          this.reportingService.campaignDayObject$.next(data["history"]);
+
+          // set table
+          this.aggregatedDataSource.data = this.getAggregateDataForTable(
+            data["history"]
+          );
+
+          this.dataSource.data = data["history"];
+          this.paginator.length = data["count"];
+
+          return true;
+        }),
+        catchError(() => {
+          this.reportingService.isLoadingCampaigns = false;
+          return [];
+        })
+      );
   }
 
   applyFilter() {
