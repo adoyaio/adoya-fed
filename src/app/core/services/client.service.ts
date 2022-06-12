@@ -187,7 +187,11 @@ export class ClientService {
 
     let params = new HttpParams();
     params = reduce(campaignIds, (m, i) => m.append("campaign_id", i), params);
-    params = params.append("total_recs", pageSize.toString());
+
+    if (!isNil(pageSize)) {
+      params = params.append("total_recs", pageSize.toString());
+    }
+
     params = params.append("offsetCampaignId", offsetCampaignId);
     params = params.append("offsetDate", offsetDate);
     params = params.append("start_date", startDate);

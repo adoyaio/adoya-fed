@@ -12,6 +12,7 @@ import {
   isNumber,
   reduce,
   map as _map,
+  set,
 } from "lodash";
 import { EMPTY, Observable, of } from "rxjs";
 import { catchError, delay, map, switchMap, take, tap } from "rxjs/operators";
@@ -101,6 +102,7 @@ export class CampaignReportingComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.aggregatedDataSource.connect();
     this.maxStartDate = new Date();
     this.maxEndDate = new Date();
     this.maxStartDate.setDate(this.maxStartDate.getDate() - 1);
@@ -202,71 +204,72 @@ export class CampaignReportingComponent implements OnInit {
       )
       .subscribe();
 
-    this.paginator.page
-      .pipe(
-        delay(0),
-        tap((val) => {
-          this.reportingService.isLoadingCampaigns = true;
-        }),
-        switchMap((val) => {
-          let campaign = this.campaignFilterForm.get("campaign").value;
-          let offsetKey = this.campaignOffsetKeys[val.pageIndex];
-          let start: Date = this.campaignFilterForm.get("start").value
-            ? this.campaignFilterForm.get("start").value
-            : "all";
-          let end: Date = this.campaignFilterForm.get("end").value
-            ? this.campaignFilterForm.get("end").value
-            : "all";
+    // this.paginator.page
+    //   .pipe(
+    //     delay(0),
+    //     tap((val) => {
+    //       this.reportingService.isLoadingCampaigns = true;
+    //     }),
+    //     switchMap((val) => {
+    //       let campaign = this.campaignFilterForm.get("campaign").value;
+    //       let offsetKey = this.campaignOffsetKeys[val.pageIndex];
+    //       let start: Date = this.campaignFilterForm.get("start").value
+    //         ? this.campaignFilterForm.get("start").value
+    //         : "all";
+    //       let end: Date = this.campaignFilterForm.get("end").value
+    //         ? this.campaignFilterForm.get("end").value
+    //         : "all";
 
-          return this.clientService
-            .getClientCampaignHistory(
-              this.orgId,
-              campaign,
-              this.paginator.pageSize,
-              offsetKey,
-              this.formatDate(start),
-              this.formatDate(end)
-            )
-            .pipe(
-              map((data) => {
-                this.reportingService.isLoadingCampaigns = false;
+    //       return this.clientService
+    //         .getClientCampaignHistory(
+    //           this.orgId,
+    //           campaign,
+    //           this.paginator.pageSize,
+    //           offsetKey,
+    //           this.formatDate(start),
+    //           this.formatDate(end)
+    //         )
+    //         .pipe(
+    //           map((data) => {
+    //             this.reportingService.isLoadingCampaigns = false;
 
-                // handle dynamo paging
-                if (val.pageIndex > val.previousPageIndex) {
-                  this.campaignOffsetKeys.push(
-                    String(data["offset"]["campaign_id"]) +
-                      "|" +
-                      String(data["offset"]["timestamp"])
-                  );
+    //             // handle dynamo paging
+    //             if (val.pageIndex > val.previousPageIndex) {
+    //               this.campaignOffsetKeys.push(
+    //                 String(data["offset"]["campaign_id"]) +
+    //                   "|" +
+    //                   String(data["offset"]["timestamp"])
+    //               );
 
-                  // items per page change
-                } else if (val.pageIndex == val.previousPageIndex) {
-                  this.campaignOffsetKeys = ["init|init"];
-                  this.campaignOffsetKeys.push(
-                    String(data["offset"]["campaign_id"]) +
-                      "|" +
-                      String(data["offset"]["timestamp"])
-                  );
-                }
+    //               // items per page change
+    //             } else if (val.pageIndex == val.previousPageIndex) {
+    //               this.campaignOffsetKeys = ["init|init"];
+    //               this.campaignOffsetKeys.push(
+    //                 String(data["offset"]["campaign_id"]) +
+    //                   "|" +
+    //                   String(data["offset"]["timestamp"])
+    //               );
+    //             }
 
-                this.dataSource.data = data["history"];
-                this.paginator.length = data["count"];
+    //             this.dataSource.data = data["history"];
+    //             this.paginator.length = data["count"];
 
-                this.reportingService.campaignDayObject$.next(data["history"]);
-                this.aggregatedDataSource.data = this.getAggregateDataForTable(
-                  data["history"]
-                );
-              }),
-              catchError(() => {
-                this.reportingService.isLoadingCampaigns = false;
-                return [];
-              })
-            );
-        })
-      )
-      .subscribe();
+    //             this.reportingService.campaignDayObject$.next(data["history"]);
+    //             this.aggregatedDataSource.data = this.getAggregateDataForTable(
+    //               data["history"]
+    //             );
+    //           }),
+    //           catchError(() => {
+    //             this.reportingService.isLoadingCampaigns = false;
+    //             return [];
+    //           })
+    //         );
+    //     })
+    //   )
+    //   .subscribe();
 
     this.aggregatedDataSource.sort = this.sort;
+    this.dataSource.sort = this.sort;
   }
 
   formatDate(date) {
@@ -299,7 +302,7 @@ export class CampaignReportingComponent implements OnInit {
       .getClientCampaignHistory(
         this.orgId,
         this.campaignControl.value,
-        1000000, // TOODO
+        undefined, // TOODO
         this.campaignOffsetKeys[0],
         this.formatDate(this.startPickerControl.value),
         this.formatDate(this.endPickerControl.value)
@@ -343,48 +346,50 @@ export class CampaignReportingComponent implements OnInit {
     this.paginator.pageIndex = 0;
     this.campaignOffsetKeys = ["init|init"];
 
-    let start: Date = this.campaignFilterForm.get("start").value
-      ? this.campaignFilterForm.get("start").value
-      : "all";
-    let end: Date = this.campaignFilterForm.get("end").value
-      ? this.campaignFilterForm.get("end").value
-      : "all";
+    this.getHistoryData().pipe(take(1)).subscribe();
 
-    this.clientService
-      .getClientCampaignHistory(
-        this.orgId,
-        campaign,
-        this.paginator.pageSize,
-        this.campaignOffsetKeys[0],
-        this.formatDate(start),
-        this.formatDate(end)
-      )
-      .pipe(
-        take(1),
-        map((data) => {
-          this.reportingService.isLoadingCampaigns = false;
+    // let start: Date = this.campaignFilterForm.get("start").value
+    //   ? this.campaignFilterForm.get("start").value
+    //   : "all";
+    // let end: Date = this.campaignFilterForm.get("end").value
+    //   ? this.campaignFilterForm.get("end").value
+    //   : "all";
 
-          // handle dynamo paging
-          this.campaignOffsetKeys.push(
-            String(data["offset"]["campaign_id"]) +
-              "|" +
-              String(data["offset"]["timestamp"])
-          );
+    // this.clientService
+    //   .getClientCampaignHistory(
+    //     this.orgId,
+    //     campaign,
+    //     this.paginator.pageSize,
+    //     this.campaignOffsetKeys[0],
+    //     this.formatDate(start),
+    //     this.formatDate(end)
+    //   )
+    //   .pipe(
+    //     take(1),
+    //     map((data) => {
+    //       this.reportingService.isLoadingCampaigns = false;
 
-          this.dataSource.data = data["history"];
-          this.paginator.length = data["count"];
-          this.reportingService.campaignDayObject$.next(data["history"]);
+    //       // handle dynamo paging
+    //       this.campaignOffsetKeys.push(
+    //         String(data["offset"]["campaign_id"]) +
+    //           "|" +
+    //           String(data["offset"]["timestamp"])
+    //       );
 
-          this.aggregatedDataSource.data = this.getAggregateDataForTable(
-            data["history"]
-          );
-        }),
-        catchError(() => {
-          this.reportingService.isLoadingCampaigns = false;
-          return [];
-        })
-      )
-      .subscribe();
+    //       this.dataSource.data = data["history"];
+    //       this.paginator.length = data["count"];
+    //       this.reportingService.campaignDayObject$.next(data["history"]);
+
+    //       this.aggregatedDataSource.data = this.getAggregateDataForTable(
+    //         data["history"]
+    //       );
+    //     }),
+    //     catchError(() => {
+    //       this.reportingService.isLoadingCampaigns = false;
+    //       return [];
+    //     })
+    //   )
+    //   .subscribe();
   }
 
   resetCampaignFilters() {
@@ -398,7 +403,7 @@ export class CampaignReportingComponent implements OnInit {
       .getClientCampaignHistory(
         this.orgId,
         this.campaignControl.value,
-        this.paginator.pageSize,
+        undefined, //this.paginator.pageSize,
         this.campaignOffsetKeys[0],
         "all",
         "all"
@@ -480,6 +485,44 @@ export class CampaignReportingComponent implements OnInit {
     this.reportingService.activeKeywordLineChartMetric$.next(
       updatedLineChartMetric
     );
+
+    // set(this.aggregatedDataSource.sort, "active", updated.value);
+    // this.sort.sortChange.emit({ active: "local_spend", direction: "desc" });
+    // this.sort._stateChanges.next();
+
+    switch (updated.value) {
+      case "installs":
+        this.sort.sort({ id: "installs", start: "desc", disableClear: false });
+        return;
+
+      case "local_spend":
+        this.sort.sort({
+          id: "local_spend",
+          start: "desc",
+          disableClear: false,
+        });
+        return;
+
+      case "avg_cpa":
+        this.sort.sort({ id: "avg_cpa", start: "desc", disableClear: false });
+        return;
+
+      case "branch_commerce_event_count":
+        this.sort.sort({
+          id: "branch_commerce_event_count",
+          start: "desc",
+          disableClear: false,
+        });
+        return;
+
+      case "branch_revenue":
+        this.sort.sort({
+          id: "branch_revenue",
+          start: "desc",
+          disableClear: false,
+        });
+        return;
+    }
   }
 
   getAggregateDataForTable(
