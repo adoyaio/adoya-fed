@@ -163,6 +163,7 @@ export class CampaignReportingComponent implements OnInit {
         tap((val) => {
           const startDate = new Date();
           const endDate = new Date();
+          const now = new Date();
 
           switch (val) {
             case "1":
@@ -193,11 +194,36 @@ export class CampaignReportingComponent implements OnInit {
               return;
 
             case "month-to-date":
-              // TODO
+              const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+
+              const lastDay = new Date(
+                now.getFullYear(),
+                now.getMonth() + 1,
+                0
+              );
+
+              this.startPickerControl.setValue(lastDay);
+              this.endPickerControl.setValue(firstDay);
+
               return;
 
             case "last-month-to-date":
               // TODO
+
+              const firstDayOfLastMonth = new Date(
+                now.getFullYear(),
+                now.getMonth() - 1,
+                1
+              );
+
+              const lastDayOfLastMonth = new Date(
+                now.getFullYear(),
+                now.getMonth(),
+                0
+              );
+
+              this.startPickerControl.setValue(lastDayOfLastMonth);
+              this.endPickerControl.setValue(firstDayOfLastMonth);
               return;
           }
         })
