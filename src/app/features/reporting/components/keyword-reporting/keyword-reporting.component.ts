@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { ClientService } from "src/app/core/services/client.service";
-import { FormBuilder, FormControl } from "@angular/forms";
+import { AbstractControl, FormBuilder, FormControl } from "@angular/forms";
 import { UserAccountService } from "src/app/core/services/user-account.service";
 import { AppService } from "src/app/core/services/app.service";
 import { ReportingService } from "../../reporting.service";
@@ -63,12 +63,21 @@ export class KeywordReportingComponent implements OnInit {
     end: [""],
     keywordStatus: ["all"],
     matchType: ["all"],
+    lookback: new FormControl(),
   });
 
   @ViewChild("keywordsPaginator", { static: false })
   keywordsPaginator: MatPaginator;
 
   @ViewChild(MatSort, { static: false }) sort: MatSort;
+
+  get startPickerControl(): AbstractControl {
+    return this.keywordFilterForm.get("start");
+  }
+
+  get endPickerControl(): AbstractControl {
+    return this.keywordFilterForm.get("end");
+  }
 
   constructor(
     private clientService: ClientService,
@@ -95,6 +104,7 @@ export class KeywordReportingComponent implements OnInit {
   }
 
   ngAfterViewInit() {
+    this.keywordFilterForm.controls["lookback"].setValue("1");
     let start: Date = this.keywordFilterForm.get("start").value;
     let end: Date = this.keywordFilterForm.get("end").value;
     this.clientService
@@ -130,11 +140,83 @@ export class KeywordReportingComponent implements OnInit {
             data["history"]
           );
 
+          this.isKeywordAggDataVisMode = true;
+
           return data;
         }),
         catchError(() => {
           this.reportingService.isLoadingKeywords = false;
           return [];
+        })
+      )
+      .subscribe();
+
+    this.keywordFilterForm.controls["lookback"].valueChanges
+      .pipe(
+        tap((val) => {
+          const startDate = new Date();
+          const endDate = new Date();
+          const now = new Date();
+
+          switch (val) {
+            case "1":
+              // set start picker today endpicker yesterday
+              startDate.setDate(startDate.getDate() - 2);
+              endDate.setDate(endDate.getDate() - 1);
+              this.startPickerControl.setValue(startDate);
+              this.endPickerControl.setValue(endDate);
+              return;
+
+            case "7":
+              // set start picker today endpicker yesterday
+
+              startDate.setDate(startDate.getDate() - 8);
+              endDate.setDate(endDate.getDate() - 1);
+              this.startPickerControl.setValue(startDate);
+              this.endPickerControl.setValue(endDate);
+
+              return;
+
+            case "30":
+              // set start picker today endpicker 30 days ago
+              startDate.setDate(startDate.getDate() - 31);
+              endDate.setDate(endDate.getDate() - 1);
+              this.startPickerControl.setValue(startDate);
+              this.endPickerControl.setValue(endDate);
+
+              return;
+
+            case "month-to-date":
+              const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+
+              const lastDay = new Date(
+                now.getFullYear(),
+                now.getMonth() + 1,
+                0
+              );
+
+              this.startPickerControl.setValue(firstDay);
+              this.endPickerControl.setValue(lastDay);
+
+              return;
+
+            case "last-month-to-date":
+              const firstDayOfLastMonth = new Date(
+                now.getFullYear(),
+                now.getMonth() - 1,
+                1
+              );
+
+              const lastDayOfLastMonth = new Date(
+                now.getFullYear(),
+                now.getMonth(),
+                0
+              );
+
+              this.startPickerControl.setValue(firstDayOfLastMonth);
+              this.endPickerControl.setValue(lastDayOfLastMonth);
+              return;
+          }
         })
       )
       .subscribe();
@@ -362,7 +444,8 @@ export class KeywordReportingComponent implements OnInit {
   }
 
   applyFilterDisabled() {
-    return !this.keywordFilterForm.valid;
+    // return !this.keywordFilterForm.valid;
+    return false;
   }
 
   downloadKeywordsCsv() {

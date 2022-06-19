@@ -6,7 +6,23 @@
       [formGroup]="keywordFilterForm"
       class="d-flex col-12 flex-wrap flex-col pl-3"
     >
-      <mat-form-field class="mr-3">
+      <mat-form-field
+        appearance="standard"
+        [hideRequiredMarker]="false"
+        color="primary"
+        class="mr-4 pb-2"
+      >
+        <mat-select formControlName="lookback">
+          <mat-option value="1">Yesterday</mat-option>
+          <mat-option value="7">Last Seven Days</mat-option>
+          <mat-option value="30">Last 30 Days</mat-option>
+          <mat-option value="month-to-date">This Month</mat-option>
+          <mat-option value="last-month-to-date">Last Month</mat-option>
+        </mat-select>
+        <mat-label>&nbsp;date range</mat-label>
+      </mat-form-field>
+
+      <mat-form-field class="mr-3 pt-2">
         <mat-label>start date</mat-label>
         <input
           matInput
@@ -21,7 +37,7 @@
         <mat-datepicker #startpicker></mat-datepicker>
       </mat-form-field>
 
-      <mat-form-field class="mr-3">
+      <mat-form-field class="mr-3 pt-2">
         <mat-label>end date</mat-label>
         <input
           matInput
@@ -45,7 +61,7 @@
         <mat-label>keyword status</mat-label>
       </mat-form-field> -->
 
-      <mat-form-field class="mr-3" color="primary">
+      <mat-form-field class="mr-3 pt-2" color="primary">
         <mat-select formControlName="matchType">
           <mat-option value="BROAD">BROAD</mat-option>
           <mat-option value="EXACT">EXACT</mat-option>
@@ -69,12 +85,12 @@
         </button>
       </div>
 
-      <div>
+      <!-- <div>
         <button mat-button (click)="resetKeywordFilters()">
           <mat-icon aria-label="clear">clear</mat-icon>
           clear filters
         </button>
-      </div>
+      </div> -->
 
       <div>
         <button (click)="downloadKeywordsCsv()" mat-button>
@@ -160,75 +176,7 @@
   >
   </mat-paginator>
 
-  <!-- <table
-    [ngClass]="isKeywordAggDataVisMode ? 'd-none' : ''"
-    mat-table
-    [dataSource]="keywordDataSource"
-    matSort
-    matSortActive="date"
-    matSortDirection="asc"
-  >
-    <ng-container matColumnDef="date">
-      <th mat-header-cell mat-sort-header *matHeaderCellDef>Date</th>
-      <td mat-cell *matCellDef="let element">{{ element.date }}</td>
-    </ng-container>
-
-    <ng-container matColumnDef="keyword_id">
-      <th mat-header-cell mat-sort-header *matHeaderCellDef>Keyword ID</th>
-      <td mat-cell *matCellDef="let element">{{ element.keyword_id }}</td>
-    </ng-container>
-
-    <ng-container matColumnDef="keyword">
-      <th mat-header-cell mat-sort-header *matHeaderCellDef>Keyword</th>
-      <td mat-cell *matCellDef="let element">{{ element.keyword }}</td>
-    </ng-container>
-
-    <ng-container matColumnDef="matchType">
-      <th mat-header-cell mat-sort-header *matHeaderCellDef>Match Type</th>
-      <td mat-cell *matCellDef="let element">{{ element.matchType }}</td>
-    </ng-container>
-
-    <ng-container matColumnDef="keywordDisplayStatus">
-      <th mat-header-cell mat-sort-header *matHeaderCellDef>Display Status</th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.keywordDisplayStatus }}
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="keywordStatus">
-      <th mat-header-cell mat-sort-header *matHeaderCellDef>Status</th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.keywordStatus }}
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="local_spend">
-      <th mat-header-cell mat-sort-header *matHeaderCellDef>Cost</th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.local_spend }}
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="installs">
-      <th mat-header-cell mat-sort-header *matHeaderCellDef>Installs</th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.installs }}
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="avg_cpa">
-      <th mat-header-cell mat-sort-header *matHeaderCellDef>
-        Cost Per Install
-      </th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.avg_cpa }}
-      </td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="displayedKeywordColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedKeywordColumns"></tr>
-  </table> -->
-
+  <!-- by day table -->
   <table
     [ngClass]="isKeywordAggDataVisMode ? 'd-none' : ''"
     mat-table

@@ -122,8 +122,8 @@ export class CampaignReportingComponent implements OnInit {
     const endDate = new Date();
 
     // set start picker today endpicker yesterday
-    startDate.setDate(startDate.getDate() - 1);
-    endDate.setDate(endDate.getDate() - 2);
+    startDate.setDate(startDate.getDate() - 2);
+    endDate.setDate(endDate.getDate() - 1);
     this.startPickerControl.setValue(startDate);
     this.endPickerControl.setValue(endDate);
 
@@ -168,8 +168,8 @@ export class CampaignReportingComponent implements OnInit {
           switch (val) {
             case "1":
               // set start picker today endpicker yesterday
-              startDate.setDate(startDate.getDate() - 1);
-              endDate.setDate(endDate.getDate() - 2);
+              startDate.setDate(startDate.getDate() - 2);
+              endDate.setDate(endDate.getDate() - 1);
               this.startPickerControl.setValue(startDate);
               this.endPickerControl.setValue(endDate);
               return;
@@ -177,8 +177,8 @@ export class CampaignReportingComponent implements OnInit {
             case "7":
               // set start picker today endpicker yesterday
 
-              startDate.setDate(startDate.getDate() - 1);
-              endDate.setDate(endDate.getDate() - 8);
+              startDate.setDate(startDate.getDate() - 8);
+              endDate.setDate(endDate.getDate() - 1);
               this.startPickerControl.setValue(startDate);
               this.endPickerControl.setValue(endDate);
 
@@ -186,8 +186,8 @@ export class CampaignReportingComponent implements OnInit {
 
             case "30":
               // set start picker today endpicker 30 days ago
-              startDate.setDate(startDate.getDate() - 1);
-              endDate.setDate(endDate.getDate() - 31);
+              startDate.setDate(startDate.getDate() - 31);
+              endDate.setDate(endDate.getDate() - 1);
               this.startPickerControl.setValue(startDate);
               this.endPickerControl.setValue(endDate);
 
@@ -202,14 +202,12 @@ export class CampaignReportingComponent implements OnInit {
                 0
               );
 
-              this.startPickerControl.setValue(lastDay);
-              this.endPickerControl.setValue(firstDay);
+              this.startPickerControl.setValue(firstDay);
+              this.endPickerControl.setValue(lastDay);
 
               return;
 
             case "last-month-to-date":
-              // TODO
-
               const firstDayOfLastMonth = new Date(
                 now.getFullYear(),
                 now.getMonth() - 1,
@@ -222,8 +220,8 @@ export class CampaignReportingComponent implements OnInit {
                 0
               );
 
-              this.startPickerControl.setValue(lastDayOfLastMonth);
-              this.endPickerControl.setValue(firstDayOfLastMonth);
+              this.startPickerControl.setValue(firstDayOfLastMonth);
+              this.endPickerControl.setValue(lastDayOfLastMonth);
               return;
           }
         })
@@ -330,8 +328,8 @@ export class CampaignReportingComponent implements OnInit {
         this.campaignControl.value,
         undefined, // TOODO
         this.campaignOffsetKeys[0],
-        this.formatDate(this.startPickerControl.value),
-        this.formatDate(this.endPickerControl.value)
+        this.formatDate(this.endPickerControl.value),
+        this.formatDate(this.startPickerControl.value)
       )
       .pipe(
         take(1),

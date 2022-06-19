@@ -51,7 +51,7 @@ export class ReportingService {
   activeKeywordLineChartMetric$ = new BehaviorSubject<ChartMetricObject[]>([
     { name: "Installs", value: "installs", state: true },
     { name: "Cost Per Install", value: "avg_cpa", state: false },
-    { name: "Spend", value: "local_spend", state: false },
+    { name: "Cost", value: "local_spend", state: false },
     { name: "Purchases", value: "branch_commerce_event_count", state: false },
     { name: "Revenue", value: "branch_revenue", state: false },
   ]);
