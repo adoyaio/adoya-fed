@@ -176,53 +176,58 @@
       isAggDataVisMode || reportingService.isLoadingCampaigns ? 'd-none' : ''
     "
     mat-table
+    matSort
+    matSortActive="installs"
+    matSortDirection="desc"
     [dataSource]="dataSource"
   >
     <ng-container matColumnDef="timestamp">
-      <th mat-header-cell *matHeaderCellDef>Date</th>
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Date</th>
       <td mat-cell *matCellDef="let element">{{ element.timestamp }}</td>
     </ng-container>
 
     <ng-container matColumnDef="campaignId">
-      <th mat-header-cell *matHeaderCellDef>Campaign ID</th>
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Campaign ID</th>
       <td mat-cell *matCellDef="let element">{{ element.campaignId }}</td>
     </ng-container>
 
     <ng-container matColumnDef="campaignName">
-      <th mat-header-cell *matHeaderCellDef>Campaign Name</th>
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Campaign Name</th>
       <td mat-cell *matCellDef="let element">{{ element.campaignName }}</td>
     </ng-container>
 
     <ng-container matColumnDef="local_spend">
-      <th mat-header-cell *matHeaderCellDef>Cost</th>
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Cost</th>
       <td mat-cell *matCellDef="let element">
         {{ element.local_spend | number: "1.2-2" }}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="installs">
-      <th mat-header-cell *matHeaderCellDef>Installs</th>
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Installs</th>
       <td mat-cell *matCellDef="let element">
         {{ element.installs }}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="avg_cpa">
-      <th mat-header-cell *matHeaderCellDef>Cost Per Install</th>
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>
+        Cost Per Install
+      </th>
       <td mat-cell *matCellDef="let element">
         {{ element.avg_cpa | number: "1.2-2" }}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="branch_revenue">
-      <th mat-header-cell *matHeaderCellDef>Revenue</th>
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Revenue</th>
       <td mat-cell *matCellDef="let element">
         {{ element.branch_revenue | number: "1.2-2" }}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="branch_commerce_event_count">
-      <th mat-header-cell *matHeaderCellDef>Purchases</th>
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Purchases</th>
       <td mat-cell *matCellDef="let element">
         {{ element.branch_commerce_event_count }}
       </td>

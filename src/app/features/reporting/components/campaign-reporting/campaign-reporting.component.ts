@@ -322,11 +322,12 @@ export class CampaignReportingComponent implements OnInit {
   }
 
   getHistoryData(): Observable<any> {
+    const test = this.campaignControl.value;
     return this.clientService
       .getClientCampaignHistory(
         this.orgId,
         this.campaignControl.value,
-        undefined, // TOODO
+        undefined, // TODO ?
         this.campaignOffsetKeys[0],
         this.formatDate(this.endPickerControl.value),
         this.formatDate(this.startPickerControl.value)
@@ -336,7 +337,7 @@ export class CampaignReportingComponent implements OnInit {
         map((data) => {
           this.reportingService.isLoadingCampaigns = false;
 
-          // pagination
+          // NOTE: server side pagination unused currently
           this.campaignOffsetKeys = ["init|init"];
           this.campaignOffsetKeys.push(
             String(data["offset"]["campaign_id"]) +
@@ -365,55 +366,11 @@ export class CampaignReportingComponent implements OnInit {
   }
 
   applyFilter() {
-    let campaign = this.campaignFilterForm.get("campaign").value;
     this.reportingService.isLoadingCampaigns = true;
     this.paginator.pageIndex = 0;
     this.campaignOffsetKeys = ["init|init"];
 
     this.getHistoryData().pipe(take(1)).subscribe();
-
-    // let start: Date = this.campaignFilterForm.get("start").value
-    //   ? this.campaignFilterForm.get("start").value
-    //   : "all";
-    // let end: Date = this.campaignFilterForm.get("end").value
-    //   ? this.campaignFilterForm.get("end").value
-    //   : "all";
-
-    // this.clientService
-    //   .getClientCampaignHistory(
-    //     this.orgId,
-    //     campaign,
-    //     this.paginator.pageSize,
-    //     this.campaignOffsetKeys[0],
-    //     this.formatDate(start),
-    //     this.formatDate(end)
-    //   )
-    //   .pipe(
-    //     take(1),
-    //     map((data) => {
-    //       this.reportingService.isLoadingCampaigns = false;
-
-    //       // handle dynamo paging
-    //       this.campaignOffsetKeys.push(
-    //         String(data["offset"]["campaign_id"]) +
-    //           "|" +
-    //           String(data["offset"]["timestamp"])
-    //       );
-
-    //       this.dataSource.data = data["history"];
-    //       this.paginator.length = data["count"];
-    //       this.reportingService.campaignDayObject$.next(data["history"]);
-
-    //       this.aggregatedDataSource.data = this.getAggregateDataForTable(
-    //         data["history"]
-    //       );
-    //     }),
-    //     catchError(() => {
-    //       this.reportingService.isLoadingCampaigns = false;
-    //       return [];
-    //     })
-    //   )
-    //   .subscribe();
   }
 
   resetCampaignFilters() {
@@ -437,7 +394,7 @@ export class CampaignReportingComponent implements OnInit {
         map((data) => {
           this.reportingService.isLoadingCampaigns = false;
 
-          // pagination
+          // NOTE: server side pagination unused currently
           this.campaignOffsetKeys.push(
             String(data["offset"]["campaign_id"]) +
               "|" +
@@ -552,7 +509,7 @@ export class CampaignReportingComponent implements OnInit {
   getAggregateDataForTable(
     currentData: CampaignDayObject[]
   ): CampaignAggregatedObject[] {
-    // build list of keywords
+    // build list of campaigns
     const history: CampaignAggregatedObject[] = [];
     let campaignIds = [];
     campaignIds = chain(currentData)
