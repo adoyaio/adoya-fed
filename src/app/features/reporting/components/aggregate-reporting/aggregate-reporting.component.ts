@@ -12,7 +12,7 @@ import {
   MatTableDataSource,
 } from "@angular/material";
 import { chain, cloneDeep, isNumber } from "lodash";
-import { catchError, map, switchMap, tap } from "rxjs/operators";
+import { catchError, map, switchMap, take, tap } from "rxjs/operators";
 import { AppService } from "src/app/core/services/app.service";
 import { ClientService } from "src/app/core/services/client.service";
 import { UserAccountService } from "src/app/core/services/user-account.service";
@@ -97,6 +97,7 @@ export class AggregateReportingComponent implements OnInit {
         undefined
       )
       .pipe(
+        take(1),
         map((data) => {
           this.reportingService.isLoadingCPI = false;
           this.cpiHistory = CostPerInstallDayObject.buildFromGetHistoryResponse(
@@ -114,6 +115,8 @@ export class AggregateReportingComponent implements OnInit {
           );
 
           this.aggregatePaginator.length = data["count"];
+
+          this.isAggregateDataVisMode = true;
 
           return data;
         }),
