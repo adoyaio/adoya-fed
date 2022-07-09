@@ -42,19 +42,6 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     private userAccountService: UserAccountService
   ) {
     this.titleService.setTitle("adoya client portal");
-    this.router.events
-      .pipe(
-        filter((event) => event instanceof NavigationStart),
-        takeUntil(this.destroyed$)
-      )
-      .subscribe();
-
-    this.router.events
-      .pipe(
-        filter((event) => event instanceof NavigationCancel),
-        takeUntil(this.destroyed$)
-      )
-      .subscribe();
 
     this.router.events
       .pipe(
@@ -72,30 +59,6 @@ export class AppComponent implements AfterViewInit, OnDestroy {
         mergeMap((r) => r.data),
         map((event) => this.titleService.setTitle(event["title"])),
         takeUntil(this.destroyed$)
-      )
-      .subscribe();
-
-    this.amplifyService
-      .authState()
-      .pipe(
-        tap((authState) => {
-          if (!(authState.state === "signedIn")) {
-            this.userAccountService.jwtToken = undefined;
-            this.userAccountService.orgId = undefined;
-            this.router.navigateByUrl("/portal");
-          }
-          const jwtToken = get(
-            authState,
-            "user.signInUserSession.idToken.jwtToken"
-          );
-          const orgId = get(
-            authState,
-            "user.signInUserSession.idToken.payload.custom:org_id"
-          );
-
-          this.userAccountService.jwtToken = jwtToken;
-          this.userAccountService.orgId = orgId;
-        })
       )
       .subscribe();
   }
