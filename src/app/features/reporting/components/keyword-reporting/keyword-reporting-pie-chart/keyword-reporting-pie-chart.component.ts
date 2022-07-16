@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { ChartOptions, ChartType } from "chart.js";
 import { Label, SingleDataSet, BaseChartDirective } from "ng2-charts";
-import { ReportingService } from "../../reporting.service";
+import { ReportingService } from "../../../reporting.service";
 import { combineLatest } from "rxjs";
 import { filter, tap } from "rxjs/operators";
 import {

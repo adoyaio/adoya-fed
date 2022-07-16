@@ -1,0 +1,17 @@
+<div
+  matTooltip="Hover or click on individual data points for a more detailed breakdown of keyword performance by day."
+>
+  <canvas
+    baseChart
+    width="400"
+    height="100"
+    [datasets]="lineChartData"
+    [labels]="lineChartLabels"
+    [options]="lineChartOptions"
+    [colors]="lineChartColors"
+    [legend]="lineChartLegend"
+    [chartType]="lineChartType"
+    [plugins]="lineChartPlugins"
+  >
+  </canvas>
+</div>

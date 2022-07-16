@@ -1,0 +1,60 @@
+<mat-tab-group color="primary">
+  <!--campaign reporting-->
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <!-- <mat-icon>leaderboard</mat-icon> -->
+      <span class="ml-2">Campaign Performance</span>
+    </ng-template>
+    <div
+      class="reporting__loading-shade"
+      *ngIf="reportingService.isLoadingCampaigns"
+    >
+      <mat-spinner color="primary" strokeWidth="6.5"></mat-spinner>
+    </div>
+    <app-campaign-reporting></app-campaign-reporting>
+  </mat-tab>
+
+  <!--Keywords reporting-->
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <!-- <mat-icon>leaderboard</mat-icon
+      > -->
+      <span class="ml-2">Keyword Performance</span>
+    </ng-template>
+    <div
+      class="reporting__loading-shade"
+      *ngIf="reportingService.isLoadingKeywords"
+    >
+      <mat-spinner color="primary" strokeWidth="6.5"></mat-spinner>
+    </div>
+    <app-keyword-reporting></app-keyword-reporting>
+  </mat-tab>
+
+  <!--aggregate reporting-->
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <!-- <mat-icon>leaderboard</mat-icon> -->
+      <span class="ml-2">Aggregate Performance</span>
+    </ng-template>
+    <div class="reporting__loading-shade" *ngIf="reportingService.isLoadingCPI">
+      <mat-spinner color="primary" strokeWidth="6.5"></mat-spinner>
+    </div>
+    <app-aggregate-reporting></app-aggregate-reporting>
+  </mat-tab>
+
+  <!--adgroup reporting-->
+  <mat-tab *ngIf="false">
+    <ng-template mat-tab-label>
+      <!-- <mat-icon>leaderboard</mat-icon
+      > -->
+      <span class="ml-2">Adgroup Performance</span>
+    </ng-template>
+    <div
+      class="reporting__loading-shade"
+      *ngIf="reportingService.isLoadingAdgroups"
+    >
+      <mat-spinner color="primary" strokeWidth="6.5"></mat-spinner>
+    </div>
+    <app-adgroup-reporting></app-adgroup-reporting>
+  </mat-tab>
+</mat-tab-group>

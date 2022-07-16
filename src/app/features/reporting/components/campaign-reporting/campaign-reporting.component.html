@@ -3,9 +3,23 @@
     class="d-flex justify-content-start col-12 flex-wrap flex-row no-gutters px-0"
   >
     <form
-      [formGroup]="keywordFilterForm"
-      class="d-flex col-12 flex-wrap flex-col pl-3"
+      [formGroup]="campaignFilterForm"
+      class="d-flex col-12 flex-wrap flex-col pl-3 align-items-center"
     >
+      <mat-form-field
+        class="mr-3 campaign-reporting__campaign-control"
+        color="primary"
+      >
+        <mat-select multiple formControlName="campaign">
+          <ng-container *ngFor="let campaign of this.appleCampaigns">
+            <mat-option [value]="campaign.campaignId">{{
+              campaign.campaignName
+            }}</mat-option>
+          </ng-container>
+        </mat-select>
+        <mat-label>campaign</mat-label>
+      </mat-form-field>
+
       <mat-form-field
         appearance="standard"
         [hideRequiredMarker]="false"
@@ -22,11 +36,11 @@
         <mat-label>&nbsp;date range</mat-label>
       </mat-form-field>
 
-      <mat-form-field class="mr-3 pt-2">
+      <mat-form-field class="mr-3">
         <mat-label>start date</mat-label>
         <input
           matInput
-          [max]="minDate"
+          [max]="maxStartDate"
           formControlName="start"
           [matDatepicker]="startpicker"
         />
@@ -37,11 +51,11 @@
         <mat-datepicker #startpicker></mat-datepicker>
       </mat-form-field>
 
-      <mat-form-field class="mr-3 pt-2">
+      <mat-form-field class="mr-3">
         <mat-label>end date</mat-label>
         <input
           matInput
-          [max]="maxDate"
+          [max]="maxEndDate"
           formControlName="end"
           [matDatepicker]="endpicker"
         />
@@ -50,24 +64,6 @@
           [for]="endpicker"
         ></mat-datepicker-toggle>
         <mat-datepicker #endpicker></mat-datepicker>
-      </mat-form-field>
-
-      <!-- <mat-form-field class="mr-3" color="primary">
-        <mat-select formControlName="keywordStatus">
-          <mat-option value="ACTIVE">ACTIVE</mat-option>
-          <mat-option value="PAUSED">PAUSED</mat-option>
-          <mat-option value="all">ALL</mat-option>
-        </mat-select>
-        <mat-label>keyword status</mat-label>
-      </mat-form-field> -->
-
-      <mat-form-field class="mr-3 pt-2" color="primary">
-        <mat-select formControlName="matchType">
-          <mat-option value="BROAD">BROAD</mat-option>
-          <mat-option value="EXACT">EXACT</mat-option>
-          <mat-option value="all">ALL</mat-option>
-        </mat-select>
-        <mat-label>match type</mat-label>
       </mat-form-field>
     </form>
 
@@ -86,41 +82,41 @@
       </div>
 
       <!-- <div>
-        <button mat-button (click)="resetKeywordFilters()">
+        <button mat-button (click)="resetCampaignFilters()">
           <mat-icon aria-label="clear">clear</mat-icon>
           clear filters
         </button>
       </div> -->
 
       <div>
-        <button (click)="downloadKeywordsCsv()" mat-button>
+        <button (click)="downloadCampaignCsv()" mat-button>
           <mat-icon class="ml-1" aria-label="download">save_alt</mat-icon>
           csv download
         </button>
       </div>
 
-      <div *ngIf="!isKeywordDataVisMode && !isKeywordAggDataVisMode">
+      <div *ngIf="!isDataVisMode && !isAggDataVisMode">
         <button mat-button (click)="showDataView()">
           <mat-icon class="ml-2" aria-label="graph">show_chart</mat-icon>
           data visualization
         </button>
       </div>
 
-      <div *ngIf="isKeywordDataVisMode || isKeywordAggDataVisMode">
+      <div *ngIf="isDataVisMode || isAggDataVisMode">
         <button mat-button (click)="showTableView()">
           <mat-icon class="ml-2" aria-label="table">table_view</mat-icon>
           table view
         </button>
       </div>
 
-      <div *ngIf="isKeywordDataVisMode">
+      <div *ngIf="isDataVisMode">
         <button mat-button (click)="showAggregateDataView()">
           <mat-icon class="ml-2" aria-label="pie chart">pie_chart</mat-icon>
           view aggregate
         </button>
       </div>
 
-      <div *ngIf="isKeywordAggDataVisMode">
+      <div *ngIf="isAggDataVisMode">
         <button mat-button (click)="showDataView()">
           <mat-icon class="ml-2" aria-label="line chart"
             >stacked_line_chart</mat-icon
@@ -130,20 +126,17 @@
       </div>
 
       <!-- <button
-        mat-icon-button
-        class="reporting__buttons mr-4"
-        (click)="hideLegend()"
-        *ngIf="isKeywordDataVisMode"
-        mat-icon-button
-      >
-        <mat-icon class="ml-2" aria-label="download">visibility_off</mat-icon>
-        hide legend
-      </button> -->
+    mat-icon-button
+    class="reporting__buttons mr-4"
+    (click)="hideLegend()"
+    *ngIf="isKeywordDataVisMode"
+    mat-icon-button
+  >
+    <mat-icon class="ml-2" aria-label="download">visibility_off</mat-icon>
+    hide legend
+  </button> -->
 
-      <mat-chip-list
-        *ngIf="isKeywordDataVisMode || isKeywordAggDataVisMode"
-        class="ml-1"
-      >
+      <mat-chip-list *ngIf="isDataVisMode || isAggDataVisMode" class="ml-1">
         <mat-chip
           *ngFor="
             let activeLineChartMetric of reportingService.activeKeywordLineChartMetric$.getValue()
@@ -158,101 +151,110 @@
   </div>
 
   <!-- data view -->
-  <div *ngIf="isKeywordDataVisMode">
-    <app-keyword-reporting-line-chart></app-keyword-reporting-line-chart>
+  <div *ngIf="isDataVisMode">
+    <app-campaign-reporting-line-chart></app-campaign-reporting-line-chart>
   </div>
 
   <!-- data view -->
-  <div *ngIf="isKeywordAggDataVisMode">
-    <app-keyword-reporting-pie-chart></app-keyword-reporting-pie-chart>
+  <div *ngIf="isAggDataVisMode">
+    <app-campaign-reporting-pie-chart></app-campaign-reporting-pie-chart>
   </div>
 
   <!-- table view -->
   <mat-paginator
-    [ngClass]="isKeywordAggDataVisMode ? 'd-none' : ''"
-    #keywordsPaginator
+    [ngClass]="
+      isAggDataVisMode || reportingService.isLoadingCampaigns ? 'd-none' : ''
+    "
+    #paginator
     [pageSizeOptions]="[100, 250, 500, 1000, 5000, 10000]"
     class="reporting__paginator"
   >
   </mat-paginator>
 
-  <!-- by day table -->
   <table
-    [ngClass]="isKeywordAggDataVisMode ? 'd-none' : ''"
+    [ngClass]="
+      isAggDataVisMode || reportingService.isLoadingCampaigns ? 'd-none' : ''
+    "
     mat-table
-    [dataSource]="keywordDataSource"
+    matSort
+    matSortActive="installs"
+    matSortDirection="desc"
+    [dataSource]="dataSource"
   >
-    <ng-container matColumnDef="date">
-      <th mat-header-cell *matHeaderCellDef>Date</th>
-      <td mat-cell *matCellDef="let element">{{ element.date }}</td>
+    <ng-container matColumnDef="timestamp">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Date</th>
+      <td mat-cell *matCellDef="let element">{{ element.timestamp }}</td>
     </ng-container>
 
-    <ng-container matColumnDef="keyword_id">
-      <th mat-header-cell *matHeaderCellDef>Keyword ID</th>
-      <td mat-cell *matCellDef="let element">{{ element.keyword_id }}</td>
+    <ng-container matColumnDef="campaignId">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Campaign ID</th>
+      <td mat-cell *matCellDef="let element">{{ element.campaignId }}</td>
     </ng-container>
 
-    <ng-container matColumnDef="keyword">
-      <th mat-header-cell *matHeaderCellDef>Keyword</th>
-      <td mat-cell *matCellDef="let element">{{ element.keyword }}</td>
-    </ng-container>
-
-    <ng-container matColumnDef="matchType">
-      <th mat-header-cell *matHeaderCellDef>Match Type</th>
-      <td mat-cell *matCellDef="let element">{{ element.matchType }}</td>
-    </ng-container>
-
-    <ng-container matColumnDef="keywordDisplayStatus">
-      <th mat-header-cell *matHeaderCellDef>Display Status</th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.keywordDisplayStatus }}
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="keywordStatus">
-      <th mat-header-cell *matHeaderCellDef>Status</th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.keywordStatus }}
-      </td>
+    <ng-container matColumnDef="campaignName">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Campaign Name</th>
+      <td mat-cell *matCellDef="let element">{{ element.campaignName }}</td>
     </ng-container>
 
     <ng-container matColumnDef="local_spend">
-      <th mat-header-cell *matHeaderCellDef>Cost</th>
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Cost</th>
       <td mat-cell *matCellDef="let element">
         {{ element.local_spend | number: "1.2-2" }}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="installs">
-      <th mat-header-cell *matHeaderCellDef>Installs</th>
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Installs</th>
       <td mat-cell *matCellDef="let element">
         {{ element.installs }}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="avg_cpa">
-      <th mat-header-cell *matHeaderCellDef>Cost Per Install</th>
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>
+        Cost Per Install
+      </th>
       <td mat-cell *matCellDef="let element">
         {{ element.avg_cpa | number: "1.2-2" }}
       </td>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedKeywordColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedKeywordColumns"></tr>
+    <ng-container matColumnDef="branch_revenue">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Revenue</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.branch_revenue | number: "1.2-2" }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="branch_commerce_event_count">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Purchases</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.branch_commerce_event_count }}
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
 
-  <!-- aggregate table -->
   <table
-    [ngClass]="!isKeywordAggDataVisMode ? 'd-none' : ''"
+    [ngClass]="
+      !isAggDataVisMode || reportingService.isLoadingCampaigns ? 'd-none' : ''
+    "
     mat-table
     matSort
     matSortActive="installs"
     matSortDirection="desc"
-    [dataSource]="keywordAggregatedDataSource"
+    [dataSource]="aggregatedDataSource"
   >
-    <ng-container matColumnDef="keyword">
-      <th mat-header-cell mat-sort-header *matHeaderCellDef>Keyword</th>
-      <td mat-cell *matCellDef="let element">{{ element.keyword }}</td>
+    <ng-container matColumnDef="campaignName">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Campaign Name</th>
+      <td mat-cell *matCellDef="let element">{{ element.campaignName }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="campaignId">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Campaign Id</th>
+      <td mat-cell *matCellDef="let element">{{ element.campaignId }}</td>
     </ng-container>
 
     <ng-container matColumnDef="installs">
@@ -278,13 +280,21 @@
       </td>
     </ng-container>
 
-    <tr
-      mat-header-row
-      *matHeaderRowDef="displayedAggregatedKeywordColumns"
-    ></tr>
-    <tr
-      mat-row
-      *matRowDef="let row; columns: displayedAggregatedKeywordColumns"
-    ></tr>
+    <ng-container matColumnDef="branch_revenue">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Revenue</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.branch_revenue | number: "1.2-2" }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="branch_commerce_event_count">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Purchases</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.branch_commerce_event_count | number: "1.2-2" }}
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedAggregatedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedAggregatedColumns"></tr>
   </table>
 </div>
