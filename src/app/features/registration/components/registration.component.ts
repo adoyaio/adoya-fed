@@ -191,6 +191,7 @@ export class RegistrationComponent implements OnInit {
   form = this.fb.group({
     step1Form: this.fb.group({
       orgId: new FormControl("", Validators.required),
+      appleOrgId: new FormControl("", Validators.required),
       clientId: new FormControl("", Validators.required),
       teamId: new FormControl("", Validators.required),
       keyId: new FormControl("", Validators.required),
@@ -346,6 +347,9 @@ export class RegistrationComponent implements OnInit {
   }
 
   get isStep3BackDisabled(): boolean {
+    if (isNil(this.client) || isNil(this.client.orgDetails)) {
+      return true;
+    }
     return chain(this.client.orgDetails.appleCampaigns)
       .some((campaign) => {
         return campaign.status === "ENABLED";
@@ -359,13 +363,14 @@ export class RegistrationComponent implements OnInit {
     private clientService: ClientService,
     private appleService: AppleService,
     private snackBar: MatSnackBar,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private userAccountService: UserAccountService
   ) {}
 
   ngOnInit() {
     Auth.currentUserInfo().then((val) => {
-      // TODO pull from userAccountService?
-      this.orgId = get(val.attributes, "custom:org_id");
+      // this.orgId = get(val.attributes, "custom:org_id");
+      this.orgId = this.userAccountService.orgId;
       this.emailAddresses = get(val.attributes, "email");
       this.clientService
         .getClient(this.orgId)
@@ -406,6 +411,7 @@ export class RegistrationComponent implements OnInit {
               ""
             );
 
+            debugger;
             this.initializeClient();
             this.isLoadingResults = true;
             if (
@@ -425,8 +431,10 @@ export class RegistrationComponent implements OnInit {
             };
 
             // set values from token
-            this.client.orgId = +this.orgId; // NOTE this may diverge at some point from asa id
-            this.client.orgDetails.orgId = +this.orgId;
+            this.client.orgId = this.orgId; // NOTE this may diverge at some point from asa id
+            // this.client.orgDetails.orgId = +this.orgId;
+            this.client.orgDetails.orgId =
+              this.step1Form.get("appleOrgId").value;
             this.client.orgDetails.emailAddresses = [this.emailAddresses];
 
             this.clientService
@@ -785,6 +793,7 @@ export class RegistrationComponent implements OnInit {
     }
   }
 
+  // DEPRECATED MIGRATE TO COGNITO ID
   setOrgIdValue() {
     this.step1Form.get("orgId").setValue(this.orgId);
   }

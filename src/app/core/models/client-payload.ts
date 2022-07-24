@@ -234,7 +234,7 @@ export class OrgDetailsPayload {
 }
 
 export class ClientPayload {
-  orgId: number;
+  orgId: string;
   orgDetails: OrgDetailsPayload;
 
   static buildFromClient(client: Client): any {

@@ -5,8 +5,8 @@ import {
   RouterStateSnapshot,
   Router,
 } from "@angular/router";
-import { Observable, Subject } from "rxjs";
-import { tap, map, take } from "rxjs/operators";
+import { EMPTY, Observable, Subject } from "rxjs";
+import { tap, map, take, catchError } from "rxjs/operators";
 
 import { ClientService } from "../services/client.service";
 import { get, has, isNil } from "lodash";
@@ -25,9 +25,13 @@ export class HasRegisteredGuard implements CanActivate {
   ): Observable<boolean> | Promise<boolean> | boolean {
     return Auth.currentUserInfo().then(
       (val) => {
-        const orgId = get(val.attributes, "custom:org_id");
+        debugger;
 
-        if (isNil(orgId)) {
+        const user = get(val.attributes, "custom:org_id", get(val, "username"));
+
+        // const orgId = get(val.attributes, "custom:org_id");
+
+        if (isNil(user)) {
           return this.handleResult(false);
         }
 
@@ -36,7 +40,7 @@ export class HasRegisteredGuard implements CanActivate {
         }
 
         return this.clientService
-          .getClient(orgId)
+          .getClient(user)
           .pipe(
             take(1),
             map((data) => {
@@ -49,7 +53,11 @@ export class HasRegisteredGuard implements CanActivate {
               }
               return client.orgDetails.hasRegistered;
             }),
-            tap((result) => this.handleResult(result))
+            tap((result) => this.handleResult(result)),
+            catchError((e) => {
+              this.handleResult(false);
+              return EMPTY;
+            })
           )
           .toPromise();
       },

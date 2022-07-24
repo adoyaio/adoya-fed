@@ -61,33 +61,33 @@ export class PortalComponent implements OnInit {
         type: "string",
         custom: true,
       },
-      {
-        label: "Organization",
-        key: "org_id",
-        required: true,
-        displayOrder: 6,
-        type: "string",
-        custom: true,
-      },
+      // {
+      //   label: "Organization",
+      //   key: "org_id",
+      //   required: true,
+      //   displayOrder: 6,
+      //   type: "string",
+      //   custom: true,
+      // },
     ],
   };
 
   ngOnInit(): void {
-    if (
-      !window.location.href.includes("home") &&
-      !window.location.href.includes("start")
-    ) {
-      this.amplifyService.authStateChange$
-        .pipe(
-          tap((authState) => {
-            if (authState.state === "signedIn") {
-              this.router.navigateByUrl("/workbench");
-            } else {
-              this.router.navigateByUrl("/portal");
-            }
-          })
-        )
-        .subscribe();
-    }
+    this.amplifyService.authStateChange$
+      .pipe(
+        tap((authState) => {
+          // if (
+          //   !window.location.href.includes("home") &&
+          //   !window.location.href.includes("start")
+          // )
+
+          if (authState.state === "signedIn") {
+            this.router.navigateByUrl("/workbench");
+          } else {
+            //this.router.navigateByUrl("/portal");
+          }
+        })
+      )
+      .subscribe();
   }
 }

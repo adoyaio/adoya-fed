@@ -1,3 +1,5 @@
+import { get } from "lodash";
+
 export class BranchBidParameters {
   branchBidAdjustment: number;
   branchOptimizationGoal: string;
@@ -179,13 +181,14 @@ export class OrgDetails {
 }
 
 export class Client {
-  orgId: number;
+  orgId: string;
   orgDetails: OrgDetails;
 
   static buildFromGetClientResponse(response: any): Client {
     const retVal = new Client();
     retVal.orgDetails = OrgDetails.buildFromResponse(response);
-    retVal.orgId = retVal.orgDetails.orgId;
+    //retVal.orgId = retVal.orgDetails.orgId;
+    retVal.orgId = get(response, "orgId");
     return retVal;
   }
 }

@@ -55,7 +55,7 @@ export class ClientService {
         url,
         {
           operation: "create",
-          tableName: "clients",
+          tableName: "clients_2",
           payload: client,
           updateApple,
         },

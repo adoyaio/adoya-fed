@@ -19,7 +19,7 @@ import {
   Router,
 } from "@angular/router";
 import { AmplifyService } from "aws-amplify-angular";
-import { get } from "lodash";
+import { get, isNil } from "lodash";
 import { Subject } from "rxjs";
 import { filter, map, mergeMap, takeUntil, tap } from "rxjs/operators";
 import { UserAccountService } from "./core/services/user-account.service";
@@ -59,6 +59,36 @@ export class AppComponent implements AfterViewInit, OnDestroy {
         mergeMap((r) => r.data),
         map((event) => this.titleService.setTitle(event["title"])),
         takeUntil(this.destroyed$)
+      )
+      .subscribe();
+
+    this.amplifyService
+      .authState()
+      .pipe(
+        tap((authState) => {
+          if (!(authState.state === "signedIn")) {
+            this.userAccountService.jwtToken = undefined;
+            this.userAccountService.orgId = undefined;
+            if (
+              !window.location.href.includes("home") &&
+              !window.location.href.includes("start")
+            )
+              this.router.navigateByUrl("/portal");
+          }
+          const jwtToken = get(
+            authState,
+            "user.signInUserSession.idToken.jwtToken"
+          );
+
+          const orgId = get(
+            authState,
+            "user.signInUserSession.idToken.payload.custom:org_id",
+            get(authState, "user.username")
+          );
+
+          this.userAccountService.jwtToken = jwtToken;
+          this.userAccountService.orgId = orgId;
+        })
       )
       .subscribe();
   }

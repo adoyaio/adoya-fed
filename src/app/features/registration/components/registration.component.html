@@ -168,6 +168,41 @@
                   color="primary"
                   class="col-11"
                 >
+                  <mat-label>Apple Organization Id</mat-label>
+                  <input
+                    matInput
+                    placeholder="organization id"
+                    required
+                    formControlName="appleOrgId"
+                  />
+                </mat-form-field>
+                <button
+                  mat-icon-button
+                  class="float-left"
+                  (click)="
+                    handleTooltipClick(
+                      $event,
+                      'Apple Search Ads Organiztion ID'
+                    )
+                  "
+                >
+                  <mat-icon
+                    class="float-left"
+                    color="primary"
+                    matTooltip="Your Apple Search Ads Organiztion ID can be found on your Apple Search Ads Console. &#13; &#13;
+                      Click for exact details on where to find this
+                      information"
+                    >help</mat-icon
+                  >
+                </button>
+              </div>
+
+              <div class="w-100 no-gutters invisible">
+                <mat-form-field
+                  appearance="fill"
+                  color="primary"
+                  class="col-11"
+                >
                   <mat-label>Organization Id</mat-label>
                   <input
                     matInput
@@ -1351,14 +1386,7 @@
 </div>
 
 <div
-  class="
-    position-absolute position-md-fixed
-    left-0
-    bottom-0
-    w-99
-    m-auto
-    text-center
-  "
+  class="position-absolute position-md-fixed left-0 bottom-0 w-99 m-auto text-center"
 >
   <a class="adoya-link" (click)="handleShowTermsClick($event)"
     >Terms of service</a
