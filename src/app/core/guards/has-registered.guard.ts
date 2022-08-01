@@ -25,10 +25,7 @@ export class HasRegisteredGuard implements CanActivate {
   ): Observable<boolean> | Promise<boolean> | boolean {
     return Auth.currentUserInfo().then(
       (val) => {
-        debugger;
-
         const user = get(val.attributes, "custom:org_id", get(val, "username"));
-
         // const orgId = get(val.attributes, "custom:org_id");
 
         if (isNil(user)) {
@@ -47,7 +44,7 @@ export class HasRegisteredGuard implements CanActivate {
               if (isNil(data)) {
                 return this.handleResult(false);
               }
-              const client = Client.buildFromGetClientResponse(data);
+              const client = Client.buildFromGetClientResponse(data, user);
               if (!has(client.orgDetails, "hasRegistered")) {
                 return this.handleResult(false);
               }

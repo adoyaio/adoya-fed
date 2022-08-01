@@ -55,11 +55,13 @@ export class PreferencesComponent implements OnInit {
       )
       .subscribe();
 
-    this.orgId = this.userAccountService
-      .getCurrentUser()
-      .UserAttributes.find((val) => {
-        return val.Name === "custom:org_id";
-      }).Value;
+    this.orgId = this.userAccountService.orgId;
+
+    // this.orgId = this.userAccountService
+    //   .getCurrentUser()
+    //   .UserAttributes.find((val) => {
+    //     return val.Name === "custom:org_id";
+    //   }).Value;
 
     this.clientService
       .getClient(this.orgId)
@@ -68,7 +70,7 @@ export class PreferencesComponent implements OnInit {
           this.isLoadingResults = true;
         }),
         map((data) => {
-          this.client = Client.buildFromGetClientResponse(data);
+          this.client = Client.buildFromGetClientResponse(data, this.orgId);
 
           this.preferencesForm
             .get("emailAddresses")

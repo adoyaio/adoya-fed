@@ -377,7 +377,7 @@ export class RegistrationComponent implements OnInit {
         .pipe(
           take(1),
           tap((data: any) => {
-            this.client = Client.buildFromGetClientResponse(data);
+            this.client = Client.buildFromGetClientResponse(data, this.orgId);
             // check if client exists and has auth fields
             if (!isNil(this.client.orgDetails.auth)) {
               this.openSnackBar(
@@ -411,7 +411,6 @@ export class RegistrationComponent implements OnInit {
               ""
             );
 
-            debugger;
             this.initializeClient();
             this.isLoadingResults = true;
             if (
@@ -449,27 +448,23 @@ export class RegistrationComponent implements OnInit {
                     );
                     this.isLoadingResults = false;
                   }
-                  return combineLatest([
-                    this.appleService.getAppleApps(this.orgId),
-                    this.appleService.getAppleAcls(this.orgId),
-                  ]).pipe(
-                    tap(([apps, acls]) => {
+                  return this.appleService.getAppleApps(this.orgId).pipe(
+                    tap((val) => {
                       this.isLoadingResults = false;
-
-                      if (isEmpty(apps.data) || isEmpty(acls)) {
+                      if (isEmpty(val.apps.data) || isEmpty(val.acls)) {
                         this.openSnackBar(
                           "unable to process changes to settings at this time",
                           "dismiss"
                         );
                       }
-                      if (!isEmpty(apps.data)) {
+                      if (!isEmpty(val.apps.data)) {
                         this.openSnackBar(
                           "we found some of your applications! please select from the dropdown to continue",
                           ""
                         );
                       }
-                      this.apps = apps.data;
-                      this.currencies = _map(acls, (acl) => {
+                      this.apps = val.apps.data;
+                      this.currencies = _map(val.acls, (acl) => {
                         return { code: acl.currency };
                       });
                     }),
@@ -482,6 +477,39 @@ export class RegistrationComponent implements OnInit {
                       return [];
                     })
                   );
+                  // return combineLatest([
+                  //   this.appleService.getAppleApps(this.orgId),
+                  //   this.appleService.getAppleAcls(this.orgId),
+                  // ]).pipe(
+                  //   tap(([apps, acls]) => {
+                  //     this.isLoadingResults = false;
+
+                  //     if (isEmpty(apps.data) || isEmpty(acls)) {
+                  //       this.openSnackBar(
+                  //         "unable to process changes to settings at this time",
+                  //         "dismiss"
+                  //       );
+                  //     }
+                  //     if (!isEmpty(apps.data)) {
+                  //       this.openSnackBar(
+                  //         "we found some of your applications! please select from the dropdown to continue",
+                  //         ""
+                  //       );
+                  //     }
+                  //     this.apps = apps.data;
+                  //     this.currencies = _map(acls, (acl) => {
+                  //       return { code: acl.currency };
+                  //     });
+                  //   }),
+                  //   catchError(() => {
+                  //     this.isLoadingResults = false;
+                  //     this.openSnackBar(
+                  //       "unable to process changes to settings at this time",
+                  //       ""
+                  //     );
+                  //     return [];
+                  //   })
+                  // );
                 }),
                 catchError(() => {
                   this.isLoadingResults = false;
@@ -632,7 +660,7 @@ export class RegistrationComponent implements OnInit {
             take(1),
             tap((val) => {
               this.isLoadingResults = false;
-              this.client = Client.buildFromGetClientResponse(val);
+              this.client = Client.buildFromGetClientResponse(val, this.orgId);
               this.step3Form.markAsPristine();
               this.openSnackBar(
                 "we've completed updating your campaigns! please review details and complete registration to finalize",
@@ -794,8 +822,11 @@ export class RegistrationComponent implements OnInit {
   }
 
   // DEPRECATED MIGRATE TO COGNITO ID
-  setOrgIdValue() {
+  setOrgIdValue(): void {
     this.step1Form.get("orgId").setValue(this.orgId);
+    this.step1Form
+      .get("appleOrgId")
+      .setValue(get(this.client, "orgDetails.orgId"));
   }
 
   setStep1FormValues() {
@@ -891,7 +922,7 @@ export class RegistrationComponent implements OnInit {
       .pipe(
         take(1),
         switchMap((val) => {
-          const client = Client.buildFromGetClientResponse(val);
+          const client = Client.buildFromGetClientResponse(val, this.orgId);
           client.orgDetails.hasRegistered = true;
           return this.clientService
             .postClient(ClientPayload.buildFromClient(client), false)
@@ -1102,7 +1133,10 @@ export class RegistrationComponent implements OnInit {
               take(1),
               switchMap((val) => {
                 // for adoya
-                const client = Client.buildFromGetClientResponse(val);
+                const client = Client.buildFromGetClientResponse(
+                  val,
+                  this.orgId
+                );
 
                 client.orgDetails.bidParameters.objective =
                   this.substep2.get("objective").value;
@@ -1166,7 +1200,8 @@ export class RegistrationComponent implements OnInit {
 
                 // for apple
                 const campaignData = new CampaignData();
-                campaignData.org_id = this.orgId;
+                // campaignData.org_id = this.orgId;
+                campaignData.org_id = client.orgDetails.orgId.toString();
                 campaignData.app_name = get(this.app, "appName");
                 campaignData.adam_id = get(this.app, "adamId");
                 campaignData.campaign_target_country =

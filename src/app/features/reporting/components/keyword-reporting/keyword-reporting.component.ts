@@ -95,12 +95,12 @@ export class KeywordReportingComponent implements OnInit {
 
     this.keywordFilterForm.get("start").setValue(this.minDate);
     this.keywordFilterForm.get("end").setValue(this.maxDate);
-
-    this.orgId = this.userAccountService
-      .getCurrentUser()
-      .UserAttributes.find((val) => {
-        return val.Name === "custom:org_id";
-      }).Value;
+    this.orgId = this.userAccountService.orgId;
+    // this.orgId = this.userAccountService
+    //   .getCurrentUser()
+    //   .UserAttributes.find((val) => {
+    //     return val.Name === "custom:org_id";
+    //   }).Value;
   }
 
   ngAfterViewInit() {

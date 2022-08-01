@@ -108,11 +108,13 @@ export class CampaignReportingComponent implements OnInit {
     this.maxStartDate.setDate(this.maxStartDate.getDate() - 1);
     this.maxEndDate.setDate(this.maxEndDate.getDate() - 2);
 
-    this.orgId = this.userAccountService
-      .getCurrentUser()
-      .UserAttributes.find((val) => {
-        return val.Name === "custom:org_id";
-      }).Value;
+    this.orgId = this.userAccountService.orgId;
+
+    // this.orgId = this.userAccountService
+    //   .getCurrentUser()
+    //   .UserAttributes.find((val) => {
+    //     return val.Name === "custom:org_id";
+    //   }).Value;
   }
 
   ngAfterViewInit() {

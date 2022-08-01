@@ -26,6 +26,7 @@ export class UserAccountService {
     return this.currentUserSubject.value;
   }
 
+  // deprecated use amplify lbi
   getCurrentUser(): UserAccount {
     let userAccount = new UserAccount();
     const keys = Object.keys(localStorage);

@@ -184,11 +184,11 @@ export class Client {
   orgId: string;
   orgDetails: OrgDetails;
 
-  static buildFromGetClientResponse(response: any): Client {
+  static buildFromGetClientResponse(response: any, orgId: string): Client {
     const retVal = new Client();
     retVal.orgDetails = OrgDetails.buildFromResponse(response);
     //retVal.orgId = retVal.orgDetails.orgId;
-    retVal.orgId = get(response, "orgId");
+    retVal.orgId = orgId;
     return retVal;
   }
 }
