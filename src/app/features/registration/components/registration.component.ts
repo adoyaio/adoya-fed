@@ -1031,6 +1031,7 @@ export class RegistrationComponent implements OnInit {
   }
 
   handleOpenConsole($event) {
+    $event.stopPropagation();
     $event.preventDefault();
     window.open(
       "https://app.searchads.apple.com/cm/app/settings/users/invite",

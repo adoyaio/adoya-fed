@@ -23,8 +23,13 @@
 
           <ol type="1">
             <li class="mb-2 p-2">
-              From the Apple Search Ads UI, choose Sign In > Advanced and log in
-              as an account administrator.
+              From the
+              <a
+                href="https://app.searchads.apple.com/cm/app/settings/users/invite"
+                target="_blank"
+                class="adoya-link"
+                >Apple Search Ads UI</a
+              >, choose Sign In Advanced and log in as an account administrator.
             </li>
             <li class="mb-2 p-2">
               From the Users menu in the top-right corner, select the account to
@@ -277,7 +282,7 @@
 
             <div class="col-6">
               <mat-list>
-                <div class="mb-4 pb-2 border-bottom">
+                <div class="mb-2 pb-2 border-bottom w-100">
                   <mat-list-item>
                     <mat-icon color="primary" class="align-text-top mr-2"
                       >done</mat-icon
@@ -288,20 +293,38 @@
                   </mat-list-item>
                 </div>
 
-                <div class="mb-4 pb-2 border-bottom">
+                <div class="mb-2 pb-2 border-bottom w-100">
                   <mat-list-item>
                     <mat-icon color="primary" class="align-text-top mr-2"
                       >done</mat-icon
                     >
 
                     Enter the 3 ids provided when you uploaded your public key
-                    to the Apple Search console. (From the Search Ads UI, choose
-                    Account Settings > API. Paste the key created in the above
-                    section into the Public Key field.)
+                    to the Apple Search console. From the Apple Search Ads UI,
+                    choose Account Settings > API. Paste the key below into the
+                    Public Key field.
                   </mat-list-item>
                 </div>
 
-                <div class="mb-4 pb-2 border-bottom">
+                <div class="mb-2 pb-2 border-bottom w-100">
+                  <mat-list-item>
+                    <mat-form-field
+                      appearance="fill"
+                      color="primary"
+                      class="w-100"
+                    >
+                      <textarea
+                        matInput
+                        readonly="true"
+                        cdkTextareaAutosize
+                        value="-----BEGIN PUBLIC KEY-----MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEfsYLIIQVzyQWizAguQWR9l7ZkXijRAzgJRXGuq/Q/th1FqlsFyE7vr4xDCw53+JoJebvKBy8QbZgSWON8TohdA==-----END PUBLIC KEY-----"
+                      >
+                      </textarea>
+                    </mat-form-field>
+                  </mat-list-item>
+                </div>
+
+                <div class="mb-2 pb-2 border-bottom">
                   <mat-list-item>
                     <mat-icon color="primary" class="align-text-top mr-2"
                       >done</mat-icon
@@ -312,15 +335,15 @@
                   </mat-list-item>
                 </div>
 
-                <div class="mb-4 pb-2 border-bottom">
+                <div class="mb-2 pb-2 border-bottom">
                   <mat-list-item>
                     <mat-icon color="primary" class="align-text-top mr-2"
                       >info</mat-icon
                     >
                     <mat-label class="font-weight-bold">
-                      We can handle this step for you, enter your contact email
-                      and Apple Search Ads Org Id, then click 'send' below to
-                      notify us that we'll be assisting on this step.
+                      We can handle this step for you, enter your Apple Search
+                      Ads Org Id, then click 'send' below to notify us that
+                      we'll be assisting on this step.
                     </mat-label>
                   </mat-list-item>
                 </div>
