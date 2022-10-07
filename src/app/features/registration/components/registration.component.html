@@ -22,7 +22,7 @@
           send us an invite using the following steps:
 
           <ol type="1">
-            <li class="mb-2 p-2">
+            <li class="mb-2 p-2 border-bottom">
               From the
               <a
                 href="https://app.searchads.apple.com/cm/app/settings/users/invite"
@@ -31,19 +31,19 @@
                 >Apple Search Ads UI</a
               >, choose Sign In Advanced and log in as an account administrator.
             </li>
-            <li class="mb-2 p-2">
+            <li class="mb-2 p-2 border-bottom">
               From the Users menu in the top-right corner, select the account to
               invite users to.
             </li>
-            <li class="mb-2 p-2">
+            <li class="mb-2 p-2 border-bottom">
               Click Invite Users to invite users to your Apple Search Ads
               organization.
             </li>
-            <li class="mb-2 p-2">
+            <li class="mb-2 p-2 border-bottom">
               In the User Details section, enter the user's first name, last
               name, and Apple ID.
             </li>
-            <li class="mb-2 p-2">
+            <li class="mb-2 p-2 border-bottom">
               Click Send Invite. The invited user receives an email with a
               secure code. The user signs into the secure Apple URL in the email
               and inputs the provided code, which activates the user's account.
@@ -293,7 +293,7 @@
                   </mat-list-item>
                 </div>
 
-                <div class="mb-2 pb-2 border-bottom w-100">
+                <div class="pb-2 w-100">
                   <mat-list-item>
                     <mat-icon color="primary" class="align-text-top mr-2"
                       >done</mat-icon
@@ -306,20 +306,15 @@
                   </mat-list-item>
                 </div>
 
-                <div class="mb-2 pb-2 border-bottom w-100">
+                <div class="mb-2 pb-2 ml-5 border-bottom w-100">
                   <mat-list-item>
-                    <mat-form-field
-                      appearance="fill"
-                      color="primary"
-                      class="w-100"
-                    >
-                      <textarea
-                        matInput
-                        readonly="true"
-                        cdkTextareaAutosize
-                        value="-----BEGIN PUBLIC KEY-----MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEfsYLIIQVzyQWizAguQWR9l7ZkXijRAzgJRXGuq/Q/th1FqlsFyE7vr4xDCw53+JoJebvKBy8QbZgSWON8TohdA==-----END PUBLIC KEY-----"
+                    <mat-form-field class="w-100 font-size-16 bg-med">
+                      <textarea matInput cdkTextareaAutosize readonly="true">
+-----BEGIN PUBLIC KEY-----
+MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEfsYLIIQVzyQWizAguQWR9l7ZkXij
+RAzgJRXGuq/Q/th1FqlsFyE7vr4xDCw53+JoJebvKBy8QbZgSWON8TohdA==
+-----END PUBLIC KEY-----</textarea
                       >
-                      </textarea>
                     </mat-form-field>
                   </mat-list-item>
                 </div>

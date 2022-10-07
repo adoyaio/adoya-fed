@@ -195,7 +195,7 @@ export class RegistrationComponent implements OnInit {
       clientId: new FormControl("", Validators.required),
       teamId: new FormControl("", Validators.required),
       keyId: new FormControl("", Validators.required),
-      // privateKey: new FormControl("", Validators.required),
+      privateKey: new FormControl("", Validators.required),
     }),
     step2Form: this.fb.group(
       {
