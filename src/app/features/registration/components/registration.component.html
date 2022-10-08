@@ -15,10 +15,13 @@
       <mat-progress-bar color="primary" mode="indeterminate"></mat-progress-bar>
     </div>
     <mat-vertical-stepper [linear]="true" #stepper class="w-100">
+      <!-- step 1 invite-->
       <mat-step>
         <ng-template matStepLabel
           >Invite us to be an API user
-          <mat-icon color="primary">outgoing_mail</mat-icon></ng-template
+          <mat-icon class="pl-2" color="accent"
+            >outgoing_mail</mat-icon
+          ></ng-template
         >
         <div class="col-6 mb-2">
           In order for our system to manage and optimize your campaigns, first
@@ -65,11 +68,13 @@
           <span class="text-light pl-1">next</span>
         </button>
       </mat-step>
+
+      <!-- step 2 account-->
       <mat-step [stepControl]="step1Form">
         <form [formGroup]="step1Form">
           <ng-template matStepLabel
             >Tell us about your Apple Search Ads Account
-            <mat-icon color="primary">feed</mat-icon></ng-template
+            <mat-icon class="pl-2" color="accent">feed</mat-icon></ng-template
           >
 
           <!-- skeleton loader -->
@@ -181,7 +186,7 @@
                 </button>
               </div>
 
-              <div class="w-100 no-gutters d-none">
+              <!-- <div class="w-100 no-gutters d-none">
                 <mat-form-field
                   appearance="fill"
                   color="primary"
@@ -211,7 +216,7 @@
                     >help</mat-icon
                   >
                 </button>
-              </div>
+              </div> -->
 
               <div class="w-100 no-gutters">
                 <mat-form-field
@@ -334,7 +339,7 @@ RAzgJRXGuq/Q/th1FqlsFyE7vr4xDCw53+JoJebvKBy8QbZgSWON8TohdA==
                   </mat-list-item>
                 </div>
 
-                <div class="mb-2 pb-2 border-bottom ml-4">
+                <div class="mb-2 pb-2 ml-4 pl-2">
                   <mat-list-item>
                     <!-- <mat-icon color="primary" class="align-text-top mr-2"
                       >info</mat-icon
@@ -351,6 +356,7 @@ RAzgJRXGuq/Q/th1FqlsFyE7vr4xDCw53+JoJebvKBy8QbZgSWON8TohdA==
               <div class="d-flex w-100 justify-content-start ml-5">
                 <button
                   (click)="handleRegHelpEvent($event)"
+                  [disabled]="regHelpEventDisabled()"
                   mat-flat-button
                   color="primary"
                   class="float-right"
@@ -387,10 +393,14 @@ RAzgJRXGuq/Q/th1FqlsFyE7vr4xDCw53+JoJebvKBy8QbZgSWON8TohdA==
           </button>
         </form>
       </mat-step>
+
+      <!-- step 3 campaings-->
       <mat-step [stepControl]="step2Form">
         <form [formGroup]="step2Form">
           <ng-template matStepLabel
-            >Create and Import your campaigns<mat-icon color="primary"
+            >Create and Import your campaigns<mat-icon
+              class="pl-2"
+              color="accent"
               >add_circle</mat-icon
             ></ng-template
           >
@@ -1286,11 +1296,14 @@ RAzgJRXGuq/Q/th1FqlsFyE7vr4xDCw53+JoJebvKBy8QbZgSWON8TohdA==
 
       <!-- TODO step to add additional countries and apps -->
 
+      <!-- step 4 finalize -->
       <mat-step [stepControl]="step3Form">
         <form [formGroup]="step3Form">
           <ng-template matStepLabel
             >Review and complete
-            <mat-icon color="primary">fact_check</mat-icon></ng-template
+            <mat-icon class="pl-2" color="accent"
+              >fact_check</mat-icon
+            ></ng-template
           >
           <div *ngIf="isLoadingResults" class="w-100 mt-2">
             <ngx-skeleton-loader
@@ -1306,7 +1319,7 @@ RAzgJRXGuq/Q/th1FqlsFyE7vr4xDCw53+JoJebvKBy8QbZgSWON8TohdA==
           </div>
           <div
             class="w-100"
-            *ngIf="!isLoadingResults && stepper.selectedIndex > 0"
+            *ngIf="!isLoadingResults && stepper.selectedIndex > 1"
           >
             <mat-list class="p-0 m-0 pb-2">
               <mat-list-item class="mb-1 pb-2">
@@ -1339,7 +1352,7 @@ RAzgJRXGuq/Q/th1FqlsFyE7vr4xDCw53+JoJebvKBy8QbZgSWON8TohdA==
 
           <div
             class="w-100 p-2 mt-2 border-top"
-            *ngIf="!isLoadingResults && stepper.selectedIndex > 0"
+            *ngIf="!isLoadingResults && stepper.selectedIndex > 1"
           >
             <table class="w-100">
               <tr>

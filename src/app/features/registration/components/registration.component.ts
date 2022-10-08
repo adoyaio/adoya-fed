@@ -205,7 +205,7 @@ export class RegistrationComponent implements OnInit {
       clientId: new FormControl("", Validators.required),
       teamId: new FormControl("", Validators.required),
       keyId: new FormControl("", Validators.required),
-      privateKey: new FormControl("", Validators.required),
+      // privateKey: new FormControl("", Validators.required),
     }),
     step2Form: this.fb.group(
       {
@@ -385,7 +385,6 @@ export class RegistrationComponent implements OnInit {
   ngOnInit() {
     Auth.currentUserInfo().then((val) => {
       // this.orgId = get(val.attributes, "custom:org_id");
-      debugger;
       this.orgId = this.userAccountService.orgId;
       this.emailAddresses = get(val.attributes, "email");
       this.username = get(val, "username");
@@ -1056,6 +1055,10 @@ export class RegistrationComponent implements OnInit {
     );
   }
 
+  regHelpEventDisabled(): boolean {
+    return isNil(this.appleOrgIdControl.value);
+  }
+
   handleRegHelpEvent($event) {
     $event.stopPropagation();
     $event.preventDefault();
@@ -1075,14 +1078,10 @@ export class RegistrationComponent implements OnInit {
         map((val) => {
           if (val) {
             this.isSendingResults = true;
-            // TODO
-            debugger;
+
             const supportItem = new SupportItem();
-            supportItem.description = `
-            username: ${this.username}
-            asa org id: ${this.orgId}
-            email: ${this.emailAddresses}
-            `;
+            supportItem.description = ``;
+            supportItem.userId = this.username;
             supportItem.username = this.emailAddresses;
             supportItem.subject = `request for reg user creation for ${this.orgId}`;
             supportItem.orgId = this.appleOrgIdControl.value;

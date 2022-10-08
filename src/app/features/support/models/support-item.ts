@@ -7,8 +7,10 @@ export class EmailItem {
 
 export class ContactUsItem extends EmailItem {
   orgId?: string;
+  userId?: string;
 }
 
 export class SupportItem extends ContactUsItem {
   orgId: string;
+  userId: string;
 }
