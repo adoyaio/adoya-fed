@@ -29,7 +29,14 @@ import {
   some,
 } from "lodash";
 import { combineLatest, EMPTY, of, Subject } from "rxjs";
-import { catchError, switchMap, take, takeUntil, tap } from "rxjs/operators";
+import {
+  catchError,
+  map,
+  switchMap,
+  take,
+  takeUntil,
+  tap,
+} from "rxjs/operators";
 import { Client, OrgDetails } from "src/app/core/models/client";
 import { ClientPayload } from "src/app/core/models/client-payload";
 import { AppService } from "src/app/core/services/app.service";
@@ -38,7 +45,9 @@ import { ClientService } from "src/app/core/services/client.service";
 import { UserAccountService } from "src/app/core/services/user-account.service";
 import { CustomFormValidators } from "src/app/shared/dynamic-form/validators/CustomFormValidators";
 import { DynamicModalComponent } from "src/app/shared/dynamic-modal/dynamic-modal.component";
+import { SupportItem } from "../../support/models/support-item";
 import { CampaignData } from "../model/campaign-data";
+import { SupportService } from "src/app/core/services/support.service";
 
 @Component({
   selector: "app-registration",
@@ -82,6 +91,7 @@ export class RegistrationComponent implements OnInit {
   isSendingResults;
   orgId: string;
   emailAddresses: string;
+  username: string;
   campaigns = [];
 
   dailyBudgetValidators = [
@@ -250,6 +260,10 @@ export class RegistrationComponent implements OnInit {
     return this.form.get("step2Form") as FormGroup;
   }
 
+  get appleOrgIdControl(): AbstractControl {
+    return this.step1Form.get("appleOrgId");
+  }
+
   get step3Form(): FormGroup {
     return this.form.get("step3Form") as FormGroup;
   }
@@ -364,14 +378,17 @@ export class RegistrationComponent implements OnInit {
     private appleService: AppleService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
-    private userAccountService: UserAccountService
+    private userAccountService: UserAccountService,
+    private supportService: SupportService
   ) {}
 
   ngOnInit() {
     Auth.currentUserInfo().then((val) => {
       // this.orgId = get(val.attributes, "custom:org_id");
+      debugger;
       this.orgId = this.userAccountService.orgId;
       this.emailAddresses = get(val.attributes, "email");
+      this.username = get(val, "username");
       this.clientService
         .getClient(this.orgId)
         .pipe(
@@ -1037,6 +1054,78 @@ export class RegistrationComponent implements OnInit {
       "https://app.searchads.apple.com/cm/app/settings/users/invite",
       "_blank"
     );
+  }
+
+  handleRegHelpEvent($event) {
+    $event.stopPropagation();
+    $event.preventDefault();
+
+    this.dialog
+      .open(DynamicModalComponent, {
+        data: {
+          title: `Confirm request for Adoya support`,
+          content: `We'll respond within 24 hours via email to ${this.emailAddresses}.`,
+          actionYes: "Confirm",
+          actionNo: "Cancel",
+        },
+      })
+      .afterClosed()
+      .pipe(
+        take(1),
+        map((val) => {
+          if (val) {
+            this.isSendingResults = true;
+            // TODO
+            debugger;
+            const supportItem = new SupportItem();
+            supportItem.description = `
+            username: ${this.username}
+            asa org id: ${this.orgId}
+            email: ${this.emailAddresses}
+            `;
+            supportItem.username = this.emailAddresses;
+            supportItem.subject = `request for reg user creation for ${this.orgId}`;
+            supportItem.orgId = this.appleOrgIdControl.value;
+            supportItem.type = "registration";
+
+            this.supportService
+              .postSupportItem(supportItem)
+              .pipe(
+                take(1),
+                tap((_) => {
+                  this.isSendingResults = true;
+                }),
+                map((data) => {
+                  this.isSendingResults = false;
+                  this.openSnackBar(
+                    "successfully sumbitted your support ticket. thank you for contacting adoya support!",
+                    "dismiss"
+                  );
+
+                  return data;
+                }),
+                catchError(() => {
+                  this.isSendingResults = false;
+                  this.openSnackBar(
+                    "unable to submit your support ticket, please enter required fields.",
+                    "dismiss"
+                  );
+                  return [];
+                })
+              )
+              .subscribe();
+          }
+          return val;
+        }),
+        switchMap((val) => {
+          setTimeout(() => {
+            this.isSendingResults = false;
+          });
+
+          return val;
+        })
+      )
+      .subscribe();
   }
 
   openSnackBar(message: string, action: string) {

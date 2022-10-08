@@ -16,7 +16,10 @@
     </div>
     <mat-vertical-stepper [linear]="true" #stepper class="w-100">
       <mat-step>
-        <ng-template matStepLabel>Invite us to be an API user</ng-template>
+        <ng-template matStepLabel
+          >Invite us to be an API user
+          <mat-icon color="primary">outgoing_mail</mat-icon></ng-template
+        >
         <div class="col-6 mb-2">
           In order for our system to manage and optimize your campaigns, first
           send us an invite using the following steps:
@@ -50,7 +53,7 @@
             </li>
           </ol>
 
-          When the above steps have been completed click next.
+          When completed click next below.
         </div>
         <button
           mat-flat-button
@@ -65,7 +68,8 @@
       <mat-step [stepControl]="step1Form">
         <form [formGroup]="step1Form">
           <ng-template matStepLabel
-            >Tell us about your Apple Search Ads Account</ng-template
+            >Tell us about your Apple Search Ads Account
+            <mat-icon color="primary">feed</mat-icon></ng-template
           >
 
           <!-- skeleton loader -->
@@ -330,28 +334,33 @@ RAzgJRXGuq/Q/th1FqlsFyE7vr4xDCw53+JoJebvKBy8QbZgSWON8TohdA==
                   </mat-list-item>
                 </div>
 
-                <div class="mb-2 pb-2 border-bottom">
+                <div class="mb-2 pb-2 border-bottom ml-4">
                   <mat-list-item>
-                    <mat-icon color="primary" class="align-text-top mr-2"
+                    <!-- <mat-icon color="primary" class="align-text-top mr-2"
                       >info</mat-icon
-                    >
+                    > -->
                     <mat-label class="font-weight-bold">
-                      We can handle this step for you, enter your Apple Search
-                      Ads Org Id, then click 'send' below to notify us that
-                      we'll be assisting on this step.
+                      We can take care of this step for you, enter your Apple
+                      Search Ads Org Id, then click 'request help on this step'
+                      below to send us a notification.
                     </mat-label>
                   </mat-list-item>
                 </div>
               </mat-list>
 
-              <div class="d-flex w-100 justify-content-start pl-5 ml-2">
+              <div class="d-flex w-100 justify-content-start ml-5">
                 <button
-                  (click)="handleOpenConsole($event)"
+                  (click)="handleRegHelpEvent($event)"
                   mat-flat-button
                   color="primary"
                   class="float-right"
                 >
-                  <span class="text-light pl-1">send </span>
+                  <span class="text-light pl-1"
+                    >request help on this step
+                    <mat-icon class="text-light align-middle"
+                      >help_outline</mat-icon
+                    >
+                  </span>
                 </button>
               </div>
             </div>
@@ -381,7 +390,9 @@ RAzgJRXGuq/Q/th1FqlsFyE7vr4xDCw53+JoJebvKBy8QbZgSWON8TohdA==
       <mat-step [stepControl]="step2Form">
         <form [formGroup]="step2Form">
           <ng-template matStepLabel
-            >Create and Import your campaigns</ng-template
+            >Create and Import your campaigns<mat-icon color="primary"
+              >add_circle</mat-icon
+            ></ng-template
           >
 
           <!-- skeleton loader -->
@@ -1277,7 +1288,10 @@ RAzgJRXGuq/Q/th1FqlsFyE7vr4xDCw53+JoJebvKBy8QbZgSWON8TohdA==
 
       <mat-step [stepControl]="step3Form">
         <form [formGroup]="step3Form">
-          <ng-template matStepLabel>Review and complete</ng-template>
+          <ng-template matStepLabel
+            >Review and complete
+            <mat-icon color="primary">fact_check</mat-icon></ng-template
+          >
           <div *ngIf="isLoadingResults" class="w-100 mt-2">
             <ngx-skeleton-loader
               count="4"
