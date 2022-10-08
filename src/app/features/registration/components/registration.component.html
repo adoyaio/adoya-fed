@@ -317,7 +317,7 @@
 
                 <div class="mb-2 pb-2 ml-5 border-bottom w-100">
                   <mat-list-item>
-                    <mat-form-field class="w-100 font-size-16 bg-med">
+                    <mat-form-field class="w-100 font-size-12 bg-med">
                       <textarea matInput cdkTextareaAutosize readonly="true">
 -----BEGIN PUBLIC KEY-----
 MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEfsYLIIQVzyQWizAguQWR9l7ZkXij
@@ -401,7 +401,7 @@ RAzgJRXGuq/Q/th1FqlsFyE7vr4xDCw53+JoJebvKBy8QbZgSWON8TohdA==
             >Create and Import your campaigns<mat-icon
               class="pl-2"
               color="accent"
-              >add_circle</mat-icon
+              >assignment_add</mat-icon
             ></ng-template
           >
 
@@ -1482,16 +1482,29 @@ RAzgJRXGuq/Q/th1FqlsFyE7vr4xDCw53+JoJebvKBy8QbZgSWON8TohdA==
       </mat-step>
     </mat-vertical-stepper>
   </div>
+  <div class="w-99 m-auto text-center">
+    <a class="adoya-link" (click)="handleShowTermsClick($event)"
+      >Terms of service</a
+    >
+    |
+    <a class="adoya-link" (click)="handleShowTermsClick($event)">FAQs</a>
+    |
+    <a class="adoya-link" href="mailto:info@adoya.io?subject=Adoya Support"
+      >Contact Us</a
+    >
+  </div>
 </div>
 
-<div
+<!-- <div
   class="position-absolute position-md-fixed left-0 bottom-0 w-99 m-auto text-center"
 >
   <a class="adoya-link" (click)="handleShowTermsClick($event)"
     >Terms of service</a
   >
   |
+  <a class="adoya-link" (click)="handleShowTermsClick($event)">FAQs</a>
+  |
   <a class="adoya-link" href="mailto:info@adoya.io?subject=Adoya Support"
     >Contact Us</a
   >
-</div>
+</div> -->

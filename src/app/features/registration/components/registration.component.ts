@@ -600,7 +600,7 @@ export class RegistrationComponent implements OnInit {
     this.dialog
       .open(DynamicModalComponent, {
         data: {
-          title: `Terms of Service`,
+          title: ``,
           content: AppService.termsOfService,
           actionYes: "Save",
           actionNo: "Cancel",
@@ -1200,7 +1200,7 @@ export class RegistrationComponent implements OnInit {
     this.dialog
       .open(DynamicModalComponent, {
         data: {
-          title: `Terms of Service`,
+          title: ``,
           content: AppService.termsOfService,
           actionYes: "Agree",
           actionNo: "Cancel",
