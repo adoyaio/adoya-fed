@@ -17,56 +17,101 @@
     <mat-vertical-stepper [linear]="true" #stepper class="w-100">
       <!-- step 1 invite-->
       <mat-step>
-        <ng-template matStepLabel
-          >Invite us to be an API user
-          <mat-icon class="pl-2" color="accent"
-            >outgoing_mail</mat-icon
-          ></ng-template
-        >
-        <div class="col-6 mb-2">
-          In order for our system to manage and optimize your campaigns, first
-          send us an invite using the following steps:
+        <form [formGroup]="step0Form">
+          <ng-template matStepLabel
+            >Invite us to be an API user
+            <mat-icon class="pl-2" color="accent"
+              >outgoing_mail</mat-icon
+            ></ng-template
+          >
+          <div class="col-6 mb-2">
+            In order for our system to manage and optimize your campaigns, first
+            send us an invite using the following steps:
 
-          <ol type="1">
-            <li class="mb-2 p-2 border-bottom">
-              From the
-              <a
-                href="https://app.searchads.apple.com/cm/app/settings/users/invite"
-                target="_blank"
-                class="adoya-link"
-                >Apple Search Ads UI</a
-              >, choose Sign In Advanced and log in as an account administrator.
-            </li>
-            <li class="mb-2 p-2 border-bottom">
-              From the Users menu in the top-right corner, select the account to
-              invite users to.
-            </li>
-            <li class="mb-2 p-2 border-bottom">
-              Click Invite Users to invite users to your Apple Search Ads
-              organization.
-            </li>
-            <li class="mb-2 p-2 border-bottom">
-              In the User Details section, enter the user's first name, last
-              name, and Apple ID.
-            </li>
-            <li class="mb-2 p-2 border-bottom">
-              Click Send Invite. The invited user receives an email with a
-              secure code. The user signs into the secure Apple URL in the email
-              and inputs the provided code, which activates the user's account.
-            </li>
-          </ol>
+            <ol type="1">
+              <li class="mb-2 p-2 border-bottom">
+                From the
+                <a
+                  href="https://app.searchads.apple.com/cm/app/settings/users/invite"
+                  target="_blank"
+                  class="adoya-link"
+                  >Apple Search Ads UI</a
+                >, choose Sign In Advanced and log in as an account
+                administrator.
+              </li>
+              <li class="mb-2 p-2 border-bottom">
+                From the Users menu in the top-right corner, select the account
+                to invite users to.
+              </li>
+              <li class="mb-2 p-2 border-bottom">
+                Click Invite Users to invite users to your Apple Search Ads
+                organization.
+              </li>
+              <li class="mb-2 p-2 border-bottom">
+                In the User Details section, enter the user's first name, last
+                name, and Apple ID.
+              </li>
+              <li class="mb-2 p-2 border-bottom">
+                Click Send Invite. The invited user receives an email with a
+                secure code. The user signs into the secure Apple URL in the
+                email and inputs the provided code, which activates the user's
+                account.
+              </li>
+            </ol>
 
-          When completed click next below.
-        </div>
-        <button
-          mat-flat-button
-          color="primary"
-          matStepperNext
-          class="float-left ml-2 border rounded"
-        >
-          <mat-icon class="text-light" aria-label="submit">done</mat-icon>
-          <span class="text-light pl-1">next</span>
-        </button>
+            When completed click 'next' below.
+          </div>
+
+          <div class="col-6 no-gutters">
+            <mat-form-field appearance="fill" color="primary" class="col-11">
+              <mat-label>Apple Organization Id</mat-label>
+              <input
+                matInput
+                placeholder="organization id"
+                required
+                formControlName="appleOrgId"
+              />
+            </mat-form-field>
+            <button
+              mat-icon-button
+              class="float-left"
+              (click)="
+                handleTooltipClick($event, 'Apple Search Ads Organiztion ID')
+              "
+            >
+              <mat-icon
+                class="float-left"
+                color="primary"
+                matTooltip="Your Apple Search Ads Organiztion ID can be found on your Apple Search Ads Console. &#13; &#13;
+                    Click for exact details on where to find this
+                    information"
+                >help</mat-icon
+              >
+            </button>
+          </div>
+
+          <button
+            *ngIf="step1NextDisabled()"
+            (click)="handleInviteSentEvent($event)"
+            [disabled]="step1ReadyToProceedDisabled()"
+            mat-flat-button
+            color="primary"
+            class="float-left ml-2 border rounded"
+          >
+            <mat-icon class="text-light" aria-label="submit">done</mat-icon>
+            <span class="text-light pl-1">ready to proceed</span>
+          </button>
+          <button
+            *ngIf="!step1NextDisabled()"
+            mat-flat-button
+            color="primary"
+            matStepperNext
+            class="float-left ml-2 border rounded"
+          >
+            <mat-icon class="text-light" aria-label="submit">done</mat-icon>
+            <span class="text-light pl-1">next</span>
+          </button>
+        </form>
       </mat-step>
 
       <!-- step 2 account-->
@@ -218,41 +263,6 @@
                 </button>
               </div> -->
 
-              <div class="w-100 no-gutters">
-                <mat-form-field
-                  appearance="fill"
-                  color="primary"
-                  class="col-11"
-                >
-                  <mat-label>Apple Organization Id</mat-label>
-                  <input
-                    matInput
-                    placeholder="organization id"
-                    required
-                    formControlName="appleOrgId"
-                  />
-                </mat-form-field>
-                <button
-                  mat-icon-button
-                  class="float-left"
-                  (click)="
-                    handleTooltipClick(
-                      $event,
-                      'Apple Search Ads Organiztion ID'
-                    )
-                  "
-                >
-                  <mat-icon
-                    class="float-left"
-                    color="primary"
-                    matTooltip="Your Apple Search Ads Organiztion ID can be found on your Apple Search Ads Console. &#13; &#13;
-                        Click for exact details on where to find this
-                        information"
-                    >help</mat-icon
-                  >
-                </button>
-              </div>
-
               <div class="w-100 no-gutters invisible">
                 <mat-form-field
                   appearance="fill"
@@ -317,7 +327,9 @@
 
                 <div class="mb-2 pb-2 ml-5 border-bottom w-100">
                   <mat-list-item>
-                    <mat-form-field class="w-100 font-size-12 bg-med">
+                    <mat-form-field
+                      class="w-100 font-size-12 bg-med text-muted"
+                    >
                       <textarea matInput cdkTextareaAutosize readonly="true">
 -----BEGIN PUBLIC KEY-----
 MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEfsYLIIQVzyQWizAguQWR9l7ZkXij

@@ -145,11 +145,13 @@ export class OrgDetails {
   appleCampaigns: any[];
   auth: any;
   hasRegistered: boolean;
+  hasInvitedApiUser: boolean;
 
   static buildFromResponse(response: any) {
     const retVal = new OrgDetails();
     retVal.auth = response.auth;
     retVal.hasRegistered = response.hasRegistered;
+    retVal.hasInvitedApiUser = response.hasInvitedApiUser;
     retVal.appleCampaigns = response.appleCampaigns;
     retVal.disabled = response.disabled;
     retVal.currency = response.currency;

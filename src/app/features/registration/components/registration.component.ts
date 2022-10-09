@@ -199,9 +199,12 @@ export class RegistrationComponent implements OnInit {
   ];
 
   form = this.fb.group({
+    step0Form: this.fb.group({
+      appleOrgId: new FormControl("", Validators.required),
+    }),
     step1Form: this.fb.group({
       orgId: new FormControl("", Validators.required),
-      appleOrgId: new FormControl("", Validators.required),
+      // appleOrgId: new FormControl("", Validators.required),
       clientId: new FormControl("", Validators.required),
       teamId: new FormControl("", Validators.required),
       keyId: new FormControl("", Validators.required),
@@ -252,6 +255,9 @@ export class RegistrationComponent implements OnInit {
     step3Form: this.fb.group({}),
   });
 
+  get step0Form(): FormGroup {
+    return this.form.get("step0Form") as FormGroup;
+  }
   get step1Form(): FormGroup {
     return this.form.get("step1Form") as FormGroup;
   }
@@ -261,7 +267,7 @@ export class RegistrationComponent implements OnInit {
   }
 
   get appleOrgIdControl(): AbstractControl {
-    return this.step1Form.get("appleOrgId");
+    return this.step0Form.get("appleOrgId");
   }
 
   get step3Form(): FormGroup {
@@ -394,8 +400,11 @@ export class RegistrationComponent implements OnInit {
           take(1),
           tap((data: any) => {
             this.client = Client.buildFromGetClientResponse(data, this.orgId);
-            // check if client exists and has auth fields
-            if (!isNil(this.client.orgDetails.auth)) {
+            // check if client exists has auth fields and has invited api user
+            if (
+              !isNil(this.client.orgDetails.auth) &&
+              get(this.client.orgDetails, "hasInvitedApiUser", "false")
+            ) {
               this.openSnackBar(
                 "we found your apple search ads configuration! if you would like to continue, click 'next'",
                 ""
@@ -451,8 +460,7 @@ export class RegistrationComponent implements OnInit {
             // set values from token
             this.client.orgId = this.orgId; // NOTE this may diverge at some point from asa id
             // this.client.orgDetails.orgId = +this.orgId;
-            this.client.orgDetails.orgId =
-              this.step1Form.get("appleOrgId").value;
+            this.client.orgDetails.orgId = this.appleOrgIdControl.value;
             this.client.orgDetails.emailAddresses = [this.emailAddresses];
 
             this.clientService
@@ -843,7 +851,7 @@ export class RegistrationComponent implements OnInit {
   // DEPRECATED MIGRATE TO COGNITO ID
   setOrgIdValue(): void {
     this.step1Form.get("orgId").setValue(this.orgId);
-    this.step1Form
+    this.step0Form
       .get("appleOrgId")
       .setValue(get(this.client, "orgDetails.orgId"));
   }
@@ -975,6 +983,20 @@ export class RegistrationComponent implements OnInit {
     set(prevStep, "active", true);
   }
 
+  step1NextDisabled(): boolean {
+    if (isNil(this.client)) {
+      return true;
+    }
+    return !this.client.orgDetails.hasInvitedApiUser;
+  }
+
+  step1ReadyToProceedDisabled(): boolean {
+    if (isNil(this.client)) {
+      return true;
+    }
+    return isNil(this.appleOrgIdControl.value);
+  }
+
   substepDisabled(): boolean {
     const activeSubstep = find(this.step2, (step) => step.active === true);
 
@@ -1057,6 +1079,46 @@ export class RegistrationComponent implements OnInit {
 
   regHelpEventDisabled(): boolean {
     return isNil(this.appleOrgIdControl.value);
+  }
+
+  handleInviteSentEvent($event) {
+    $event.stopPropagation();
+    $event.preventDefault();
+
+    const supportItem = new SupportItem();
+    supportItem.description = `invite has been sent for api user`;
+    supportItem.userId = this.username;
+    supportItem.username = this.emailAddresses;
+    supportItem.subject = `an invite has been sent for  ${this.orgId}`;
+    supportItem.orgId = this.appleOrgIdControl.value;
+    supportItem.type = "registration";
+
+    this.supportService
+      .postSupportItem(supportItem)
+      .pipe(
+        take(1),
+        tap((_) => {
+          this.isSendingResults = true;
+        }),
+        map((data) => {
+          this.isSendingResults = false;
+          this.openSnackBar(
+            "successfully sumbitted your support ticket. thank you for contacting adoya support!",
+            "dismiss"
+          );
+
+          return data;
+        }),
+        catchError(() => {
+          this.isSendingResults = false;
+          this.openSnackBar(
+            "unable to submit your support ticket, please enter required fields.",
+            "dismiss"
+          );
+          return [];
+        })
+      )
+      .subscribe();
   }
 
   handleRegHelpEvent($event) {
