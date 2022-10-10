@@ -1,7 +1,10 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { AmplifyService } from "aws-amplify-angular";
 import { Router } from "@angular/router";
-import { tap } from "rxjs/operators";
+import { take, tap } from "rxjs/operators";
+import { MatDialog } from "@angular/material";
+import { DynamicModalComponent } from "src/app/shared/dynamic-modal/dynamic-modal.component";
+import { AppService } from "src/app/core/services/app.service";
 
 @Component({
   selector: "app-portal",
@@ -12,6 +15,7 @@ export class PortalComponent implements OnInit {
   @Input() signUpType: string;
   @Input() isSignUp: boolean;
   constructor(
+    private dialog: MatDialog,
     private amplifyService: AmplifyService,
     private router: Router // public dialogRef: MatDialogRef<PortalComponent> // @Inject(MAT_DIALOG_DATA) public data: PortalDialogData
   ) {}
@@ -89,5 +93,36 @@ export class PortalComponent implements OnInit {
         })
       )
       .subscribe();
+  }
+
+  handleShowTermsClick($event) {
+    $event.preventDefault();
+    this.dialog
+      .open(DynamicModalComponent, {
+        data: {
+          title: ``,
+          content: AppService.termsOfService,
+          actionYes: "Save",
+          actionNo: "Cancel",
+        },
+        maxWidth: "500px",
+        width: "500px",
+        panelClass: "tooltip-dialog-box",
+        autoFocus: false,
+      })
+      .afterClosed()
+      .pipe(
+        take(1),
+        tap((val) => {
+          if (val) {
+            this.handlePrintTerms();
+          }
+        })
+      )
+      .subscribe();
+  }
+
+  handlePrintTerms() {
+    window.print();
   }
 }
