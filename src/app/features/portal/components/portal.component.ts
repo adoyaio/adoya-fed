@@ -20,6 +20,8 @@ export class PortalComponent implements OnInit {
     private router: Router // public dialogRef: MatDialogRef<PortalComponent> // @Inject(MAT_DIALOG_DATA) public data: PortalDialogData
   ) {}
 
+  printViewText = AppService.termsOfService;
+
   user: any;
   greeting: string;
   usernameAttributes = "email";

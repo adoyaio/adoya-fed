@@ -20,7 +20,11 @@
     </div> -->
     <!-- <div class="col-md-4"></div> -->
 
-    <div class="row sign-in col-12 col-md-6">
+    <div class="d-none d-print-block">
+      <span [innerHTML]="printViewText"></span>
+    </div>
+
+    <div class="row sign-in col-12 col-md-6 d-print-none">
       <div class="w-100">
         <amplify-authenticator
           [signUpConfig]="signUpConfig"
@@ -37,7 +41,7 @@
       </div>
     </div>
 
-    <div class="row sign-in col-12 col-md-6 mt-3">
+    <div class="row sign-in col-12 col-md-6 mt-3 d-print-none">
       <mat-list>
         <div class="mb-0 pb-0 w-100">
           <mat-list-item>

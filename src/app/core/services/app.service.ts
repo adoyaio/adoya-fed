@@ -117,6 +117,137 @@ export class AppService {
   This Platforms may include content provided by third parties. All statements and/or opinions expressed in these materials, and all articles and responses to questions and other content, other than the Content provided by the Company, are solely the opinions and the responsibility of the person or entity providing those materials. These materials do not necessarily reflect the opinion of the Company. We are not responsible, or liable to you or any third party, for the content or accuracy of any materials provided by any third parties.
   </div>
 
+  <div class="mb-2 mt-2"><u><h4>CHANGES TO THE PLATFORMS:</h4></u></div>
+
+  <div class="mb-2">
+  We may update the Content on these Platforms from time to time, but their Content is not necessarily complete or up to date. Any of the material on the Platforms may be out of date at any given time, and we are under no obligation to update such material.
+  </div>
+
+  <div class="mb-2 mt-2"><u><h4>YOUR PERSONAL INFORMATION:</h4></u></div>
+
+  <div class="mb-2">
+  All information we collect on these Platforms are subject to our Privacy Policy https://www.adoya.io/privacy. By using the Platforms, you consent to all actions taken by us with respect to your information in compliance with the Privacy Policy.
+  </div>
+
+  <div class="mb-2 mt-2"><u><h4>ONLINE PURCHASES AND OTHER TERMS AND CONDITIONS:</h4></u></div>
+
+  <div class="mb-2">
+  All purchases through our Platforms or other transactions for the sale of services formed through the Platforms or as a result of visits made by you are governed by our user agreement, which incorporates these Terms of Use. You will be asked to accept the user agreement before purchasing services, and upon acceptance, the user agreement shall be binding.
+  </div>
+
+  <div class="mb-2 mt-2"><u><h4>LINKS TO OTHER WEBSITES:</h4></u></div>
+
+  <div class="mb-2">
+  The Platforms contains links to other sites and resources provided by third parties. These links are provided for your convenience only. We have no control over the contents of the websites or resources linked, and accept no responsibility for them or for any loss or damage that may arise from your use of them. If you decide to access any of the third-party websites linked to these Platforms, you do so entirely at your own risk and subject to the terms and conditions of use for such websites.
+  </div>
+
+
+  <div class="mb-2 mt-2"><u><h4>GEOGRAPHIC RESTRICTIONS:</h4></u></div>
+
+  <div class="mb-2">
+  The owner of the Platforms is based in the state of California, in the United States of America. We provide these Platforms for use only by persons located in the United States, unless otherwise specifically indicated. We make no claims that the Platforms or any of its Content is accessible or appropriate outside of the United States. Access to the Platforms may not be legal by certain persons or in certain countries. If you access the Platforms from outside the United States, you do so on your own initiative and are responsible for compliance with local laws.
+  </div>
+
+  <div class="mb-2 mt-2"><u><h4>DISCLAIMER OF WARRANTIES:</h4></u></div>
+
+  <div class="mb-2">
+  You understand that we cannot and do not guarantee or warrant that files available for downloading from the Internet or the Platforms will be free of viruses or other destructive code. You are responsible for implementing sufficient procedures and checkpoints to satisfy your particular requirements for anti-virus protection and accuracy of data input and output, and for maintaining a means external to our Platforms for any reconstruction of any lost data. No data transmission over the Internet can be guaranteed to be 100% safe. Thus, we cannot warrant that your information will be absolutely secure. The Company has a variety of safeguards – technical, administrative, and physical – in place to help protect against unauthorized access to, use, or disclosure of user information. WE WILL NOT BE LIABLE FOR ANY LOSS OR DAMAGE CAUSED BY A DISTRIBUTED DENIAL-OF-SERVICE ATTACK, VIRUSES OR OTHER TECHNOLOGICALLY HARMFUL MATERIAL THAT MAY INFECT YOUR COMPUTER EQUIPMENT, COMPUTER PROGRAMS, DATA OR OTHER PROPRIETARY MATERIAL DUE TO YOUR USE OF THE PLATFORMS OR ANY SERVICES OR ITEMS OBTAINED THROUGH THE PLATFORMS OR TO YOUR DOWNLOADING OF ANY MATERIAL POSTED ON IT, OR ON ANY WEBSITE LINKED TO IT.
+  </div>
+
+  <div class="mb-2">
+  YOUR USE OF THE PLATFORMS, THEIR CONTENT AND ANY SERVICES OR ITEMS OBTAINED THROUGH THE PLATFORMS IS AT YOUR OWN RISK. THE PLATFORMS, THEIR CONTENT AND ANY SERVICES OR ITEMS OBTAINED THROUGH THE PLATFORMS ARE PROVIDED ON AN "AS IS" AND "AS AVAILABLE" BASIS, WITHOUT ANY WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED. NEITHER THE COMPANY NOR ANY PERSON ASSOCIATED WITH THE COMPANY MAKES ANY WARRANTY OR REPRESENTATION WITH RESPECT TO THE COMPLETENESS, SECURITY, RELIABILITY, QUALITY, ACCURACY OR AVAILABILITY OF THE PLATFORMS. WITHOUT LIMITING THE FOREGOING, NEITHER THE COMPANY NOR ANYONE ASSOCIATED WITH THE COMPANY REPRESENTS OR WARRANTS THAT THE PLATFORMS, THEIR CONTENT OR ANY SERVICES OBTAINED THROUGH THE PLATFORMS WILL BE ACCURATE, RELIABLE, ERROR-FREE OR UNINTERRUPTED, THAT DEFECTS WILL BE CORRECTED, THAT OUR PLATFORMS OR THE SERVER THAT MAKES THEM AVAILABLE ARE FREE OF VIRUSES OR OTHER HARMFUL COMPONENTS OR THAT THE PLATFORMS OR ANY SERVICES OBTAINED THROUGH THE PLATFORMS WILL OTHERWISE MEET YOUR NEEDS OR EXPECTATIONS.
+  </div>
+
+  <div class="mb-2">
+  THE COMPANY HEREBY DISCLAIMS ALL WARRANTIES OF ANY KIND, WHETHER EXPRESS OR IMPLIED, STATUTORY OR OTHERWISE, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF MERCHANTABILITY, NON-INFRINGEMENT AND FITNESS FOR PARTICULAR PURPOSE.
+  </div>
+
+  <div class="mb-2>
+  THE FOREGOING DOES NOT AFFECT ANY WARRANTIES WHICH CANNOT BE EXCLUDED OR LIMITED UNDER APPLICABLE FEDERAL OR STATE LAW.
+  </div>
+
+  <div class="mb-2 mt-2"><u><h4> </h4></u></div>
+
+  <div class="mb-2">
+
+  </div>
+
+  <div class="mb-2 mt-2"><u><h4> INDEMNIFICATION:</h4></u></div>
+
+  <div class="mb-2">
+  You agree to defend, indemnify and hold harmless the Company, its affiliates, licensors and service providers, and its and their respective officers, directors, employees, contractors, agents, licensors, suppliers, successors and assigns from and against any claims, liabilities, damages, judgments, awards, losses, costs, expenses or fees (including reasonable attorneys' fees) arising out of or relating to your violation of these Terms of Use or your use of the Platforms, including, but not limited to, your user contributions, any use of the Platforms' Content, services and products other than as expressly authorized in these Terms of Use or your use of any information obtained from the Platforms.
+  </div>
+
+  <div class="mb-2 mt-2"><u><h4>GOVERNING LAW: </h4></u></div>
+
+  <div class="mb-2">
+  All matters relating to the Platforms and these Terms of Use and any dispute or claim arising therefrom or related thereto (in each case, including non-contractual disputes or claims), shall be governed by and construed in accordance with the internal laws of the State of California, without giving effect to any choice or conflict of law provision or rule.
+  </div>
+
+  <div class="mb-2>
+  Any legal suit, action or proceeding arising out of, or related to, these Terms of Use or the Platforms shall be instituted exclusively in the federal courts of the United States or the courts of the State of California, in each case located in the City of San Francisco, and County of San Francisco, although we retain the right to bring any suit, action or proceeding against you for breach of these Terms of Use in your country or county of residence, or any other relevant country or county. You waive any and all objections to the exercise of jurisdiction over you by such courts and to venue in such courts.
+  </div>
+
+  <div class="mb-2 mt-2"><u><h4>ARBITRATION </h4></u></div>
+
+  <div class="mb-2">
+  If you have any issue or dispute with the Company, you agree to first contact us at info@adoya.io and attempt to resolve the dispute with us informally. If we are not been able to resolve the dispute with you informally, both parties agree to resolve any claim, dispute, or controversy (excluding claims for injunctive or other equitable relief) arising out of or in connection with or relating to these Terms by binding arbitration by the American Arbitration Association ("AAA") under the Commercial Arbitration Rules and Supplementary Procedures for Consumer Related Disputes then in effect for the AAA, except as provided herein.
+  </div>
+
+  <div class="mb-2">
+  Unless both parties agree otherwise, the arbitration will be conducted in San Francisco County, California. Each party will be responsible for paying their respective AAA filing, administrative and arbitrator fees in accordance with AAA rules. The award rendered by the arbitrator shall include costs of arbitration, reasonable attorneys' fees, and reasonable costs for expert and other witnesses, and any judgment on the award rendered by the arbitrator may be entered in any court of competent jurisdiction. Nothing in this Section shall prevent either party from seeking injunctive or other equitable relief from the courts for matters related to data security, intellectual property or unauthorized access to the Service.
+  </div>
+
+  <div class="mb-2">
+ALL CLAIMS MUST BE BROUGHT IN THE PARTIES' INDIVIDUAL CAPACITY, AND NOT AS A PLAINTIFF OR CLASS MEMBER IN ANY PURPORTED CLASS OR REPRESENTATIVE PROCEEDING, AND, UNLESS WE AGREE OTHERWISE, THE ARBITRATOR MAY NOT CONSOLIDATE MORE THAN ONE PERSON'S CLAIMS. YOU AGREE THAT, BY ENTERING INTO THESE TERMS, YOU AND THE COMPANY ARE EACH WAIVING THE RIGHT TO A TRIAL BY JURY OR TO PARTICIPATE IN A CLASS ACTION.
+  </div>
+
+
+  <div class="mb-2 mt-2"><u><h4> LIMITATION ON TIME TO FILE CLAIMS:</h4></u></div>
+
+  <div class="mb-2">
+  ANY CAUSE OF ACTION OR CLAIM YOU MAY HAVE ARISING OUT OF OR RELATING TO THESE TERMS OF USE OR THE PLATFORMS MUST BE COMMENCED WITHIN ONE (1) YEAR AFTER THE CAUSE OF ACTION ACCRUES, OTHERWISE, SUCH CAUSE OF ACTION OR CLAIM IS PERMANENTLY BARRED.
+  </div>
+
+  <div class="mb-2 mt-2"><u><h4> WAIVER AND SEVERABILITY: </h4></u></div>
+
+  <div class="mb-2">
+  No waiver by the Company of any term or condition set forth in these Terms of Use shall be deemed a further or continuing waiver of such term or condition or a waiver of any other term or condition, and any failure of the Company to assert a right or provision under these Terms of Use shall not constitute a waiver of such right or provision.
+  </div>
+
+  <div class="mb-2">
+  If any provision of these Terms of Use is held by a court or other tribunal of competent jurisdiction to be invalid, illegal or unenforceable for any reason, such provision shall be eliminated or limited to the minimum extent such that the remaining provisions of the Terms of Use will continue in full force and effect.
+  </div>
+
+
+  <div class="mb-2 mt-2"><u><h4>ENTIRE AGREEMENT: </h4></u></div>
+
+  <div class="mb-2">
+  These Terms of Use, and our Privacy Policy and user agreement, constitute the sole and entire agreement between you and us with respect to the Platforms and services provided, and supersede all prior and contemporaneous understandings, agreements, representations and warranties, both written and oral, with respect to the Platforms.
+  </div>
+
+
+  <div class="mb-2 mt-2"><u><h4>CHANGES TO THE TERMS OF USE: </h4></u></div>
+
+  <div class="mb-2">
+  We may revise and update these Terms of Use from time to time in our sole discretion. All changes are effective immediately when we post them and apply to all access to and use of the Platforms thereafter. However, any changes to the dispute resolution provisions set forth in GOVERNING LAW will not apply to any disputes for which the parties have actual notice prior to the date the change is posted on the Platforms.
+  </div>
+
+  <div class="mb-2">
+  Your continued use of the Platforms following the posting of revised Terms of Use means that you accept and agree to the changes. You are expected to check this page from time to time so that you are aware of any changes, as they are binding on you. A printed version of these Terms of Service and of any notices given to you in electronic form or otherwise shall be admissible in judicial or administrative proceedings based upon or relating to these Terms of Service to the same extent and subject to the same conditions as other business documents and records originally generated and maintained in printed form.
+  </div>
+
+  <div class="mb-2 mt-2"><u><h4>YOUR COMMENTS AND CONCERNS: </h4></u></div>
+
+  <div class="mb-2">
+  These Platforms are operated Adoya, Inc.
+  </div>
+
+  <div class="mb-2">
+  All feedback, comments, requests for technical support and other communications relating to the Platforms should be directed to info@adoya.io or 5029 Geary Blvd. #6, San Francisco, California, 94118.
+  </div>
+
+
   `;
   downloadAggregateFile(data, filename) {
     let headerRow = [
