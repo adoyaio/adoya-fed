@@ -12,12 +12,74 @@
     <img src="/assets/images/spacer.png" height="25" alt="" />
   </div>
   <div class="row ml-5">
-    <div class="row sign-in w-100">
+    <!-- <div class="row sign-in w-100">
+      <amplify-authenticator
+        [signUpConfig]="signUpConfig"
+        [usernameAttributes]="usernameAttributes"
+      ></amplify-authenticator>
+    </div> -->
+    <!-- <div class="col-md-4"></div> -->
+
+    <div class="row sign-in col-12 col-md-6">
       <amplify-authenticator
         [signUpConfig]="signUpConfig"
         [usernameAttributes]="usernameAttributes"
       ></amplify-authenticator>
     </div>
-    <!-- <div class="col-md-4"></div> -->
+
+    <div class="row sign-in col-12 col-md-6 mt-3">
+      <mat-list>
+        <div class="mb-2 pb-2 border-bottom w-100">
+          <mat-list-item>
+            <h4>It's as Easy as 1-2-3</h4>
+          </mat-list-item>
+        </div>
+        <div class="mb-2 pb-2 border-bottom w-100">
+          <mat-list-item>
+            <mat-icon color="primary" class="align-text-top mr-2"
+              >done</mat-icon
+            >
+
+            Step 1. Connect your Apple Search Ads account
+          </mat-list-item>
+        </div>
+
+        <div class="mb-2 pb-2 border-bottom w-100">
+          <mat-list-item>
+            <mat-icon color="primary" class="align-text-top mr-2"
+              >done</mat-icon
+            >
+
+            Step 2. Answer a few basic questions about your app
+          </mat-list-item>
+        </div>
+
+        <div class="mb-2 pb-2 border-bottom w-100">
+          <mat-list-item>
+            <mat-icon color="primary" class="align-text-top mr-2"
+              >done</mat-icon
+            >
+
+            Step 3. Enter your cost per install and/or ROAS goals
+          </mat-list-item>
+        </div>
+
+        <div class="mb-2 pb-2">
+          <mat-list-item>
+            <mat-icon color="primary" class="align-text-top mr-2"
+              >data_exploration</mat-icon
+            >
+
+            Why Adoya? We package years of app store marketing experience in an
+            intuitive, automated, self-serve platform. No contracts. No sales
+            pitches. Just growth.
+          </mat-list-item>
+        </div>
+
+        <button mat-flat-button color="primary" class="float-left ml-3">
+          <span class="text-light pl-1">view pricing and details</span>
+        </button>
+      </mat-list>
+    </div>
   </div>
 </div>
