@@ -60,7 +60,8 @@
             </ol>
 
             When completed, enter your Apple Org Id and click 'ready to
-            proceed'.
+            proceed'. In 24-48 hours, we'll email you when we're linked up and
+            you're ready to continue.
           </div>
 
           <div class="col-6 no-gutters">
@@ -92,12 +93,10 @@
           </div>
 
           <button
-            *ngIf="step1NextDisabled()"
+            *ngIf="step1NextVisible()"
             (click)="handleInviteSentEvent($event)"
             [disabled]="
-              step1ReadyToProceedDisabled() ||
-              isLoadingResults ||
-              isSendingResults
+              appleOrgIdControl.invalid || isLoadingResults || isSendingResults
             "
             mat-flat-button
             color="primary"
@@ -106,11 +105,13 @@
             <mat-icon class="text-light" aria-label="submit">done</mat-icon>
             <span class="text-light pl-1">ready to proceed</span>
           </button>
-          <div *ngIf="!step1NextDisabled()" class="ml-3 mb-2">
+          <div *ngIf="!step1NextVisible()" class="ml-3 mb-2">
             You're ready to proceed to the next step! When ready, click next.
           </div>
+
           <button
-            *ngIf="!step1NextDisabled()"
+            [disabled]="appleOrgIdControl.invalid"
+            *ngIf="!step1NextVisible()"
             mat-flat-button
             color="primary"
             matStepperNext

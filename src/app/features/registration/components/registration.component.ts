@@ -200,6 +200,7 @@ export class RegistrationComponent implements OnInit {
 
   form = this.fb.group({
     step0Form: this.fb.group({
+      inviteControl: new FormControl(undefined, Validators.required),
       appleOrgId: new FormControl(undefined, Validators.required),
     }),
     step1Form: this.fb.group({
@@ -307,6 +308,10 @@ export class RegistrationComponent implements OnInit {
     return this.step2Form.get("termsControl");
   }
 
+  get inviteControl(): AbstractControl {
+    return this.step0Form.get("inviteControl");
+  }
+
   get dailyBudgetError(): string {
     if (this.dailyBudget.hasError("invalidDailyBudget")) {
       return "Daily budget cap must be 20x Target Cost Per Install";
@@ -400,6 +405,10 @@ export class RegistrationComponent implements OnInit {
           take(1),
           tap((data: any) => {
             this.client = Client.buildFromGetClientResponse(data, this.orgId);
+
+            if (this.client.orgDetails.hasInvitedApiUser) {
+              this.inviteControl.setValue(true);
+            }
             // check if client exists has auth fields and has invited api user
             if (
               !isNil(this.client.orgDetails.auth) &&
@@ -458,9 +467,13 @@ export class RegistrationComponent implements OnInit {
             };
 
             // set values from token
-            this.client.orgId = this.orgId; // NOTE this may diverge at some point from asa id
+            this.client.orgId = this.orgId; // NOTE this has diverged from asa id
             // this.client.orgDetails.orgId = +this.orgId;
             this.client.orgDetails.orgId = this.appleOrgIdControl.value;
+
+            // NOT sure if we need this still
+            this.client.orgDetails.hasInvitedApiUser = true;
+
             this.client.orgDetails.emailAddresses = [this.emailAddresses];
 
             this.clientService
@@ -851,9 +864,14 @@ export class RegistrationComponent implements OnInit {
   // DEPRECATED MIGRATE TO COGNITO ID
   setOrgIdValue(): void {
     this.step1Form.get("orgId").setValue(this.orgId);
-    this.step0Form
-      .get("appleOrgId")
-      .setValue(get(this.client, "orgDetails.orgId"));
+    if (
+      !isNil(this.client.orgDetails.orgId) &&
+      !isEmpty(this.client.orgDetails.orgId)
+    ) {
+      this.step0Form
+        .get("appleOrgId")
+        .setValue(get(this.client, "orgDetails.orgId"));
+    }
   }
 
   setStep1FormValues() {
@@ -983,18 +1001,11 @@ export class RegistrationComponent implements OnInit {
     set(prevStep, "active", true);
   }
 
-  step1NextDisabled(): boolean {
+  step1NextVisible(): boolean {
     if (isNil(this.client)) {
       return true;
     }
     return !this.client.orgDetails.hasInvitedApiUser;
-  }
-
-  step1ReadyToProceedDisabled(): boolean {
-    if (isNil(this.client)) {
-      return true;
-    }
-    return isNil(this.appleOrgIdControl.value);
   }
 
   substepDisabled(): boolean {
