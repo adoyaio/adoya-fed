@@ -26,7 +26,8 @@
           >
           <div class="col-6 mb-2">
             In order for our system to manage and optimize your campaigns, first
-            send us an invite using the following steps:
+            send an invite for us to connect to you account using the following
+            steps:
 
             <ol type="1">
               <li class="mb-2 p-2 border-bottom">
@@ -49,14 +50,9 @@
               </li>
               <li class="mb-2 p-2 border-bottom">
                 In the User Details section, enter the user's first name, last
-                name, and Apple ID.
+                name, and <strong>info@adoya.io</strong>
               </li>
-              <li class="mb-2 p-2 border-bottom">
-                Click Send Invite. The invited user receives an email with a
-                secure code. The user signs into the secure Apple URL in the
-                email and inputs the provided code, which activates the user's
-                account.
-              </li>
+              <li class="mb-2 p-2 border-bottom">Click Send Invite.</li>
             </ol>
 
             When completed, enter your Apple Org Id and click 'ready to
@@ -96,7 +92,10 @@
             *ngIf="step1NextVisible()"
             (click)="handleInviteSentEvent($event)"
             [disabled]="
-              appleOrgIdControl.invalid || isLoadingResults || isSendingResults
+              inviteSent ||
+              appleOrgIdControl.invalid ||
+              isLoadingResults ||
+              isSendingResults
             "
             mat-flat-button
             color="primary"
@@ -155,6 +154,7 @@
                 >
                   <mat-label>Client Id</mat-label>
                   <input
+                    readonly="true"
                     matInput
                     placeholder="client id"
                     required
@@ -186,6 +186,7 @@
                 >
                   <mat-label>Team Id</mat-label>
                   <input
+                    readonly="true"
                     matInput
                     placeholder="team id"
                     required
@@ -217,6 +218,7 @@
                 >
                   <mat-label>Key ID</mat-label>
                   <input
+                    readonly="true"
                     matInput
                     placeholder="key id"
                     required
@@ -316,12 +318,23 @@
                       >done</mat-icon
                     >
 
-                    We need to gather some details about your Apple Search Ads
-                    account, this allows our system to optimize bids for you
+                    We gathered some details about your Apple Search Ads
+                    account, this allows our system to optimize bids for you.
                   </mat-list-item>
                 </div>
 
-                <div class="pb-2 w-100">
+                <div class="mb-2 pb-2 border-bottom">
+                  <mat-list-item>
+                    <mat-icon color="primary" class="align-text-top mr-2"
+                      >done</mat-icon
+                    >
+
+                    Nothing for you to do here! Click next to continue creating
+                    your campaigns.
+                  </mat-list-item>
+                </div>
+
+                <!-- <div class="pb-2 w-100">
                   <mat-list-item>
                     <mat-icon color="primary" class="align-text-top mr-2"
                       >done</mat-icon
@@ -332,9 +345,9 @@
                     choose Account Settings > API. Paste the key below into the
                     Public Key field.
                   </mat-list-item>
-                </div>
+                </div> -->
 
-                <div class="mb-2 pb-2 ml-5 border-bottom w-100">
+                <!-- <div class="mb-2 pb-2 ml-5 border-bottom w-100">
                   <mat-list-item>
                     <mat-form-field
                       class="w-100 font-size-12 bg-med text-muted"
@@ -347,9 +360,9 @@ RAzgJRXGuq/Q/th1FqlsFyE7vr4xDCw53+JoJebvKBy8QbZgSWON8TohdA==
                       >
                     </mat-form-field>
                   </mat-list-item>
-                </div>
+                </div> -->
 
-                <div class="mb-2 pb-2 border-bottom">
+                <!-- <div class="mb-2 pb-2 border-bottom">
                   <mat-list-item>
                     <mat-icon color="primary" class="align-text-top mr-2"
                       >done</mat-icon
@@ -362,19 +375,17 @@ RAzgJRXGuq/Q/th1FqlsFyE7vr4xDCw53+JoJebvKBy8QbZgSWON8TohdA==
 
                 <div class="mb-2 pb-2 ml-4 pl-2">
                   <mat-list-item>
-                    <!-- <mat-icon color="primary" class="align-text-top mr-2"
-                      >info</mat-icon
-                    > -->
+
                     <mat-label class="font-weight-bold">
                       We can take care of this step for you, enter your Apple
                       Search Ads Org Id, then click 'request help on this step'
                       below to send us a notification.
                     </mat-label>
                   </mat-list-item>
-                </div>
+                </div> -->
               </mat-list>
 
-              <div class="d-flex w-100 justify-content-start ml-5">
+              <!-- <div class="d-flex w-100 justify-content-start ml-5">
                 <button
                   (click)="handleRegHelpEvent($event)"
                   [disabled]="regHelpEventDisabled()"
@@ -389,7 +400,7 @@ RAzgJRXGuq/Q/th1FqlsFyE7vr4xDCw53+JoJebvKBy8QbZgSWON8TohdA==
                     >
                   </span>
                 </button>
-              </div>
+              </div> -->
             </div>
           </div>
 

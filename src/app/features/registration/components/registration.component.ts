@@ -93,6 +93,7 @@ export class RegistrationComponent implements OnInit {
   emailAddresses: string;
   username: string;
   campaigns = [];
+  inviteSent = false;
 
   dailyBudgetValidators = [
     Validators.required,
@@ -864,6 +865,9 @@ export class RegistrationComponent implements OnInit {
   // DEPRECATED MIGRATE TO COGNITO ID
   setOrgIdValue(): void {
     this.step1Form.get("orgId").setValue(this.orgId);
+    if (isNil(this.client)) {
+      return;
+    }
     if (
       !isNil(this.client.orgDetails.orgId) &&
       !isEmpty(this.client.orgDetails.orgId)
@@ -1093,6 +1097,7 @@ export class RegistrationComponent implements OnInit {
   }
 
   handleInviteSentEvent($event) {
+    this.isSendingResults = true;
     $event.stopPropagation();
     $event.preventDefault();
 
@@ -1108,13 +1113,13 @@ export class RegistrationComponent implements OnInit {
       .postSupportItem(supportItem)
       .pipe(
         take(1),
-        tap((_) => {
-          this.isSendingResults = true;
-        }),
         map((data) => {
+          this.inviteSent = true;
           this.isSendingResults = false;
           this.openSnackBar(
-            "thank you for inviting adoya to manage your campaigns, we'll notify you via email when you may refresh this page and continue to the next step.",
+            `thank you for inviting adoya to manage your campaigns!
+
+            we'll notify you via email when you may refresh this page and continue to the next step.`,
             "dismiss"
           );
 
