@@ -59,7 +59,8 @@
               </li>
             </ol>
 
-            When completed click 'next' below.
+            When completed, enter your Apple Org Id and click 'ready to
+            proceed'.
           </div>
 
           <div class="col-6 no-gutters">
@@ -93,7 +94,11 @@
           <button
             *ngIf="step1NextDisabled()"
             (click)="handleInviteSentEvent($event)"
-            [disabled]="step1ReadyToProceedDisabled()"
+            [disabled]="
+              step1ReadyToProceedDisabled() ||
+              isLoadingResults ||
+              isSendingResults
+            "
             mat-flat-button
             color="primary"
             class="float-left ml-2 border rounded"
@@ -101,6 +106,9 @@
             <mat-icon class="text-light" aria-label="submit">done</mat-icon>
             <span class="text-light pl-1">ready to proceed</span>
           </button>
+          <div *ngIf="!step1NextDisabled()" class="ml-3 mb-2">
+            You're ready to proceed to the next step! When ready, click next.
+          </div>
           <button
             *ngIf="!step1NextDisabled()"
             mat-flat-button

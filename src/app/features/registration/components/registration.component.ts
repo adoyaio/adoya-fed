@@ -200,7 +200,7 @@ export class RegistrationComponent implements OnInit {
 
   form = this.fb.group({
     step0Form: this.fb.group({
-      appleOrgId: new FormControl("", Validators.required),
+      appleOrgId: new FormControl(undefined, Validators.required),
     }),
     step1Form: this.fb.group({
       orgId: new FormControl("", Validators.required),
@@ -1103,7 +1103,7 @@ export class RegistrationComponent implements OnInit {
         map((data) => {
           this.isSendingResults = false;
           this.openSnackBar(
-            "successfully sumbitted your support ticket. thank you for contacting adoya support!",
+            "thank you for inviting adoya to manage your campaigns, we'll notify you via email when you may refresh this page and continue to the next step.",
             "dismiss"
           );
 
@@ -1112,7 +1112,7 @@ export class RegistrationComponent implements OnInit {
         catchError(() => {
           this.isSendingResults = false;
           this.openSnackBar(
-            "unable to submit your support ticket, please enter required fields.",
+            "unable to process your request at this time, we apologize for the inconvenience",
             "dismiss"
           );
           return [];
