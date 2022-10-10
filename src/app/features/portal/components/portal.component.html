@@ -21,17 +21,25 @@
     <!-- <div class="col-md-4"></div> -->
 
     <div class="row sign-in col-12 col-md-6">
-      <amplify-authenticator
-        [signUpConfig]="signUpConfig"
-        [usernameAttributes]="usernameAttributes"
-      ></amplify-authenticator>
+      <div class="w-100">
+        <amplify-authenticator
+          [signUpConfig]="signUpConfig"
+          [usernameAttributes]="usernameAttributes"
+        ></amplify-authenticator>
+      </div>
+
+      <div class="pl-5 pr-5 ml-5 mr-5 mt-3 adoya-link">
+        By clicking "Create Account" or "Sign In" above, you acknowledge that
+        you have read, understood, and agree to Adoyas's
+        <strong>Terms of Service</strong>
+      </div>
     </div>
 
     <div class="row sign-in col-12 col-md-6 mt-3">
       <mat-list>
-        <div class="mb-2 pb-2 border-bottom w-100">
+        <div class="mb-0 pb-0 w-100">
           <mat-list-item>
-            <h4>It's as Easy as 1-2-3</h4>
+            <h3>3 steps to get up and running:</h3>
           </mat-list-item>
         </div>
         <div class="mb-2 pb-2 border-bottom w-100">
@@ -67,7 +75,7 @@
         <div class="mb-2 pb-2">
           <mat-list-item>
             <mat-icon color="primary" class="align-text-top mr-2"
-              >data_exploration</mat-icon
+              >info_outline</mat-icon
             >
 
             Why Adoya? We package years of app store marketing experience in an
