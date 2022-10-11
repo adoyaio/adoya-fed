@@ -645,6 +645,34 @@ export class RegistrationComponent implements OnInit {
       .subscribe();
   }
 
+  handleShowPrivacyClick($event) {
+    $event.preventDefault();
+    this.printViewText = AppService.privacyPolicy;
+    this.dialog
+      .open(DynamicModalComponent, {
+        data: {
+          title: ``,
+          content: AppService.privacyPolicy,
+          actionYes: "Save",
+          actionNo: "Cancel",
+        },
+        maxWidth: "500px",
+        width: "500px",
+        panelClass: "tooltip-dialog-box",
+        autoFocus: false,
+      })
+      .afterClosed()
+      .pipe(
+        take(1),
+        tap((val) => {
+          if (val) {
+            this.handlePrintTerms();
+          }
+        })
+      )
+      .subscribe();
+  }
+
   handleShowFAQClick($event) {
     $event.preventDefault();
     this.printViewText = AppService.faqs;

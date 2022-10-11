@@ -8,6 +8,273 @@ export class AppService {
   constructor() {}
 
   static privacyPolicy: string = `
+  <div class='text-center'><h4>Adoya, Inc. Privacy Policy</h4></div>
+
+  <div class="mb-2">
+  Adoya, Inc. (“Adoya,”"we," or “us”) respects your privacy and is committed to protecting it through our compliance with this “Privacy Policy.” Throughout this Privacy Policy, we refer to any person accessing or using these Platforms (as defined below) as “you,” or the “User.”
+  </div>
+
+  <div class="mb-2">
+  This Privacy Policy describes the types of information we may collect from you or that you may provide when you visit the websites www.adoya-app.io/portal and/or www.adoya.io, the services, features, content, and any applications (“Apps”) offered by Adoya (collectively our "Platforms") and our practices for collecting, using, maintaining, protecting and disclosing that information.
+  </div>
+
+
+  <div class="mb-2 mt-2"><h4>This Privacy Policy applies to information we collect:</h4></div>
+  <div class="mb-2">
+  <ul>
+  <li>On or through these Platforms.</li>
+  <li>In email, text, and other electronic messages between you and these Platforms.</li>
+  <li>When you interact with our advertising and applications on third-party websites and services, if
+  those applications or advertising include links to this Privacy Policy.</li>
+  </ul>
+  </div>
+
+
+  <div class="mb-2 mt-2"><h4>It does not apply to information collected by:</h4></div>
+  <div class="mb-2">
+  <ul>
+  <li>Us offline or through any other means not listed above; or</li>
+  <li>Any third party (including our affiliates and subsidiaries) website or application. Please be aware
+  that we have no control over the content and policies of third-party platforms and cannot accept responsibility or liability for their respective privacy practices.</li>
+  </ul>
+  </div>
+
+
+  <div class="mb-2">
+  Please read this Privacy Policy carefully to understand our policies and practices regarding your Personal Information (as defined below in INFORMATION WE COLLECT) and how we will treat it. If you do not agree with our policies and practices, your only choice is not to use our Platforms. By accessing or using our Platforms, you agree to this Privacy Policy. This Privacy Policy may change from time to time. Your continued use of the Platforms after we make changes is deemed to be your acceptance of those changes, so please check the Privacy Policy periodically for updates.
+  </div>
+
+  <div class="mb-2 mt-2"><h4>Adoya’s Privacy Assurance</h4></div>
+  <div class="mb-2">
+  <ul>
+  <li>We do not sell your Personal Information to any third parties.</li>
+  <li>We do not share your Personal Information with nonaffiliated third parties that would use it to
+  contact you about their own products and services, unless you have allowed us to do so and as
+  permitted pursuant to a joint marketing agreement.</li>
+  <li>We require our employees to protect your Personal Information and keep it confidential.</li>
+  <li>We require persons or organizations that represent or assist us in serving you to keep your
+  information confidential.</li>
+  </ul>
+  </div>
+
+
+  <div class="mb-2 mt-2"><u><h4>CHILDREN UNDER THE AGE OF 13:</h4></u></div>
+  <div class="mb-2">
+  Our Platforms are not intended for children under 13 years of age. No one under the age of 13 may provide any Personal Information to Adoya or through the Platforms. We do not knowingly collect Personal Information from children under 13. If you are under 13, do not use or provide any information through any of the Platforms’ features/functionality, make any purchases through the Platforms, use any of the interactive features that may be available on these Platforms, or provide any information about yourself to us, including your name, address, telephone number, and/or email address. If we learn that we have collected or received Personal Information from a child under 13 without verification of parental consent, we will delete that information. If you believe we might have any information from or about a child under 13, please contact us at info@adoya.io.
+  </div>
+
+
+
+  <div class="mb-2 mt-2"><u><h4>INFORMATION WE COLLECT:</h4></u></div>
+  <div class="mb-2">
+  We collect several types of information from and about Users of our Platforms, including log data, device data, and Personal Information.
+  </div>
+
+
+  <div class="mb-2 mt-2"><h4>Log Data</h4></div>
+  <div class="mb-2">
+  When you visit our Platforms, our servers may automatically log the standard data provided by your web browser. It may include your computer’s Internet Protocol (IP) address, your browser type and version, the pages you visit, the time and date of your visit, the time spent on each page, and other details.
+  </div>
+
+
+  <div class="mb-2 mt-2"><h4>Device Data</h4></div>
+  <div class="mb-2">
+  We may also automatically collect data about the device you’re using to access our Platforms. This data may include the device type, operating system, unique device identifiers, device settings, and location data. What we collect depends on the individual settings of your device and software.
+  </div>
+
+  <div class="mb-2 mt-2"><h4>Personal Information</h4></div>
+  <div class="mb-2">
+  We may collect information from you while you use these Platforms, including:
+  <ul>
+  <li>By which you may be personally identified, such as your name, email address, payment information, and other identifying information that you choose to share with us by which you
+  may be contacted online or offline ("Personal Information"); and/or</li>
+  <li>That is about you but individually does not identify you, such as your annual revenue, gender, certain demographic information. This information is not considered Personal
+  Information, as it is anonymized statistical data.
+  </li>
+  </ul>
+  </div>
+
+
+  <div class="mb-2 mt-2"><u><h4>HOW WE COLLECT INFORMATION:</h4></u></div>
+  <div class="mb-2 mt-2"><h4>Information We Collect Automatically</h4></div>
+  <div class="mb-2">
+  As you navigate through and interact with our Platforms, we may use automatic data collection technologies to collect certain information about your devices, browsing actions and patterns, as described above. The technologies we use for this automatic data collection may include cookies, flash cookies, or web beacons. For more information on these technologies, see our DATA COLLECTION POLICY below. The information we collect automatically is statistical data and does not include Personal Information, but we may maintain it for any of the reasons listed in HOW WE USE YOUR INFORMATION.
+  </div>
+
+  <div class="mb-2 mt-2"><h4>Information You Provide Directly to Us</h4></div>
+  <div class="mb-2">
+  The information we collect on or through our Platforms may include:
+  <ul>
+  <li>Information that you provide by filling in forms on our Platforms. This includes information provided at the time of registering to use our Platforms or joining our mailing list. We may also ask you for information when you report a problem with our Platforms;</li>
+  <li>Records and copies of your correspondence (including email addresses), if you contact us; and/or</li>
+  <li>Details of transactions you carry out through our Platforms.</li>
+  </ul>
+  </div>
+
+  <div class="mb-2 mt-2"><h4>Information Provided to Us by Third Parties</h4></div>
+  <div class="mb-2">
+  If we receive Personal Information about you from a third party, we will protect it as set out in this Privacy Policy. If you are a third party providing Personal Information about somebody else, you represent and warrant that you have such person’s consent to provide the Personal Information to us.
+  </div>
+
+
+
+  <div class="mb-2 mt-2"><u><h4>DATA COLLECTION POLICY:</h4></u></div>
+  <div class="mb-2">
+  The technologies we use for automatic data collection on these Platforms may include:
+  <ul>
+  <li>Cookies (or browser cookies). A cookie is a small file placed on the hard drive of your computer. You may refuse to accept browser cookies by activating the appropriate setting on your browser. However, if you select this setting you may be unable to access certain parts of our Platforms. Unless you have adjusted your browser setting so that it will refuse cookies, our system will issue cookies
+  when you direct your browser to our Platforms</li>
+  <li>Flash Cookies. Certain features of our Platforms may use local stored objects (or Flash cookies) to collect and store information about your preferences and navigation to, from and on our Platforms. Flash cookies are not managed by the same browser settings as are used for browser cookies; and/or</li>
+  <li>Web Beacons. Pages of the Platforms, and our emails, may contain small electronic files known as web beacons (also referred to as clear gifs. pixel tags and single-pixel gifs) that permit Adoya, for example, to count Users who have visited those pages, or opened an email, and for other related statistics (for example, recording the popularity of certain content on the Platforms and verifying system and server integrity).</li>
+  </ul>
+  </div>
+
+  <div class="mb-2 mt-2"><h4>DO NOT TRACK:</h4></div>
+  <div class="mb-2">
+  “Do Not Track” is a preference you can set your browser to let websites you visit know that you do not want them collecting certain information about you. We do not currently respond to, or honor, Do Not Track signals or requests from your browser.
+  </div>
+
+
+  <div class="mb-2 mt-2"><h4>THIRD-PARTY USE OF COOKIES AND OTHER TRACKING TECHNOLOGIES:</h4></div>
+  <div class="mb-2">
+  Some content or applications on the Platforms are served by third parties, including content providers and application providers. These third parties may use cookies (alone or in conjunction with web beacons or other tracking technologies) to collect information about you when you use our Platforms. The information they collect may be associated with your Personal Information, or they may collect information, including Personal Information, about your online activities over time and across different websites and other online services. They may use this information to provide you with interest-based (behavioral) advertising or other targeted content.
+  </div>
+
+  <div class="mb-2">
+  We do not control these third parties' tracking technologies or how they may be used. If you have any questions about an advertisement or other targeted content, you should contact the responsible provider directly.
+  </div>
+
+
+  <div class="mb-2 mt-2"><u><h4>HOW WE USE YOUR INFORMATION:</h4></u></div>
+  <div class="mb-2">
+  We may collect your information for a number of reasons, specifically:
+
+  <ul>
+  <li>To enable you to access and use our Platforms;</li>
+  <li>To enable you to customize or personalize your experience of our Platforms;</li>
+  <li>To contact and communicate with you;</li>
+  <li>To prevent fraud;</li>
+  <li>For internal record keeping and administrative purposes;</li>
+  <li>For analytics, market research, and business development, including to operate and improve our
+  Platforms;</li>
+  <li>To offer additional benefits to you, including but not limited to sending promotional information
+  about our products/services and/or facilitating competitions and/or giveaways;</li>
+  <li>To provide you with information about third parties that may be of interest to you;</li>
+  <li>To fulfill any other purpose for which you provide your information and consent; and/or</li>
+  <li>To comply with our legal obligations and resolve any disputes that we may have.</li>
+  </ul>
+  </div>
+
+
+
+
+  <div class="mb-2 mt-2"><h4>DISCLOSURE OF YOUR INFORMATION, GENERALLY:</h4></div>
+  <div class="mb-2">
+  We disclose Personal Information that we collect or that you provide, as described in this Privacy Policy, in the following circumstances:
+
+  <ul>
+  <li>To our subsidiaries and affiliates;</li>
+  <li>To contractors, service providers and other third parties we use to support our business and who are
+  bound by contractual obligations to keep Personal Information confidential and use it only for the
+  purposes for which we disclose it to them;</li>
+  <li>To a buyer or other successor in the event of a merger, divestiture, restructuring, reorganization,
+  dissolution or other sale or transfer of some or all of Adoya’s assets, whether as a going concern or as part of bankruptcy, liquidation or similar proceeding, in which Personal Information held by Adoya about our Platforms’ Users is among the assets transferred. You acknowledge that such transfers may occur, and that any parties who acquire us may continue to use your Personal Information according to this Privacy Policy;</li>
+  <li>To fulfill the purpose for which you provide it;</li>
+  <li>For any other purpose disclosed by us when you provide the information; or</li>
+  <li>With your consent.</li>
+  </ul>
+  </div>
+
+
+
+  <div class="mb-2 mt-2"><h4>DISCLOSURE OF YOUR INFORMATION TO THIRD PARTIES:</h4></div>
+  <div class="mb-2">
+  We may disclose your Personal Information to third party service providers for the purpose of enabling them to provide their services, if you have allowed us to do so, including but not limited to:
+  <ul>
+  <li>Information Technology (“IT”) service providers;</li>
+  <li>Data storage, hosting, and server providers;</li>
+  <li>Analytics companies;</li>
+  <li>Error loggers;</li>
+  <li>Maintenance or problem-solving providers;</li>
+  <li>Marketing or advertising providers;</li>
+  <li>Professional advisors;</li>
+  <li>Payment systems operators; and/or</li>
+  <li>Sponsors or promoters of any competition or promotion we run.</li>
+  </ul>
+  </div>
+
+
+
+  <div class="mb-2">
+  We may also disclose your Personal Information to third parties for the purpose of establishing, exercising, or defending our legal rights, including but not limited to:
+  <ul>
+  <li>Debt collectors;</li>
+  <li>Our legal counsel and/or prospective legal counsel; and/or</li>
+  <li>Courts, tribunals, regulatory authorities, and law enforcement officers, as required by law.</li>
+  </ul>
+
+  We may disclose aggregated, anonymized, statistical data and/or non-identifying information about our Users without restriction.
+  </div>
+
+
+  <div class="mb-2 mt-2"><h4>CHOICES ABOUT HOW WE USE AND DISCLOSE YOUR INFORMATION:</h4></div>
+
+  <div class="mb-2">
+  We strive to provide you with choices regarding the Personal Information you provide to us. The following mechanisms should help to provide you with control over your information:
+  <ul>
+  <li>Tracking Technologies and Advertising. You can set your browser to refuse all or some browser cookies, or to alert you when cookies are being sent. To learn how you can manage your Flash cookie settings, visit the Flash player settings page on Adobe's website. If you disable or refuse cookies, please note that some parts of these Platforms may be inaccessible or not function properly.</li>
+  <li>Promotional Offers from Adoya or our Affiliates. If you do not wish to have your email address/contact information used by Adoya or its affiliates to promote our own or third parties' products or services, you can opt-out by sending us an email stating your request to info@adoya.io. If we have sent you a promotional email, you may use the unsubscribe option in the footer of the email. This opt out does not apply to information provided to info@adoya.io as a result of a product or service purchase, or other transactions.</li>
+  </ul>
+
+  We do not control third parties' collection or use of your information to serve interest-based advertising. However, these third parties may provide you with ways to choose not to have your information collected or used in this way. You can opt out of receiving targeted ads from members of the Network Advertising Initiative ("NAI") on the NAI's website.
+  </div>
+
+
+  <div class="mb-2 mt-2"><h4>ACCESSING AND CORRECTING YOUR INFORMATION:</h4></div>
+  <div class="mb-2">
+  If you believe that any information we hold about you is inaccurate, out of date, incomplete, irrelevant or misleading, you can review and change your Personal Information by logging into your account profile on the Platforms and navigating to the appropriate settings page or sending us an email at info@adoya.io to request access to, correct, or delete any Personal Information that you have provided to us. We cannot delete some of your Personal Information except by also deleting your User account. We may not accommodate a request to change information if we believe the change would violate any law or regulatory requirement, result in fraud, or cause the information to be incorrect.
+  </div>
+
+
+  <div class="mb-2 mt-2"><h4>YOUR CALIFORNIA PRIVACY RIGHTS:</h4></div>
+  <div class="mb-2">
+  If you are a California resident, you have the right to request information from us regarding the manner in which we share certain categories of your Personal Information with third parties for their own direct marketing uses. California’s “Shine the Light” Act provides that you have the right to submit a request to us at our email address in order to receive information on the categories of customer information that we shared and the names and addresses of those businesses with which we shared customer information for the immediately prior calendar year. To obtain this information, please send an email message to info@adoya.io with "Request for California Privacy Information" in the subject line and in the body of your message. We will provide the requested information to you in your email address in response.
+  </div>
+
+  <div class="mb-2">
+  Please be aware that not all information sharing is covered by the Shine the Light requirements, and only information on covered sharing will be included in our response.
+  </div>
+
+  <div class="mb-2 mt-2"><h4>DATA SECURITY:</h4></div>
+  <div class="mb-2">
+  We have implemented measures designed to secure your Personal Information from accidental loss and from unauthorized access, use, alteration and disclosure. All information you provide to us through the Platforms is secured by TLS technology, and is stored on our secure, password protected servers behind firewalls. We have implemented a restricted employee access for all of our servers containing personally identifiable information.
+  </div>
+
+  <div class="mb-2">
+  Any payment transactions will be encrypted using SSL technology. We use Stripe (PCI-DSS compliant) as our payment processor.
+  </div>
+
+
+  <div class="mb-2">
+  The safety and security of your information also depends on you. Where we have given you (or where you have chosen) a password for access to certain parts of our Platforms, you are responsible for keeping this password confidential. We ask you not to share your password with anyone.
+  </div>
+
+
+  <div class="mb-2">
+  Unfortunately, the transmission of information via the Internet is not completely secure. Although we do our best to protect your Personal Information, we cannot guarantee the security of your Personal Information transmitted to our Platforms. Any transmission of Personal Information is at your own risk. We are not responsible for circumvention of any privacy settings or security measures contained on the Platforms.
+  </div>
+
+
+  <div class="mb-2 mt-2"><h4>CHANGES TO OUR PRIVACY POLICY:</h4></div>
+  <div class="mb-2">
+  It is our policy to post any changes we make to our Privacy Policy on this page, with a notice that the Privacy Policy has been updated on the Platforms’ home pages. If we make material changes to how we treat our Users' Personal Information, we will notify you by email to the most recent email address provided to Adoya either through correspondence or through your User account and/or through a notice on the Platforms’ home pages. The date the Privacy Policy was last revised is identified at the top of the page. You are responsible for ensuring we have an up-to-date active and deliverable email address for you, and for periodically visiting our Platforms and this Privacy Policy to check for any changes.
+
+
+
+  <div class="mb-2 mt-2"><h4>CONTACT INFORMATION:</h4></div>
+  <div class="mb-2">
+  To ask questions, or make a comment about this Privacy Policy and our privacy practices, contact us at: info@adoya.io or 5029 Geary Blvd. #6, San Francisco, California 94118
+  </div>
 
   `;
 

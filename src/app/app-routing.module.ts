@@ -43,6 +43,13 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     data: { title: "Registration" },
   },
+  {
+    path: "legal",
+    loadChildren: () =>
+      import("./features/legal/legal.module").then((m) => m.LegalModule),
+
+    data: { title: "legal" },
+  },
 ];
 
 @NgModule({
