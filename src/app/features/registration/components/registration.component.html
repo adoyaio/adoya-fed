@@ -11,12 +11,15 @@
     <div class="workbench__loading" *ngIf="isLoadingResults">
       <mat-spinner color="primary" strokeWidth="6.5"></mat-spinner>
     </div>
-    <div class="workbench__sending" *ngIf="isSendingResults">
-      <mat-progress-bar color="primary" mode="indeterminate"></mat-progress-bar>
-    </div>
     <mat-vertical-stepper [linear]="true" #stepper class="w-100">
       <!-- step 1 invite-->
-      <mat-step>
+      <mat-step [stepControl]="step0Form">
+        <div class="workbench__sending p-2 col-6" *ngIf="isSendingResults">
+          <mat-progress-bar
+            color="primary"
+            mode="indeterminate"
+          ></mat-progress-bar>
+        </div>
         <form [formGroup]="step0Form">
           <ng-template matStepLabel
             >Invite us to be an API user
