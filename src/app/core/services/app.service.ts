@@ -249,6 +249,65 @@ ALL CLAIMS MUST BE BROUGHT IN THE PARTIES' INDIVIDUAL CAPACITY, AND NOT AS A PLA
 
 
   `;
+
+  static faqs: string = `
+  <div class='text-center'><h4>Frequently Asked Questions</h4></div>
+
+  <div><h4>How does Adoya compliment Apple Search Ads?</h4></div>
+  <div class="mb-4">
+  Adoya compliments Apple Search Ads by automating best practices including bidding, adding top-performing search terms as targeted keywords, adding poor-performing search terms as negative keywords, sending daily email reports, and integrating with mobile measurement partners (MMPs) to report and optimize on post-install events. View Adoya as your “Growth Marketer” in a box. We aren’t meant to replace Apple Search Ads. We compliment it!
+  </div>
+
+  <div><h4>When should I use Adoya and when should I use the native Apple Search Ads platform? </h4></div>
+  <div class="mb-4">
+  You should use Adoya for day-to-day campaign management like bids, budgets, and updating settings. Use the native Apple Search Ads platform if you want deeper analytics, adjust settings that aren’t available in the Adoya platform like geo targeting. Use the native Apple Search Ads platform if you want to pause or add new keywords to existing campaigns.
+  </div>
+
+  <div><h4>What if I want to create a new campaign?</h4></div>
+  <div class="mb-4">
+  Adoya recommends you run campaigns via our proprietary method which you would have created when you signed up with us. However, feel free to use the native Apple Search Ads console to create new campaigns. Contact support if you want to utilize our automated bid management system for newly created campaigns and we’ll do a sync for you!
+  </div>
+
+  <div><h4>What is your refund policy?</h4></div>
+  <div class="mb-4">
+  Review our terms of service for more information on our refund policy.
+  </div>
+
+  <div><h4>Who do I contact with a billing question or issue?:</h4></div>
+  <div class="mb-4">
+  Email info@adoya.io or contact support and we’ll respond to you within 24 hours.
+  </div>
+
+
+  <div><h4>What other ad platforms do you support?:</h4></div>
+  <div class="mb-4">
+  We currently support Apple Search Ads but if there’s a platform you recommend, contact info@adoya.io and provide a suggestion. We’d love to hear from you!
+  </div>
+
+  <div><h4>Where do I provide feedback?</h4></div>
+  <div class="mb-4">
+  Contact support or email info@adoya.io. We love feedback!
+  </div>
+
+  <div><h4>What if I want to promote multiple apps or locations?</h4></div>
+  <div class="mb-4">
+  Currently Adoya supports 1:1 app and location mapping. However, if this changes, we’ll let you know.
+  </div>
+
+
+  <div><h4> Do you provide an account manager?</h4></div>
+  <div class="mb-4">
+  Adoya doesn’t offer managed services. We keep things streamlined to keep down costs and pass that cost savings down to you. However, if you have an urgent issue, contact us at info@adoya.io and we’ll reach out to you within 24 hours and provide a customized solution.
+  </div>
+
+  <div><h4>What if I want to build something customized?</h4></div>
+  <div class="mb-4">
+  Contact us at info@adoya.io or support [link to support] and we’ll evaluate options!
+  </div>
+
+
+  `;
+
   downloadAggregateFile(data, filename) {
     let headerRow = [
       "date",
