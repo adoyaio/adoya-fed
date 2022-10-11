@@ -619,6 +619,7 @@ export class RegistrationComponent implements OnInit {
 
   handleShowTermsClick($event) {
     $event.preventDefault();
+    this.printViewText = AppService.termsOfService;
     this.dialog
       .open(DynamicModalComponent, {
         data: {
@@ -646,6 +647,7 @@ export class RegistrationComponent implements OnInit {
 
   handleShowFAQClick($event) {
     $event.preventDefault();
+    this.printViewText = AppService.faqs;
     this.dialog
       .open(DynamicModalComponent, {
         data: {
@@ -889,16 +891,12 @@ export class RegistrationComponent implements OnInit {
     }
   }
 
-  // DEPRECATED MIGRATE TO COGNITO ID
   setOrgIdValue(): void {
     this.step1Form.get("orgId").setValue(this.orgId);
     if (isNil(this.client)) {
       return;
     }
-    if (
-      !isNil(this.client.orgDetails.orgId) &&
-      !isEmpty(this.client.orgDetails.orgId)
-    ) {
+    if (!isNil(this.client.orgDetails.orgId)) {
       this.step0Form
         .get("appleOrgId")
         .setValue(get(this.client, "orgDetails.orgId"));
@@ -1306,7 +1304,7 @@ export class RegistrationComponent implements OnInit {
       .open(DynamicModalComponent, {
         data: {
           title: ``,
-          content: AppService.termsOfService,
+          content: AppService.clickWrap,
           actionYes: "Agree",
           actionNo: "Cancel",
         },

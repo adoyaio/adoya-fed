@@ -99,11 +99,40 @@ export class PortalComponent implements OnInit {
 
   handleShowTermsClick($event) {
     $event.preventDefault();
+    this.printViewText = AppService.termsOfService;
     this.dialog
       .open(DynamicModalComponent, {
         data: {
           title: ``,
           content: AppService.termsOfService,
+          actionYes: "Save",
+          actionNo: "Cancel",
+        },
+        maxWidth: "500px",
+        width: "500px",
+        panelClass: "tooltip-dialog-box",
+        autoFocus: false,
+      })
+      .afterClosed()
+      .pipe(
+        take(1),
+        tap((val) => {
+          if (val) {
+            this.handlePrintTerms();
+          }
+        })
+      )
+      .subscribe();
+  }
+
+  handleShowFAQClick($event) {
+    $event.preventDefault();
+    this.printViewText = AppService.faqs;
+    this.dialog
+      .open(DynamicModalComponent, {
+        data: {
+          title: ``,
+          content: AppService.faqs,
           actionYes: "Save",
           actionNo: "Cancel",
         },
