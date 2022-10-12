@@ -1007,7 +1007,7 @@ export class RegistrationComponent implements OnInit {
     supportItem.description = `invite has been sent for api user`;
     supportItem.userId = this.username;
     supportItem.username = this.emailAddresses;
-    supportItem.subject = `an invite has been sent for  ${this.orgId}`;
+    supportItem.subject = `an asa api user invite has been sent for ${this.orgId}  (⌐■_■) `;
     supportItem.orgId = this.appleOrgIdControl.value;
     supportItem.type = "registration";
 

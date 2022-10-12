@@ -120,7 +120,7 @@ export class OnboardingComponent implements OnInit {
           supportItem.description = ``;
           supportItem.userId = newClient.orgId;
           supportItem.username = newClient.orgDetails.emailAddresses[0];
-          supportItem.subject = `we have accepted your invitation to your apple search ads account`;
+          supportItem.subject = `we have accepted an invitation to your apple search ads account (⌐■_■) `;
           supportItem.orgId = String(newClient.orgDetails.orgId);
           supportItem.type = "registration";
 

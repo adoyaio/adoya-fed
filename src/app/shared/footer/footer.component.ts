@@ -2,6 +2,7 @@ import { Component, EventEmitter, OnInit, Output } from "@angular/core";
 import { MatDialog } from "@angular/material";
 import { take, tap } from "rxjs/operators";
 import { AppService } from "src/app/core/services/app.service";
+import { ContactUsComponent } from "src/app/features/homesite/contact-us/contact-us.component";
 import { DynamicModalComponent } from "../dynamic-modal/dynamic-modal.component";
 
 @Component({
@@ -94,6 +95,23 @@ export class FooterComponent implements OnInit {
             this.printCalled.emit({ text: AppService.faqs });
           }
         })
+      )
+      .subscribe();
+  }
+
+  handleContactClick() {
+    this.dialog
+      .open(ContactUsComponent, {
+        data: {},
+        maxWidth: "800px",
+        width: "800px",
+        panelClass: "tooltip-dialog-box",
+        autoFocus: false,
+      })
+      .afterClosed()
+      .pipe(
+        take(1),
+        tap((val) => {})
       )
       .subscribe();
   }
