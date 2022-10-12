@@ -5,6 +5,7 @@ import { take, tap } from "rxjs/operators";
 import { MatDialog } from "@angular/material";
 import { DynamicModalComponent } from "src/app/shared/dynamic-modal/dynamic-modal.component";
 import { AppService } from "src/app/core/services/app.service";
+import { get } from "lodash";
 
 @Component({
   selector: "app-portal",
@@ -97,6 +98,13 @@ export class PortalComponent implements OnInit {
       .subscribe();
   }
 
+  handlePrintTerms($event) {
+    this.printViewText = get($event, "text");
+    setTimeout(() => {
+      window.print();
+    });
+  }
+
   handleShowTermsClick($event) {
     $event.preventDefault();
     this.printViewText = AppService.termsOfService;
@@ -118,42 +126,12 @@ export class PortalComponent implements OnInit {
         take(1),
         tap((val) => {
           if (val) {
-            this.handlePrintTerms();
+            setTimeout(() => {
+              window.print();
+            });
           }
         })
       )
       .subscribe();
-  }
-
-  handleShowFAQClick($event) {
-    $event.preventDefault();
-    this.printViewText = AppService.faqs;
-    this.dialog
-      .open(DynamicModalComponent, {
-        data: {
-          title: ``,
-          content: AppService.faqs,
-          actionYes: "Save",
-          actionNo: "Cancel",
-        },
-        maxWidth: "500px",
-        width: "500px",
-        panelClass: "tooltip-dialog-box",
-        autoFocus: false,
-      })
-      .afterClosed()
-      .pipe(
-        take(1),
-        tap((val) => {
-          if (val) {
-            this.handlePrintTerms();
-          }
-        })
-      )
-      .subscribe();
-  }
-
-  handlePrintTerms() {
-    window.print();
   }
 }

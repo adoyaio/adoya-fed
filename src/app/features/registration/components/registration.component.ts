@@ -617,92 +617,11 @@ export class RegistrationComponent implements OnInit {
     this._destroyed$.next(true);
   }
 
-  handleShowTermsClick($event) {
-    $event.preventDefault();
-    this.printViewText = AppService.termsOfService;
-    this.dialog
-      .open(DynamicModalComponent, {
-        data: {
-          title: ``,
-          content: AppService.termsOfService,
-          actionYes: "Save",
-          actionNo: "Cancel",
-        },
-        maxWidth: "500px",
-        width: "500px",
-        panelClass: "tooltip-dialog-box",
-        autoFocus: false,
-      })
-      .afterClosed()
-      .pipe(
-        take(1),
-        tap((val) => {
-          if (val) {
-            this.handlePrintTerms();
-          }
-        })
-      )
-      .subscribe();
-  }
-
-  handleShowPrivacyClick($event) {
-    $event.preventDefault();
-    this.printViewText = AppService.privacyPolicy;
-    this.dialog
-      .open(DynamicModalComponent, {
-        data: {
-          title: ``,
-          content: AppService.privacyPolicy,
-          actionYes: "Save",
-          actionNo: "Cancel",
-        },
-        maxWidth: "500px",
-        width: "500px",
-        panelClass: "tooltip-dialog-box",
-        autoFocus: false,
-      })
-      .afterClosed()
-      .pipe(
-        take(1),
-        tap((val) => {
-          if (val) {
-            this.handlePrintTerms();
-          }
-        })
-      )
-      .subscribe();
-  }
-
-  handleShowFAQClick($event) {
-    $event.preventDefault();
-    this.printViewText = AppService.faqs;
-    this.dialog
-      .open(DynamicModalComponent, {
-        data: {
-          title: ``,
-          content: AppService.faqs,
-          actionYes: "Save",
-          actionNo: "Cancel",
-        },
-        maxWidth: "500px",
-        width: "500px",
-        panelClass: "tooltip-dialog-box",
-        autoFocus: false,
-      })
-      .afterClosed()
-      .pipe(
-        take(1),
-        tap((val) => {
-          if (val) {
-            this.handlePrintTerms();
-          }
-        })
-      )
-      .subscribe();
-  }
-
-  handlePrintTerms() {
-    window.print();
+  handlePrintTerms($event) {
+    this.printViewText = get($event, "text");
+    setTimeout(() => {
+      window.print();
+    });
   }
 
   undoStep3Changes() {

@@ -1,5 +1,5 @@
 <div class="container pt-2 pb-1">
-  <div class="row bottom-border">
+  <div class="row bottom-border d-print-none">
     <div class="col-md-4"></div>
     <div class="col-md-3">
       <a href="/workbench/reporting"
@@ -9,7 +9,7 @@
     <div class="col-md-5"></div>
   </div>
   <div class="row">
-    <img src="/assets/images/spacer.png" height="25" alt="" />
+    <img src="/assets/images/spacer.png" height="30" alt="" />
   </div>
   <div class="row ml-5">
     <!-- <div class="row sign-in w-100">
@@ -21,7 +21,9 @@
     <!-- <div class="col-md-4"></div> -->
 
     <div class="d-none d-print-block">
-      <span [innerHTML]="printViewText"></span>
+      <div class="d-flex flex-column flex-wrap">
+        <span [innerHTML]="printViewText"></span>
+      </div>
     </div>
 
     <div class="row sign-in col-12 col-md-6 d-print-none">
@@ -84,7 +86,7 @@
               >info_outline</mat-icon
             >
 
-            Want more info?
+            more info here:
           </mat-list-item>
         </div>
 
@@ -93,5 +95,8 @@
         </button>
       </mat-list>
     </div>
+  </div>
+  <div class="d-flex flex-row w-100 justify-content-center pt-5 mt-5">
+    <app-footer (printCalled)="handlePrintTerms($event)"></app-footer>
   </div>
 </div>

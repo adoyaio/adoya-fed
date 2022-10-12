@@ -1517,33 +1517,5 @@ RAzgJRXGuq/Q/th1FqlsFyE7vr4xDCw53+JoJebvKBy8QbZgSWON8TohdA==
       </mat-step>
     </mat-vertical-stepper>
   </div>
-  <div class="w-99 m-auto text-center">
-    <a class="adoya-link" (click)="handleShowTermsClick($event)"
-      >Terms of service</a
-    >
-    |
-    <a class="adoya-link" (click)="handleShowPrivacyClick($event)"
-      >Privacy Policy</a
-    >
-    |
-    <a class="adoya-link" (click)="handleShowFAQClick($event)">FAQs</a>
-    |
-    <a class="adoya-link" href="mailto:info@adoya.io?subject=Adoya Support"
-      >Contact Us</a
-    >
-  </div>
+  <app-footer (printCalled)="handlePrintTerms($event)"></app-footer>
 </div>
-
-<!-- <div
-  class="position-absolute position-md-fixed left-0 bottom-0 w-99 m-auto text-center"
->
-  <a class="adoya-link" (click)="handleShowTermsClick($event)"
-    >Terms of service</a
-  >
-  |
-  <a class="adoya-link" (click)="handleShowTermsClick($event)">FAQs</a>
-  |
-  <a class="adoya-link" href="mailto:info@adoya.io?subject=Adoya Support"
-    >Contact Us</a
-  >
-</div> -->
