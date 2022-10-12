@@ -6,6 +6,7 @@ import { RegistrationComponent } from "./features/registration/components/regist
 import { HasRegisteredGuard } from "./core/guards/has-registered.guard";
 import { SplashComponent } from "./features/homesite/splash/splash.component";
 import { HomeComponent } from "./features/homesite/home/home.component";
+import { OnboardingComponent } from "./features/onboarding/components/onboarding.component";
 
 const routes: Routes = [
   {
@@ -42,6 +43,12 @@ const routes: Routes = [
     component: RegistrationComponent,
     canActivate: [AuthGuard],
     data: { title: "Registration" },
+  },
+  {
+    path: "onboarding",
+    component: OnboardingComponent,
+    canActivate: [AuthGuard],
+    data: { title: "onboarding" },
   },
   {
     path: "legal",

@@ -447,7 +447,7 @@ export class RegistrationComponent implements OnInit {
               ""
             );
 
-            this.initializeClient();
+            // this.initializeClient();
             this.isLoadingResults = true;
             if (
               has(this.client.orgDetails, "appleCampaigns") &&
@@ -827,76 +827,6 @@ export class RegistrationComponent implements OnInit {
     return hasInvalid;
   }
 
-  initializeClient() {
-    // set default KeywordAdderParameters
-    this.client = new Client();
-    this.client.orgDetails = new OrgDetails();
-    this.client.orgDetails.keywordAdderParameters = {
-      targetedKeywordTapThreshold: 2,
-      negativeKeywordConversionThreshold: 0,
-      broadMatchDefaultBid: 1,
-      exactMatchDefaultBid: 1,
-      negativeKeywordTapThreshold: 10,
-      targetedKeywordConversionThreshold: 2,
-    };
-
-    // set default AdgroupBidParameters
-    this.client.orgDetails.adgroupBidParameters = {
-      highCPABidDecrease: 0.85,
-      tapThreshold: 7,
-      objective: "standard",
-      lowCPIBidIncreaseThresh: 0.4,
-      minBid: 0.1,
-      noInstallBidDecreaseThresh: 0,
-      highCPIBidDecreaseThresh: 0,
-      lowCPABidBoost: 1.15,
-      maxBid: 3,
-      staleRaiseBidBoost: 1.025,
-      staleRaiseImpresshionThresh: 0,
-    };
-
-    this.client.orgDetails.bidParameters = {
-      highCPABidDecrease: 0.85,
-      tapThreshold: 7,
-      objective: "standard",
-      minBid: 0.1,
-      noInstallBidDecreaseThresh: 0,
-      highCPIBidDecreaseThresh: 0,
-      lowCPABidBoost: 1.15,
-      maxBid: 0.35,
-      staleRaiseBidBoost: 1.025,
-      staleRaiseImpresshionThresh: 0,
-    };
-
-    this.client.orgDetails.branchIntegrationParameters = {
-      branchBidAdjusterEnabled: false,
-      branchKey: "",
-      branchSecret: "",
-    };
-
-    this.client.orgDetails.branchBidParameters = {
-      branchBidAdjustment: 0.1,
-      branchOptimizationGoal: "cost_per_purchase",
-      minAppleInstalls: 15,
-      branchMinBid: 0.1,
-      branchMaxBid: 25,
-      revenueOverAdSpendThreshold: 1,
-      revenueOverAdSpendThresholdBuffer: 0.2,
-      costPerPurchaseThreshold: 20,
-      costPerPurchaseThresholdBuffer: 0.2,
-    };
-
-    this.client.orgDetails.disabled = false;
-    this.client.orgDetails.appleCampaigns = [];
-
-    // disable branch controls by defuault
-    this.substep6.get("cpp").disable();
-    this.substep6.get("mmpObjective").disable();
-    this.substep6.get("roas").disable();
-    this.substep6.get("branchKey").disable();
-    this.substep6.get("branchSecret").disable();
-  }
-
   handleBranchCheckboxChange($event: MatCheckboxChange) {
     if ($event.checked) {
       this.substep6.get("mmpObjective").enable();
@@ -1185,74 +1115,6 @@ export class RegistrationComponent implements OnInit {
             "dismiss"
           );
           return [];
-        })
-      )
-      .subscribe();
-  }
-
-  handleRegHelpEvent($event) {
-    $event.stopPropagation();
-    $event.preventDefault();
-
-    this.dialog
-      .open(DynamicModalComponent, {
-        data: {
-          title: `Confirm request for Adoya support`,
-          content: `We'll respond within 24 hours via email to ${this.emailAddresses}.`,
-          actionYes: "Confirm",
-          actionNo: "Cancel",
-        },
-      })
-      .afterClosed()
-      .pipe(
-        take(1),
-        map((val) => {
-          if (val) {
-            this.isSendingResults = true;
-
-            const supportItem = new SupportItem();
-            supportItem.description = ``;
-            supportItem.userId = this.username;
-            supportItem.username = this.emailAddresses;
-            supportItem.subject = `request for reg user creation for ${this.orgId}`;
-            supportItem.orgId = this.appleOrgIdControl.value;
-            supportItem.type = "registration";
-
-            this.supportService
-              .postSupportItem(supportItem)
-              .pipe(
-                take(1),
-                tap((_) => {
-                  this.isSendingResults = true;
-                }),
-                map((data) => {
-                  this.isSendingResults = false;
-                  this.openSnackBar(
-                    "successfully sumbitted your support ticket. thank you for contacting adoya support!",
-                    "dismiss"
-                  );
-
-                  return data;
-                }),
-                catchError(() => {
-                  this.isSendingResults = false;
-                  this.openSnackBar(
-                    "unable to submit your support ticket, please enter required fields.",
-                    "dismiss"
-                  );
-                  return [];
-                })
-              )
-              .subscribe();
-          }
-          return val;
-        }),
-        switchMap((val) => {
-          setTimeout(() => {
-            this.isSendingResults = false;
-          });
-
-          return val;
         })
       )
       .subscribe();

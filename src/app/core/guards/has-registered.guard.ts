@@ -32,9 +32,9 @@ export class HasRegisteredGuard implements CanActivate {
           return this.handleResult(false);
         }
 
-        if (this.initialized) {
-          return this.handleResult(true);
-        }
+        // if (this.initialized) {
+        //   return this.handleResult(true);
+        // }
 
         return this.clientService
           .getClient(user)

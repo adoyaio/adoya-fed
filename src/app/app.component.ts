@@ -71,7 +71,8 @@ export class AppComponent implements AfterViewInit, OnDestroy {
             this.userAccountService.orgId = undefined;
             if (
               !window.location.href.includes("home") &&
-              !window.location.href.includes("start")
+              !window.location.href.includes("start") &&
+              !window.location.href.includes("legal")
             )
               this.router.navigateByUrl("/portal");
           }

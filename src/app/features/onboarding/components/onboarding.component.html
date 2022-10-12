@@ -1,0 +1,216 @@
+<div class="onboarding__container d-flex flex-row w-100">
+  <form [formGroup]="form" class="w-100 mt-2 d-flex flex-row col-12 flex-wrap">
+    <div class="workbench__sending p-2 col-6" *ngIf="isSendingResults">
+      <mat-progress-bar color="primary" mode="indeterminate"></mat-progress-bar>
+    </div>
+    <div class="w-100 mt-2 d-flex flex-row col-12">
+      <div class="col-6">
+        <div class="w-100 no-gutters">
+          <mat-form-field appearance="fill" color="primary" class="col-11">
+            <mat-label>Client Id</mat-label>
+            <input
+              matInput
+              placeholder="client id"
+              required
+              formControlName="clientId"
+            />
+          </mat-form-field>
+
+          <!-- <button
+            mat-icon-button
+            class="float-left"
+            (click)="handleTooltipClick($event, 'Client ID')"
+          >
+            <mat-icon
+              class="float-left"
+              color="primary"
+              matTooltip="Your client ID can be found on your Apple Search Ads Console. &#13; &#13;
+                  Click for exact details on where to find this
+                  information"
+              >help</mat-icon
+            >
+          </button> -->
+        </div>
+
+        <div class="w-100 no-gutters">
+          <mat-form-field appearance="fill" color="primary" class="col-11">
+            <mat-label>Team Id</mat-label>
+            <input
+              matInput
+              placeholder="team id"
+              required
+              formControlName="teamId"
+            />
+          </mat-form-field>
+
+          <!-- <button
+            mat-icon-button
+            class="float-left"
+            (click)="handleTooltipClick($event, 'Team ID')"
+          >
+            <mat-icon
+              class="float-left"
+              color="primary"
+              matTooltip="Your team id can be found on your Apple Search Ads Console. &#13; &#13;
+                  Click for exact details on where to find this
+                  information"
+              >help</mat-icon
+            >
+          </button> -->
+        </div>
+
+        <div class="w-100 no-gutters">
+          <mat-form-field appearance="fill" color="primary" class="col-11">
+            <mat-label>Key ID</mat-label>
+            <input
+              matInput
+              placeholder="key id"
+              required
+              formControlName="keyId"
+            />
+          </mat-form-field>
+
+          <!-- <button
+            class="float-left"
+            mat-icon-button
+            (click)="handleTooltipClick($event, 'Key ID')"
+          >
+            <mat-icon
+              class="float-left"
+              color="primary"
+              matTooltip="Your key id can be found on your Apple Search Ads Console. &#13; &#13;
+                  Click for exact details on where to find this
+                  information"
+              >help</mat-icon
+            >
+          </button> -->
+        </div>
+
+        <div class="w-100 no-gutters">
+          <mat-form-field appearance="fill" color="primary" class="col-11">
+            <mat-label>User ID</mat-label>
+            <input
+              matInput
+              placeholder="user id"
+              required
+              formControlName="userId"
+            />
+          </mat-form-field>
+
+          <!-- <button
+            class="float-left"
+            mat-icon-button
+            (click)="handleTooltipClick($event, 'Key ID')"
+          >
+            <mat-icon
+              class="float-left"
+              color="primary"
+              matTooltip="Your key id can be found on your Apple Search Ads Console. &#13; &#13;
+                  Click for exact details on where to find this
+                  information"
+              >help</mat-icon
+            >
+          </button> -->
+        </div>
+
+        <!-- <div class="w-100 no-gutters d-none">
+          <mat-form-field
+            appearance="fill"
+            color="primary"
+            class="col-11"
+          >
+            <mat-label>Private Key</mat-label>
+
+            <textarea
+              matInput
+              cdkTextareaAutosize
+              formControlName="privateKey"
+            >
+            </textarea>
+          </mat-form-field>
+
+          <button
+            mat-icon-button
+            class="float-left"
+            (click)="handleTooltipClick($event, 'Private Key')"
+          >
+            <mat-icon
+              class="float-left"
+              color="primary"
+              matTooltip="Your key id can be found on your Apple Search Ads Console. &#13; &#13;
+                  Click for exact details on where to find this
+                  information"
+              >help</mat-icon
+            >
+          </button>
+        </div> -->
+
+        <div class="w-100 no-gutters">
+          <mat-form-field appearance="fill" color="primary" class="col-11">
+            <mat-label>Organization Id</mat-label>
+            <input
+              matInput
+              placeholder="organization id"
+              required
+              formControlName="appleOrgId"
+            />
+          </mat-form-field>
+          <!-- <button
+            mat-icon-button
+            class="float-left"
+            (click)="
+              handleTooltipClick($event, 'Apple Search Ads Organiztion ID')
+            "
+          >
+            <mat-icon
+              class="float-left"
+              color="primary"
+              matTooltip="Your Apple Search Ads Organiztion ID can be found on your Apple Search Ads Console. &#13; &#13;
+                  Click for exact details on where to find this
+                  information"
+              >help</mat-icon
+            >
+          </button> -->
+        </div>
+
+        <div class="w-100 no-gutters">
+          <mat-form-field appearance="fill" color="primary" class="col-11">
+            <mat-label>email</mat-label>
+            <input
+              matInput
+              placeholder="email"
+              required
+              formControlName="email"
+            />
+          </mat-form-field>
+          <!-- <button
+            mat-icon-button
+            class="float-left"
+            (click)="
+              handleTooltipClick($event, 'Apple Search Ads Organiztion ID')
+            "
+          >
+            <mat-icon
+              class="float-left"
+              color="primary"
+              matTooltip="Your Apple Search Ads Organiztion ID can be found on your Apple Search Ads Console. &#13; &#13;
+                  Click for exact details on where to find this
+                  information"
+              >help</mat-icon
+            >
+          </button> -->
+        </div>
+
+        <button
+          mat-flat-button
+          color="primary"
+          class="float-left"
+          (click)="handleSubmit()"
+        >
+          <mat-icon class="text-light" aria-label="submit">done</mat-icon>
+          <span class="text-light pl-1">submit</span>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
