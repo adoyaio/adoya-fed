@@ -122,7 +122,7 @@ export class OnboardingComponent implements OnInit {
           supportItem.username = newClient.orgDetails.emailAddresses[0];
           supportItem.subject = `we have accepted an invitation to your apple search ads account (⌐■_■) `;
           supportItem.orgId = String(newClient.orgDetails.orgId);
-          supportItem.type = "registration";
+          supportItem.type = "onboarding";
 
           return this.supportService.postSupportItem(supportItem).pipe(
             map((data) => {

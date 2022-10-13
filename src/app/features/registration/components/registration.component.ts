@@ -373,14 +373,16 @@ export class RegistrationComponent implements OnInit {
   }
 
   get isStep3BackDisabled(): boolean {
-    if (isNil(this.client) || isNil(this.client.orgDetails)) {
-      return true;
-    }
-    return chain(this.client.orgDetails.appleCampaigns)
-      .some((campaign) => {
-        return campaign.status === "ENABLED";
-      })
-      .value();
+    // TODO revisit
+    return true;
+    // if (isNil(this.client) || isNil(this.client.orgDetails)) {
+    //   return true;
+    // }
+    // return chain(this.client.orgDetails.appleCampaigns)
+    //   .some((campaign) => {
+    //     return campaign.status === "ENABLED";
+    //   })
+    //   .value();
   }
 
   constructor(
@@ -453,8 +455,9 @@ export class RegistrationComponent implements OnInit {
               has(this.client.orgDetails, "appleCampaigns") &&
               !isEmpty(this.client.orgDetails.appleCampaigns)
             ) {
+              // TODO revisit
               // modal warning
-              this.showWarningDialog();
+              // this.showWarningDialog();
             }
 
             // TODO move all this into the modal
@@ -463,8 +466,8 @@ export class RegistrationComponent implements OnInit {
               teamId: this.step1Form.get("teamId").value,
               keyId: this.step1Form.get("keyId").value,
               //privateKey: this.step1Form.get("privateKey").value,
-              privateKey:
-                "MHcCAQEEIJgiDLBqbaAb8pqgK74wEY/u0uiswAZkECJFkLUayk+9oAoGCCqGSM49AwEHoUQDQgAEfsYLIIQVzyQWizAguQWR9l7ZkXijRAzgJRXGuq/Q/th1FqlsFyE7vr4xDCw53+JoJebvKBy8QbZgSWON8TohdA==",
+              // privateKey:
+              //   "MHcCAQEEIJgiDLBqbaAb8pqgK74wEY/u0uiswAZkECJFkLUayk+9oAoGCCqGSM49AwEHoUQDQgAEfsYLIIQVzyQWizAguQWR9l7ZkXijRAzgJRXGuq/Q/th1FqlsFyE7vr4xDCw53+JoJebvKBy8QbZgSWON8TohdA==",
             };
 
             // set values from token
@@ -1007,7 +1010,7 @@ export class RegistrationComponent implements OnInit {
     supportItem.description = `invite has been sent for api user`;
     supportItem.userId = this.username;
     supportItem.username = this.emailAddresses;
-    supportItem.subject = `an asa api user invite has been sent for ${this.orgId}  (⌐■_■) `;
+    supportItem.subject = `an asa api user invite has been sent for ${this.orgId} `;
     supportItem.orgId = this.appleOrgIdControl.value;
     supportItem.type = "registration";
 

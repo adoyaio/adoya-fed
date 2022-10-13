@@ -245,38 +245,6 @@
                 </button>
               </div>
 
-              <!-- <div class="w-100 no-gutters d-none">
-                <mat-form-field
-                  appearance="fill"
-                  color="primary"
-                  class="col-11"
-                >
-                  <mat-label>Private Key</mat-label>
-
-                  <textarea
-                    matInput
-                    cdkTextareaAutosize
-                    formControlName="privateKey"
-                  >
-                  </textarea>
-                </mat-form-field>
-
-                <button
-                  mat-icon-button
-                  class="float-left"
-                  (click)="handleTooltipClick($event, 'Private Key')"
-                >
-                  <mat-icon
-                    class="float-left"
-                    color="primary"
-                    matTooltip="Your key id can be found on your Apple Search Ads Console. &#13; &#13;
-                        Click for exact details on where to find this
-                        information"
-                    >help</mat-icon
-                  >
-                </button>
-              </div> -->
-
               <div class="w-100 no-gutters invisible">
                 <mat-form-field
                   appearance="fill"
@@ -1354,7 +1322,7 @@ RAzgJRXGuq/Q/th1FqlsFyE7vr4xDCw53+JoJebvKBy8QbZgSWON8TohdA==
           </div>
           <div
             class="w-100"
-            *ngIf="!isLoadingResults && stepper.selectedIndex > 1"
+            *ngIf="!isLoadingResults && stepper.selectedIndex == 3"
           >
             <mat-list class="p-0 m-0 pb-2">
               <mat-list-item class="mb-1 pb-2">
@@ -1387,7 +1355,7 @@ RAzgJRXGuq/Q/th1FqlsFyE7vr4xDCw53+JoJebvKBy8QbZgSWON8TohdA==
 
           <div
             class="w-100 p-2 mt-2 border-top"
-            *ngIf="!isLoadingResults && stepper.selectedIndex > 1"
+            *ngIf="!isLoadingResults && stepper.selectedIndex == 3"
           >
             <table class="w-100">
               <tr>
@@ -1469,6 +1437,7 @@ RAzgJRXGuq/Q/th1FqlsFyE7vr4xDCw53+JoJebvKBy8QbZgSWON8TohdA==
               </ng-container>
             </table>
           </div>
+
           <div *ngIf="step3Form.dirty; else continueBlock">
             <button
               mat-flat-button
