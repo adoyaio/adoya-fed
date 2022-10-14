@@ -89,6 +89,10 @@ export class PortalComponent implements OnInit {
           // )
 
           if (authState.state === "signedIn") {
+            if (authState.user.attributes.email === "info@adoya.io") {
+              this.router.navigateByUrl("/onboarding");
+              return;
+            }
             this.router.navigateByUrl("/workbench");
           } else {
             //this.router.navigateByUrl("/portal");
