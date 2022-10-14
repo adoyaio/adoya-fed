@@ -134,4 +134,8 @@ export class PortalComponent implements OnInit {
       )
       .subscribe();
   }
+
+  handleCTA() {
+    window.open("https://www.adoya.io/copy-of-services", "_blank");
+  }
 }

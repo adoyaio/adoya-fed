@@ -32,7 +32,6 @@ export class OnboardingComponent implements OnInit {
     keyId: new FormControl("", Validators.required),
     userId: new FormControl("", Validators.required),
     email: new FormControl("", Validators.required),
-    // privateKey: new FormControl("", Validators.required),
   });
 
   handleSubmit() {
@@ -44,8 +43,6 @@ export class OnboardingComponent implements OnInit {
       teamId: this.form.get("teamId").value,
       keyId: this.form.get("keyId").value,
       clientId: this.form.get("clientId").value,
-      // privateKey:
-      //   "MHcCAQEEIJgiDLBqbaAb8pqgK74wEY/u0uiswAZkECJFkLUayk+9oAoGCCqGSM49AwEHoUQDQgAEfsYLIIQVzyQWizAguQWR9l7ZkXijRAzgJRXGuq/Q/th1FqlsFyE7vr4xDCw53+JoJebvKBy8QbZgSWON8TohdA==",
     };
     newClient.orgDetails.orgId = +this.form.get("appleOrgId").value;
     newClient.orgDetails.emailAddresses = [this.form.get("email").value];

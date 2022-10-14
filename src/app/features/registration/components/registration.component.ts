@@ -210,7 +210,6 @@ export class RegistrationComponent implements OnInit {
       clientId: new FormControl("", Validators.required),
       teamId: new FormControl("", Validators.required),
       keyId: new FormControl("", Validators.required),
-      // privateKey: new FormControl("", Validators.required),
     }),
     step2Form: this.fb.group(
       {
@@ -449,7 +448,6 @@ export class RegistrationComponent implements OnInit {
               ""
             );
 
-            // this.initializeClient();
             this.isLoadingResults = true;
             if (
               has(this.client.orgDetails, "appleCampaigns") &&
@@ -465,9 +463,6 @@ export class RegistrationComponent implements OnInit {
               clientId: this.step1Form.get("clientId").value,
               teamId: this.step1Form.get("teamId").value,
               keyId: this.step1Form.get("keyId").value,
-              //privateKey: this.step1Form.get("privateKey").value,
-              // privateKey:
-              //   "MHcCAQEEIJgiDLBqbaAb8pqgK74wEY/u0uiswAZkECJFkLUayk+9oAoGCCqGSM49AwEHoUQDQgAEfsYLIIQVzyQWizAguQWR9l7ZkXijRAzgJRXGuq/Q/th1FqlsFyE7vr4xDCw53+JoJebvKBy8QbZgSWON8TohdA==",
             };
 
             // set values from token
@@ -789,9 +784,6 @@ export class RegistrationComponent implements OnInit {
       .setValue(this.client.orgDetails.auth.clientId);
     this.step1Form.get("teamId").setValue(this.client.orgDetails.auth.teamId);
     this.step1Form.get("keyId").setValue(this.client.orgDetails.auth.keyId);
-    // this.step1Form
-    //   .get("privateKey")
-    //   .setValue(this.client.orgDetails.auth.privateKey);
   }
 
   setStep2FormValues() {

@@ -86,11 +86,16 @@
               >info_outline</mat-icon
             >
 
-            more info here:
+            get more info:
           </mat-list-item>
         </div>
 
-        <button mat-flat-button color="primary" class="float-left ml-3">
+        <button
+          mat-flat-button
+          color="primary"
+          class="float-left ml-3"
+          (click)="handleCTA()"
+        >
           <span class="text-light pl-1">view pricing and details</span>
         </button>
       </mat-list>
