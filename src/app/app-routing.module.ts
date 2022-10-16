@@ -7,6 +7,7 @@ import { HasRegisteredGuard } from "./core/guards/has-registered.guard";
 import { SplashComponent } from "./features/homesite/splash/splash.component";
 import { HomeComponent } from "./features/homesite/home/home.component";
 import { OnboardingComponent } from "./features/onboarding/components/onboarding.component";
+import { PortalInternalComponent } from "./features/portal/components/portal-internal/portal-internal.component";
 
 const routes: Routes = [
   {
@@ -17,6 +18,11 @@ const routes: Routes = [
   {
     path: "portal",
     component: PortalComponent,
+    data: { title: "adoya" },
+  },
+  {
+    path: "portal-internal",
+    component: PortalInternalComponent,
     data: { title: "adoya" },
   },
   {
@@ -46,7 +52,11 @@ const routes: Routes = [
   },
   {
     path: "onboarding",
-    component: OnboardingComponent,
+    // component: OnboardingComponent,
+    loadChildren: () =>
+      import("./features/onboarding/onboarding.module").then(
+        (m) => m.OnboardingModule
+      ),
     canActivate: [AuthGuard],
     data: { title: "onboarding" },
   },
