@@ -8,7 +8,7 @@ export class AppService {
   constructor() {}
 
   static privacyPolicy: string = `
-  <div class='text-center'><h4>Adoya, Inc. Privacy Policy</h4></div>
+  <div><h4>Adoya, Inc. Privacy Policy</h4></div>
 
   <div class="mb-2">
   Adoya, Inc. (“Adoya,”"we," or “us”) respects your privacy and is committed to protecting it through our compliance with this “Privacy Policy.” Throughout this Privacy Policy, we refer to any person accessing or using these Platforms (as defined below) as “you,” or the “User.”
@@ -659,10 +659,10 @@ export class AppService {
 
   `;
   static termsOfService: string = `
-  <div class='text-center'><h4>Adoya, Inc. Terms of Service</h4></div>
+  <div><h4>Adoya, Inc. Terms of Service</h4></div>
 
   <div class="mb-2">
-  www.adoya-app.io and www.adoya.io is operated by Adoya, Inc. <br> <br> Throughout these “Terms of Use” we use the terms “we”, “us”, “our”, or the “Company” to refer to Adoya, Inc. We refer to any person accessing or using this website as “You,” or the “User.”
+  adoya-app.io and adoya.io are operated by Adoya, Inc. <br> <br> Throughout these “Terms of Use” we use the terms “we”, “us”, “our”, or the “Company” to refer to Adoya, Inc. We refer to any person accessing or using this website as “You,” or the “User.”
   The following outlines the Terms of Use, together with any other legal agreements by and between you and the Company linked within the Terms of Use (collectively the “Agreement”), govern your access to and use of the website, services, features, content, and any applications offered by the Company and found at www.adoya-app.io/portal and/or www.adoya.io (collectively the "Platforms”) whether as a guest or a registered user. Before using any of our services, you are required to read, understand, and agree to these terms.
   </div>
 
@@ -915,7 +915,7 @@ export class AppService {
   `;
 
   static faqs: string = `
-  <div class='text-center'><h4>Frequently Asked Questions</h4></div>
+  <div ><h4>Frequently Asked Questions</h4></div>
 
   <div><h4>How does Adoya compliment Apple Search Ads?</h4></div>
   <div class="mb-4">
@@ -966,7 +966,7 @@ export class AppService {
 
   <div><h4>What if I want to build something customized?</h4></div>
   <div class="mb-4">
-  Contact us at info@adoya.io or support [link to support] and we’ll evaluate options!
+  Contact us at info@adoya.io or support at <a href="https://adoya-app.io/workbench/support" target="_blank" class="adoya-link font-weight-bold">https://adoya-app.io/workbench/support</a> and we’ll evaluate options!
   </div>
 
   `;

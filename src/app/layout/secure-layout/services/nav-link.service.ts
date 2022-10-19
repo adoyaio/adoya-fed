@@ -93,6 +93,18 @@ export class NavLinkService implements OnDestroy {
         undefined
       )
     );
+
+    this.navLinks.push(
+      LayoutNavLinks.build(
+        7,
+        "button",
+        "FAQ",
+        "/workbench/faq",
+        "help_center",
+        undefined,
+        undefined
+      )
+    );
   }
 
   setActiveLink(index: number) {

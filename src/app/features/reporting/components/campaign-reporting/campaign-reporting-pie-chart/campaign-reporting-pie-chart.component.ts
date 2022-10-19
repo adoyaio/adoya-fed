@@ -8,10 +8,11 @@ import {
   filter as _filter,
   reduce,
   get,
+  isEmpty,
 } from "lodash";
 import { BaseChartDirective, Label, SingleDataSet } from "ng2-charts";
-import { combineLatest } from "rxjs";
-import { filter, tap } from "rxjs/operators";
+import { combineLatest, Observable } from "rxjs";
+import { filter, map, tap } from "rxjs/operators";
 import { ReportingService } from "../../../reporting.service";
 
 @Component({
@@ -41,17 +42,18 @@ export class CampaignReportingPieChartComponent implements OnInit {
       .pipe(
         filter(([data, metrics]) => !isNil(data)),
         tap(([data, metrics]) => {
+          //debugger;
           const activeMetric = find(metrics, (metric) => {
             return metric.state === true;
           });
 
-          if (isNil(activeMetric)) {
-            return;
-          }
-
           // init chart
           this.pieChartData = [];
           this.pieChartLabels = [];
+
+          if (isNil(activeMetric)) {
+            return;
+          }
 
           // build list of campaigns
           this.pieChartLabels = chain(data)
