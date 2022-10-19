@@ -929,17 +929,17 @@ export class AppService {
 
   <div><h4>What if I want to create a new campaign?</h4></div>
   <div class="mb-4">
-  Adoya recommends you run campaigns via our proprietary method which you would have created when you signed up with us. However, feel free to use the native Apple Search Ads console to create new campaigns. Contact support if you want to utilize our automated bid management system for newly created campaigns and we’ll do a sync for you!
+  Adoya recommends you run campaigns via our proprietary method which you would have created when you signed up with us. However, feel free to use the native Apple Search Ads console to create new campaigns. Contact <a href="https://adoya-app.io/workbench/support" target="_blank" class="adoya-link font-weight-bold">support</a> if you want to utilize our automated bid management system for newly created campaigns and we’ll do a sync for you!
   </div>
 
   <div><h4>What is your refund policy?</h4></div>
   <div class="mb-4">
-  Review our terms of service for more information on our refund policy.
+  Review our <a href="https://adoya-app.io/legal/terms" target="_blank" class="adoya-link font-weight-bold">terms of service</a> for more information on our refund policy.
   </div>
 
   <div><h4>Who do I contact with a billing question or issue?:</h4></div>
   <div class="mb-4">
-  Email info@adoya.io or contact support and we’ll respond to you within 24 hours.
+  Email info@adoya.io or contact <a href="https://adoya-app.io/workbench/support" target="_blank" class="adoya-link font-weight-bold">support</a> and we’ll respond to you within 24 hours.
   </div>
 
 
@@ -950,7 +950,7 @@ export class AppService {
 
   <div><h4>Where do I provide feedback?</h4></div>
   <div class="mb-4">
-  Contact support or email info@adoya.io. We love feedback!
+  Contact <a href="https://adoya-app.io/workbench/support" target="_blank" class="adoya-link font-weight-bold">support</a> or email info@adoya.io. We love feedback!
   </div>
 
   <div><h4>What if I want to promote multiple apps or locations?</h4></div>
@@ -966,7 +966,7 @@ export class AppService {
 
   <div><h4>What if I want to build something customized?</h4></div>
   <div class="mb-4">
-  Contact us at info@adoya.io or support at <a href="https://adoya-app.io/workbench/support" target="_blank" class="adoya-link font-weight-bold">https://adoya-app.io/workbench/support</a> and we’ll evaluate options!
+  Contact us at info@adoya.io or <a href="https://adoya-app.io/workbench/support" target="_blank" class="adoya-link font-weight-bold">support</a> and we’ll evaluate options!
   </div>
 
   `;

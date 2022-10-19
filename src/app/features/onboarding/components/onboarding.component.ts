@@ -1,11 +1,13 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormControl, Validators } from "@angular/forms";
 import { MatSnackBar } from "@angular/material";
+import { Router } from "@angular/router";
 import { catchError, map, switchMap, take, tap } from "rxjs/operators";
 import { Client, OrgDetails } from "src/app/core/models/client";
 import { ClientPayload } from "src/app/core/models/client-payload";
 import { ClientService } from "src/app/core/services/client.service";
 import { SupportService } from "src/app/core/services/support.service";
+import { UserAccountService } from "src/app/core/services/user-account.service";
 import { SupportItem } from "../../support/models/support-item";
 
 @Component({
@@ -18,7 +20,9 @@ export class OnboardingComponent implements OnInit {
     private clientService: ClientService,
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
-    private supportService: SupportService
+    private supportService: SupportService,
+    private router: Router,
+    private userAccountService: UserAccountService
   ) {}
 
   ngOnInit() {}
@@ -147,5 +151,13 @@ export class OnboardingComponent implements OnInit {
       duration: 15000,
       panelClass: "standard",
     });
+  }
+
+  onProfileClicked() {
+    this.router.navigateByUrl("/workbench/account");
+  }
+  onLogoutClicked() {
+    this.userAccountService.logout();
+    this.router.navigateByUrl("/portal");
   }
 }

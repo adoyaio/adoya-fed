@@ -1,4 +1,4 @@
-<div class="onboarding__container d-flex flex-row w-100">
+<div class="onboarding__container d-flex flex-row flex-wrap w-100">
   <form [formGroup]="form" class="w-100 mt-2 d-flex flex-row col-12 flex-wrap">
     <div class="workbench__sending p-2 col-6" *ngIf="isSendingResults">
       <mat-progress-bar color="primary" mode="indeterminate"></mat-progress-bar>
@@ -181,4 +181,17 @@
       </div>
     </div>
   </form>
+
+  <div class="w-100">
+    <div>
+      <button (click)="onProfileClicked()" mat-icon-button>
+        <mat-icon color="primary">account_circle</mat-icon> Account
+      </button>
+    </div>
+    <div>
+      <button (click)="onLogoutClicked()" mat-icon-button>
+        <mat-icon color="primary">exit_to_app</mat-icon> Log Out
+      </button>
+    </div>
+  </div>
 </div>
