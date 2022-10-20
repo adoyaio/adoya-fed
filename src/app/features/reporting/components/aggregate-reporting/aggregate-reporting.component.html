@@ -67,12 +67,12 @@
         </button>
       </div>
 
-      <!-- <div>
+      <div>
         <button mat-button (click)="resetDateForms()">
-          <mat-icon aria-label="clear">clear</mat-icon>
+          <mat-icon aria-label="clear" color="primary">clear</mat-icon>
           clear filters
         </button>
-      </div> -->
+      </div>
 
       <div>
         <button mat-button (click)="downloadAggregateCsv()" class="ml-2">
@@ -107,7 +107,7 @@
         </button>
       </div>
 
-      <mat-chip-list class="mt-2">
+      <mat-chip-list class="mt-2 ml-2 mb-2">
         <mat-chip
           *ngFor="
             let activeLineChartLabel of reportingService.activeLineChartLabel$.getValue()
@@ -148,7 +148,7 @@
     >
     </mat-paginator> -->
 
-    <div class="w-100">
+    <div class="w-100 mt-2">
       <mat-paginator
         #aggregatePaginator
         [ngClass]="isAggregateDataVisMode ? 'd-none' : ''"

@@ -80,7 +80,7 @@
           mat-button
           (click)="applyFilter()"
         >
-          <mat-icon aria-label="save">filter_alt</mat-icon>
+          <mat-icon aria-label="save" color="primary">filter_alt</mat-icon>
           apply filters
         </button>
       </div>
@@ -94,35 +94,43 @@
 
       <div>
         <button (click)="downloadKeywordsCsv()" mat-button>
-          <mat-icon class="ml-1" aria-label="download">save_alt</mat-icon>
+          <mat-icon class="ml-1" aria-label="download" color="primary"
+            >save_alt</mat-icon
+          >
           csv download
         </button>
       </div>
 
       <div *ngIf="!isKeywordDataVisMode && !isKeywordAggDataVisMode">
         <button mat-button (click)="showDataView()">
-          <mat-icon class="ml-2" aria-label="graph">show_chart</mat-icon>
+          <mat-icon class="ml-2" aria-label="graph" color="primary"
+            >show_chart</mat-icon
+          >
           data visualization
         </button>
       </div>
 
       <div *ngIf="isKeywordDataVisMode || isKeywordAggDataVisMode">
         <button mat-button (click)="showTableView()">
-          <mat-icon class="ml-2" aria-label="table">table_rows</mat-icon>
+          <mat-icon class="ml-2" aria-label="table" color="primary"
+            >table_rows</mat-icon
+          >
           table view
         </button>
       </div>
 
       <div *ngIf="isKeywordDataVisMode">
         <button mat-button (click)="showAggregateDataView()">
-          <mat-icon class="ml-2" aria-label="pie chart">pie_chart</mat-icon>
+          <mat-icon class="ml-2" aria-label="pie chart" color="primary"
+            >pie_chart</mat-icon
+          >
           view aggregate
         </button>
       </div>
 
       <div *ngIf="isKeywordAggDataVisMode">
         <button mat-button (click)="showDataView()">
-          <mat-icon class="ml-2" aria-label="line chart"
+          <mat-icon class="ml-2" aria-label="line chart" color="primary"
             >stacked_line_chart</mat-icon
           >
           view by day
@@ -142,7 +150,7 @@
 
       <mat-chip-list
         *ngIf="isKeywordDataVisMode || isKeywordAggDataVisMode"
-        class="ml-1"
+        class="mt-2 ml-2 mb-2"
       >
         <mat-chip
           *ngFor="
