@@ -25,7 +25,9 @@ export class HasRegisteredGuard implements CanActivate {
   ): Observable<boolean> | Promise<boolean> | boolean {
     return Auth.currentUserInfo().then(
       (val) => {
+        // check first for org_id, then failover to username
         const user = get(val.attributes, "custom:org_id", get(val, "username"));
+
         // const orgId = get(val.attributes, "custom:org_id");
 
         if (isNil(user)) {

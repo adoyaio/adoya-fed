@@ -59,17 +59,17 @@ export class NavLinkService implements OnDestroy {
       )
     );
 
-    this.navLinks.push(
-      LayoutNavLinks.build(
-        4,
-        "button",
-        "Marketing Newsfeed",
-        "/workbench/newsfeed",
-        "dynamic_feed",
-        undefined,
-        undefined
-      )
-    );
+    // this.navLinks.push(
+    //   LayoutNavLinks.build(
+    //     4,
+    //     "button",
+    //     "Marketing Newsfeed",
+    //     "/workbench/newsfeed",
+    //     "dynamic_feed",
+    //     undefined,
+    //     undefined
+    //   )
+    // );
 
     this.navLinks.push(
       LayoutNavLinks.build(
@@ -82,13 +82,14 @@ export class NavLinkService implements OnDestroy {
         undefined
       )
     );
+
     this.navLinks.push(
       LayoutNavLinks.build(
         6,
         "button",
-        "Support",
-        "/workbench/support",
-        "feedback",
+        "FAQ",
+        "/workbench/faq",
+        "help_center",
         undefined,
         undefined
       )
@@ -98,9 +99,21 @@ export class NavLinkService implements OnDestroy {
       LayoutNavLinks.build(
         7,
         "button",
-        "FAQ",
-        "/workbench/faq",
-        "help_center",
+        "Legal",
+        "/workbench/legal",
+        "policy",
+        undefined,
+        undefined
+      )
+    );
+
+    this.navLinks.push(
+      LayoutNavLinks.build(
+        8,
+        "button",
+        "Support",
+        "/workbench/support",
+        "feedback",
         undefined,
         undefined
       )

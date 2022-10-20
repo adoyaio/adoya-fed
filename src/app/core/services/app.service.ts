@@ -10,6 +10,8 @@ export class AppService {
   static privacyPolicy: string = `
   <div><h4>Adoya, Inc. Privacy Policy</h4></div>
 
+  <div class="mb-4">Last Modified: July 17, 2022</div>
+
   <div class="mb-2">
   Adoya, Inc. (“Adoya,”"we," or “us”) respects your privacy and is committed to protecting it through our compliance with this “Privacy Policy.” Throughout this Privacy Policy, we refer to any person accessing or using these Platforms (as defined below) as “you,” or the “User.”
   </div>
@@ -279,10 +281,13 @@ export class AppService {
   `;
 
   static clickWrap: string = `
-  <div class='text-center'><h4>Adoya, Inc. User Agreement</h4></div>
+  <div><h4>Adoya, Inc. User Agreement</h4></div>
+
+  <div class="mb-4">Last Modified: July 17, 2022</div>
+
 
   <div class="mb-2">
-  www.adoya-app.io and www.adoya.io along with any accompanying applications (collectively the “Platforms”) are operated by Adoya, Inc. (“we,” “us,” “our,” “Adoya,” or the “Company”). Before registering with the Company for a user account on these Platforms, please read the following User Agreement (these “Terms” or the “Agreement”) carefully to understand our policies and practices regarding your information, how we will treat it, what we expect of you during your use of the Platforms, and payment information.
+  adoya-app.io and adoya.io along with any accompanying applications (collectively the “Platforms”) are operated by Adoya, Inc. (“we,” “us,” “our,” “Adoya,” or the “Company”). Before registering with the Company for a user account on these Platforms, please read the following User Agreement (these “Terms” or the “Agreement”) carefully to understand our policies and practices regarding your information, how we will treat it, what we expect of you during your use of the Platforms, and payment information.
   </div>
 
   <div class="mb-2">
@@ -661,8 +666,14 @@ export class AppService {
   static termsOfService: string = `
   <div><h4>Adoya, Inc. Terms of Service</h4></div>
 
+  <div class="mb-4">Last Modified: July 17, 2022</div>
+
   <div class="mb-2">
-  adoya-app.io and adoya.io are operated by Adoya, Inc. <br> <br> Throughout these “Terms of Use” we use the terms “we”, “us”, “our”, or the “Company” to refer to Adoya, Inc. We refer to any person accessing or using this website as “You,” or the “User.”
+  adoya-app.io and adoya.io are operated by Adoya, Inc. Throughout these “Terms of Use” we use the terms “we”, “us”, “our”, or the “Company” to refer to Adoya, Inc. We refer to any person accessing or using this website as “You,” or the “User.”
+  </div>
+
+
+  <div class="mb-2">
   The following outlines the Terms of Use, together with any other legal agreements by and between you and the Company linked within the Terms of Use (collectively the “Agreement”), govern your access to and use of the website, services, features, content, and any applications offered by the Company and found at www.adoya-app.io/portal and/or www.adoya.io (collectively the "Platforms”) whether as a guest or a registered user. Before using any of our services, you are required to read, understand, and agree to these terms.
   </div>
 

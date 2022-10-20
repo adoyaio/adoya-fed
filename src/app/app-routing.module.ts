@@ -8,6 +8,7 @@ import { SplashComponent } from "./features/homesite/splash/splash.component";
 import { HomeComponent } from "./features/homesite/home/home.component";
 import { OnboardingComponent } from "./features/onboarding/components/onboarding.component";
 import { PortalInternalComponent } from "./features/portal/components/portal-internal/portal-internal.component";
+import { IsAdminGuard } from "./core/guards/is-admin.guard";
 
 const routes: Routes = [
   {
@@ -57,7 +58,7 @@ const routes: Routes = [
       import("./features/onboarding/onboarding.module").then(
         (m) => m.OnboardingModule
       ),
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, IsAdminGuard],
     data: { title: "onboarding" },
   },
   {
