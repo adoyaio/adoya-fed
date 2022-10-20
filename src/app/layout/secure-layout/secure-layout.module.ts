@@ -15,6 +15,7 @@ import { NewsfeedModule } from "src/app/features/newsfeed/newsfeed.module";
 import { OptimizationsModule } from "src/app/features/optimizations/optimizations.module";
 import { PreferencesModule } from "src/app/features/preferences/preferences.module";
 import { LegalModule } from "src/app/features/legal/legal.module";
+import { LegalSecureModule } from "src/app/features/secure-legal/legal-secure.module";
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { LegalModule } from "src/app/features/legal/legal.module";
     NewsfeedModule,
     PreferencesModule,
     LegalModule,
+    LegalSecureModule,
   ],
 })
 export class SecureLayoutModule {}

@@ -100,7 +100,7 @@ export class NavLinkService implements OnDestroy {
         7,
         "button",
         "Legal",
-        "/workbench/legal",
+        "/workbench/policy",
         "policy",
         undefined,
         undefined
