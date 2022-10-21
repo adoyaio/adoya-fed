@@ -664,7 +664,7 @@ export class AppService {
 
   `;
   static termsOfService: string = `
-  <div><h4>Adoya, Inc. Terms of Service</h4></div>
+  <div><h4>Adoya, Inc. Terms of Use</h4></div>
 
   <div class="mb-4">Last Modified: July 17, 2022</div>
 

@@ -58,6 +58,10 @@ export class AggregateReportingComponent implements OnInit {
     return this.campaignForm.get("end");
   }
 
+  get lookbackControl(): AbstractControl {
+    return this.campaignForm.get("lookback");
+  }
+
   @ViewChild("aggregatePaginator", { static: false })
   aggregatePaginator: MatPaginator;
 
@@ -79,12 +83,6 @@ export class AggregateReportingComponent implements OnInit {
     this.maxEndDate.setDate(this.maxEndDate.getDate() - 1);
 
     this.orgId = this.userAccountService.orgId;
-
-    // this.orgId = this.userAccountService
-    //   .getCurrentUser()
-    //   .UserAttributes.find((val) => {
-    //     return val.Name === "custom:org_id";
-    //   }).Value;
   }
 
   ngAfterViewInit() {
@@ -248,6 +246,76 @@ export class AggregateReportingComponent implements OnInit {
         })
       )
       .subscribe();
+
+    this.campaignForm.controls["lookback"].valueChanges
+      .pipe(
+        tap((val) => {
+          const startDate = new Date();
+          const endDate = new Date();
+          const now = new Date();
+
+          switch (val) {
+            case "1":
+              // set start picker today endpicker yesterday
+              startDate.setDate(startDate.getDate() - 2);
+              endDate.setDate(endDate.getDate() - 1);
+              this.startPickerControl.setValue(startDate);
+              this.endPickerControl.setValue(endDate);
+              return;
+
+            case "7":
+              // set start picker today endpicker yesterday
+
+              startDate.setDate(startDate.getDate() - 8);
+              endDate.setDate(endDate.getDate() - 1);
+              this.startPickerControl.setValue(startDate);
+              this.endPickerControl.setValue(endDate);
+
+              return;
+
+            case "30":
+              // set start picker today endpicker 30 days ago
+              startDate.setDate(startDate.getDate() - 31);
+              endDate.setDate(endDate.getDate() - 1);
+              this.startPickerControl.setValue(startDate);
+              this.endPickerControl.setValue(endDate);
+
+              return;
+
+            case "month-to-date":
+              const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+
+              const lastDay = new Date(
+                now.getFullYear(),
+                now.getMonth() + 1,
+                0
+              );
+
+              this.startPickerControl.setValue(firstDay);
+              this.endPickerControl.setValue(lastDay);
+
+              return;
+
+            case "last-month-to-date":
+              const firstDayOfLastMonth = new Date(
+                now.getFullYear(),
+                now.getMonth() - 1,
+                1
+              );
+
+              const lastDayOfLastMonth = new Date(
+                now.getFullYear(),
+                now.getMonth(),
+                0
+              );
+
+              this.startPickerControl.setValue(firstDayOfLastMonth);
+              this.endPickerControl.setValue(lastDayOfLastMonth);
+              return;
+          }
+        })
+      )
+      .subscribe();
   }
 
   formatDate(date) {
@@ -292,6 +360,7 @@ export class AggregateReportingComponent implements OnInit {
     this.reportingService.isLoadingCPI = true;
     this.startPickerControl.reset();
     this.endPickerControl.reset();
+    this.lookbackControl.reset();
     this.aggregatePaginator.pageIndex = 0;
     this.offsetKeys = ["init|init"];
     // this.sort.active = "timestamp";
