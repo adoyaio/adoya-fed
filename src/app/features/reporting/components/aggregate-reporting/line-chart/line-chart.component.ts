@@ -53,7 +53,7 @@ export class LineChartComponent implements OnInit {
           //init data lines - build these dynamically
           const cpiDataLine = { data: [], label: "Cost Per Install" };
           const installsDataLine = { data: [], label: "Installs" };
-          const spendDataLine = { data: [], label: "Spend" };
+          const spendDataLine = { data: [], label: "Cost" };
           const purchasesDataLine = { data: [], label: "Purchases" };
           const cppDataLine = { data: [], label: "Cost Per Purchase" };
           const revenueDataLine = { data: [], label: "Revenue" };
