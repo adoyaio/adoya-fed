@@ -140,6 +140,6 @@ export class PortalComponent implements OnInit {
   }
 
   handleCTA() {
-    window.open("https://www.adoya.io/copy-of-services", "_blank");
+    window.open("https://www.adoya.io/apple-search-ads", "_blank");
   }
 }
