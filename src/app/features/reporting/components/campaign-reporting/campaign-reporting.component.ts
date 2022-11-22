@@ -112,6 +112,7 @@ export class CampaignReportingComponent implements OnInit {
   }
 
   ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
     this.campaignFilterForm.controls["lookback"].setValue("1");
 
     const startDate = new Date();
@@ -224,6 +225,7 @@ export class CampaignReportingComponent implements OnInit {
       )
       .subscribe();
 
+    // JF 11/22/22 going to client side pagination as data vis doesn't work well w serverside paging
     // this.paginator.page
     //   .pipe(
     //     delay(0),

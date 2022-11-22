@@ -137,6 +137,7 @@ export class ClientService {
     let headers = new HttpHeaders();
     headers = headers.set("x-api-key", this.authKey);
     headers = headers.set("Authorization", this.userAccountservice.jwtToken);
+    debugger;
     return this.http.get<any>(url, { headers: headers }).pipe(
       map((response) => {
         // return CostPerInstallDayObject.buildFromGetHistoryResponse(response);

@@ -86,15 +86,25 @@ export class AggregateReportingComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    //this.dataSource.paginator = this.aggregatePaginator;
+    this.dataSource.paginator = this.aggregatePaginator;
+    this.dataSource.sort = this.sort;
+
+    const startDate = new Date();
+    const endDate = new Date();
+
+    // set start picker today endpicker yesterday
+    startDate.setDate(startDate.getDate() - 100);
+    endDate.setDate(endDate.getDate() - 1);
+    this.startPickerControl.setValue(startDate);
+    this.endPickerControl.setValue(endDate);
 
     this.clientService
       .getClientCostHistoryByTime(
         this.orgId,
         this.aggregatePaginator.pageSize,
         this.offsetKeys[this.aggregatePaginator.pageIndex],
-        undefined,
-        undefined
+        startDate.toISOString().split("T")[0],
+        endDate.toISOString().split("T")[0]
       )
       .pipe(
         take(1),
@@ -127,125 +137,125 @@ export class AggregateReportingComponent implements OnInit {
       )
       .subscribe();
 
-    this.aggregatePaginator.page
-      .pipe(
-        tap((val) => {
-          this.reportingService.isLoadingCPI = true;
-        }),
-        switchMap((val) => {
-          let offsetKey = this.offsetKeys[val.pageIndex];
-          let start: Date = this.startPickerControl.value
-            ? this.startPickerControl.value
-            : "all";
-          let end: Date = this.endPickerControl.value
-            ? this.endPickerControl.value
-            : "all";
+    // this.aggregatePaginator.page
+    //   .pipe(
+    //     tap((val) => {
+    //       this.reportingService.isLoadingCPI = true;
+    //     }),
+    //     switchMap((val) => {
+    //       let offsetKey = this.offsetKeys[val.pageIndex];
+    //       let start: Date = this.startPickerControl.value
+    //         ? this.startPickerControl.value
+    //         : "all";
+    //       let end: Date = this.endPickerControl.value
+    //         ? this.endPickerControl.value
+    //         : "all";
 
-          return this.clientService
-            .getClientCostHistoryByTime(
-              this.orgId,
-              this.aggregatePaginator.pageSize,
-              this.offsetKeys[this.aggregatePaginator.pageIndex],
-              this.formatDate(start),
-              this.formatDate(end)
-            )
-            .pipe(
-              map((data) => {
-                this.reportingService.isLoadingCPI = false;
-                this.cpiHistory =
-                  CostPerInstallDayObject.buildFromGetHistoryResponse(
-                    data["history"]
-                  );
-                this.dataSource.data = this.cpiHistory;
-                this.reportingService.costPerInstallDayObject$.next({
-                  ...this.cpiHistory,
-                });
+    //       return this.clientService
+    //         .getClientCostHistoryByTime(
+    //           this.orgId,
+    //           this.aggregatePaginator.pageSize,
+    //           this.offsetKeys[this.aggregatePaginator.pageIndex],
+    //           this.formatDate(start),
+    //           this.formatDate(end)
+    //         )
+    //         .pipe(
+    //           map((data) => {
+    //             this.reportingService.isLoadingCPI = false;
+    //             this.cpiHistory =
+    //               CostPerInstallDayObject.buildFromGetHistoryResponse(
+    //                 data["history"]
+    //               );
+    //             this.dataSource.data = this.cpiHistory;
+    //             this.reportingService.costPerInstallDayObject$.next({
+    //               ...this.cpiHistory,
+    //             });
 
-                if (val.pageIndex > val.previousPageIndex) {
-                  this.offsetKeys.push(
-                    String(data["offset"]["org_id"]) +
-                      "|" +
-                      String(data["offset"]["timestamp"])
-                  );
-                }
+    //             if (val.pageIndex > val.previousPageIndex) {
+    //               this.offsetKeys.push(
+    //                 String(data["offset"]["org_id"]) +
+    //                   "|" +
+    //                   String(data["offset"]["timestamp"])
+    //               );
+    //             }
 
-                this.aggregatePaginator.length = data["count"];
+    //             this.aggregatePaginator.length = data["count"];
 
-                return data;
-              }),
-              catchError(() => {
-                this.reportingService.isLoadingCPI = false;
-                return [];
-              })
-            );
-        })
-      )
-      .subscribe();
+    //             return data;
+    //           }),
+    //           catchError(() => {
+    //             this.reportingService.isLoadingCPI = false;
+    //             return [];
+    //           })
+    //         );
+    //     })
+    //   )
+    //   .subscribe();
 
-    this.sort.sortChange
-      .pipe(
-        tap((val) => {
-          this.cpiHistory.sort((a, b) => {
-            if (val.active === "timestamp") {
-              if (val.direction === "asc") {
-                return a.timestamp < b.timestamp ? -1 : 1;
-              }
-              return a.timestamp > b.timestamp ? -1 : 1;
-            }
+    // this.sort.sortChange
+    //   .pipe(
+    //     tap((val) => {
+    //       this.cpiHistory.sort((a, b) => {
+    //         if (val.active === "timestamp") {
+    //           if (val.direction === "asc") {
+    //             return a.timestamp < b.timestamp ? -1 : 1;
+    //           }
+    //           return a.timestamp > b.timestamp ? -1 : 1;
+    //         }
 
-            if (val.active === "spend") {
-              if (val.direction === "asc") {
-                return +a.spend - +b.spend;
-              }
-              return +b.spend - +a.spend;
-            }
+    //         if (val.active === "spend") {
+    //           if (val.direction === "asc") {
+    //             return +a.spend - +b.spend;
+    //           }
+    //           return +b.spend - +a.spend;
+    //         }
 
-            if (val.active === "installs") {
-              if (val.direction === "asc") {
-                return +a.installs - +b.installs;
-              }
-              return +b.installs - +a.installs;
-            }
+    //         if (val.active === "installs") {
+    //           if (val.direction === "asc") {
+    //             return +a.installs - +b.installs;
+    //           }
+    //           return +b.installs - +a.installs;
+    //         }
 
-            if (val.active === "cpi") {
-              if (val.direction === "asc") {
-                return +a.cpi - +b.cpi;
-              }
-              return +b.cpi - +a.cpi;
-            }
+    //         if (val.active === "cpi") {
+    //           if (val.direction === "asc") {
+    //             return +a.cpi - +b.cpi;
+    //           }
+    //           return +b.cpi - +a.cpi;
+    //         }
 
-            if (val.active === "purchases") {
-              if (val.direction === "asc") {
-                return a.purchases < b.purchases ? -1 : 1;
-              }
-              return a.purchases > b.purchases ? -1 : 1;
-            }
+    //         if (val.active === "purchases") {
+    //           if (val.direction === "asc") {
+    //             return a.purchases < b.purchases ? -1 : 1;
+    //           }
+    //           return a.purchases > b.purchases ? -1 : 1;
+    //         }
 
-            if (val.active === "revenue") {
-              if (val.direction === "asc") {
-                return a.revenue < b.revenue ? -1 : 1;
-              }
-              return a.revenue > b.revenue ? -1 : 1;
-            }
+    //         if (val.active === "revenue") {
+    //           if (val.direction === "asc") {
+    //             return a.revenue < b.revenue ? -1 : 1;
+    //           }
+    //           return a.revenue > b.revenue ? -1 : 1;
+    //         }
 
-            if (val.active === "cpp") {
-              if (val.direction === "asc") {
-                return a.cpp < b.cpp ? -1 : 1;
-              }
-              return a.cpp > b.cpp ? -1 : 1;
-            }
+    //         if (val.active === "cpp") {
+    //           if (val.direction === "asc") {
+    //             return a.cpp < b.cpp ? -1 : 1;
+    //           }
+    //           return a.cpp > b.cpp ? -1 : 1;
+    //         }
 
-            if (val.active === "revenueOverCost") {
-              if (val.direction === "asc") {
-                return a.revenueOverCost < b.revenueOverCost ? -1 : 1;
-              }
-              return a.revenueOverCost > b.revenueOverCost ? -1 : 1;
-            }
-          });
-          this.dataSource.data = this.cpiHistory;
-        })
-      )
-      .subscribe();
+    //         if (val.active === "revenueOverCost") {
+    //           if (val.direction === "asc") {
+    //             return a.revenueOverCost < b.revenueOverCost ? -1 : 1;
+    //           }
+    //           return a.revenueOverCost > b.revenueOverCost ? -1 : 1;
+    //         }
+    //       });
+    //       this.dataSource.data = this.cpiHistory;
+    //     })
+    //   )
+    //   .subscribe();
 
     this.campaignForm.controls["lookback"].valueChanges
       .pipe(
@@ -371,8 +381,8 @@ export class AggregateReportingComponent implements OnInit {
     this.clientService
       .getClientCostHistoryByTime(
         this.orgId,
-        this.aggregatePaginator.pageSize,
-        this.offsetKeys[this.aggregatePaginator.pageIndex],
+        undefined, // this.aggregatePaginator.pageSize,
+        this.offsetKeys[0], // this.offsetKeys[this.aggregatePaginator.pageIndex],
         undefined,
         undefined
       )
@@ -418,7 +428,7 @@ export class AggregateReportingComponent implements OnInit {
     this.clientService
       .getClientCostHistoryByTime(
         this.orgId,
-        this.aggregatePaginator.pageSize,
+        undefined, //this.aggregatePaginator.pageSize
         this.offsetKeys[this.aggregatePaginator.pageIndex],
         start.toISOString().split("T")[0],
         end.toISOString().split("T")[0]
@@ -435,7 +445,6 @@ export class AggregateReportingComponent implements OnInit {
             ...this.cpiHistory,
           });
           this.aggregatePaginator.length = data["count"];
-          // TODO
 
           this.offsetKeys.push(
             String(data["offset"]["org_id"]) +

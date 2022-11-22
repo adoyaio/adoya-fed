@@ -128,14 +128,15 @@
         </button>
       </div>
 
-      <div *ngIf="isKeywordAggDataVisMode">
+      <!-- get rid of line chart on kw reporting-->
+      <!-- <div *ngIf="isKeywordAggDataVisMode">
         <button mat-button (click)="showDataView()">
           <mat-icon class="ml-2" aria-label="line chart" color="primary"
             >stacked_line_chart</mat-icon
           >
           view by day
         </button>
-      </div>
+      </div> -->
 
       <!-- <button
         mat-icon-button
@@ -166,9 +167,9 @@
   </div>
 
   <!-- data view -->
-  <div *ngIf="isKeywordDataVisMode">
+  <!-- <div *ngIf="isKeywordDataVisMode">
     <app-keyword-reporting-line-chart></app-keyword-reporting-line-chart>
-  </div>
+  </div> -->
 
   <!-- data view -->
   <div *ngIf="isKeywordAggDataVisMode">

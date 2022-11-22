@@ -517,8 +517,9 @@ export class KeywordReportingComponent implements OnInit {
   }
 
   showDataView() {
-    this.isKeywordDataVisMode = true;
-    this.isKeywordAggDataVisMode = false;
+    // jf 11/22/2022 removing the non agg (daily) kw report
+    //this.isKeywordDataVisMode = true;
+    this.isKeywordAggDataVisMode = true;
   }
 
   showTableView() {
