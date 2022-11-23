@@ -181,6 +181,7 @@
     [ngClass]="isKeywordAggDataVisMode ? 'd-none' : ''"
     #keywordsPaginator
     [pageSizeOptions]="[100, 250, 500, 1000, 5000, 10000]"
+    showFirstLastButtons
     class="reporting__paginator"
   >
   </mat-paginator>
@@ -189,58 +190,64 @@
   <table
     [ngClass]="isKeywordAggDataVisMode ? 'd-none' : ''"
     mat-table
+    matSort
+    #daySort="matSort"
+    matSortActive="date"
+    matSortDirection="desc"
     [dataSource]="keywordDataSource"
   >
     <ng-container matColumnDef="date">
-      <th mat-header-cell *matHeaderCellDef>Date</th>
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Date</th>
       <td mat-cell *matCellDef="let element">{{ element.date }}</td>
     </ng-container>
 
     <ng-container matColumnDef="keyword_id">
-      <th mat-header-cell *matHeaderCellDef>Keyword ID</th>
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Keyword ID</th>
       <td mat-cell *matCellDef="let element">{{ element.keyword_id }}</td>
     </ng-container>
 
     <ng-container matColumnDef="keyword">
-      <th mat-header-cell *matHeaderCellDef>Keyword</th>
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Keyword</th>
       <td mat-cell *matCellDef="let element">{{ element.keyword }}</td>
     </ng-container>
 
     <ng-container matColumnDef="matchType">
-      <th mat-header-cell *matHeaderCellDef>Match Type</th>
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Match Type</th>
       <td mat-cell *matCellDef="let element">{{ element.matchType }}</td>
     </ng-container>
 
     <ng-container matColumnDef="keywordDisplayStatus">
-      <th mat-header-cell *matHeaderCellDef>Display Status</th>
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Display Status</th>
       <td mat-cell *matCellDef="let element">
         {{ element.keywordDisplayStatus }}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="keywordStatus">
-      <th mat-header-cell *matHeaderCellDef>Status</th>
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Status</th>
       <td mat-cell *matCellDef="let element">
         {{ element.keywordStatus }}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="local_spend">
-      <th mat-header-cell *matHeaderCellDef>Cost</th>
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Cost</th>
       <td mat-cell *matCellDef="let element">
         {{ element.local_spend | number: "1.2-2" }}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="installs">
-      <th mat-header-cell *matHeaderCellDef>Installs</th>
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Installs</th>
       <td mat-cell *matCellDef="let element">
         {{ element.installs }}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="avg_cpa">
-      <th mat-header-cell *matHeaderCellDef>Cost Per Install</th>
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>
+        Cost Per Install
+      </th>
       <td mat-cell *matCellDef="let element">
         {{ element.avg_cpa | number: "1.2-2" }}
       </td>
@@ -255,6 +262,7 @@
     [ngClass]="!isKeywordAggDataVisMode ? 'd-none' : ''"
     mat-table
     matSort
+    #aggSort="matSort"
     matSortActive="installs"
     matSortDirection="desc"
     [dataSource]="keywordAggregatedDataSource"

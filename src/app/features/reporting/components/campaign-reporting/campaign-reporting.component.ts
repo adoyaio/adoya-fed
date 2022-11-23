@@ -113,6 +113,9 @@ export class CampaignReportingComponent implements OnInit {
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+    this.aggregatedDataSource.sort = this.sort;
+    this.dataSource.sort = this.sort;
+
     this.campaignFilterForm.controls["lookback"].setValue("1");
 
     const startDate = new Date();
@@ -289,9 +292,6 @@ export class CampaignReportingComponent implements OnInit {
     //     })
     //   )
     //   .subscribe();
-
-    this.aggregatedDataSource.sort = this.sort;
-    this.dataSource.sort = this.sort;
   }
 
   formatDate(date) {

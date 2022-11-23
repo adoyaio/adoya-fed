@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
+import { MatSort } from "@angular/material";
 import { ChartOptions, ChartType } from "chart.js";
 import {
   chain,
@@ -42,7 +43,6 @@ export class CampaignReportingPieChartComponent implements OnInit {
       .pipe(
         filter(([data, metrics]) => !isNil(data)),
         tap(([data, metrics]) => {
-          //debugger;
           const activeMetric = find(metrics, (metric) => {
             return metric.state === true;
           });
