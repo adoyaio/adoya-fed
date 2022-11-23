@@ -92,8 +92,8 @@ export class AggregateReportingComponent implements OnInit {
     const startDate = new Date();
     const endDate = new Date();
 
-    // set start picker today endpicker yesterday
-    startDate.setDate(startDate.getDate() - 100);
+    // set start picker today endpicker for the ytd
+    startDate.setDate(startDate.getDate() - 366);
     endDate.setDate(endDate.getDate() - 1);
     this.startPickerControl.setValue(startDate);
     this.endPickerControl.setValue(endDate);
