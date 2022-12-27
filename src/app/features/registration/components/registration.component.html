@@ -52,8 +52,15 @@
                 organization.
               </li>
               <li class="mb-2 p-2 border-bottom">
-                In the User Details section, enter the user's first name, last
-                name, and <strong>info@adoya.io</strong>
+                In the User Details section, enter values
+                <ul>
+                  <li class="p-2">first name: <strong>adoya</strong></li>
+                  <li class="p-2">last name: <strong>info</strong></li>
+                  <li class="p-2">apple id: <strong>info@adoya.io</strong></li>
+                  <li class="p-2">
+                    role: <strong>api account manager</strong>
+                  </li>
+                </ul>
               </li>
               <li class="mb-2 p-2 border-bottom">Click Send Invite.</li>
             </ol>
@@ -574,7 +581,13 @@
                     >
                       <mat-select formControlName="objective">
                         <mat-option
-                          matTooltip="Standard: &#13; Finds a balance between growth and efficiency goals and is recommended for most advertisers."
+                          matTooltip="Efficiency: &#13;  You’re more likely to stay within your cost per install target but you may not hit your daily budget.  &#13; &#13;
+                          We recommend this for most advertisers for the first 30 days as a learning period for our algorithm."
+                          value="conservative"
+                          >Efficiency</mat-option
+                        >
+                        <mat-option
+                          matTooltip="Standard: &#13; Finds a balance between growth and efficiency goals."
                           value="standard"
                           >Standard</mat-option
                         >
@@ -582,11 +595,6 @@
                           matTooltip="Growth: &#13; You’ll be more likely to spend your daily budget but could exceed your cost per install target."
                           value="aggressive"
                           >Growth</mat-option
-                        >
-                        <mat-option
-                          matTooltip="Efficiency: &#13;  You’re more likely to stay within your cost per install target but you may not hit your daily budget."
-                          value="conservative"
-                          >Efficiency</mat-option
                         >
                       </mat-select>
                       <mat-label

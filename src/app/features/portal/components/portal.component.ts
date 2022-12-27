@@ -118,7 +118,7 @@ export class PortalComponent implements OnInit {
           title: ``,
           content: AppService.termsOfService,
           actionYes: "Save",
-          actionNo: "Cancel",
+          actionNo: "Close",
         },
         maxWidth: "500px",
         width: "500px",

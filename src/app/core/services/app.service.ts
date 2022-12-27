@@ -479,7 +479,7 @@ export class AppService {
 
   <div class="mb-2 mt-2"><u><h4>PAYMENT:</h4></u></div>
   <div class="mb-3">
-  The first 15 days of Adoya is free. After that, Adoya will provide Apple Search Ads campaign management support at a rate of $250 per month. The first billable month will be prorated.
+  The first 30 days of Adoya is free. After that, Adoya will provide Apple Search Ads campaign management support at a rate of $250 per month. The first billable month will be prorated.
   Subsequent months will be billed at the entire $250 per month rate. You understand and agree that your payment information will be stored and charged automatically on the first calendar day of each month.
   </div>
 
@@ -987,6 +987,13 @@ export class AppService {
   <div><h4>What if I want to build something customized?</h4></div>
   <div class="mb-4">
   Contact us at info@adoya.io or <a href="https://adoya-app.io/workbench/support" target="_blank" class="adoya-link font-weight-bold">support</a> and we’ll evaluate options!
+  </div>
+
+  <div><h4>What’s your cancellation policy?</h4></div>
+  <div class="mb-4">
+  Cancel anytime via info@adoya.io or <a href="https://adoya-app.io/workbench/support" target="_blank" class="adoya-link font-weight-bold">support</a>
+
+  For our complete list of terms including cancellation policy, visit: https://adoya-app.io/legal/clickwrap
   </div>
 
   `;

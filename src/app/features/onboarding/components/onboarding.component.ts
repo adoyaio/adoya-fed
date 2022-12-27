@@ -66,7 +66,7 @@ export class OnboardingComponent implements OnInit {
     newClient.orgDetails.adgroupBidParameters = {
       highCPABidDecrease: 0.85,
       tapThreshold: 7,
-      objective: "standard",
+      objective: "conservative",
       lowCPIBidIncreaseThresh: 0.4,
       minBid: 0.1,
       noInstallBidDecreaseThresh: 0,
@@ -80,7 +80,7 @@ export class OnboardingComponent implements OnInit {
     newClient.orgDetails.bidParameters = {
       highCPABidDecrease: 0.85,
       tapThreshold: 7,
-      objective: "standard",
+      objective: "conservative",
       minBid: 0.1,
       noInstallBidDecreaseThresh: 0,
       highCPIBidDecreaseThresh: 0,
