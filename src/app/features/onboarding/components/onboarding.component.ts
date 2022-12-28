@@ -52,6 +52,7 @@ export class OnboardingComponent implements OnInit {
     newClient.orgDetails.emailAddresses = [this.form.get("email").value];
     newClient.orgDetails.hasInvitedApiUser = true;
     newClient.orgDetails.hasRegistered = false;
+    newClient.orgDetails.isActiveClient = false;
 
     newClient.orgDetails.keywordAdderParameters = {
       targetedKeywordTapThreshold: 2,

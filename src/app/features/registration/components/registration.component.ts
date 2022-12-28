@@ -870,6 +870,7 @@ export class RegistrationComponent implements OnInit {
         switchMap((val) => {
           const client = Client.buildFromGetClientResponse(val, this.orgId);
           client.orgDetails.hasRegistered = true;
+          client.orgDetails.isActiveClient = true;
           return this.clientService
             .postClient(ClientPayload.buildFromClient(client), false)
             .pipe(

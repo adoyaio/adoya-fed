@@ -194,6 +194,7 @@ export class OrgDetailsPayload {
   auth: any;
   hasRegistered: boolean;
   hasInvitedApiUser: boolean;
+  isActiveClient: boolean;
 
   static buildFromClient(response: OrgDetails) {
     const retVal = new OrgDetailsPayload();
@@ -210,6 +211,7 @@ export class OrgDetailsPayload {
     retVal.auth = response.auth;
     retVal.hasRegistered = response.hasRegistered;
     retVal.hasInvitedApiUser = response.hasInvitedApiUser;
+    retVal.isActiveClient = response.isActiveClient;
     retVal.branchBidParameters = BranchBidParametersPayload.buildFromClient(
       response.branchBidParameters
     );
