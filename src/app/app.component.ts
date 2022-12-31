@@ -73,7 +73,8 @@ export class AppComponent implements AfterViewInit, OnDestroy {
               !window.location.href.includes("home") &&
               !window.location.href.includes("start") &&
               !window.location.href.includes("legal") &&
-              !window.location.href.includes("portal-internal")
+              !window.location.href.includes("portal-internal") &&
+              !window.location.href.includes("create-account")
             )
               this.router.navigateByUrl("/portal");
           }

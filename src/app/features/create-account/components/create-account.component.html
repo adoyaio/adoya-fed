@@ -1,0 +1,101 @@
+<div>
+  <form
+    [formGroup]="form"
+    class="w-100 mt-2 d-flex flex-row col-12 flex-wrap"
+    *ngIf="view === 'login'"
+  >
+    <div class="workbench__sending p-2 col-6" *ngIf="isSendingResults">
+      <mat-progress-bar color="primary" mode="indeterminate"></mat-progress-bar>
+    </div>
+    <div class="w-100 mt-2 d-flex flex-row col-12">
+      <div class="col-6">
+        <div class="w-100 no-gutters">
+          <h2>
+            Client Portal Sign Up
+            <mat-icon color="accent" class="align-middle pl-1"
+              >account_circle</mat-icon
+            >
+          </h2>
+        </div>
+
+        <div class="w-100 no-gutters">
+          <mat-form-field appearance="fill" color="primary" class="col-11">
+            <mat-label>email</mat-label>
+            <input
+              matInput
+              placeholder="email"
+              required
+              formControlName="email"
+            />
+          </mat-form-field>
+        </div>
+
+        <div class="w-100 no-gutters mb-2">
+          <mat-form-field appearance="fill" color="primary" class="col-11">
+            <mat-label>password</mat-label>
+            <input
+              type="password"
+              matInput
+              placeholder="password"
+              required
+              formControlName="password"
+            />
+
+            <mat-error>
+              {{ passwordError }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="w-100 no-gutters mb-2">
+          <mat-form-field appearance="fill" color="primary" class="col-11">
+            <mat-label>confirm password</mat-label>
+            <input
+              type="password"
+              matInput
+              placeholder="confirm password"
+              required
+              formControlName="confirmpassword"
+            />
+
+            <mat-error>
+              {{ confirmationError }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="w-100 no-gutters">
+          <mat-form-field appearance="fill" color="primary" class="col-11">
+            <mat-label>last</mat-label>
+            <input matInput placeholder="last" formControlName="last" />
+          </mat-form-field>
+        </div>
+
+        <div class="w-100 no-gutters">
+          <mat-form-field appearance="fill" color="primary" class="col-11">
+            <mat-label>first</mat-label>
+            <input matInput placeholder="first" formControlName="first" />
+          </mat-form-field>
+        </div>
+
+        <div class="w-100 no-gutters">
+          Have an account?
+          <a (click)="showLogin()" class="adoya-link">Sign In</a>
+        </div>
+
+        <div class="w-100 no-gutters mt-3">
+          <button
+            mat-flat-button
+            color="primary"
+            class="float-left"
+            (click)="handleSubmit()"
+            [disabled]="submitDisabled()"
+          >
+            <mat-icon class="text-light" aria-label="submit">done</mat-icon>
+            <span class="text-light pl-1">create account</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

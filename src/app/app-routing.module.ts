@@ -9,6 +9,7 @@ import { HomeComponent } from "./features/homesite/home/home.component";
 import { OnboardingComponent } from "./features/onboarding/components/onboarding.component";
 import { PortalInternalComponent } from "./features/portal/components/portal-internal/portal-internal.component";
 import { IsAdminGuard } from "./core/guards/is-admin.guard";
+import { CreateAccountComponent } from "./features/create-account/components/create-account.component";
 
 const routes: Routes = [
   {
@@ -24,6 +25,11 @@ const routes: Routes = [
   {
     path: "portal-internal",
     component: PortalInternalComponent,
+    data: { title: "adoya" },
+  },
+  {
+    path: "create-account",
+    component: CreateAccountComponent,
     data: { title: "adoya" },
   },
   {
