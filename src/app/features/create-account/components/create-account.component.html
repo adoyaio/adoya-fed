@@ -1,8 +1,9 @@
 <div>
+  <!-- create account -->
   <form
     [formGroup]="form"
     class="w-100 mt-2 d-flex flex-row col-12 flex-wrap"
-    *ngIf="view === 'login'"
+    *ngIf="view == 'create'"
   >
     <div class="workbench__sending p-2 col-6" *ngIf="isSendingResults">
       <mat-progress-bar color="primary" mode="indeterminate"></mat-progress-bar>
@@ -80,7 +81,7 @@
 
         <div class="w-100 no-gutters">
           Have an account?
-          <a (click)="showLogin()" class="adoya-link">Sign In</a>
+          <a (click)="showView('login')" class="adoya-link">Sign In</a>
         </div>
 
         <div class="w-100 no-gutters mt-3">
@@ -98,4 +99,79 @@
       </div>
     </div>
   </form>
+
+  <!-- login -->
+  <form
+    [formGroup]="loginForm"
+    class="w-100 mt-2 d-flex flex-row col-12 flex-wrap"
+    *ngIf="view == 'login'"
+  >
+    <div class="workbench__sending p-2 col-6" *ngIf="isSendingResults">
+      <mat-progress-bar color="primary" mode="indeterminate"></mat-progress-bar>
+    </div>
+    <div class="w-100 mt-2 d-flex flex-row col-12">
+      <div class="col-6">
+        <div class="w-100 no-gutters">
+          <h2>
+            Sign In
+            <mat-icon color="accent" class="align-middle pl-1"
+              >account_circle</mat-icon
+            >
+          </h2>
+        </div>
+
+        <div class="w-100 no-gutters">
+          <mat-form-field appearance="fill" color="primary" class="col-11">
+            <mat-label>email</mat-label>
+            <input
+              matInput
+              placeholder="email"
+              required
+              formControlName="email"
+            />
+          </mat-form-field>
+        </div>
+
+        <div class="w-100 no-gutters mb-2">
+          <mat-form-field appearance="fill" color="primary" class="col-11">
+            <mat-label>password</mat-label>
+            <input
+              type="password"
+              matInput
+              placeholder="password"
+              required
+              formControlName="password"
+            />
+          </mat-form-field>
+        </div>
+
+        <div class="w-100 no-gutters">
+          Forgot Password?
+          <a (click)="showView('reset')" class="adoya-link">Reset Password</a>
+        </div>
+
+        <div class="w-100 no-gutters">
+          No account?
+          <a (click)="showView('create')" class="adoya-link">Create Account</a>
+        </div>
+
+        <div class="w-100 no-gutters mt-3">
+          <button
+            mat-flat-button
+            color="primary"
+            class="float-left"
+            (click)="handleSignIn()"
+            [disabled]="loginForm.invalid"
+          >
+            <mat-icon class="text-light" aria-label="submit">done</mat-icon>
+            <span class="text-light pl-1">login </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <div *ngIf="view == 'reset'">
+    <amplify-auth-forgot-password> </amplify-auth-forgot-password>
+  </div>
 </div>

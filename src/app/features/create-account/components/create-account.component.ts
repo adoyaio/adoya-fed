@@ -14,6 +14,7 @@ import { UserAccountService } from "src/app/core/services/user-account.service";
 import { Auth } from "aws-amplify";
 import { get, isNil } from "lodash";
 import { tap } from "rxjs/operators";
+import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
 
 @Component({
   selector: "app-create-account",
@@ -50,6 +51,11 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
     last: new FormControl(""),
   });
 
+  loginForm = this.fb.group({
+    email: new FormControl("", Validators.required),
+    password: new FormControl("", Validators.required),
+  });
+
   isSendingResults;
 
   public view = "login";
@@ -60,6 +66,14 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
 
   get confirmPasswordControl(): AbstractControl {
     return this.form.get("confirmpassword");
+  }
+
+  get loginEmailControl(): AbstractControl {
+    return this.loginForm.get("email");
+  }
+
+  get loginPasswordControl(): AbstractControl {
+    return this.loginForm.get("password");
   }
 
   constructor(
@@ -95,6 +109,33 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
     if (this.confirmPasswordControl.getError("notmatching")) {
       return "Passwords must match";
     }
+  }
+
+  handleSignIn() {
+    this.isSendingResults = true;
+    Auth.signIn(this.loginEmailControl.value, this.loginPasswordControl.value)
+      .then((user) => {
+        this.isSendingResults = false;
+        this.openSnackBar("success", "dismiss");
+        console.log(user);
+        // if (get(user, "attributes.email_verified") === true) {
+        //   this.userAccountService.amplifyService.setAuthState({
+        //     state: "signedIn",
+        //     user,
+        //   });
+        // }
+
+        this.userAccountService.amplifyService.setAuthState({
+          state: "signedIn",
+          user,
+        });
+
+        this.router.navigateByUrl("/workbench");
+      })
+      .catch((err) => {
+        this.isSendingResults = false;
+        this.openSnackBar(get(err, "message", "error"), "dismiss");
+      });
   }
 
   handleSubmit() {
@@ -138,7 +179,14 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
       this.confirmPasswordControl.value !== this.passwordControl.value
     );
   }
+
+  showView(view: string) {
+    // if (view == "reset") {
+    //   this.userAccountService.amplifyService.setAuthState({
+    //     state: "forgotPassword",
+    //     user: {},
+    //   });
+    // }
+    this.view = view;
+  }
 }
-// function AfterViewInit() {
-//   throw new Error("Function not implemented.");
-// }

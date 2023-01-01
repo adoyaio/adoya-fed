@@ -17,7 +17,7 @@ export class UserAccountService {
   public jwtToken: string;
   public orgId: string;
 
-  constructor(private amplifyService: AmplifyService) {
+  constructor(public amplifyService: AmplifyService) {
     this.currentUserSubject = new BehaviorSubject<UserAccount>(this.storedUser);
     this.currentUser$ = this.currentUserSubject.asObservable();
   }
