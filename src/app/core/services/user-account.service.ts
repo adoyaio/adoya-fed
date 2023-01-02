@@ -16,6 +16,7 @@ export class UserAccountService {
 
   public jwtToken: string;
   public orgId: string;
+  public userName: string;
 
   constructor(public amplifyService: AmplifyService) {
     this.currentUserSubject = new BehaviorSubject<UserAccount>(this.storedUser);

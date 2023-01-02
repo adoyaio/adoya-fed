@@ -35,10 +35,10 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute,
+    // private route: ActivatedRoute,
     private titleService: Title,
     private activatedRoute: ActivatedRoute,
-    private amplifyService: AmplifyService,
+    // private amplifyService: AmplifyService,
     private userAccountService: UserAccountService
   ) {
     this.titleService.setTitle("adoya client portal");
@@ -62,7 +62,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       )
       .subscribe();
 
-    this.amplifyService
+    this.userAccountService.amplifyService
       .authState()
       .pipe(
         tap((authState) => {
@@ -74,7 +74,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
               !window.location.href.includes("start") &&
               !window.location.href.includes("legal") &&
               !window.location.href.includes("portal-internal") &&
-              !window.location.href.includes("create-account")
+              !window.location.href.includes("login")
             )
               this.router.navigateByUrl("/portal");
           }
@@ -89,8 +89,11 @@ export class AppComponent implements AfterViewInit, OnDestroy {
             get(authState, "user.username")
           );
 
+          const userName = get(authState, "user.attributes.email");
+
           this.userAccountService.jwtToken = jwtToken;
           this.userAccountService.orgId = orgId;
+          this.userAccountService.userName = userName;
         })
       )
       .subscribe();

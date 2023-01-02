@@ -14,7 +14,6 @@ import { UserAccountService } from "src/app/core/services/user-account.service";
 import { Auth } from "aws-amplify";
 import { get, isNil } from "lodash";
 import { tap } from "rxjs/operators";
-import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
 
 @Component({
   selector: "app-create-account",
@@ -22,7 +21,18 @@ import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
   styleUrls: ["./create-account.component.scss"],
 })
 export class CreateAccountComponent implements OnInit, AfterViewInit {
-  ngOnInit() {}
+  ngOnInit() {
+    this.userAccountService.amplifyService
+      .authState()
+      .pipe(
+        tap((authState) => {
+          if (authState.state == "signedIn") {
+            this.view = "logout";
+          }
+        })
+      )
+      .subscribe();
+  }
 
   ngAfterViewInit() {
     this.confirmPasswordControl.valueChanges
@@ -56,9 +66,19 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
     password: new FormControl("", Validators.required),
   });
 
+  confirmForm = this.fb.group({
+    email: new FormControl("", Validators.required),
+    code: new FormControl("", Validators.required),
+  });
+
+  resetForm = this.fb.group({
+    email: new FormControl("", Validators.required),
+  });
+
   isSendingResults;
 
-  public view = "login";
+  public view;
+  public user;
 
   get passwordControl(): AbstractControl {
     return this.form.get("password");
@@ -83,9 +103,15 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
     private appleService: AppleService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
-    private userAccountService: UserAccountService,
+    public userAccountService: UserAccountService,
     private supportService: SupportService
-  ) {}
+  ) {
+    if (!isNil(this.userAccountService.jwtToken)) {
+      this.view = "logout";
+    } else {
+      this.view = "login";
+    }
+  }
 
   get passwordError(): string {
     if (isNil(this.passwordControl)) {
@@ -111,19 +137,21 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
     }
   }
 
+  handleSignOut() {
+    Auth.signOut().then(() => {
+      this.view = "login";
+      this.userAccountService.logout();
+    });
+  }
+
   handleSignIn() {
     this.isSendingResults = true;
     Auth.signIn(this.loginEmailControl.value, this.loginPasswordControl.value)
       .then((user) => {
         this.isSendingResults = false;
         this.openSnackBar("success", "dismiss");
-        console.log(user);
-        // if (get(user, "attributes.email_verified") === true) {
-        //   this.userAccountService.amplifyService.setAuthState({
-        //     state: "signedIn",
-        //     user,
-        //   });
-        // }
+
+        // console.log(user);
 
         this.userAccountService.amplifyService.setAuthState({
           state: "signedIn",
@@ -138,7 +166,7 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
       });
   }
 
-  handleSubmit() {
+  handleSignUp() {
     this.isSendingResults = true;
     Auth.signUp({
       username: this.form.get("email").value,
@@ -155,14 +183,30 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
     })
       .then((user) => {
         console.log(user);
+        this.showView("confirm");
         this.isSendingResults = false;
       })
       .catch((err) => {
-        //console.log(get(err, "message"));
+        console.log(get(err, "message"));
         this.isSendingResults = false;
         this.openSnackBar(get(err, "message", "error"), "dismiss");
       });
-    // console.log(user);
+  }
+
+  handleConfirm() {
+    this.isSendingResults = true;
+    const username = this.confirmForm.get("email").value;
+    const code = this.confirmForm.get("code").value;
+    Auth.confirmSignUp(username, code)
+      .then(() => {
+        this.showView("login");
+        this.isSendingResults = false;
+      })
+      .catch((err) => {
+        console.log(get(err, "message"));
+        this.isSendingResults = false;
+        this.openSnackBar(get(err, "message", "error"), "dismiss");
+      });
   }
 
   openSnackBar(message: string, action: string) {
@@ -172,7 +216,7 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
     });
   }
 
-  submitDisabled() {
+  signUpDisabled() {
     return (
       this.form.invalid ||
       this.isSendingResults ||

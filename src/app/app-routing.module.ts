@@ -17,6 +17,7 @@ const routes: Routes = [
     redirectTo: "portal",
     pathMatch: "full",
   },
+  // deprecated
   {
     path: "portal",
     component: PortalComponent,
@@ -28,7 +29,7 @@ const routes: Routes = [
     data: { title: "adoya" },
   },
   {
-    path: "create-account",
+    path: "login",
     component: CreateAccountComponent,
     data: { title: "adoya" },
   },
