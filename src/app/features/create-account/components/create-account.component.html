@@ -43,7 +43,7 @@
             />
 
             <mat-error>
-              {{ passwordError }}
+              {{ passwordError("form") }}
             </mat-error>
           </mat-form-field>
         </div>
@@ -60,7 +60,7 @@
             />
 
             <mat-error>
-              {{ confirmationError }}
+              {{ confirmationError("form") }}
             </mat-error>
           </mat-form-field>
         </div>
@@ -176,7 +176,10 @@
   </form>
 
   <!-- log out -->
-  <div *ngIf="view == 'logout'">
+  <div
+    *ngIf="view == 'logout'"
+    class="w-100 mt-2 d-flex flex-row col-12 flex-wrap"
+  >
     <div class="w-100 no-gutters">
       <h2>
         Sign Out
@@ -267,7 +270,7 @@
     </div>
   </form>
 
-  <!-- request code -->
+  <!-- reset pw -->
   <form
     [formGroup]="resetForm"
     class="w-100 mt-2 d-flex flex-row col-12 flex-wrap"
@@ -322,6 +325,104 @@
   </form>
 
   <!-- confirm code and new pw -->
+  <form
+    [formGroup]="confirmResetForm"
+    class="w-100 mt-2 d-flex flex-row col-12 flex-wrap"
+    *ngIf="view == 'confirmreset'"
+  >
+    <div class="workbench__sending p-2 col-6" *ngIf="isSendingResults">
+      <mat-progress-bar color="primary" mode="indeterminate"></mat-progress-bar>
+    </div>
+    <div class="w-100 mt-2 d-flex flex-row col-12">
+      <div class="col-6">
+        <div class="w-100 no-gutters">
+          <h2>
+            Confirm your password
+            <mat-icon color="accent" class="align-middle pl-1"
+              >account_circle</mat-icon
+            >
+          </h2>
+        </div>
+
+        <div class="w-100 no-gutters">
+          <mat-form-field appearance="fill" color="primary" class="col-11">
+            <mat-label>email</mat-label>
+            <input
+              matInput
+              placeholder="email"
+              required
+              formControlName="email"
+            />
+          </mat-form-field>
+        </div>
+
+        <div class="w-100 no-gutters mb-2">
+          <mat-form-field appearance="fill" color="primary" class="col-11">
+            <mat-label>confirmation code</mat-label>
+            <input
+              matInput
+              placeholder="enter your code"
+              required
+              formControlName="code"
+            />
+          </mat-form-field>
+        </div>
+
+        <div class="w-100 no-gutters mb-2">
+          <mat-form-field appearance="fill" color="primary" class="col-11">
+            <mat-label>password</mat-label>
+            <input
+              type="password"
+              matInput
+              placeholder="password"
+              required
+              formControlName="password"
+            />
+
+            <mat-error>
+              {{ passwordError("confirmResetForm") }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="w-100 no-gutters mb-2">
+          <mat-form-field appearance="fill" color="primary" class="col-11">
+            <mat-label>confirm password</mat-label>
+            <input
+              type="password"
+              matInput
+              placeholder="confirm password"
+              required
+              formControlName="confirmpassword"
+            />
+
+            <mat-error>
+              {{ confirmationError("confirmResetForm") }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="w-100 no-gutters">
+          <a (click)="showView('login')" class="adoya-link font-weight-bold"
+            >Back to Sign in</a
+          >
+        </div>
+
+        <div class="w-100 no-gutters mt-3">
+          <button
+            mat-flat-button
+            color="primary"
+            class="float-left"
+            (click)="handleConfirmResetSubmit()"
+            [disabled]="confirmResetForm.invalid"
+          >
+            <mat-icon class="text-light" aria-label="submit">done</mat-icon>
+            <span class="text-light pl-1">submit </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
 
   <!--  back to login -->
 </div>

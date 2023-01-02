@@ -13,7 +13,7 @@ import { SupportService } from "src/app/core/services/support.service";
 import { UserAccountService } from "src/app/core/services/user-account.service";
 import { Auth } from "aws-amplify";
 import { get, isNil } from "lodash";
-import { tap } from "rxjs/operators";
+import { filter, tap } from "rxjs/operators";
 
 @Component({
   selector: "app-create-account",
@@ -47,6 +47,22 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
         })
       )
       .subscribe();
+
+    this.confirmPasswordControlConfirmReset.valueChanges
+      .pipe(
+        filter((value) => !isNil(value)),
+        tap((value) => {
+          if (value !== this.passwordControlConfirmReset.value) {
+            this.confirmPasswordControlConfirmReset.setErrors({
+              notmatching: true,
+            });
+            return;
+          } else {
+            this.confirmPasswordControlConfirmReset.setErrors(null);
+          }
+        })
+      )
+      .subscribe();
   }
 
   form = this.fb.group({
@@ -75,6 +91,17 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
     email: new FormControl("", Validators.required),
   });
 
+  confirmResetForm = this.fb.group({
+    email: new FormControl("", Validators.required),
+    code: new FormControl("", Validators.required),
+    password: new FormControl("", [
+      Validators.required,
+      Validators.minLength(8),
+      Validators.pattern("[a-zA-Z]+[0-9]+"),
+    ]),
+    confirmpassword: new FormControl("", [Validators.required]),
+  });
+
   isSendingResults;
 
   public view;
@@ -86,6 +113,14 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
 
   get confirmPasswordControl(): AbstractControl {
     return this.form.get("confirmpassword");
+  }
+
+  get passwordControlConfirmReset(): AbstractControl {
+    return this.confirmResetForm.get("password");
+  }
+
+  get confirmPasswordControlConfirmReset(): AbstractControl {
+    return this.confirmResetForm.get("confirmpassword");
   }
 
   get loginEmailControl(): AbstractControl {
@@ -113,26 +148,38 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
     }
   }
 
-  get passwordError(): string {
-    if (isNil(this.passwordControl)) {
+  passwordError(formName: string): string {
+    const control =
+      formName === "form"
+        ? this.passwordControl
+        : this.passwordControlConfirmReset;
+    if (isNil(control)) {
       return "";
     }
 
-    if (this.passwordControl.getError("minlength")) {
+    if (isNil(control)) {
+      return "";
+    }
+
+    if (control.getError("minlength")) {
       return "Password must be minimum of 8 characters";
     }
 
-    if (this.passwordControl.getError("pattern")) {
+    if (control.getError("pattern")) {
       return "Password must contain letters and numbers.";
     }
   }
 
-  get confirmationError(): string {
-    if (isNil(this.confirmPasswordControl)) {
+  confirmationError(formName: string): string {
+    const control =
+      formName === "form"
+        ? this.confirmPasswordControl
+        : this.confirmPasswordControlConfirmReset;
+    if (isNil(control)) {
       return "";
     }
 
-    if (this.confirmPasswordControl.getError("notmatching")) {
+    if (control.getError("notmatching")) {
       return "Passwords must match";
     }
   }
@@ -148,11 +195,9 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
     this.isSendingResults = true;
     Auth.signIn(this.loginEmailControl.value, this.loginPasswordControl.value)
       .then((user) => {
+        const un = get(user, "attributes.email");
         this.isSendingResults = false;
-        this.openSnackBar("success", "dismiss");
-
-        // console.log(user);
-
+        this.openSnackBar(`welcome, ${un} :)`, "dismiss");
         this.userAccountService.amplifyService.setAuthState({
           state: "signedIn",
           user,
@@ -201,6 +246,38 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
       .then(() => {
         this.showView("login");
         this.isSendingResults = false;
+      })
+      .catch((err) => {
+        console.log(get(err, "message"));
+        this.isSendingResults = false;
+        this.openSnackBar(get(err, "message", "error"), "dismiss");
+      });
+  }
+
+  handleResetSubmit() {
+    this.isSendingResults = true;
+    Auth.forgotPassword(this.resetForm.get("email").value)
+      .then(() => {
+        this.isSendingResults = false;
+        this.view = "confirmreset";
+      })
+      .catch((err) => {
+        console.log(get(err, "message"));
+        this.isSendingResults = false;
+        this.openSnackBar(get(err, "message", "error"), "dismiss");
+      });
+  }
+
+  handleConfirmResetSubmit() {
+    this.isSendingResults = true;
+    Auth.forgotPasswordSubmit(
+      this.confirmResetForm.get("email").value,
+      this.confirmResetForm.get("code").value,
+      this.confirmResetForm.get("password").value
+    )
+      .then(() => {
+        this.isSendingResults = false;
+        this.view = "login";
       })
       .catch((err) => {
         console.log(get(err, "message"));
