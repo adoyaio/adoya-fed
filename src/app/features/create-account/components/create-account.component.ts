@@ -227,7 +227,8 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
       //},
     })
       .then((user) => {
-        console.log(user);
+        //console.log(user);
+        this.confirmForm.get("email").setValue(this.form.get("email").value);
         this.showView("confirm");
         this.isSendingResults = false;
       })
@@ -259,6 +260,9 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
     Auth.forgotPassword(this.resetForm.get("email").value)
       .then(() => {
         this.isSendingResults = false;
+        this.confirmResetForm
+          .get("email")
+          .setValue(this.resetForm.get("email").value);
         this.view = "confirmreset";
       })
       .catch((err) => {

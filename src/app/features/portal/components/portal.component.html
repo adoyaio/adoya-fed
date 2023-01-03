@@ -12,14 +12,6 @@
     <img src="/assets/images/spacer.png" height="30" alt="" />
   </div>
   <div class="row ml-5">
-    <!-- <div class="row sign-in w-100">
-      <amplify-authenticator
-        [signUpConfig]="signUpConfig"
-        [usernameAttributes]="usernameAttributes"
-      ></amplify-authenticator>
-    </div> -->
-    <!-- <div class="col-md-4"></div> -->
-
     <div class="d-none d-print-block">
       <div class="d-flex flex-column flex-wrap">
         <span [innerHTML]="printViewText"></span>
@@ -35,10 +27,12 @@
         ></amplify-authenticator> -->
       </div>
 
-      <div class="pl-5 pr-5 ml-5 mr-5 mt-3">
+      <div class="pr-5 mr-5 mt-3 ml-5 pr-5">
         By clicking "Create Account" or "Sign In" above, you acknowledge that
         you have read, understood, and agree to Adoya's
-        <a class="adoya-link" (click)="handleShowTermsClick($event)"
+        <a
+          class="adoya-link font-weight-bold"
+          (click)="handleShowTermsClick($event)"
           >Terms of Use</a
         >
       </div>
