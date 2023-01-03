@@ -18,5 +18,6 @@ import { SharedModule } from "src/app/shared/shared.module";
     NgxSkeletonLoaderModule,
     AmplifyAngularModule,
   ],
+  exports: [CreateAccountComponent],
 })
 export class CreateAccountModule {}

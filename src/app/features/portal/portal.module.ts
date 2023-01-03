@@ -9,10 +9,16 @@ import { AmplifyAngularModule, AmplifyService } from "aws-amplify-angular";
 import { MaterialModule } from "src/app/shared/material-design/material.module";
 import { SharedModule } from "src/app/shared/shared.module";
 import { PortalInternalComponent } from "./components/portal-internal/portal-internal.component";
+import { CreateAccountModule } from "../create-account/create-account.module";
 
 @NgModule({
   declarations: [PortalComponent, PortalInternalComponent],
-  imports: [PortalRoutingModule, AmplifyAngularModule, SharedModule],
+  imports: [
+    PortalRoutingModule,
+    AmplifyAngularModule,
+    SharedModule,
+    CreateAccountModule,
+  ],
   providers: [AmplifyService],
   exports: [PortalComponent],
 })

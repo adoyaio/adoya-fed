@@ -188,10 +188,19 @@
         >
       </h2>
 
-      Hello, {{ userAccountService.userName }} <br />
-      <a (click)="handleSignOut()" class="adoya-link font-weight-bold"
-        >Sign Out</a
+      Hello, {{ userAccountService.userName }} <br /><br />
+
+      <a href="/workbench" class="adoya-link font-weight-bold mt-2 mb-2"
+        >Go to my workbench
+        <mat-icon class="align-middle pl-1">dashboard</mat-icon></a
       >
+      <br />
+
+      <a (click)="handleSignOut()" class="adoya-link font-weight-bold"
+        >Sign Out <mat-icon class="align-middle pl-1">logout</mat-icon></a
+      >
+
+      <br />
     </div>
   </div>
 
@@ -260,7 +269,7 @@
             color="primary"
             class="float-left"
             (click)="handleSignIn()"
-            [disabled]="loginForm.invalid"
+            [disabled]="loginForm.invalid || isSendingResults"
           >
             <mat-icon class="text-light" aria-label="submit">done</mat-icon>
             <span class="text-light pl-1">login </span>
@@ -314,7 +323,7 @@
             color="primary"
             class="float-left"
             (click)="handleResetSubmit()"
-            [disabled]="resetForm.invalid"
+            [disabled]="resetForm.invalid || isSendingResults"
           >
             <mat-icon class="text-light" aria-label="submit">done</mat-icon>
             <span class="text-light pl-1">submit </span>
@@ -414,7 +423,7 @@
             color="primary"
             class="float-left"
             (click)="handleConfirmResetSubmit()"
-            [disabled]="confirmResetForm.invalid"
+            [disabled]="confirmResetForm.invalid || isSendingResults"
           >
             <mat-icon class="text-light" aria-label="submit">done</mat-icon>
             <span class="text-light pl-1">submit </span>
@@ -423,6 +432,4 @@
       </div>
     </div>
   </form>
-
-  <!--  back to login -->
 </div>
