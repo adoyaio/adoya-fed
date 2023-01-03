@@ -28,10 +28,24 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
         tap((authState) => {
           if (authState.state == "signedIn") {
             this.view = "logout";
+            this.loggedIn = true;
+          } else {
+            this.view = "login";
+            this.loggedIn = false;
           }
         })
       )
       .subscribe();
+
+    Auth.currentSession().then((val) => {
+      if (!isNil(val)) {
+        this.view = "logout";
+        this.loggedIn = true;
+      } else {
+        this.view = "login";
+        this.loggedIn = false;
+      }
+    });
   }
 
   ngAfterViewInit() {
@@ -106,6 +120,7 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
 
   public view;
   public user;
+  public loggedIn;
 
   get passwordControl(): AbstractControl {
     return this.form.get("password");

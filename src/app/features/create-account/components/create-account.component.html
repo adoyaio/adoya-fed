@@ -154,8 +154,18 @@
         </div>
 
         <div class="w-100 no-gutters">
-          <a (click)="showView('login')" class="adoya-link font-weight-bold"
+          <a
+            *ngIf="!loggedIn"
+            (click)="showView('login')"
+            class="adoya-link font-weight-bold"
             >Back to Sign in</a
+          >
+
+          <a
+            *ngIf="loggedIn"
+            (click)="showView('logout')"
+            class="adoya-link font-weight-bold"
+            >Back to Sign out</a
           >
         </div>
 
@@ -191,9 +201,18 @@
       Hello, {{ userAccountService.userName }} <br /><br />
 
       <a href="/workbench" class="adoya-link font-weight-bold mt-2 mb-2"
-        >Go to my workbench
+        >View Workbench
         <mat-icon class="align-middle pl-1">dashboard</mat-icon></a
       >
+      <br />
+
+      <a
+        (click)="showView('reset')"
+        class="adoya-link font-weight-bold mt-2 mb-2"
+        >Reset Password
+        <mat-icon class="align-middle pl-1">perm_identity</mat-icon></a
+      >
+
       <br />
 
       <a (click)="handleSignOut()" class="adoya-link font-weight-bold"
@@ -312,8 +331,18 @@
         </div>
 
         <div class="w-100 no-gutters">
-          <a (click)="showView('login')" class="adoya-link font-weight-bold"
+          <a
+            *ngIf="!loggedIn"
+            (click)="showView('login')"
+            class="adoya-link font-weight-bold"
             >Back to Sign in</a
+          >
+
+          <a
+            *ngIf="loggedIn"
+            (click)="showView('logout')"
+            class="adoya-link font-weight-bold"
+            >Back to Sign out</a
           >
         </div>
 
@@ -412,8 +441,18 @@
         </div>
 
         <div class="w-100 no-gutters">
-          <a (click)="showView('login')" class="adoya-link font-weight-bold"
+          <a
+            *ngIf="!loggedIn"
+            (click)="showView('login')"
+            class="adoya-link font-weight-bold"
             >Back to Sign in</a
+          >
+
+          <a
+            *ngIf="loggedIn"
+            (click)="showView('logout')"
+            class="adoya-link font-weight-bold"
+            >Back to Sign out</a
           >
         </div>
 
