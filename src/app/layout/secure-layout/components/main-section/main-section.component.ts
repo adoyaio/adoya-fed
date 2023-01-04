@@ -39,7 +39,7 @@ export class MainSectionComponent implements OnInit {
     this.router.navigateByUrl("/workbench/account");
   }
   onLogoutClicked() {
-    this.userAccountService.logout();
+    // this.userAccountService.logout();
     this.router.navigateByUrl("/portal");
   }
 }
