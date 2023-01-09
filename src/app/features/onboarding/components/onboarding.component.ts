@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormControl, Validators } from "@angular/forms";
 import { MatSnackBar } from "@angular/material";
 import { Router } from "@angular/router";
+import { get } from "lodash";
 import { catchError, map, switchMap, take, tap } from "rxjs/operators";
 import { Client, OrgDetails } from "src/app/core/models/client";
 import { ClientPayload } from "src/app/core/models/client-payload";
@@ -28,19 +29,43 @@ export class OnboardingComponent implements OnInit {
   ngOnInit() {}
 
   isSendingResults;
-  form = this.fb.group({
-    orgId: new FormControl("", Validators.required),
+
+  form1 = this.fb.group({
     appleOrgId: new FormControl("", Validators.required),
+    publicKey: new FormControl(""),
+  });
+
+  form = this.fb.group({
+    userId: new FormControl("", Validators.required),
     clientId: new FormControl("", Validators.required),
     teamId: new FormControl("", Validators.required),
     keyId: new FormControl("", Validators.required),
-    userId: new FormControl("", Validators.required),
     email: new FormControl("", Validators.required),
   });
+
+  handleSubmit1() {
+    this.isSendingResults = true;
+    // create the public and private key
+    this.clientService
+      .createPemKey(this.form1.get("appleOrgId").value)
+      .pipe(
+        take(1),
+        tap((val) => {
+          this.openSnackBar(
+            "successfully created key and uploaded to s3",
+            "dismiss"
+          );
+          this.isSendingResults = false;
+          this.form1.get("publicKey").setValue(get(val, "publicKey"));
+        })
+      )
+      .subscribe();
+  }
 
   handleSubmit() {
     this.isSendingResults = true;
     const newClient = new Client();
+    // mapping of cognito user id to dynamo root org id
     newClient.orgId = this.form.get("userId").value;
     newClient.orgDetails = new OrgDetails();
     newClient.orgDetails.auth = {
@@ -48,6 +73,7 @@ export class OnboardingComponent implements OnInit {
       keyId: this.form.get("keyId").value,
       clientId: this.form.get("clientId").value,
     };
+    // mapping of apple org id to dynamo orgdetails org id
     newClient.orgDetails.orgId = +this.form.get("appleOrgId").value;
     newClient.orgDetails.emailAddresses = [this.form.get("email").value];
     newClient.orgDetails.hasInvitedApiUser = true;

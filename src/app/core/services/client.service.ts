@@ -35,6 +35,7 @@ export class ClientService {
   clientCostHistoryUrl = this.baseUrl + `/client/cost/history`;
   clientKeywordHistoryUrl = this.baseUrl + `/client/keyword/history`;
   clientCampaignHistoryUrl = this.baseUrl + `/client/campaign/history`;
+  clientCreatePemKeyUrl = this.baseUrl + `/client/createPemKey`;
   clientGetUrl = this.baseUrl + `/client/get`;
   clientPostUrl = this.baseUrl + `/client/post`;
   clientPatchUrl = this.baseUrl + `/client/patch`;
@@ -209,5 +210,18 @@ export class ClientService {
           return response;
         })
       );
+  }
+
+  public createPemKey(orgId: string) {
+    let headers = new HttpHeaders();
+    headers = headers.set("x-api-key", this.authKey);
+    headers = headers.set("Authorization", this.userAccountservice.jwtToken);
+
+    const url = `${this.clientCreatePemKeyUrl}?org_id=${orgId}`;
+    return this.http.post<any>(url, { headers: headers }).pipe(
+      map((response) => {
+        return response;
+      })
+    );
   }
 }
