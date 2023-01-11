@@ -1,34 +1,24 @@
-<div class="onboarding__container d-flex flex-col flex-wrap w-100">
-  <div class="w-100">
-    <form
-      [formGroup]="form1"
-      class="w-100 mt-2 d-flex flex-row col-12 flex-wrap"
-    >
+<div class="onboarding__container d-flex flex-col flex-wrap w-100 container">
+  <div class="w-100 no-gutters">
+    <form [formGroup]="form1" class="w-100 mt-2 d-flex flex-row flex-wrap">
       <div class="workbench__sending p-2 col-12" *ngIf="isSendingResults">
         <mat-progress-bar
           color="primary"
           mode="indeterminate"
         ></mat-progress-bar>
       </div>
-      <div class="w-100 mt-2 d-flex flex-row col-6 flex-wrap">
-        <h3>Step 1. create and upload keys</h3>
+      <div class="w-100 mt-2 d-flex flex-row flex-wrap">
+        <h4>Step 1. create oauth keys and upload to s3</h4>
 
         <div class="w-100 no-gutters">
-          <mat-form-field appearance="fill" color="primary" class="col-11">
-            <mat-label>Organization Id</mat-label>
+          <mat-form-field appearance="fill" color="primary" class="col-6">
+            <mat-label>Organization Id from invite email</mat-label>
             <input
               matInput
               placeholder="organization id"
               required
               formControlName="appleOrgId"
             />
-          </mat-form-field>
-        </div>
-
-        <div class="w-100 no-gutters col-12">
-          <mat-form-field appearance="fill" color="primary" class="col-11">
-            <mat-label>Public Key</mat-label>
-            <textarea readonly matInput formControlName="publicKey"> </textarea>
           </mat-form-field>
         </div>
 
@@ -41,26 +31,35 @@
           <mat-icon class="text-light" aria-label="submit">done</mat-icon>
           <span class="text-light pl-1">submit </span>
         </button>
+
+        <div class="w-100 no-gutters mt-4">
+          <mat-divider></mat-divider>
+          <h4 class="mt-2">Step 2. upload public key to ASA</h4>
+          <mat-form-field appearance="fill" color="accent" class="col-6 mt-2">
+            <mat-label>Public Key</mat-label>
+            <textarea readonly matInput formControlName="publicKey"> </textarea>
+          </mat-form-field>
+
+          <h3>Complete this step in ASA console and copy IDs into Step 3 ></h3>
+        </div>
       </div>
     </form>
-  </div>
-
-  <div class="w-100">
+    <mat-divider></mat-divider>
     <form
       [formGroup]="form"
-      class="w-100 mt-2 d-flex flex-row col-12 flex-wrap"
+      class="w-100 mt-2 d-flex flex-row flex-wrap no-gutters"
     >
-      <div class="w-100 mt-2 d-flex flex-row col-12">
-        <h3>Step 2. create client json</h3>
+      <div class="w-100 mt-2 d-flex flex-row">
+        <h4>Step 3. create client json</h4>
       </div>
-      <div class="w-100 mt-2 d-flex flex-row col-12">
+      <div class="w-100 mt-2 d-flex flex-row">
         <div class="col-6">
           <div class="w-100 no-gutters">
             <mat-form-field appearance="fill" color="primary" class="col-11">
-              <mat-label>Client Id</mat-label>
+              <mat-label>Client Id from ASA</mat-label>
               <input
                 matInput
-                placeholder="client id"
+                placeholder="client id from ASA"
                 required
                 formControlName="clientId"
               />
@@ -69,10 +68,10 @@
 
           <div class="w-100 no-gutters">
             <mat-form-field appearance="fill" color="primary" class="col-11">
-              <mat-label>Team Id</mat-label>
+              <mat-label>Team Id from ASA</mat-label>
               <input
                 matInput
-                placeholder="team id"
+                placeholder="team id from ASA"
                 required
                 formControlName="teamId"
               />
@@ -81,22 +80,22 @@
 
           <div class="w-100 no-gutters">
             <mat-form-field appearance="fill" color="primary" class="col-11">
-              <mat-label>Key ID</mat-label>
+              <mat-label>Key ID from ASA</mat-label>
               <input
                 matInput
-                placeholder="key id"
+                placeholder="key id from ASA"
                 required
                 formControlName="keyId"
               />
             </mat-form-field>
           </div>
 
-          <div class="w-100 no-gutters col-12">
+          <div class="w-100 no-gutters">
             <mat-form-field appearance="fill" color="primary" class="col-11">
-              <mat-label>Congito User ID</mat-label>
+              <mat-label>Congito User ID from invite email</mat-label>
               <input
                 matInput
-                placeholder="cognito user id"
+                placeholder="cognito user id from invite email"
                 required
                 formControlName="userId"
               />
@@ -105,10 +104,10 @@
 
           <div class="w-100 no-gutters">
             <mat-form-field appearance="fill" color="primary" class="col-11">
-              <mat-label>email</mat-label>
+              <mat-label>Email from invite email</mat-label>
               <input
                 matInput
-                placeholder="email"
+                placeholder="email from invite email"
                 required
                 formControlName="email"
               />
@@ -129,7 +128,8 @@
     </form>
   </div>
 
-  <div class="w-100 ml-5">
+  <div class="w-100 mt-3">
+    <mat-divider></mat-divider>
     <div>
       <button (click)="onProfileClicked()" mat-icon-button>
         <mat-icon color="primary">account_circle</mat-icon> Account

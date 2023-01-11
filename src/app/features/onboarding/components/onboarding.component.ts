@@ -74,7 +74,7 @@ export class OnboardingComponent implements OnInit {
       clientId: this.form.get("clientId").value,
     };
     // mapping of apple org id to dynamo orgdetails org id
-    newClient.orgDetails.orgId = +this.form.get("appleOrgId").value;
+    newClient.orgDetails.orgId = +this.form1.get("appleOrgId").value;
     newClient.orgDetails.emailAddresses = [this.form.get("email").value];
     newClient.orgDetails.hasInvitedApiUser = true;
     newClient.orgDetails.hasRegistered = false;
