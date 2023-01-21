@@ -138,7 +138,7 @@ export class ClientService {
     let headers = new HttpHeaders();
     headers = headers.set("x-api-key", this.authKey);
     headers = headers.set("Authorization", this.userAccountservice.jwtToken);
-    debugger;
+
     return this.http.get<any>(url, { headers: headers }).pipe(
       map((response) => {
         // return CostPerInstallDayObject.buildFromGetHistoryResponse(response);
@@ -218,7 +218,7 @@ export class ClientService {
     headers = headers.set("Authorization", this.userAccountservice.jwtToken);
 
     const url = `${this.clientCreatePemKeyUrl}?org_id=${orgId}`;
-    return this.http.post<any>(url, { headers: headers }).pipe(
+    return this.http.post<any>(url, {}, { headers: headers }).pipe(
       map((response) => {
         return response;
       })

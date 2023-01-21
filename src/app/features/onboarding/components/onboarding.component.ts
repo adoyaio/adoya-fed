@@ -2,10 +2,12 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormControl, Validators } from "@angular/forms";
 import { MatSnackBar } from "@angular/material";
 import { Router } from "@angular/router";
-import { get } from "lodash";
+import { chain, get, isNil } from "lodash";
+import { of } from "rxjs";
 import { catchError, map, switchMap, take, tap } from "rxjs/operators";
 import { Client, OrgDetails } from "src/app/core/models/client";
 import { ClientPayload } from "src/app/core/models/client-payload";
+import { AppleService } from "src/app/core/services/apple.service";
 import { ClientService } from "src/app/core/services/client.service";
 import { SupportService } from "src/app/core/services/support.service";
 import { UserAccountService } from "src/app/core/services/user-account.service";
@@ -19,6 +21,7 @@ import { SupportItem } from "../../support/models/support-item";
 export class OnboardingComponent implements OnInit {
   constructor(
     private clientService: ClientService,
+    private appleService: AppleService,
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
     private supportService: SupportService,
@@ -28,11 +31,11 @@ export class OnboardingComponent implements OnInit {
 
   ngOnInit() {}
 
-  isSendingResults;
+  isSendingResults = false;
 
   form1 = this.fb.group({
     appleOrgId: new FormControl("", Validators.required),
-    publicKey: new FormControl(""),
+    publicKey: new FormControl(undefined),
   });
 
   form = this.fb.group({
@@ -144,28 +147,52 @@ export class OnboardingComponent implements OnInit {
         take(1),
         switchMap((val) => {
           this.openSnackBar("successfuly created a client", "dismiss");
-          const supportItem = new SupportItem();
-          supportItem.description = ``;
-          supportItem.userId = newClient.orgId;
-          supportItem.username = newClient.orgDetails.emailAddresses[0];
-          supportItem.subject = `we have accepted an invitation to your apple search ads account (⌐■_■) `;
-          supportItem.orgId = String(newClient.orgDetails.orgId);
-          supportItem.type = "onboarding";
 
-          return this.supportService.postSupportItem(supportItem).pipe(
-            map((data) => {
-              this.isSendingResults = false;
-              this.openSnackBar("successfully emailed client", "dismiss");
-              return data;
+          // run get apps as a test
+          return this.appleService.getAppleApps(String(newClient.orgId)).pipe(
+            take(1),
+            switchMap((val) => {
+              const test = chain(val).get("apps.data").value();
+              if (test.length > 0) {
+                this.openSnackBar("successfully pulled client apps", "dismiss");
+
+                const supportItem = new SupportItem();
+                supportItem.description = ``;
+                supportItem.userId = newClient.orgId;
+                supportItem.username = newClient.orgDetails.emailAddresses[0];
+                supportItem.subject = `we have accepted an invitation to your apple search ads account (⌐■_■) `;
+                supportItem.orgId = String(newClient.orgDetails.orgId);
+                supportItem.type = "onboarding";
+
+                return this.supportService.postSupportItem(supportItem).pipe(
+                  map((data) => {
+                    this.isSendingResults = false;
+                    this.openSnackBar("successfully emailed client", "dismiss");
+                    return data;
+                  }),
+                  catchError(() => {
+                    this.isSendingResults = false;
+                    this.openSnackBar("unable to process right now", "dismiss");
+                    return [];
+                  })
+                );
+              }
+
+              return of(false);
             }),
-            catchError(() => {
+            catchError((err) => {
               this.isSendingResults = false;
-              this.openSnackBar("unable to process right now", "dismiss");
-              return [];
+              this.openSnackBar(
+                "failed to to pulled client apps, check ouath values:::" +
+                  get(val, "error", "error"),
+                "dismiss"
+              );
+              return err;
             })
           );
         }),
         catchError((err) => {
+          this.isSendingResults = false;
           this.openSnackBar("failed to create client", "dismiss");
           return err;
         })
@@ -186,5 +213,13 @@ export class OnboardingComponent implements OnInit {
   onLogoutClicked() {
     this.userAccountService.logout();
     this.router.navigateByUrl("/portal");
+  }
+
+  isShowingFirstProgressBar(): boolean {
+    return this.isSendingResults && isNil(this.form1.get("publicKey").value);
+  }
+
+  isShowingSecondProgressBar(): boolean {
+    return this.isSendingResults && !isNil(this.form1.get("publicKey").value);
   }
 }

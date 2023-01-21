@@ -1,8 +1,9 @@
 <div class="onboarding__container d-flex flex-col flex-wrap w-100 container">
   <div class="w-100 no-gutters">
     <form [formGroup]="form1" class="w-100 mt-2 d-flex flex-row flex-wrap">
-      <div class="workbench__sending p-2 col-12" *ngIf="isSendingResults">
+      <div class="workbench__sending p-2 col-12">
         <mat-progress-bar
+          *ngIf="isShowingFirstProgressBar()"
           color="primary"
           mode="indeterminate"
         ></mat-progress-bar>
@@ -49,6 +50,13 @@
       [formGroup]="form"
       class="w-100 mt-2 d-flex flex-row flex-wrap no-gutters"
     >
+      <div class="workbench__sending p-2 col-12">
+        <mat-progress-bar
+          color="primary"
+          mode="indeterminate"
+          *ngIf="isShowingSecondProgressBar()"
+        ></mat-progress-bar>
+      </div>
       <div class="w-100 mt-2 d-flex flex-row">
         <h4>Step 3. create client json</h4>
       </div>
