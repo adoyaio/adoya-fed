@@ -674,6 +674,7 @@ export class RegistrationComponent implements OnInit {
           return this.clientService.getClient(this.orgId).pipe(
             take(1),
             tap((val) => {
+              debugger;
               this.isLoadingResults = false;
               this.client = Client.buildFromGetClientResponse(val, this.orgId);
               this.step3Form.markAsPristine();
@@ -1226,7 +1227,7 @@ export class RegistrationComponent implements OnInit {
                   take(1),
                   switchMap((val) => {
                     this.openIndefiniteSnackBar(
-                      "creating apple search ads campaigns, this may take a few minutes! please don't refresh your browser during this time!",
+                      "creating apple search ads campaigns, this may take a few minutes. please don't refresh your browser during this time!",
                       ""
                     );
                     // set auth
