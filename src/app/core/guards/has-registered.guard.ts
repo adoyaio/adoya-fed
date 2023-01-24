@@ -5,8 +5,8 @@ import {
   RouterStateSnapshot,
   Router,
 } from "@angular/router";
-import { Observable, Subject } from "rxjs";
-import { tap, map, take } from "rxjs/operators";
+import { EMPTY, Observable, Subject } from "rxjs";
+import { tap, map, take, catchError } from "rxjs/operators";
 
 import { ClientService } from "../services/client.service";
 import { get, has, isNil } from "lodash";
@@ -25,31 +25,38 @@ export class HasRegisteredGuard implements CanActivate {
   ): Observable<boolean> | Promise<boolean> | boolean {
     return Auth.currentUserInfo().then(
       (val) => {
-        const orgId = get(val.attributes, "custom:org_id");
+        // check first for org_id, then failover to username
+        const user = get(val.attributes, "custom:org_id", get(val, "username"));
 
-        if (isNil(orgId)) {
+        // const orgId = get(val.attributes, "custom:org_id");
+
+        if (isNil(user)) {
           return this.handleResult(false);
         }
 
-        if (this.initialized) {
-          return this.handleResult(true);
-        }
+        // if (this.initialized) {
+        //   return this.handleResult(true);
+        // }
 
         return this.clientService
-          .getClient(orgId)
+          .getClient(user)
           .pipe(
             take(1),
             map((data) => {
               if (isNil(data)) {
                 return this.handleResult(false);
               }
-              const client = Client.buildFromGetClientResponse(data);
+              const client = Client.buildFromGetClientResponse(data, user);
               if (!has(client.orgDetails, "hasRegistered")) {
                 return this.handleResult(false);
               }
               return client.orgDetails.hasRegistered;
             }),
-            tap((result) => this.handleResult(result))
+            tap((result) => this.handleResult(result)),
+            catchError((e) => {
+              this.handleResult(false);
+              return EMPTY;
+            })
           )
           .toPromise();
       },

@@ -193,6 +193,8 @@ export class OrgDetailsPayload {
   appleCampaigns: any[];
   auth: any;
   hasRegistered: boolean;
+  hasInvitedApiUser: boolean;
+  isActiveClient: boolean;
 
   static buildFromClient(response: OrgDetails) {
     const retVal = new OrgDetailsPayload();
@@ -208,6 +210,8 @@ export class OrgDetailsPayload {
     retVal.clientName = response.clientName;
     retVal.auth = response.auth;
     retVal.hasRegistered = response.hasRegistered;
+    retVal.hasInvitedApiUser = response.hasInvitedApiUser;
+    retVal.isActiveClient = response.isActiveClient;
     retVal.branchBidParameters = BranchBidParametersPayload.buildFromClient(
       response.branchBidParameters
     );
@@ -234,7 +238,7 @@ export class OrgDetailsPayload {
 }
 
 export class ClientPayload {
-  orgId: number;
+  orgId: string;
   orgDetails: OrgDetailsPayload;
 
   static buildFromClient(client: Client): any {

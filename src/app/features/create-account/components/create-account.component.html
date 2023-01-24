@@ -1,0 +1,474 @@
+<div>
+  <!-- create account -->
+  <form
+    [formGroup]="form"
+    class="w-100 mt-2 d-flex flex-row col-12 flex-wrap"
+    *ngIf="view == 'create'"
+  >
+    <div class="workbench__sending p-2 col-11" *ngIf="isSendingResults">
+      <mat-progress-bar color="primary" mode="indeterminate"></mat-progress-bar>
+    </div>
+    <div class="w-100 mt-2 d-flex flex-row col-12">
+      <div class="col-12">
+        <div class="w-100 no-gutters">
+          <h2>
+            Sign Up
+            <mat-icon color="accent" class="align-middle pl-1"
+              >account_circle</mat-icon
+            >
+          </h2>
+        </div>
+
+        <div class="w-100 no-gutters">
+          <mat-form-field appearance="fill" color="primary" class="col-11">
+            <mat-label>email</mat-label>
+            <input
+              matInput
+              placeholder="email"
+              required
+              formControlName="email"
+            />
+          </mat-form-field>
+        </div>
+
+        <div class="w-100 no-gutters mb-2">
+          <mat-form-field appearance="fill" color="primary" class="col-11">
+            <mat-label>password</mat-label>
+            <input
+              type="password"
+              matInput
+              placeholder="password"
+              required
+              formControlName="password"
+            />
+
+            <mat-error>
+              {{ passwordError("form") }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="w-100 no-gutters mb-2">
+          <mat-form-field appearance="fill" color="primary" class="col-11">
+            <mat-label>confirm password</mat-label>
+            <input
+              type="password"
+              matInput
+              placeholder="confirm password"
+              required
+              formControlName="confirmpassword"
+            />
+
+            <mat-error>
+              {{ confirmationError("form") }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="w-100 no-gutters">
+          <mat-form-field appearance="fill" color="primary" class="col-11">
+            <mat-label>first name</mat-label>
+            <input matInput placeholder="first name" formControlName="first" />
+          </mat-form-field>
+        </div>
+
+        <div class="w-100 no-gutters">
+          <mat-form-field appearance="fill" color="primary" class="col-11">
+            <mat-label>last name</mat-label>
+            <input matInput placeholder="last name" formControlName="last" />
+          </mat-form-field>
+        </div>
+
+        <div class="w-100 no-gutters">
+          Have an account?
+          <a (click)="showView('login')" class="adoya-link font-weight-bold"
+            >Sign In</a
+          >
+        </div>
+
+        <div class="w-100 no-gutters mt-3">
+          <button
+            mat-flat-button
+            color="primary"
+            class="float-left"
+            (click)="handleSignUp()"
+            [disabled]="signUpDisabled()"
+          >
+            <mat-icon class="text-light" aria-label="submit">done</mat-icon>
+            <span class="text-light pl-1">create account</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <!-- confirm account -->
+  <form
+    [formGroup]="confirmForm"
+    class="w-100 mt-2 d-flex flex-row col-12 flex-wrap"
+    *ngIf="view == 'confirm'"
+  >
+    <div class="workbench__sending p-2 col-11" *ngIf="isSendingResults">
+      <mat-progress-bar color="primary" mode="indeterminate"></mat-progress-bar>
+    </div>
+    <div class="w-100 mt-2 d-flex flex-row col-12">
+      <div class="col-12">
+        <div class="w-100 no-gutters">
+          <h2>
+            Confirm Sign Up
+            <mat-icon color="accent" class="align-middle pl-1"
+              >account_circle</mat-icon
+            >
+          </h2>
+        </div>
+
+        <div class="w-100 no-gutters">
+          <mat-form-field appearance="fill" color="primary" class="col-11">
+            <mat-label>email</mat-label>
+            <input
+              matInput
+              placeholder="email"
+              required
+              formControlName="email"
+            />
+          </mat-form-field>
+        </div>
+
+        <div class="w-100 no-gutters mb-2">
+          <mat-form-field appearance="fill" color="primary" class="col-11">
+            <mat-label>confirmation code</mat-label>
+            <input
+              matInput
+              placeholder="enter your code"
+              required
+              formControlName="code"
+            />
+          </mat-form-field>
+        </div>
+
+        <div class="w-100 no-gutters">
+          Lost your code?
+          <a (click)="resendCode()" class="adoya-link font-weight-bold"
+            >Resend Code</a
+          >
+        </div>
+
+        <div class="w-100 no-gutters">
+          <a
+            *ngIf="!loggedIn"
+            (click)="showView('login')"
+            class="adoya-link font-weight-bold"
+            >Back to Sign in</a
+          >
+
+          <a
+            *ngIf="loggedIn"
+            (click)="showView('logout')"
+            class="adoya-link font-weight-bold"
+            >Back to Sign out</a
+          >
+        </div>
+
+        <div class="w-100 no-gutters mt-3">
+          <button
+            mat-flat-button
+            color="primary"
+            class="float-left"
+            (click)="handleConfirm()"
+            [disabled]="confirmForm.invalid || isSendingResults"
+          >
+            <mat-icon class="text-light" aria-label="submit">done</mat-icon>
+            <span class="text-light pl-1">create account</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <!-- log out -->
+  <div
+    *ngIf="view == 'logout'"
+    class="w-100 mt-2 d-flex flex-row col-12 flex-wrap"
+  >
+    <div class="w-100 no-gutters">
+      <h2>
+        Sign Out
+        <mat-icon color="accent" class="align-middle pl-1"
+          >account_circle</mat-icon
+        >
+      </h2>
+
+      Hello, {{ userAccountService.userName }} <br /><br />
+
+      <a href="/workbench" class="adoya-link font-weight-bold mt-2 mb-2"
+        >View Workbench
+        <mat-icon class="align-middle pl-1">dashboard</mat-icon></a
+      >
+      <br />
+
+      <a
+        (click)="showView('reset')"
+        class="adoya-link font-weight-bold mt-2 mb-2"
+        >Reset Password
+        <mat-icon class="align-middle pl-1">perm_identity</mat-icon></a
+      >
+
+      <br />
+
+      <a (click)="handleSignOut()" class="adoya-link font-weight-bold"
+        >Sign Out <mat-icon class="align-middle pl-1">logout</mat-icon></a
+      >
+
+      <br />
+    </div>
+  </div>
+
+  <!-- login -->
+  <form
+    [formGroup]="loginForm"
+    class="w-100 mt-2 d-flex flex-row col-12 flex-wrap"
+    *ngIf="view == 'login'"
+  >
+    <div class="workbench__sending p-2 col-11" *ngIf="isSendingResults">
+      <mat-progress-bar color="primary" mode="indeterminate"></mat-progress-bar>
+    </div>
+    <div class="w-100 mt-2 d-flex flex-row col-12">
+      <div class="col-12">
+        <div class="w-100 no-gutters">
+          <h2>
+            Sign In
+            <mat-icon color="accent" class="align-middle pl-1"
+              >account_circle</mat-icon
+            >
+          </h2>
+        </div>
+
+        <div class="w-100 no-gutters">
+          <mat-form-field appearance="fill" color="primary" class="col-11">
+            <mat-label>email</mat-label>
+            <input
+              matInput
+              placeholder="email"
+              required
+              formControlName="email"
+            />
+          </mat-form-field>
+        </div>
+
+        <div class="w-100 no-gutters mb-2">
+          <mat-form-field appearance="fill" color="primary" class="col-11">
+            <mat-label>password</mat-label>
+            <input
+              type="password"
+              matInput
+              placeholder="password"
+              required
+              formControlName="password"
+            />
+          </mat-form-field>
+        </div>
+
+        <div class="w-100 no-gutters">
+          Forgot Password?
+          <a (click)="showView('reset')" class="adoya-link font-weight-bold"
+            >Reset Password</a
+          >
+        </div>
+
+        <div class="w-100 no-gutters">
+          No account?
+          <a (click)="showView('create')" class="adoya-link font-weight-bold"
+            >Create Account</a
+          >
+        </div>
+
+        <div class="w-100 no-gutters mt-3">
+          <button
+            mat-flat-button
+            color="primary"
+            class="float-left"
+            (click)="handleSignIn()"
+            [disabled]="loginForm.invalid || isSendingResults"
+          >
+            <mat-icon class="text-light" aria-label="submit">done</mat-icon>
+            <span class="text-light pl-1">login </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <!-- reset pw -->
+  <form
+    [formGroup]="resetForm"
+    class="w-100 mt-2 d-flex flex-row col-12 flex-wrap"
+    *ngIf="view == 'reset'"
+  >
+    <div class="workbench__sending p-2 col-11" *ngIf="isSendingResults">
+      <mat-progress-bar color="primary" mode="indeterminate"></mat-progress-bar>
+    </div>
+    <div class="w-100 mt-2 d-flex flex-row col-12">
+      <div class="col-12">
+        <div class="w-100 no-gutters">
+          <h2>
+            Reset your password
+            <mat-icon color="accent" class="align-middle pl-1"
+              >account_circle</mat-icon
+            >
+          </h2>
+        </div>
+
+        <div class="w-100 no-gutters">
+          <mat-form-field appearance="fill" color="primary" class="col-11">
+            <mat-label>email</mat-label>
+            <input
+              matInput
+              placeholder="email"
+              required
+              formControlName="email"
+            />
+          </mat-form-field>
+        </div>
+
+        <div class="w-100 no-gutters">
+          <a
+            *ngIf="!loggedIn"
+            (click)="showView('login')"
+            class="adoya-link font-weight-bold"
+            >Back to Sign in</a
+          >
+
+          <a
+            *ngIf="loggedIn"
+            (click)="showView('logout')"
+            class="adoya-link font-weight-bold"
+            >Back to Sign out</a
+          >
+        </div>
+
+        <div class="w-100 no-gutters mt-3">
+          <button
+            mat-flat-button
+            color="primary"
+            class="float-left"
+            (click)="handleResetSubmit()"
+            [disabled]="resetForm.invalid || isSendingResults"
+          >
+            <mat-icon class="text-light" aria-label="submit">done</mat-icon>
+            <span class="text-light pl-1">submit </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <!-- confirm code and new pw -->
+  <form
+    [formGroup]="confirmResetForm"
+    class="w-100 mt-2 d-flex flex-row col-12 flex-wrap"
+    *ngIf="view == 'confirmreset'"
+  >
+    <div class="workbench__sending p-2 col-11" *ngIf="isSendingResults">
+      <mat-progress-bar color="primary" mode="indeterminate"></mat-progress-bar>
+    </div>
+    <div class="w-100 mt-2 d-flex flex-row col-12">
+      <div class="col-12">
+        <div class="w-100 no-gutters">
+          <h2>
+            Confirm your password
+            <mat-icon color="accent" class="align-middle pl-1"
+              >account_circle</mat-icon
+            >
+          </h2>
+        </div>
+
+        <div class="w-100 no-gutters">
+          <mat-form-field appearance="fill" color="primary" class="col-11">
+            <mat-label>email</mat-label>
+            <input
+              matInput
+              placeholder="email"
+              required
+              formControlName="email"
+            />
+          </mat-form-field>
+        </div>
+
+        <div class="w-100 no-gutters mb-2">
+          <mat-form-field appearance="fill" color="primary" class="col-11">
+            <mat-label>confirmation code</mat-label>
+            <input
+              matInput
+              placeholder="enter your code"
+              required
+              formControlName="code"
+            />
+          </mat-form-field>
+        </div>
+
+        <div class="w-100 no-gutters mb-2">
+          <mat-form-field appearance="fill" color="primary" class="col-11">
+            <mat-label>password</mat-label>
+            <input
+              type="password"
+              matInput
+              placeholder="password"
+              required
+              formControlName="password"
+            />
+
+            <mat-error>
+              {{ passwordError("confirmResetForm") }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="w-100 no-gutters mb-2">
+          <mat-form-field appearance="fill" color="primary" class="col-11">
+            <mat-label>confirm password</mat-label>
+            <input
+              type="password"
+              matInput
+              placeholder="confirm password"
+              required
+              formControlName="confirmpassword"
+            />
+
+            <mat-error>
+              {{ confirmationError("confirmResetForm") }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="w-100 no-gutters">
+          <a
+            *ngIf="!loggedIn"
+            (click)="showView('login')"
+            class="adoya-link font-weight-bold"
+            >Back to Sign in</a
+          >
+
+          <a
+            *ngIf="loggedIn"
+            (click)="showView('logout')"
+            class="adoya-link font-weight-bold"
+            >Back to Sign out</a
+          >
+        </div>
+
+        <div class="w-100 no-gutters mt-3">
+          <button
+            mat-flat-button
+            color="primary"
+            class="float-left"
+            (click)="handleConfirmResetSubmit()"
+            [disabled]="confirmResetForm.invalid || isSendingResults"
+          >
+            <mat-icon class="text-light" aria-label="submit">done</mat-icon>
+            <span class="text-light pl-1">submit </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

@@ -19,6 +19,8 @@ import { NgxSkeletonLoaderModule } from "ngx-skeleton-loader";
 import { MatCarouselModule } from "@ngmodule/material-carousel";
 import { HomesiteModule } from "./features/homesite/homesite.module";
 import { ContactUsComponent } from "./features/homesite/contact-us/contact-us.component";
+import { OnboardingModule } from "./features/onboarding/onboarding.module";
+import { CreateAccountModule } from "./features/create-account/create-account.module";
 
 @NgModule({
   declarations: [AppComponent],
@@ -33,8 +35,10 @@ import { ContactUsComponent } from "./features/homesite/contact-us/contact-us.co
     DynamicFormModule,
     ChartsModule,
     RegistrationModule,
+    OnboardingModule,
     SharedModule,
     HomesiteModule,
+    CreateAccountModule,
     NgxSkeletonLoaderModule,
     MatCarouselModule.forRoot(),
   ],

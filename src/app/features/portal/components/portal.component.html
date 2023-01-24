@@ -1,5 +1,5 @@
 <div class="container pt-2 pb-1">
-  <div class="row bottom-border">
+  <div class="row bottom-border d-print-none">
     <div class="col-md-4"></div>
     <div class="col-md-3">
       <a href="/workbench/reporting"
@@ -9,15 +9,105 @@
     <div class="col-md-5"></div>
   </div>
   <div class="row">
-    <img src="/assets/images/spacer.png" height="25" alt="" />
+    <img src="/assets/images/spacer.png" height="30" alt="" />
   </div>
   <div class="row ml-5">
-    <div class="row sign-in w-100">
-      <amplify-authenticator
-        [signUpConfig]="signUpConfig"
-        [usernameAttributes]="usernameAttributes"
-      ></amplify-authenticator>
+    <div class="d-none d-print-block">
+      <div class="d-flex flex-column flex-wrap">
+        <span [innerHTML]="printViewText"></span>
+      </div>
     </div>
-    <!-- <div class="col-md-4"></div> -->
+
+    <div class="row sign-in col-12 col-md-6 d-print-none">
+      <div class="w-100">
+        <app-create-account></app-create-account>
+        <!-- <amplify-authenticator
+          [signUpConfig]="signUpConfig"
+          [usernameAttributes]="usernameAttributes"
+        ></amplify-authenticator> -->
+      </div>
+
+      <div class="pr-5 mr-5 mt-3 ml-5 pr-5">
+        By clicking "Create Account" or "Sign In" above, you acknowledge that
+        you have read, understood, and agree to Adoya's
+        <a
+          class="adoya-link font-weight-bold"
+          (click)="handleShowTermsClick($event)"
+          >Terms of Use</a
+        >
+      </div>
+    </div>
+
+    <div class="row sign-in col-12 col-md-6 mt-3 d-print-none">
+      <mat-list>
+        <div class="mb-0 pb-0 w-100">
+          <mat-list-item>
+            <h3>4 steps to get up and running:</h3>
+          </mat-list-item>
+        </div>
+
+        <div class="mb-2 pb-2 border-bottom w-100">
+          <mat-list-item>
+            <mat-icon color="primary" class="align-text-top mr-2"
+              >done</mat-icon
+            >
+
+            Step 1. Create an account and login
+          </mat-list-item>
+        </div>
+
+        <div class="mb-2 pb-2 border-bottom w-100">
+          <mat-list-item>
+            <mat-icon color="primary" class="align-text-top mr-2"
+              >done</mat-icon
+            >
+
+            Step 2. Connect your Apple Search Ads account
+          </mat-list-item>
+        </div>
+
+        <div class="mb-2 pb-2 border-bottom w-100">
+          <mat-list-item>
+            <mat-icon color="primary" class="align-text-top mr-2"
+              >done</mat-icon
+            >
+
+            Step 3. Answer a few basic questions about your app
+          </mat-list-item>
+        </div>
+
+        <div class="mb-2 pb-2 border-bottom w-100">
+          <mat-list-item>
+            <mat-icon color="primary" class="align-text-top mr-2"
+              >done</mat-icon
+            >
+
+            Step 4. Enter your cost per install and/or ROAS goals
+          </mat-list-item>
+        </div>
+
+        <div class="mb-2 pb-2">
+          <mat-list-item>
+            <mat-icon color="primary" class="align-text-top mr-2"
+              >info_outline</mat-icon
+            >
+
+            Get more info:
+          </mat-list-item>
+        </div>
+
+        <button
+          mat-flat-button
+          color="primary"
+          class="float-left ml-3"
+          (click)="handleCTA()"
+        >
+          <span class="text-light pl-1">view pricing and details</span>
+        </button>
+      </mat-list>
+    </div>
+  </div>
+  <div class="d-flex flex-row w-100 justify-content-center pt-5 mt-5">
+    <app-footer (printCalled)="handlePrintTerms($event)"></app-footer>
   </div>
 </div>

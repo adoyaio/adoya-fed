@@ -9,6 +9,7 @@ import {
   some,
   toInteger,
 } from "lodash";
+import { format } from "url";
 import { FormUtils } from "../utils/form-utils";
 
 export class CustomFormValidators {
@@ -324,6 +325,27 @@ export class CustomFormValidators {
 
     return null;
   }
+
+  // static passwordValidator(form: FormGroup): any {
+  //   const password = form.get("password");
+  //   const confirmpassword = form.get("confirmpassword");
+
+  //   if (!form) {
+  //     return null;
+  //   }
+  //   if (form.untouched) {
+  //     return null;
+  //   }
+
+  //   debugger;
+
+  //   if (password.value !== confirmpassword.value) {
+  //     confirmpassword.setErrors({ notmatching: true });
+
+  //     return { notmatching: true };
+  //   }
+  //   return null;
+  // }
 
   // Validates the step3 budget controls
   // static budgetValidatorStep3(form: FormGroup): any {

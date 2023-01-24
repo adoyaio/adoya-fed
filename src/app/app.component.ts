@@ -19,7 +19,7 @@ import {
   Router,
 } from "@angular/router";
 import { AmplifyService } from "aws-amplify-angular";
-import { get } from "lodash";
+import { get, isNil } from "lodash";
 import { Subject } from "rxjs";
 import { filter, map, mergeMap, takeUntil, tap } from "rxjs/operators";
 import { UserAccountService } from "./core/services/user-account.service";
@@ -35,10 +35,10 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute,
+    // private route: ActivatedRoute,
     private titleService: Title,
     private activatedRoute: ActivatedRoute,
-    private amplifyService: AmplifyService,
+    // private amplifyService: AmplifyService,
     private userAccountService: UserAccountService
   ) {
     this.titleService.setTitle("adoya client portal");
@@ -59,6 +59,42 @@ export class AppComponent implements AfterViewInit, OnDestroy {
         mergeMap((r) => r.data),
         map((event) => this.titleService.setTitle(event["title"])),
         takeUntil(this.destroyed$)
+      )
+      .subscribe();
+
+    this.userAccountService.amplifyService
+      .authState()
+      .pipe(
+        tap((authState) => {
+          if (!(authState.state === "signedIn")) {
+            this.userAccountService.jwtToken = undefined;
+            this.userAccountService.orgId = undefined;
+            if (
+              !window.location.href.includes("home") &&
+              !window.location.href.includes("start") &&
+              !window.location.href.includes("legal") &&
+              !window.location.href.includes("portal-internal") &&
+              !window.location.href.includes("login")
+            )
+              this.router.navigateByUrl("/portal");
+          }
+          const jwtToken = get(
+            authState,
+            "user.signInUserSession.idToken.jwtToken"
+          );
+
+          const orgId = get(
+            authState,
+            "user.signInUserSession.idToken.payload.custom:org_id",
+            get(authState, "user.username")
+          );
+
+          const userName = get(authState, "user.attributes.email");
+
+          this.userAccountService.jwtToken = jwtToken;
+          this.userAccountService.orgId = orgId;
+          this.userAccountService.userName = userName;
+        })
       )
       .subscribe();
   }

@@ -25,11 +25,12 @@ export class AccountComponent implements OnInit {
   });
 
   ngOnInit() {
-    const orgId = this.userAccountService
-      .getCurrentUser()
-      .UserAttributes.find((val) => {
-        return val.Name === "custom:org_id";
-      }).Value;
+    const orgId = this.userAccountService.orgId;
+    // const orgId = this.userAccountService
+    //   .getCurrentUser()
+    //   .UserAttributes.find((val) => {
+    //     return val.Name === "custom:org_id";
+    //   }).Value;
 
     this.accountForm.get("orgId").setValue(orgId);
 

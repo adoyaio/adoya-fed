@@ -63,7 +63,7 @@
           </form>
         </div>
       </mat-card-content>
-      <mat-action-row class="w-100">
+      <mat-action-row class="w-100 d-flex justify-content-between">
         <button
           [disabled]="supportForm.invalid"
           (click)="onSupportSubmit()"
@@ -74,11 +74,16 @@
           <mat-icon class="text-light" aria-label="submit">done</mat-icon>
           <span class="text-light pl-1">submit</span>
         </button>
+
+        <button
+          (click)="closeDialog()"
+          mat-flat-button
+          color="primary"
+          class="float-left"
+        >
+          <span class="text-light pl-1">close</span>
+        </button>
       </mat-action-row>
     </mat-card>
-  </div>
-  <div class="ml-3">
-    By submitting this form you agree to our Privacy Policy and Terms of
-    Service.
   </div>
 </div>

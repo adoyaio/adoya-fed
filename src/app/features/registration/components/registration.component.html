@@ -11,14 +11,133 @@
     <div class="workbench__loading" *ngIf="isLoadingResults">
       <mat-spinner color="primary" strokeWidth="6.5"></mat-spinner>
     </div>
-    <div class="workbench__sending" *ngIf="isSendingResults">
-      <mat-progress-bar color="primary" mode="indeterminate"></mat-progress-bar>
-    </div>
     <mat-vertical-stepper [linear]="true" #stepper class="w-100">
+      <!-- step 1 invite-->
+      <mat-step [stepControl]="step0Form">
+        <div class="workbench__sending p-2 col-6" *ngIf="isSendingResults">
+          <mat-progress-bar
+            color="primary"
+            mode="indeterminate"
+          ></mat-progress-bar>
+        </div>
+        <form [formGroup]="step0Form">
+          <ng-template matStepLabel
+            >Invite us to be an API user
+            <mat-icon class="pl-2" color="accent"
+              >outgoing_mail</mat-icon
+            ></ng-template
+          >
+          <div class="col-6 mb-2">
+            In order for our system to manage and optimize your campaigns, first
+            send an invite for us to connect to your account using the following
+            steps:
+
+            <ol type="1">
+              <li class="mb-2 p-2 border-bottom">
+                From the
+                <a
+                  href="https://app.searchads.apple.com/cm/app/settings/users/invite"
+                  target="_blank"
+                  class="adoya-link"
+                  >Apple Search Ads UI</a
+                >, choose Sign In Advanced and log in as an account
+                administrator.
+              </li>
+              <li class="mb-2 p-2 border-bottom">
+                From the Users menu in the top-right corner, select the account
+                to invite users to.
+              </li>
+              <li class="mb-2 p-2 border-bottom">
+                Click Invite Users to invite users to your Apple Search Ads
+                organization.
+              </li>
+              <li class="mb-2 p-2 border-bottom">
+                In the User Details section, enter values
+                <ul>
+                  <li class="p-2">first name: <strong>adoya</strong></li>
+                  <li class="p-2">last name: <strong>info</strong></li>
+                  <li class="p-2">apple id: <strong>info@adoya.io</strong></li>
+                  <li class="p-2">
+                    role: <strong>api account manager</strong>
+                  </li>
+                </ul>
+              </li>
+              <li class="mb-2 p-2 border-bottom">Click Send Invite.</li>
+            </ol>
+
+            When completed, enter your Apple Org Id and click 'ready to
+            proceed'. In 24-48 hours, we'll email you when we're linked up and
+            you're ready to continue.
+          </div>
+
+          <div class="col-6 no-gutters">
+            <mat-form-field appearance="fill" color="primary" class="col-11">
+              <mat-label>Apple Organization Id</mat-label>
+              <input
+                matInput
+                placeholder="organization id"
+                required
+                formControlName="appleOrgId"
+              />
+            </mat-form-field>
+            <button
+              mat-icon-button
+              class="float-left"
+              (click)="
+                handleTooltipClick($event, 'Apple Search Ads Organiztion ID')
+              "
+            >
+              <mat-icon
+                class="float-left"
+                color="primary"
+                matTooltip="Your Apple Search Ads Organiztion ID can be found on your Apple Search Ads Console. &#13; &#13;
+                    Click for exact details on where to find this
+                    information"
+                >help</mat-icon
+              >
+            </button>
+          </div>
+
+          <button
+            *ngIf="step1NextVisible()"
+            (click)="handleInviteSentEvent($event)"
+            [disabled]="
+              inviteSent ||
+              appleOrgIdControl.invalid ||
+              isLoadingResults ||
+              isSendingResults
+            "
+            mat-flat-button
+            color="primary"
+            class="float-left ml-2 border rounded"
+          >
+            <mat-icon class="text-light" aria-label="submit">done</mat-icon>
+            <span class="text-light pl-1">ready to proceed</span>
+          </button>
+          <div *ngIf="!step1NextVisible()" class="ml-3 mb-2">
+            You're ready to proceed to the next step! When ready, click next.
+          </div>
+
+          <button
+            [disabled]="appleOrgIdControl.invalid"
+            *ngIf="!step1NextVisible()"
+            mat-flat-button
+            color="primary"
+            matStepperNext
+            class="float-left ml-2 border rounded"
+          >
+            <mat-icon class="text-light" aria-label="submit">done</mat-icon>
+            <span class="text-light pl-1">next</span>
+          </button>
+        </form>
+      </mat-step>
+
+      <!-- step 2 account-->
       <mat-step [stepControl]="step1Form">
         <form [formGroup]="step1Form">
           <ng-template matStepLabel
-            >Tell us about your Apple Search Ads Account</ng-template
+            >Tell us about your Apple Search Ads Account
+            <mat-icon class="pl-2" color="accent">feed</mat-icon></ng-template
           >
 
           <!-- skeleton loader -->
@@ -45,6 +164,7 @@
                 >
                   <mat-label>Client Id</mat-label>
                   <input
+                    readonly="true"
                     matInput
                     placeholder="client id"
                     required
@@ -61,8 +181,8 @@
                     class="float-left"
                     color="primary"
                     matTooltip="Your client ID can be found on your Apple Search Ads Console. &#13; &#13;
-                      Click for exact details on where to find this
-                      information"
+                        Click for exact details on where to find this
+                        information"
                     >help</mat-icon
                   >
                 </button>
@@ -76,6 +196,7 @@
                 >
                   <mat-label>Team Id</mat-label>
                   <input
+                    readonly="true"
                     matInput
                     placeholder="team id"
                     required
@@ -92,8 +213,8 @@
                     class="float-left"
                     color="primary"
                     matTooltip="Your team id can be found on your Apple Search Ads Console. &#13; &#13;
-                      Click for exact details on where to find this
-                      information"
+                        Click for exact details on where to find this
+                        information"
                     >help</mat-icon
                   >
                 </button>
@@ -107,6 +228,7 @@
                 >
                   <mat-label>Key ID</mat-label>
                   <input
+                    readonly="true"
                     matInput
                     placeholder="key id"
                     required
@@ -123,46 +245,14 @@
                     class="float-left"
                     color="primary"
                     matTooltip="Your key id can be found on your Apple Search Ads Console. &#13; &#13;
-                      Click for exact details on where to find this
-                      information"
+                        Click for exact details on where to find this
+                        information"
                     >help</mat-icon
                   >
                 </button>
               </div>
 
-              <div class="w-100 no-gutters">
-                <mat-form-field
-                  appearance="fill"
-                  color="primary"
-                  class="col-11"
-                >
-                  <mat-label>Private Key</mat-label>
-
-                  <textarea
-                    matInput
-                    cdkTextareaAutosize
-                    formControlName="privateKey"
-                  >
-                  </textarea>
-                </mat-form-field>
-
-                <button
-                  mat-icon-button
-                  class="float-left"
-                  (click)="handleTooltipClick($event, 'Private Key')"
-                >
-                  <mat-icon
-                    class="float-left"
-                    color="primary"
-                    matTooltip="Your key id can be found on your Apple Search Ads Console. &#13; &#13;
-                      Click for exact details on where to find this
-                      information"
-                    >help</mat-icon
-                  >
-                </button>
-              </div>
-
-              <div class="w-100 no-gutters">
+              <div class="w-100 no-gutters invisible">
                 <mat-form-field
                   appearance="fill"
                   color="primary"
@@ -190,8 +280,8 @@
                     class="float-left"
                     color="primary"
                     matTooltip="Your Apple Search Ads Organiztion ID can be found on your Apple Search Ads Console. &#13; &#13;
-                      Click for exact details on where to find this
-                      information"
+                        Click for exact details on where to find this
+                        information"
                     >help</mat-icon
                   >
                 </button>
@@ -200,29 +290,53 @@
 
             <div class="col-6">
               <mat-list>
-                <div class="mb-4 pb-2 border-bottom">
+                <div class="mb-2 pb-2 border-bottom w-100">
                   <mat-list-item>
                     <mat-icon color="primary" class="align-text-top mr-2"
                       >done</mat-icon
                     >
 
-                    We need to gather some details about your Apple Search Ads
-                    account, this allows our system to optimize bids for you
+                    We gathered some details about your Apple Search Ads
+                    account, this allows our system to optimize bids for you.
                   </mat-list-item>
                 </div>
 
-                <div class="mb-4 pb-2 border-bottom">
+                <div class="mb-2 pb-2 border-bottom">
+                  <mat-list-item>
+                    <mat-icon color="primary" class="align-text-top mr-2"
+                      >done</mat-icon
+                    >
+
+                    Nothing for you to do here! Click next to continue creating
+                    your campaigns.
+                  </mat-list-item>
+                </div>
+
+                <!-- <div class="pb-2 w-100">
                   <mat-list-item>
                     <mat-icon color="primary" class="align-text-top mr-2"
                       >done</mat-icon
                     >
 
                     Enter the 3 ids provided when you uploaded your public key
-                    to the Apple Search console.
+                    to the Apple Search console. From the Apple Search Ads UI,
+                    choose Account Settings > API. Paste the key below into the
+                    Public Key field.
                   </mat-list-item>
-                </div>
+                </div> -->
 
-                <div class="mb-4 pb-2 border-bottom">
+                <!-- <div class="mb-2 pb-2 ml-5 border-bottom w-100">
+                  <mat-list-item>
+                    <mat-form-field
+                      class="w-100 font-size-12 bg-med text-muted"
+                    >
+                      <textarea matInput cdkTextareaAutosize readonly="true"></textarea
+                      >
+                    </mat-form-field>
+                  </mat-list-item>
+                </div> -->
+
+                <!-- <div class="mb-2 pb-2 border-bottom">
                   <mat-list-item>
                     <mat-icon color="primary" class="align-text-top mr-2"
                       >done</mat-icon
@@ -233,31 +347,45 @@
                   </mat-list-item>
                 </div>
 
-                <div class="mb-4 pb-2 border-bottom">
+                <div class="mb-2 pb-2 ml-4 pl-2">
                   <mat-list-item>
-                    <mat-icon color="primary" class="align-text-top mr-2"
-                      >info</mat-icon
-                    >
+
                     <mat-label class="font-weight-bold">
-                      We can handle this step for you, click below to open the
-                      Apple Search Ads web console to send us an invitation.
+                      We can take care of this step for you, enter your Apple
+                      Search Ads Org Id, then click 'request help on this step'
+                      below to send us a notification.
                     </mat-label>
                   </mat-list-item>
-                </div>
+                </div> -->
               </mat-list>
 
-              <div class="d-flex w-100 justify-content-start pl-5 ml-2">
+              <!-- <div class="d-flex w-100 justify-content-start ml-5">
                 <button
-                  (click)="handleOpenConsole($event)"
+                  (click)="handleRegHelpEvent($event)"
+                  [disabled]="regHelpEventDisabled()"
                   mat-flat-button
                   color="primary"
                   class="float-right"
                 >
-                  <span class="text-light pl-1">open console</span>
+                  <span class="text-light pl-1"
+                    >request help on this step
+                    <mat-icon class="text-light align-middle"
+                      >help_outline</mat-icon
+                    >
+                  </span>
                 </button>
-              </div>
+              </div> -->
             </div>
           </div>
+
+          <button
+            mat-flat-button
+            matStepperPrevious
+            color="primary"
+            class="float-left ml-3"
+          >
+            <span class="text-light pl-1">previous</span>
+          </button>
 
           <button
             mat-flat-button
@@ -271,10 +399,16 @@
           </button>
         </form>
       </mat-step>
+
+      <!-- step 3 campaings-->
       <mat-step [stepControl]="step2Form">
         <form [formGroup]="step2Form">
           <ng-template matStepLabel
-            >Create and Import your campaigns</ng-template
+            >Create and Import your campaigns<mat-icon
+              class="pl-2"
+              color="accent"
+              >assignment_add</mat-icon
+            ></ng-template
           >
 
           <!-- skeleton loader -->
@@ -447,7 +581,13 @@
                     >
                       <mat-select formControlName="objective">
                         <mat-option
-                          matTooltip="Standard: &#13; Finds a balance between growth and efficiency goals and is recommended for most advertisers."
+                          matTooltip="Efficiency: &#13;  You’re more likely to stay within your cost per install target but you may not hit your daily budget.  &#13; &#13;
+                          We recommend this for most advertisers for the first 30 days as a learning period for our algorithm."
+                          value="conservative"
+                          >Efficiency</mat-option
+                        >
+                        <mat-option
+                          matTooltip="Standard: &#13; Finds a balance between growth and efficiency goals."
                           value="standard"
                           >Standard</mat-option
                         >
@@ -455,11 +595,6 @@
                           matTooltip="Growth: &#13; You’ll be more likely to spend your daily budget but could exceed your cost per install target."
                           value="aggressive"
                           >Growth</mat-option
-                        >
-                        <mat-option
-                          matTooltip="Efficiency: &#13;  You’re more likely to stay within your cost per install target but you may not hit your daily budget."
-                          value="conservative"
-                          >Efficiency</mat-option
                         >
                       </mat-select>
                       <mat-label
@@ -1168,9 +1303,15 @@
 
       <!-- TODO step to add additional countries and apps -->
 
+      <!-- step 4 finalize -->
       <mat-step [stepControl]="step3Form">
         <form [formGroup]="step3Form">
-          <ng-template matStepLabel>Review and complete</ng-template>
+          <ng-template matStepLabel
+            >Review and complete
+            <mat-icon class="pl-2" color="accent"
+              >fact_check</mat-icon
+            ></ng-template
+          >
           <div *ngIf="isLoadingResults" class="w-100 mt-2">
             <ngx-skeleton-loader
               count="4"
@@ -1185,7 +1326,7 @@
           </div>
           <div
             class="w-100"
-            *ngIf="!isLoadingResults && stepper.selectedIndex > 0"
+            *ngIf="!isLoadingResults && stepper.selectedIndex == 3"
           >
             <mat-list class="p-0 m-0 pb-2">
               <mat-list-item class="mb-1 pb-2">
@@ -1199,7 +1340,7 @@
                   >done</mat-icon
                 >
                 <mat-label>
-                  Based on the info you've provided, we've created the following
+                  Based on the info you provided, we created the following
                   campaigns and recommended budgets.
                 </mat-label>
               </mat-list-item>
@@ -1209,8 +1350,8 @@
                   >build</mat-icon
                 >
                 <mat-label>
-                  Feel free to update budgets and enable the campaigns you want
-                  to run.
+                  Feel free to update budgets, and enable or disable any
+                  campaigns.
                 </mat-label>
               </mat-list-item>
             </mat-list>
@@ -1218,7 +1359,7 @@
 
           <div
             class="w-100 p-2 mt-2 border-top"
-            *ngIf="!isLoadingResults && stepper.selectedIndex > 0"
+            *ngIf="!isLoadingResults && stepper.selectedIndex == 3"
           >
             <table class="w-100">
               <tr>
@@ -1300,6 +1441,7 @@
               </ng-container>
             </table>
           </div>
+
           <div *ngIf="step3Form.dirty; else continueBlock">
             <button
               mat-flat-button
@@ -1348,23 +1490,5 @@
       </mat-step>
     </mat-vertical-stepper>
   </div>
-</div>
-
-<div
-  class="
-    position-absolute position-md-fixed
-    left-0
-    bottom-0
-    w-99
-    m-auto
-    text-center
-  "
->
-  <a class="adoya-link" (click)="handleShowTermsClick($event)"
-    >Terms of service</a
-  >
-  |
-  <a class="adoya-link" href="mailto:info@adoya.io?subject=Adoya Support"
-    >Contact Us</a
-  >
+  <app-footer (printCalled)="handlePrintTerms($event)"></app-footer>
 </div>

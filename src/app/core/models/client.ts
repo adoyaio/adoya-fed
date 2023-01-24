@@ -1,3 +1,5 @@
+import { get } from "lodash";
+
 export class BranchBidParameters {
   branchBidAdjustment: number;
   branchOptimizationGoal: string;
@@ -143,11 +145,15 @@ export class OrgDetails {
   appleCampaigns: any[];
   auth: any;
   hasRegistered: boolean;
+  hasInvitedApiUser: boolean;
+  isActiveClient: boolean;
 
   static buildFromResponse(response: any) {
     const retVal = new OrgDetails();
     retVal.auth = response.auth;
     retVal.hasRegistered = response.hasRegistered;
+    retVal.hasInvitedApiUser = response.hasInvitedApiUser;
+    retVal.isActiveClient = response.isActiveClient;
     retVal.appleCampaigns = response.appleCampaigns;
     retVal.disabled = response.disabled;
     retVal.currency = response.currency;
@@ -179,13 +185,14 @@ export class OrgDetails {
 }
 
 export class Client {
-  orgId: number;
+  orgId: string;
   orgDetails: OrgDetails;
 
-  static buildFromGetClientResponse(response: any): Client {
+  static buildFromGetClientResponse(response: any, orgId: string): Client {
     const retVal = new Client();
     retVal.orgDetails = OrgDetails.buildFromResponse(response);
-    retVal.orgId = retVal.orgDetails.orgId;
+    //retVal.orgId = retVal.orgDetails.orgId;
+    retVal.orgId = orgId;
     return retVal;
   }
 }

@@ -1,0 +1,152 @@
+<div class="onboarding__container d-flex flex-col flex-wrap w-100 container">
+  <div class="w-100 no-gutters">
+    <form [formGroup]="form1" class="w-100 mt-2 d-flex flex-row flex-wrap">
+      <div class="workbench__sending p-2 col-12">
+        <mat-progress-bar
+          *ngIf="isShowingFirstProgressBar()"
+          color="primary"
+          mode="indeterminate"
+        ></mat-progress-bar>
+      </div>
+      <div class="w-100 mt-2 d-flex flex-row flex-wrap">
+        <h4>Step 1. create oauth keys and upload to s3</h4>
+
+        <div class="w-100 no-gutters">
+          <mat-form-field appearance="fill" color="primary" class="col-6">
+            <mat-label>Organization Id from invite email</mat-label>
+            <input
+              matInput
+              placeholder="organization id"
+              required
+              formControlName="appleOrgId"
+            />
+          </mat-form-field>
+        </div>
+
+        <button
+          mat-flat-button
+          color="primary"
+          class="float-left"
+          (click)="handleSubmit1()"
+        >
+          <mat-icon class="text-light" aria-label="submit">done</mat-icon>
+          <span class="text-light pl-1">submit </span>
+        </button>
+
+        <div class="w-100 no-gutters mt-4">
+          <mat-divider></mat-divider>
+          <h4 class="mt-2">Step 2. upload public key to ASA</h4>
+          <mat-form-field appearance="fill" color="accent" class="col-6 mt-2">
+            <mat-label>Public Key</mat-label>
+            <textarea readonly matInput formControlName="publicKey"> </textarea>
+          </mat-form-field>
+
+          <h3>Complete this step in ASA console and copy IDs into Step 3 ></h3>
+        </div>
+      </div>
+    </form>
+    <mat-divider></mat-divider>
+    <form
+      [formGroup]="form"
+      class="w-100 mt-2 d-flex flex-row flex-wrap no-gutters"
+    >
+      <div class="workbench__sending p-2 col-12">
+        <mat-progress-bar
+          color="primary"
+          mode="indeterminate"
+          *ngIf="isShowingSecondProgressBar()"
+        ></mat-progress-bar>
+      </div>
+      <div class="w-100 mt-2 d-flex flex-row">
+        <h4>Step 3. create client json</h4>
+      </div>
+      <div class="w-100 mt-2 d-flex flex-row">
+        <div class="col-6">
+          <div class="w-100 no-gutters">
+            <mat-form-field appearance="fill" color="primary" class="col-11">
+              <mat-label>Client Id from ASA</mat-label>
+              <input
+                matInput
+                placeholder="client id from ASA"
+                required
+                formControlName="clientId"
+              />
+            </mat-form-field>
+          </div>
+
+          <div class="w-100 no-gutters">
+            <mat-form-field appearance="fill" color="primary" class="col-11">
+              <mat-label>Team Id from ASA</mat-label>
+              <input
+                matInput
+                placeholder="team id from ASA"
+                required
+                formControlName="teamId"
+              />
+            </mat-form-field>
+          </div>
+
+          <div class="w-100 no-gutters">
+            <mat-form-field appearance="fill" color="primary" class="col-11">
+              <mat-label>Key ID from ASA</mat-label>
+              <input
+                matInput
+                placeholder="key id from ASA"
+                required
+                formControlName="keyId"
+              />
+            </mat-form-field>
+          </div>
+
+          <div class="w-100 no-gutters">
+            <mat-form-field appearance="fill" color="primary" class="col-11">
+              <mat-label>Congito User ID from invite email</mat-label>
+              <input
+                matInput
+                placeholder="cognito user id from invite email"
+                required
+                formControlName="userId"
+              />
+            </mat-form-field>
+          </div>
+
+          <div class="w-100 no-gutters">
+            <mat-form-field appearance="fill" color="primary" class="col-11">
+              <mat-label>Email from invite email</mat-label>
+              <input
+                matInput
+                placeholder="email from invite email"
+                required
+                formControlName="email"
+              />
+            </mat-form-field>
+          </div>
+
+          <button
+            mat-flat-button
+            color="primary"
+            class="float-left"
+            (click)="handleSubmit()"
+          >
+            <mat-icon class="text-light" aria-label="submit">done</mat-icon>
+            <span class="text-light pl-1">submit</span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="w-100 mt-3">
+    <mat-divider></mat-divider>
+    <div>
+      <button (click)="onProfileClicked()" mat-icon-button>
+        <mat-icon color="primary">account_circle</mat-icon> Account
+      </button>
+    </div>
+    <div>
+      <button (click)="onLogoutClicked()" mat-icon-button>
+        <mat-icon color="primary">exit_to_app</mat-icon> Log Out
+      </button>
+    </div>
+  </div>
+</div>

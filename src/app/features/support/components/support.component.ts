@@ -39,11 +39,12 @@ export class SupportComponent implements OnInit {
   today: Date;
 
   ngOnInit() {
-    this.orgId = this.userAccountService
-      .getCurrentUser()
-      .UserAttributes.find((val) => {
-        return val.Name === "custom:org_id";
-      }).Value;
+    this.orgId = this.userAccountService.orgId;
+    // this.orgId = this.userAccountService
+    //   .getCurrentUser()
+    //   .UserAttributes.find((val) => {
+    //     return val.Name === "custom:org_id";
+    //   }).Value;
 
     this.username = this.userAccountService
       .getCurrentUser()

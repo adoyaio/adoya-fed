@@ -37,7 +37,7 @@ export class ContactUsComponent implements OnInit {
     this.today = new Date();
     this.subject =
       this.today.toLocaleDateString().toString() +
-      " Adoya request for proposal";
+      " - contact us clicked (⌐■_■) ";
     this.supportForm.get("subject").setValue(this.subject);
 
     this.supportForm
@@ -91,5 +91,9 @@ export class ContactUsComponent implements OnInit {
       duration: 10000,
       panelClass: "standard",
     });
+  }
+
+  closeDialog() {
+    this.dialogRef.close();
   }
 }

@@ -7,6 +7,7 @@ import {
   includes as _includes,
   each as _each,
   map as _map,
+  sortBy,
 } from "lodash";
 import { ReportingService } from "../../../reporting.service";
 import { tap } from "rxjs/internal/operators/tap";
@@ -42,6 +43,9 @@ export class LineChartComponent implements OnInit {
     ])
       .pipe(
         tap(([data, labels]) => {
+          const reversed = sortBy(data, (cpiLine) => {
+            return cpiLine.timestamp;
+          });
           // init chart
           this.lineChartData = [];
           this.lineChartLabels = [];
@@ -49,7 +53,7 @@ export class LineChartComponent implements OnInit {
           //init data lines - build these dynamically
           const cpiDataLine = { data: [], label: "Cost Per Install" };
           const installsDataLine = { data: [], label: "Installs" };
-          const spendDataLine = { data: [], label: "Spend" };
+          const spendDataLine = { data: [], label: "Cost" };
           const purchasesDataLine = { data: [], label: "Purchases" };
           const cppDataLine = { data: [], label: "Cost Per Purchase" };
           const revenueDataLine = { data: [], label: "Revenue" };
@@ -59,7 +63,7 @@ export class LineChartComponent implements OnInit {
           };
 
           // build datalines
-          _each(data, (cpiObject) => {
+          _each(reversed, (cpiObject) => {
             this.lineChartLabels.push(cpiObject.timestamp);
             cpiDataLine.data.push(cpiObject.cpi);
             installsDataLine.data.push(cpiObject.installs);

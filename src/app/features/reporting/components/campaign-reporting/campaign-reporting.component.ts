@@ -108,14 +108,14 @@ export class CampaignReportingComponent implements OnInit {
     this.maxStartDate.setDate(this.maxStartDate.getDate() - 1);
     this.maxEndDate.setDate(this.maxEndDate.getDate() - 2);
 
-    this.orgId = this.userAccountService
-      .getCurrentUser()
-      .UserAttributes.find((val) => {
-        return val.Name === "custom:org_id";
-      }).Value;
+    this.orgId = this.userAccountService.orgId;
   }
 
   ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.aggregatedDataSource.sort = this.sort;
+    this.dataSource.sort = this.sort;
+
     this.campaignFilterForm.controls["lookback"].setValue("1");
 
     const startDate = new Date();
@@ -228,6 +228,7 @@ export class CampaignReportingComponent implements OnInit {
       )
       .subscribe();
 
+    // JF 11/22/22 going to client side pagination as data vis doesn't work well w serverside paging
     // this.paginator.page
     //   .pipe(
     //     delay(0),
@@ -291,9 +292,6 @@ export class CampaignReportingComponent implements OnInit {
     //     })
     //   )
     //   .subscribe();
-
-    this.aggregatedDataSource.sort = this.sort;
-    this.dataSource.sort = this.sort;
   }
 
   formatDate(date) {

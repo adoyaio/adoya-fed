@@ -11,6 +11,8 @@ import { NewsfeedComponent } from "src/app/features/newsfeed/components/newsfeed
 import { OptimizationsComponent } from "src/app/features/optimizations/components/optimizations.component";
 import { PreferencesComponent } from "src/app/features/preferences/components/preferences.component";
 import { ReportingComponent } from "src/app/features/reporting/components/reporting.component";
+import { FaqComponent } from "src/app/features/legal/components/faq/faq.component";
+import { LegalSecureComponent } from "src/app/features/secure-legal/legal-secure.component";
 
 const routes: Routes = [
   {
@@ -81,6 +83,16 @@ const routes: Routes = [
         //   ),
         // canActivate: [AuthGuard],
         data: { title: "Marketing Newsfeed" },
+      },
+      {
+        path: "faq",
+        component: FaqComponent,
+        data: { title: "FAQ" },
+      },
+      {
+        path: "policy",
+        component: LegalSecureComponent,
+        data: { title: "Legal" },
       },
     ],
   },

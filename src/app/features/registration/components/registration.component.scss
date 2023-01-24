@@ -4,4 +4,10 @@
 
 .registration__container {
   min-height: calc(100vh - 100px) !important;
+
+  ::ng-deep .mat-step-header {
+    span {
+      color: white !important;
+    }
+  }
 }

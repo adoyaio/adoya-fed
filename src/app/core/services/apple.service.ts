@@ -88,6 +88,7 @@ export class AppleService {
     updateData: Array<CampaignUpdateData>
   ): Observable<any> {
     const url = `${this.updateAppleCampaignsUrl}?org_id=${orgId}`;
+    debugger;
     let headers = new HttpHeaders();
     headers = headers.set("x-api-key", this.authKey);
     headers = headers.set("Authorization", this.userAccountservice.jwtToken);

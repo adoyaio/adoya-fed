@@ -180,11 +180,14 @@ export class OptimizationsComponent implements OnInit {
       )
       .subscribe();
 
-    this.orgId = this.userAccountService
-      .getCurrentUser()
-      .UserAttributes.find((val) => {
-        return val.Name === "custom:org_id";
-      }).Value;
+    this.orgId = this.userAccountService.orgId;
+
+    // deprecated
+    // this.orgId = this.userAccountService
+    //   .getCurrentUser()
+    //   .UserAttributes.find((val) => {
+    //     return val.Name === "custom:org_id";
+    //   }).Value;
 
     this.clientService
       .getClient(this.orgId)
@@ -194,7 +197,7 @@ export class OptimizationsComponent implements OnInit {
           this.branchForm.markAsPristine();
         }),
         tap((data) => {
-          this.client = Client.buildFromGetClientResponse(data);
+          this.client = Client.buildFromGetClientResponse(data, this.orgId);
           this.buildCampaignForm(this.client);
           this.setFormValues();
           this.isLoadingResults = false;
@@ -253,7 +256,7 @@ export class OptimizationsComponent implements OnInit {
           this.branchForm.markAsPristine();
         }),
         tap((data) => {
-          this.client = Client.buildFromGetClientResponse(data);
+          this.client = Client.buildFromGetClientResponse(data, this.orgId);
           this.setFormValues();
           this.isLoadingResults = false;
         }),
@@ -880,7 +883,7 @@ export class OptimizationsComponent implements OnInit {
             take(1),
             tap((val) => {
               this.isLoadingResults = false;
-              this.client = Client.buildFromGetClientResponse(val);
+              this.client = Client.buildFromGetClientResponse(val, this.orgId);
               this.appleForm.markAsPristine();
               this.openSnackBar(
                 "we've completed updating your campaigns! please review details and complete registration to finalize",

@@ -22,30 +22,29 @@ export class SecureLayoutComponent implements OnInit {
     private amplifyService: AmplifyService,
     private userAccountService: UserAccountService
   ) {
-    this.amplifyService
-      .authState()
-      .pipe(
-        tap((authState) => {
-          if (!(authState.state === "signedIn")) {
-            this.userAccountService.jwtToken = undefined;
-            this.userAccountService.orgId = undefined;
-            this.router.navigateByUrl("/portal");
-          }
-          const jwtToken = get(
-            authState,
-            "user.signInUserSession.idToken.jwtToken"
-          );
-          const orgId = get(
-            authState,
-            "user.signInUserSession.idToken.payload.custom:org_id"
-          );
-
-          this.userAccountService.jwtToken = jwtToken;
-          this.userAccountService.orgId = orgId;
-        }),
-        takeUntil(this.destroyed$)
-      )
-      .subscribe();
+    // this.amplifyService
+    //   .authState()
+    //   .pipe(
+    //     tap((authState) => {
+    //       if (!(authState.state === "signedIn")) {
+    //         this.userAccountService.jwtToken = undefined;
+    //         this.userAccountService.orgId = undefined;
+    //         this.router.navigateByUrl("/portal");
+    //       }
+    //       const jwtToken = get(
+    //         authState,
+    //         "user.signInUserSession.idToken.jwtToken"
+    //       );
+    //       const orgId = get(
+    //         authState,
+    //         "user.signInUserSession.idToken.payload.custom:org_id"
+    //       );
+    //       this.userAccountService.jwtToken = jwtToken;
+    //       this.userAccountService.orgId = orgId;
+    //     }),
+    //     takeUntil(this.destroyed$)
+    //   )
+    //   .subscribe();
   }
 
   ngOnInit() {}

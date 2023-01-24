@@ -16,8 +16,9 @@ export class UserAccountService {
 
   public jwtToken: string;
   public orgId: string;
+  public userName: string;
 
-  constructor(private amplifyService: AmplifyService) {
+  constructor(public amplifyService: AmplifyService) {
     this.currentUserSubject = new BehaviorSubject<UserAccount>(this.storedUser);
     this.currentUser$ = this.currentUserSubject.asObservable();
   }
@@ -26,6 +27,7 @@ export class UserAccountService {
     return this.currentUserSubject.value;
   }
 
+  // deprecated use amplify lbi
   getCurrentUser(): UserAccount {
     let userAccount = new UserAccount();
     const keys = Object.keys(localStorage);

@@ -29,7 +29,14 @@ import {
   some,
 } from "lodash";
 import { combineLatest, EMPTY, of, Subject } from "rxjs";
-import { catchError, switchMap, take, takeUntil, tap } from "rxjs/operators";
+import {
+  catchError,
+  map,
+  switchMap,
+  take,
+  takeUntil,
+  tap,
+} from "rxjs/operators";
 import { Client, OrgDetails } from "src/app/core/models/client";
 import { ClientPayload } from "src/app/core/models/client-payload";
 import { AppService } from "src/app/core/services/app.service";
@@ -38,7 +45,9 @@ import { ClientService } from "src/app/core/services/client.service";
 import { UserAccountService } from "src/app/core/services/user-account.service";
 import { CustomFormValidators } from "src/app/shared/dynamic-form/validators/CustomFormValidators";
 import { DynamicModalComponent } from "src/app/shared/dynamic-modal/dynamic-modal.component";
+import { SupportItem } from "../../support/models/support-item";
 import { CampaignData } from "../model/campaign-data";
+import { SupportService } from "src/app/core/services/support.service";
 
 @Component({
   selector: "app-registration",
@@ -82,7 +91,9 @@ export class RegistrationComponent implements OnInit {
   isSendingResults;
   orgId: string;
   emailAddresses: string;
+  username: string;
   campaigns = [];
+  inviteSent = false;
 
   dailyBudgetValidators = [
     Validators.required,
@@ -189,12 +200,16 @@ export class RegistrationComponent implements OnInit {
   ];
 
   form = this.fb.group({
+    step0Form: this.fb.group({
+      inviteControl: new FormControl(undefined, Validators.required),
+      appleOrgId: new FormControl(undefined, Validators.required),
+    }),
     step1Form: this.fb.group({
       orgId: new FormControl("", Validators.required),
+      // appleOrgId: new FormControl("", Validators.required),
       clientId: new FormControl("", Validators.required),
       teamId: new FormControl("", Validators.required),
       keyId: new FormControl("", Validators.required),
-      privateKey: new FormControl("", Validators.required),
     }),
     step2Form: this.fb.group(
       {
@@ -241,12 +256,19 @@ export class RegistrationComponent implements OnInit {
     step3Form: this.fb.group({}),
   });
 
+  get step0Form(): FormGroup {
+    return this.form.get("step0Form") as FormGroup;
+  }
   get step1Form(): FormGroup {
     return this.form.get("step1Form") as FormGroup;
   }
 
   get step2Form(): FormGroup {
     return this.form.get("step2Form") as FormGroup;
+  }
+
+  get appleOrgIdControl(): AbstractControl {
+    return this.step0Form.get("appleOrgId");
   }
 
   get step3Form(): FormGroup {
@@ -284,6 +306,10 @@ export class RegistrationComponent implements OnInit {
 
   get termsControl(): AbstractControl {
     return this.step2Form.get("termsControl");
+  }
+
+  get inviteControl(): AbstractControl {
+    return this.step0Form.get("inviteControl");
   }
 
   get dailyBudgetError(): string {
@@ -346,11 +372,16 @@ export class RegistrationComponent implements OnInit {
   }
 
   get isStep3BackDisabled(): boolean {
-    return chain(this.client.orgDetails.appleCampaigns)
-      .some((campaign) => {
-        return campaign.status === "ENABLED";
-      })
-      .value();
+    // TODO revisit
+    return true;
+    // if (isNil(this.client) || isNil(this.client.orgDetails)) {
+    //   return true;
+    // }
+    // return chain(this.client.orgDetails.appleCampaigns)
+    //   .some((campaign) => {
+    //     return campaign.status === "ENABLED";
+    //   })
+    //   .value();
   }
 
   constructor(
@@ -359,22 +390,32 @@ export class RegistrationComponent implements OnInit {
     private clientService: ClientService,
     private appleService: AppleService,
     private snackBar: MatSnackBar,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private userAccountService: UserAccountService,
+    private supportService: SupportService
   ) {}
 
   ngOnInit() {
     Auth.currentUserInfo().then((val) => {
-      // TODO pull from userAccountService?
-      this.orgId = get(val.attributes, "custom:org_id");
+      // this.orgId = get(val.attributes, "custom:org_id");
+      this.orgId = this.userAccountService.orgId;
       this.emailAddresses = get(val.attributes, "email");
+      this.username = get(val, "username");
       this.clientService
         .getClient(this.orgId)
         .pipe(
           take(1),
           tap((data: any) => {
-            this.client = Client.buildFromGetClientResponse(data);
-            // check if client exists and has auth fields
-            if (!isNil(this.client.orgDetails.auth)) {
+            this.client = Client.buildFromGetClientResponse(data, this.orgId);
+
+            if (this.client.orgDetails.hasInvitedApiUser) {
+              this.inviteControl.setValue(true);
+            }
+            // check if client exists has auth fields and has invited api user
+            if (
+              !isNil(this.client.orgDetails.auth) &&
+              get(this.client.orgDetails, "hasInvitedApiUser", "false")
+            ) {
               this.openSnackBar(
                 "we found your apple search ads configuration! if you would like to continue, click 'next'",
                 ""
@@ -382,6 +423,7 @@ export class RegistrationComponent implements OnInit {
               this.setOrgIdValue();
               this.setStep1FormValues();
               this.setStep2FormValues();
+              this.stepper.next();
             }
             this.isLoadingResults = false;
           }),
@@ -399,21 +441,21 @@ export class RegistrationComponent implements OnInit {
     this.stepper.selectionChange
       .pipe(
         tap((val) => {
-          // STEP 1
-          if (val.selectedIndex === 1) {
+          // STEP 2
+          if (val.selectedIndex === 2) {
             this.openSnackBar(
               "one moment, while we gather more details about your account",
               ""
             );
 
-            this.initializeClient();
             this.isLoadingResults = true;
             if (
               has(this.client.orgDetails, "appleCampaigns") &&
               !isEmpty(this.client.orgDetails.appleCampaigns)
             ) {
+              // TODO revisit
               // modal warning
-              this.showWarningDialog();
+              // this.showWarningDialog();
             }
 
             // TODO move all this into the modal
@@ -421,12 +463,16 @@ export class RegistrationComponent implements OnInit {
               clientId: this.step1Form.get("clientId").value,
               teamId: this.step1Form.get("teamId").value,
               keyId: this.step1Form.get("keyId").value,
-              privateKey: this.step1Form.get("privateKey").value,
             };
 
             // set values from token
-            this.client.orgId = +this.orgId; // NOTE this may diverge at some point from asa id
-            this.client.orgDetails.orgId = +this.orgId;
+            this.client.orgId = this.orgId; // NOTE this has diverged from asa id
+            // this.client.orgDetails.orgId = +this.orgId;
+            this.client.orgDetails.orgId = this.appleOrgIdControl.value;
+
+            // NOT sure if we need this still
+            this.client.orgDetails.hasInvitedApiUser = true;
+
             this.client.orgDetails.emailAddresses = [this.emailAddresses];
 
             this.clientService
@@ -441,27 +487,23 @@ export class RegistrationComponent implements OnInit {
                     );
                     this.isLoadingResults = false;
                   }
-                  return combineLatest([
-                    this.appleService.getAppleApps(this.orgId),
-                    this.appleService.getAppleAcls(this.orgId),
-                  ]).pipe(
-                    tap(([apps, acls]) => {
+                  return this.appleService.getAppleApps(this.orgId).pipe(
+                    tap((val) => {
                       this.isLoadingResults = false;
-
-                      if (isEmpty(apps.data) || isEmpty(acls)) {
+                      if (isEmpty(val.apps.data) || isEmpty(val.acls)) {
                         this.openSnackBar(
                           "unable to process changes to settings at this time",
                           "dismiss"
                         );
                       }
-                      if (!isEmpty(apps.data)) {
+                      if (!isEmpty(val.apps.data)) {
                         this.openSnackBar(
                           "we found some of your applications! please select from the dropdown to continue",
                           ""
                         );
                       }
-                      this.apps = apps.data;
-                      this.currencies = _map(acls, (acl) => {
+                      this.apps = val.apps.data;
+                      this.currencies = _map(val.acls, (acl) => {
                         return { code: acl.currency };
                       });
                     }),
@@ -474,6 +516,39 @@ export class RegistrationComponent implements OnInit {
                       return [];
                     })
                   );
+                  // return combineLatest([
+                  //   this.appleService.getAppleApps(this.orgId),
+                  //   this.appleService.getAppleAcls(this.orgId),
+                  // ]).pipe(
+                  //   tap(([apps, acls]) => {
+                  //     this.isLoadingResults = false;
+
+                  //     if (isEmpty(apps.data) || isEmpty(acls)) {
+                  //       this.openSnackBar(
+                  //         "unable to process changes to settings at this time",
+                  //         "dismiss"
+                  //       );
+                  //     }
+                  //     if (!isEmpty(apps.data)) {
+                  //       this.openSnackBar(
+                  //         "we found some of your applications! please select from the dropdown to continue",
+                  //         ""
+                  //       );
+                  //     }
+                  //     this.apps = apps.data;
+                  //     this.currencies = _map(acls, (acl) => {
+                  //       return { code: acl.currency };
+                  //     });
+                  //   }),
+                  //   catchError(() => {
+                  //     this.isLoadingResults = false;
+                  //     this.openSnackBar(
+                  //       "unable to process changes to settings at this time",
+                  //       ""
+                  //     );
+                  //     return [];
+                  //   })
+                  // );
                 }),
                 catchError(() => {
                   this.isLoadingResults = false;
@@ -540,35 +615,11 @@ export class RegistrationComponent implements OnInit {
     this._destroyed$.next(true);
   }
 
-  handleShowTermsClick($event) {
-    $event.preventDefault();
-    this.dialog
-      .open(DynamicModalComponent, {
-        data: {
-          title: `Terms of Service`,
-          content: AppService.termsOfService,
-          actionYes: "Save",
-          actionNo: "Cancel",
-        },
-        maxWidth: "500px",
-        width: "500px",
-        panelClass: "tooltip-dialog-box",
-        autoFocus: false,
-      })
-      .afterClosed()
-      .pipe(
-        take(1),
-        tap((val) => {
-          if (val) {
-            this.handlePrintTerms();
-          }
-        })
-      )
-      .subscribe();
-  }
-
-  handlePrintTerms() {
-    window.print();
+  handlePrintTerms($event) {
+    this.printViewText = get($event, "text");
+    setTimeout(() => {
+      window.print();
+    });
   }
 
   undoStep3Changes() {
@@ -623,8 +674,9 @@ export class RegistrationComponent implements OnInit {
           return this.clientService.getClient(this.orgId).pipe(
             take(1),
             tap((val) => {
+              debugger;
               this.isLoadingResults = false;
-              this.client = Client.buildFromGetClientResponse(val);
+              this.client = Client.buildFromGetClientResponse(val, this.orgId);
               this.step3Form.markAsPristine();
               this.openSnackBar(
                 "we've completed updating your campaigns! please review details and complete registration to finalize",
@@ -693,76 +745,6 @@ export class RegistrationComponent implements OnInit {
     return hasInvalid;
   }
 
-  initializeClient() {
-    // set default KeywordAdderParameters
-    this.client = new Client();
-    this.client.orgDetails = new OrgDetails();
-    this.client.orgDetails.keywordAdderParameters = {
-      targetedKeywordTapThreshold: 2,
-      negativeKeywordConversionThreshold: 0,
-      broadMatchDefaultBid: 1,
-      exactMatchDefaultBid: 1,
-      negativeKeywordTapThreshold: 10,
-      targetedKeywordConversionThreshold: 2,
-    };
-
-    // set default AdgroupBidParameters
-    this.client.orgDetails.adgroupBidParameters = {
-      highCPABidDecrease: 0.85,
-      tapThreshold: 7,
-      objective: "standard",
-      lowCPIBidIncreaseThresh: 0.4,
-      minBid: 0.1,
-      noInstallBidDecreaseThresh: 0,
-      highCPIBidDecreaseThresh: 0,
-      lowCPABidBoost: 1.15,
-      maxBid: 3,
-      staleRaiseBidBoost: 1.025,
-      staleRaiseImpresshionThresh: 0,
-    };
-
-    this.client.orgDetails.bidParameters = {
-      highCPABidDecrease: 0.85,
-      tapThreshold: 7,
-      objective: "standard",
-      minBid: 0.1,
-      noInstallBidDecreaseThresh: 0,
-      highCPIBidDecreaseThresh: 0,
-      lowCPABidBoost: 1.15,
-      maxBid: 0.35,
-      staleRaiseBidBoost: 1.025,
-      staleRaiseImpresshionThresh: 0,
-    };
-
-    this.client.orgDetails.branchIntegrationParameters = {
-      branchBidAdjusterEnabled: false,
-      branchKey: "",
-      branchSecret: "",
-    };
-
-    this.client.orgDetails.branchBidParameters = {
-      branchBidAdjustment: 0.1,
-      branchOptimizationGoal: "cost_per_purchase",
-      minAppleInstalls: 15,
-      branchMinBid: 0.1,
-      branchMaxBid: 25,
-      revenueOverAdSpendThreshold: 1,
-      revenueOverAdSpendThresholdBuffer: 0.2,
-      costPerPurchaseThreshold: 20,
-      costPerPurchaseThresholdBuffer: 0.2,
-    };
-
-    this.client.orgDetails.disabled = false;
-    this.client.orgDetails.appleCampaigns = [];
-
-    // disable branch controls by defuault
-    this.substep6.get("cpp").disable();
-    this.substep6.get("mmpObjective").disable();
-    this.substep6.get("roas").disable();
-    this.substep6.get("branchKey").disable();
-    this.substep6.get("branchSecret").disable();
-  }
-
   handleBranchCheckboxChange($event: MatCheckboxChange) {
     if ($event.checked) {
       this.substep6.get("mmpObjective").enable();
@@ -785,8 +767,16 @@ export class RegistrationComponent implements OnInit {
     }
   }
 
-  setOrgIdValue() {
+  setOrgIdValue(): void {
     this.step1Form.get("orgId").setValue(this.orgId);
+    if (isNil(this.client)) {
+      return;
+    }
+    if (!isNil(this.client.orgDetails.orgId)) {
+      this.step0Form
+        .get("appleOrgId")
+        .setValue(get(this.client, "orgDetails.orgId"));
+    }
   }
 
   setStep1FormValues() {
@@ -795,9 +785,6 @@ export class RegistrationComponent implements OnInit {
       .setValue(this.client.orgDetails.auth.clientId);
     this.step1Form.get("teamId").setValue(this.client.orgDetails.auth.teamId);
     this.step1Form.get("keyId").setValue(this.client.orgDetails.auth.keyId);
-    this.step1Form
-      .get("privateKey")
-      .setValue(this.client.orgDetails.auth.privateKey);
   }
 
   setStep2FormValues() {
@@ -882,8 +869,9 @@ export class RegistrationComponent implements OnInit {
       .pipe(
         take(1),
         switchMap((val) => {
-          const client = Client.buildFromGetClientResponse(val);
+          const client = Client.buildFromGetClientResponse(val, this.orgId);
           client.orgDetails.hasRegistered = true;
+          client.orgDetails.isActiveClient = true;
           return this.clientService
             .postClient(ClientPayload.buildFromClient(client), false)
             .pipe(
@@ -914,6 +902,13 @@ export class RegistrationComponent implements OnInit {
     const prevStep = find(this.step2, (step) => step.ordinal === ordinal - 1);
     set(prevStep, "complete", false);
     set(prevStep, "active", true);
+  }
+
+  step1NextVisible(): boolean {
+    if (isNil(this.client)) {
+      return true;
+    }
+    return !this.client.orgDetails.hasInvitedApiUser;
   }
 
   substepDisabled(): boolean {
@@ -988,11 +983,57 @@ export class RegistrationComponent implements OnInit {
   }
 
   handleOpenConsole($event) {
+    $event.stopPropagation();
     $event.preventDefault();
     window.open(
       "https://app.searchads.apple.com/cm/app/settings/users/invite",
       "_blank"
     );
+  }
+
+  regHelpEventDisabled(): boolean {
+    return isNil(this.appleOrgIdControl.value);
+  }
+
+  handleInviteSentEvent($event) {
+    this.isSendingResults = true;
+    $event.stopPropagation();
+    $event.preventDefault();
+
+    const supportItem = new SupportItem();
+    supportItem.description = `invite has been sent for api user`;
+    supportItem.userId = this.username;
+    supportItem.username = this.emailAddresses;
+    supportItem.subject = `an asa api user invite has been sent for ${this.orgId} `;
+    supportItem.orgId = this.appleOrgIdControl.value;
+    supportItem.type = "registration";
+
+    this.supportService
+      .postSupportItem(supportItem)
+      .pipe(
+        take(1),
+        map((data) => {
+          this.inviteSent = true;
+          this.isSendingResults = false;
+          this.openSnackBar(
+            `thank you for inviting adoya to manage your campaigns!
+
+            we'll notify you via email when you may refresh this page and continue to the next step.`,
+            "dismiss"
+          );
+
+          return data;
+        }),
+        catchError(() => {
+          this.isSendingResults = false;
+          this.openSnackBar(
+            "unable to process your request at this time, we apologize for the inconvenience",
+            "dismiss"
+          );
+          return [];
+        })
+      )
+      .subscribe();
   }
 
   openSnackBar(message: string, action: string) {
@@ -1068,8 +1109,8 @@ export class RegistrationComponent implements OnInit {
     this.dialog
       .open(DynamicModalComponent, {
         data: {
-          title: `Terms of Service`,
-          content: AppService.termsOfService,
+          title: ``,
+          content: AppService.clickWrap,
           actionYes: "Agree",
           actionNo: "Cancel",
         },
@@ -1093,7 +1134,10 @@ export class RegistrationComponent implements OnInit {
               take(1),
               switchMap((val) => {
                 // for adoya
-                const client = Client.buildFromGetClientResponse(val);
+                const client = Client.buildFromGetClientResponse(
+                  val,
+                  this.orgId
+                );
 
                 client.orgDetails.bidParameters.objective =
                   this.substep2.get("objective").value;
@@ -1157,7 +1201,8 @@ export class RegistrationComponent implements OnInit {
 
                 // for apple
                 const campaignData = new CampaignData();
-                campaignData.org_id = this.orgId;
+                // campaignData.org_id = this.orgId;
+                campaignData.org_id = client.orgDetails.orgId.toString();
                 campaignData.app_name = get(this.app, "appName");
                 campaignData.adam_id = get(this.app, "adamId");
                 campaignData.campaign_target_country =
@@ -1182,7 +1227,7 @@ export class RegistrationComponent implements OnInit {
                   take(1),
                   switchMap((val) => {
                     this.openIndefiniteSnackBar(
-                      "creating apple search ads campaigns, this may take a few minutes! please don't refresh your browser during this time!",
+                      "creating apple search ads campaigns, this may take a few minutes. please don't refresh your browser during this time!",
                       ""
                     );
                     // set auth
