@@ -24,6 +24,7 @@ export class AuthGuard implements CanActivate {
           this.router.navigateByUrl("/portal");
           return false;
         }
+
         return true;
       },
       () => {

@@ -16,6 +16,7 @@ import { OptimizationsModule } from "src/app/features/optimizations/optimization
 import { PreferencesModule } from "src/app/features/preferences/preferences.module";
 import { LegalModule } from "src/app/features/legal/legal.module";
 import { LegalSecureModule } from "src/app/features/secure-legal/legal-secure.module";
+import { AgentsModule } from "src/app/features/agents/agents.module";
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { LegalSecureModule } from "src/app/features/secure-legal/legal-secure.mo
     PreferencesModule,
     LegalModule,
     LegalSecureModule,
+    AgentsModule,
   ],
 })
 export class SecureLayoutModule {}

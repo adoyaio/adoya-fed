@@ -1,4 +1,4 @@
-import { get } from "lodash";
+import { chain, get } from "lodash";
 
 export class BranchBidParameters {
   branchBidAdjustment: number;
@@ -190,9 +190,20 @@ export class Client {
 
   static buildFromGetClientResponse(response: any, orgId: string): Client {
     const retVal = new Client();
+    // TODO response shouldn't be a pythonic/blackbox client, it should return complete dynamo response
     retVal.orgDetails = OrgDetails.buildFromResponse(response);
     //retVal.orgId = retVal.orgDetails.orgId;
     retVal.orgId = orgId;
+    return retVal;
+  }
+
+  static buildListFromResponse(response: any): Array<Client> {
+    const retVal = chain(response)
+      .map((org) => {
+        return Client.buildFromGetClientResponse(org.orgDetails, org.orgId);
+      })
+      .value();
+
     return retVal;
   }
 }

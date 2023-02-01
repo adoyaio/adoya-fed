@@ -1,0 +1,187 @@
+<!--  card -->
+<div class="workbench__loading-shade" *ngIf="isLoadingResults">
+  <mat-spinner color="primary" strokeWidth="6.5"></mat-spinner>
+</div>
+<div class="workbench__sending" *ngIf="isSendingResults">
+  <mat-progress-bar color="primary" mode="indeterminate"></mat-progress-bar>
+</div>
+<mat-card class="workbench__card mat-elevation-z0 mt-3 w-100">
+  <mat-card-title class="pb-2">
+    <!-- Bid Optimization Settings For Installs -->
+    <button
+      (click)="onResetForm()"
+      [disabled]="undoDisabled()"
+      mat-button
+      class="workbench__buttons float-right"
+    >
+      <mat-icon
+        [ngClass]="undoDisabled() ? '' : 'adoya-web-primary'"
+        aria-label="reset"
+        >refresh</mat-icon
+      >
+      <span [ngClass]="undoDisabled() ? '' : 'adoya-web-primary'"
+        >undo changes</span
+      >
+    </button>
+
+    <button
+      (click)="submit()"
+      [disabled]="submitDisabled()"
+      mat-button
+      class="workbench__buttons float-right"
+    >
+      <mat-icon
+        [ngClass]="submitDisabled() ? '' : 'adoya-web-primary'"
+        aria-label="save"
+        >cloud_done</mat-icon
+      >
+      <span [ngClass]="submitDisabled() ? '' : 'adoya-web-primary'">
+        save changes</span
+      >
+    </button>
+
+    <button
+      mat-button
+      class="rounded float-right"
+      (click)="handleRegistration()"
+    >
+      <mat-icon class="pr-2" color="accent">add</mat-icon>
+      add a new client or application to your account
+    </button>
+  </mat-card-title>
+
+  <!-- form -->
+  <form [formGroup]="clientForm">
+    <mat-card-content>
+      <div class="w-100">
+        <mat-card-subtitle class="mt-2 mb-2 font-weight-bold">
+          Manage Applications and Clients
+        </mat-card-subtitle>
+      </div>
+
+      <!-- campaigns title -->
+      <mat-card-subtitle class="mt-2 mb-2 font-weight-bold">
+        <button
+          class="float-right"
+          mat-button
+          (click)="$event.preventDefault(); accordion.openAll()"
+        >
+          <mat-icon color="primary">expand_more</mat-icon>Expand All
+        </button>
+        <button
+          class="float-right"
+          mat-button
+          (click)="$event.preventDefault(); accordion.closeAll()"
+        >
+          <mat-icon color="primary">expand_less</mat-icon>Collapse All
+        </button>
+      </mat-card-subtitle>
+
+      <!-- campaigns subtitle  -->
+      <!-- <mat-label class="d-block"> Set App level Stuff </mat-label> -->
+
+      <!-- campaigns  -->
+      <div class="w-100">
+        <div *ngIf="hasNoClients() | async">
+          You have no applications registered to this account.
+        </div>
+        <div class="mt-2">
+          <!-- <button
+            mat-flat-button
+            class="rounded border"
+            (click)="handleRegistration()"
+          >
+            <mat-icon class="pr-2" color="accent">add</mat-icon>
+            add a new client or application to your account
+          </button> -->
+        </div>
+        <mat-accordion multi class="col-2">
+          <!-- <div *ngFor="let client of clients">{{ client | json}}</div> -->
+          <ng-container *ngFor="let client of clients | async">
+            <!-- campaigns panels -->
+            <!-- <mat-expansion-panel
+              class="mat-elevation-z0 mt-1 m-2 text-center"
+              [class.disabled]="client.status === ''"
+              [ngClass]="[
+                hasBidParameters(campaign)
+                  ? 'workbench_campaign__card-active'
+                  : 'workbench_campaign__card',
+                campaign.status === 'PAUSED'
+                  ? 'workbench_campaign__card-disabled'
+                  : '',
+                isCampaignDirty(campaign)
+                  ? 'workbench_campaign__card-dirty'
+                  : ''
+              ]"
+              *ngIf="!isSearchCampaign(campaign)"
+            > -->
+            <mat-expansion-panel
+              class="mat-elevation-z0 mt-1 m-2 text-center"
+              [class.disabled]="client.status === ''"
+              [ngClass]="[
+                client.orgDetails.isActiveClient
+                  ? 'workbench_campaign__card'
+                  : 'workbench_campaign__card-disabled'
+              ]"
+            >
+              <mat-expansion-panel-header>
+                <div>
+                  <mat-icon
+                    *ngIf="
+                      client.orgDetails.isActiveClient === true;
+                      else pausedIcon
+                    "
+                    color="primary"
+                    class="align-middle"
+                    >play_arrow</mat-icon
+                  >
+                  <ng-template #pausedIcon>
+                    <mat-icon class="align-middle">pause</mat-icon>
+                  </ng-template>
+                  {{ client.orgDetails.appName }}
+                </div>
+              </mat-expansion-panel-header>
+
+              <div
+                class="d-flex flex-row flex-wrap no-gutters justify-content-start"
+              >
+                <div class="w-100 d-flex justify-content-start p-2">
+                  <!-- <mat-slide-toggle
+                    color="primary"
+                    [formControlName]="'status' + campaign.campaignId"
+                    >Enable</mat-slide-toggle
+                  > -->
+                  <mat-slide-toggle color="primary">Enable</mat-slide-toggle>
+                </div>
+                <div class="w-100 d-flex justify-content-start p-2">
+                  Agent Id: {{ userAccountService.agentId }}
+                </div>
+                <div class="w-100 d-flex justify-content-start p-2">
+                  client level org id: {{ client.orgId }}
+                </div>
+                <div class="w-100 d-flex justify-content-start p-2">
+                  ASA id : {{ client.orgDetails.orgId }}
+                </div>
+                <div class="w-100 d-flex justify-content-start p-2">
+                  APP ID: {{ client.orgDetails.appId }}
+                </div>
+
+                <div class="w-100 d-flex justify-content-start p-2">
+                  <button
+                    mat-button
+                    class="border rounded"
+                    (click)="
+                      contextSwitch(client.orgId, client.orgDetails.appName)
+                    "
+                  >
+                    Browse as this client & application
+                  </button>
+                </div>
+              </div>
+            </mat-expansion-panel>
+          </ng-container>
+        </mat-accordion>
+      </div>
+    </mat-card-content>
+  </form>
+</mat-card>

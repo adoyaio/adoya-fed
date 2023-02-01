@@ -12,7 +12,11 @@ import {
   MatSnackBar,
   MatStepper,
 } from "@angular/material";
-import { Router } from "@angular/router";
+import {
+  ActivatedRoute,
+  ActivatedRouteSnapshot,
+  Router,
+} from "@angular/router";
 import { Auth } from "aws-amplify";
 
 import {
@@ -48,6 +52,7 @@ import { DynamicModalComponent } from "src/app/shared/dynamic-modal/dynamic-moda
 import { SupportItem } from "../../support/models/support-item";
 import { CampaignData } from "../model/campaign-data";
 import { SupportService } from "src/app/core/services/support.service";
+import { Location } from "@angular/common";
 
 @Component({
   selector: "app-registration",
@@ -87,9 +92,11 @@ export class RegistrationComponent implements OnInit {
   keywordsCategory: string[] = [];
   keywordsCompetitors: string[] = [];
   client: Client;
-  isLoadingResults = true;
+  isLoadingResults;
   isSendingResults;
   orgId: string;
+  asaId: string;
+  clientKey: string;
   emailAddresses: string;
   username: string;
   campaigns = [];
@@ -205,7 +212,7 @@ export class RegistrationComponent implements OnInit {
       appleOrgId: new FormControl(undefined, Validators.required),
     }),
     step1Form: this.fb.group({
-      orgId: new FormControl("", Validators.required),
+      orgId: new FormControl("", Validators.required), // this is the adoya orgId/cognito id
       // appleOrgId: new FormControl("", Validators.required),
       clientId: new FormControl("", Validators.required),
       teamId: new FormControl("", Validators.required),
@@ -392,48 +399,123 @@ export class RegistrationComponent implements OnInit {
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
     private userAccountService: UserAccountService,
-    private supportService: SupportService
+    private supportService: SupportService,
+    private activatedRoute: ActivatedRoute,
+    private location: Location
   ) {}
 
   ngOnInit() {
+    if (!isNil(this.activatedRoute.snapshot.queryParams["id"])) {
+      this.asaId = this.activatedRoute.snapshot.queryParams["id"];
+      this.setAsaIdValue();
+    }
     Auth.currentUserInfo().then((val) => {
-      // this.orgId = get(val.attributes, "custom:org_id");
+      // 2 flows, agent or directly as a client
+      // debugger;
+
       this.orgId = this.userAccountService.orgId;
       this.emailAddresses = get(val.attributes, "email");
-      this.username = get(val, "username");
-      this.clientService
-        .getClient(this.orgId)
-        .pipe(
-          take(1),
-          tap((data: any) => {
-            this.client = Client.buildFromGetClientResponse(data, this.orgId);
+      // this.username = get(val, "username"); // NOTE unused, this is the same as orgId
 
-            if (this.client.orgDetails.hasInvitedApiUser) {
-              this.inviteControl.setValue(true);
-            }
-            // check if client exists has auth fields and has invited api user
-            if (
-              !isNil(this.client.orgDetails.auth) &&
-              get(this.client.orgDetails, "hasInvitedApiUser", "false")
-            ) {
-              this.openSnackBar(
-                "we found your apple search ads configuration! if you would like to continue, click 'next'",
-                ""
+      // if they have a client entry then populate step 2 values and proceed
+      if (!isNil(this.asaId)) {
+        this.isLoadingResults = true;
+        this.clientKey = `${this.orgId}||${this.asaId}`;
+        this.clientService
+          .getClient(this.clientKey)
+          .pipe(
+            take(1),
+            tap((data: any) => {
+              debugger;
+              this.client = Client.buildFromGetClientResponse(
+                data,
+                this.clientKey
               );
-              this.setOrgIdValue();
-              this.setStep1FormValues();
-              this.setStep2FormValues();
-              this.stepper.next();
-            }
-            this.isLoadingResults = false;
-          }),
-          catchError(() => {
-            this.setOrgIdValue();
-            this.isLoadingResults = false;
-            return EMPTY;
-          })
-        )
-        .subscribe();
+
+              if (this.client.orgDetails.hasInvitedApiUser) {
+                this.inviteControl.setValue(true);
+              }
+              // check if client exists has auth fields and has invited api user
+              if (
+                !isNil(this.client.orgDetails.auth) &&
+                get(this.client.orgDetails, "hasInvitedApiUser", "false")
+              ) {
+                this.openSnackBar(
+                  "we found your apple search ads configuration! if you would like to continue, click 'next'",
+                  ""
+                );
+                this.setOrgIdValue();
+                this.setStep1FormValues();
+                this.setStep2FormValues();
+                this.stepper.next();
+              }
+              this.isLoadingResults = false;
+            }),
+            catchError(() => {
+              //this.setOrgIdValue();
+              this.isLoadingResults = false;
+              return EMPTY;
+            })
+          )
+          .subscribe();
+      }
+
+      //  else {
+      //   // get by agent id begins_with(agent id), and filter for the app that hasn't been registered
+      //   this.clientService
+      //     .getClients(this.userAccountService.agentId)
+      //     .pipe(
+      //       take(1),
+      //       tap((data: any) => {
+      //         const hasMultipleUnregisteredApps = chain(data)
+      //           .filter((client: Client) => {
+      //             return (
+      //               client.orgDetails.isActiveClient &&
+      //               !client.orgDetails.hasRegistered
+      //             );
+      //           })
+      //           .value();
+
+      //         // TODO modal here to handle if there are multiple unregistered apps
+      //         if (get(data, "length", 0) > 1 && hasMultipleUnregisteredApps) {
+      //           // FOR NOW REDIRECT TO AGENTS
+      //           this.openSnackBar(
+      //             "we found several unregistered applications. please select one to continue registration.",
+      //             "dismiss"
+      //           );
+      //           this.router.navigateByUrl("/workbench/agents");
+      //           return;
+      //         }
+
+      //         this.client = Client.buildFromGetClientResponse(data, this.orgId);
+
+      //         if (this.client.orgDetails.hasInvitedApiUser) {
+      //           this.inviteControl.setValue(true);
+      //         }
+      //         // check if client exists has auth fields and has invited api user
+      //         if (
+      //           !isNil(this.client.orgDetails.auth) &&
+      //           get(this.client.orgDetails, "hasInvitedApiUser", "false")
+      //         ) {
+      //           this.openSnackBar(
+      //             "we found your apple search ads configuration! if you would like to continue, click 'next'",
+      //             ""
+      //           );
+      //           this.setOrgIdValue();
+      //           this.setStep1FormValues();
+      //           this.setStep2FormValues();
+      //           this.stepper.next();
+      //         }
+      //         this.isLoadingResults = false;
+      //       }),
+      //       catchError(() => {
+      //         this.setOrgIdValue();
+      //         this.isLoadingResults = false;
+      //         return EMPTY;
+      //       })
+      //     )
+      //     .subscribe();
+      // }
     });
   }
 
@@ -466,13 +548,11 @@ export class RegistrationComponent implements OnInit {
             };
 
             // set values from token
-            this.client.orgId = this.orgId; // NOTE this has diverged from asa id
             // this.client.orgDetails.orgId = +this.orgId;
-            this.client.orgDetails.orgId = this.appleOrgIdControl.value;
-
-            // NOT sure if we need this still
+            // this.client.orgId = this.orgId; // NOTE this has diverged from asa id
+            this.client.orgId = this.clientKey; // NOTE this now uses the composite key of cognito id - asa id
+            this.client.orgDetails.orgId = this.appleOrgIdControl.value; // this represents an asa id
             this.client.orgDetails.hasInvitedApiUser = true;
-
             this.client.orgDetails.emailAddresses = [this.emailAddresses];
 
             this.clientService
@@ -487,7 +567,7 @@ export class RegistrationComponent implements OnInit {
                     );
                     this.isLoadingResults = false;
                   }
-                  return this.appleService.getAppleApps(this.orgId).pipe(
+                  return this.appleService.getAppleApps(this.clientKey).pipe(
                     tap((val) => {
                       this.isLoadingResults = false;
                       if (isEmpty(val.apps.data) || isEmpty(val.acls)) {
@@ -667,16 +747,19 @@ export class RegistrationComponent implements OnInit {
       .value();
 
     this.appleService
-      .patchAppleCampaign(this.orgId, payload)
+      .patchAppleCampaign(this.clientKey, payload)
       .pipe(
         take(1),
         switchMap((val) => {
-          return this.clientService.getClient(this.orgId).pipe(
+          return this.clientService.getClient(this.clientKey).pipe(
             take(1),
             tap((val) => {
               debugger;
               this.isLoadingResults = false;
-              this.client = Client.buildFromGetClientResponse(val, this.orgId);
+              this.client = Client.buildFromGetClientResponse(
+                val,
+                this.clientKey
+              );
               this.step3Form.markAsPristine();
               this.openSnackBar(
                 "we've completed updating your campaigns! please review details and complete registration to finalize",
@@ -769,14 +852,19 @@ export class RegistrationComponent implements OnInit {
 
   setOrgIdValue(): void {
     this.step1Form.get("orgId").setValue(this.orgId);
-    if (isNil(this.client)) {
-      return;
-    }
-    if (!isNil(this.client.orgDetails.orgId)) {
-      this.step0Form
-        .get("appleOrgId")
-        .setValue(get(this.client, "orgDetails.orgId"));
-    }
+    // if (isNil(this.client)) {
+    //   return;
+    // }
+    // THIS COMES OFF URL NOW
+    // if (!isNil(this.client.orgDetails.orgId)) {
+    //   this.step0Form
+    //     .get("appleOrgId")
+    //     .setValue(get(this.client, "orgDetails.orgId"));
+    // }
+  }
+
+  setAsaIdValue(): void {
+    this.step0Form.get("appleOrgId").setValue(this.asaId);
   }
 
   setStep1FormValues() {
@@ -865,11 +953,11 @@ export class RegistrationComponent implements OnInit {
   complete() {
     this.isLoadingResults = true;
     this.clientService
-      .getClient(this.orgId)
+      .getClient(this.clientKey)
       .pipe(
         take(1),
         switchMap((val) => {
-          const client = Client.buildFromGetClientResponse(val, this.orgId);
+          const client = Client.buildFromGetClientResponse(val, this.clientKey);
           client.orgDetails.hasRegistered = true;
           client.orgDetails.isActiveClient = true;
           return this.clientService
@@ -1000,9 +1088,15 @@ export class RegistrationComponent implements OnInit {
     $event.stopPropagation();
     $event.preventDefault();
 
+    // we now know what the asa id is, if we didn't before from url
+    this.asaId = this.appleOrgIdControl.value;
+    this.clientKey = `${this.orgId}||${this.asaId}`;
+
+    this.location.replaceState(`/registration?id=${this.asaId}`);
+
     const supportItem = new SupportItem();
     supportItem.description = `invite has been sent for api user`;
-    supportItem.userId = this.username;
+    supportItem.userId = this.clientKey;
     supportItem.username = this.emailAddresses;
     supportItem.subject = `an asa api user invite has been sent for ${this.orgId} `;
     supportItem.orgId = this.appleOrgIdControl.value;
@@ -1130,13 +1224,13 @@ export class RegistrationComponent implements OnInit {
             );
             this.termsControl.setValue(true);
             this.isLoadingResults = true;
-            return this.clientService.getClient(this.orgId).pipe(
+            return this.clientService.getClient(this.clientKey).pipe(
               take(1),
               switchMap((val) => {
                 // for adoya
                 const client = Client.buildFromGetClientResponse(
                   val,
-                  this.orgId
+                  this.clientKey
                 );
 
                 client.orgDetails.bidParameters.objective =
@@ -1193,7 +1287,7 @@ export class RegistrationComponent implements OnInit {
                   .value();
 
                 client.orgDetails.appName = get(this.app, "appName");
-                client.orgDetails.appID = get(this.app, "appID");
+                client.orgDetails.appID = get(this.app, "adamId");
                 client.orgDetails.clientName = get(this.app, "developerName");
 
                 client.orgDetails.currency =
@@ -1223,7 +1317,7 @@ export class RegistrationComponent implements OnInit {
                 campaignData.targeted_keywords_brand = this.keywordsBrand;
 
                 // get auth
-                return this.appleService.getAppleAuth(this.orgId).pipe(
+                return this.appleService.getAppleAuth(this.clientKey).pipe(
                   take(1),
                   switchMap((val) => {
                     this.openIndefiniteSnackBar(
@@ -1239,7 +1333,7 @@ export class RegistrationComponent implements OnInit {
                     set(competitorData, "campaignType", "competitor");
 
                     return this.appleService
-                      .postAppleCampaign(this.orgId, competitorData)
+                      .postAppleCampaign(this.clientKey, competitorData)
                       .pipe(
                         take(1),
                         tap((val) => {
@@ -1276,7 +1370,7 @@ export class RegistrationComponent implements OnInit {
                           const categoryData = cloneDeep(campaignData);
                           set(categoryData, "campaignType", "category");
                           return this.appleService
-                            .postAppleCampaign(this.orgId, categoryData)
+                            .postAppleCampaign(this.clientKey, categoryData)
                             .pipe(
                               take(1),
                               tap((val) => {
@@ -1317,7 +1411,7 @@ export class RegistrationComponent implements OnInit {
                                 const brandData = cloneDeep(campaignData);
                                 set(brandData, "campaignType", "brand");
                                 return this.appleService
-                                  .postAppleCampaign(this.orgId, brandData)
+                                  .postAppleCampaign(this.clientKey, brandData)
                                   .pipe(
                                     take(1),
                                     tap((val) => {
@@ -1362,7 +1456,7 @@ export class RegistrationComponent implements OnInit {
                                       );
                                       return this.appleService
                                         .postAppleCampaign(
-                                          this.orgId,
+                                          this.clientKey,
                                           exactDiscoveryData
                                         )
                                         .pipe(
@@ -1410,7 +1504,7 @@ export class RegistrationComponent implements OnInit {
                                             );
                                             return this.appleService
                                               .postAppleCampaign(
-                                                this.orgId,
+                                                this.clientKey,
                                                 broadDiscoveryData
                                               )
                                               .pipe(
@@ -1460,7 +1554,7 @@ export class RegistrationComponent implements OnInit {
                                                   );
                                                   return this.appleService
                                                     .postAppleCampaign(
-                                                      this.orgId,
+                                                      this.clientKey,
                                                       searchDiscoveryData
                                                     )
                                                     .pipe(
@@ -1590,5 +1684,9 @@ export class RegistrationComponent implements OnInit {
     setTimeout(() => {
       this.stepper.previous();
     }, 500);
+  }
+
+  navigateBack() {
+    this.router.navigateByUrl("/portal");
   }
 }

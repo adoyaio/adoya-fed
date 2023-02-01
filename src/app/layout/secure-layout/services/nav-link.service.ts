@@ -27,6 +27,18 @@ export class NavLinkService implements OnDestroy {
       LayoutNavLinks.build(
         1,
         "button",
+        "Agents",
+        "/workbench/agents",
+        "badge",
+        undefined,
+        undefined
+      )
+    );
+
+    this.navLinks.push(
+      LayoutNavLinks.build(
+        2,
+        "button",
         "Optimizations",
         "/workbench/optimizations",
         "dashboard",
@@ -37,7 +49,7 @@ export class NavLinkService implements OnDestroy {
 
     this.navLinks.push(
       LayoutNavLinks.build(
-        2,
+        3,
         "button",
         "Reporting",
         "/workbench/reporting",
@@ -49,7 +61,7 @@ export class NavLinkService implements OnDestroy {
 
     this.navLinks.push(
       LayoutNavLinks.build(
-        3,
+        4,
         "button",
         "Preferences",
         "/workbench/preferences",

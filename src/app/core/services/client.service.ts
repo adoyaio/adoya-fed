@@ -37,6 +37,7 @@ export class ClientService {
   clientCampaignHistoryUrl = this.baseUrl + `/client/campaign/history`;
   clientCreatePemKeyUrl = this.baseUrl + `/client/createPemKey`;
   clientGetUrl = this.baseUrl + `/client/get`;
+  clientListUrl = this.baseUrl + `/client/list`;
   clientPostUrl = this.baseUrl + `/client/post`;
   clientPatchUrl = this.baseUrl + `/client/patch`;
   clientAdminUrl = this.baseUrl + `/client/admin`;
@@ -96,6 +97,18 @@ export class ClientService {
 
   public getClient(orgId: string): Observable<any> {
     const url = `${this.clientGetUrl}?org_id=${orgId}`;
+    let headers = new HttpHeaders();
+    headers = headers.set("x-api-key", this.authKey);
+    headers = headers.set("Authorization", this.userAccountservice.jwtToken);
+    return this.http.get<any>(url, { headers: headers }).pipe(
+      map((response) => {
+        return response;
+      })
+    );
+  }
+
+  public getClients(orgId: string): Observable<any> {
+    const url = `${this.clientListUrl}?org_id=${orgId}`;
     let headers = new HttpHeaders();
     headers = headers.set("x-api-key", this.authKey);
     headers = headers.set("Authorization", this.userAccountservice.jwtToken);

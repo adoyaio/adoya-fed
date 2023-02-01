@@ -80,6 +80,7 @@ export class PortalComponent implements OnInit {
   // };
 
   ngOnInit(): void {
+    // TODO why is this not all in app component, revisit
     this.amplifyService.authStateChange$
       .pipe(
         tap((authState) => {
@@ -93,8 +94,21 @@ export class PortalComponent implements OnInit {
               this.router.navigateByUrl("/onboarding");
               return;
             }
+
+            const isAgent = get(
+              authState,
+              "user.signInUserSession.idToken.payload.custom:agent",
+              0
+            )
+              ? true
+              : false;
+
+            if (isAgent) {
+              return;
+            }
             this.router.navigateByUrl("/workbench");
           } else {
+            // TODO remove this probably
             //this.router.navigateByUrl("/portal");
           }
         })

@@ -21,7 +21,7 @@ import {
 import { AmplifyService } from "aws-amplify-angular";
 import { get, isNil } from "lodash";
 import { Subject } from "rxjs";
-import { filter, map, mergeMap, takeUntil, tap } from "rxjs/operators";
+import { filter, map, mergeMap, take, takeUntil, tap } from "rxjs/operators";
 import { UserAccountService } from "./core/services/user-account.service";
 
 @Component({
@@ -65,6 +65,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     this.userAccountService.amplifyService
       .authState()
       .pipe(
+        // take(1),
         tap((authState) => {
           if (!(authState.state === "signedIn")) {
             this.userAccountService.jwtToken = undefined;
@@ -83,6 +84,24 @@ export class AppComponent implements AfterViewInit, OnDestroy {
             "user.signInUserSession.idToken.jwtToken"
           );
 
+          // TODO check if user is an agent and if so org id is set from agents page
+          //debugger;
+          const isAgent = get(
+            authState,
+            "user.signInUserSession.idToken.payload.custom:agent",
+            0
+          )
+            ? true
+            : false;
+
+          if (isAgent) {
+            //this.router.navigateByUrl("/workbench/agents");
+            //return;
+            this.userAccountService.agentId = get(authState, "user.username");
+          }
+
+          // orgid from custom:org_id if there is one
+          //  legacy and admin users fallback to cognito id
           const orgId = get(
             authState,
             "user.signInUserSession.idToken.payload.custom:org_id",

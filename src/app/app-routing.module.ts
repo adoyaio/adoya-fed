@@ -6,10 +6,11 @@ import { RegistrationComponent } from "./features/registration/components/regist
 import { HasRegisteredGuard } from "./core/guards/has-registered.guard";
 import { SplashComponent } from "./features/homesite/splash/splash.component";
 import { HomeComponent } from "./features/homesite/home/home.component";
-import { OnboardingComponent } from "./features/onboarding/components/onboarding.component";
+// import { OnboardingComponent } from "./features/onboarding/components/onboarding.component";
 import { PortalInternalComponent } from "./features/portal/components/portal-internal/portal-internal.component";
 import { IsAdminGuard } from "./core/guards/is-admin.guard";
-import { CreateAccountComponent } from "./features/create-account/components/create-account.component";
+import { AgentsComponent } from "./features/agents/agents.component";
+// import { CreateAccountComponent } from "./features/create-account/components/create-account.component";
 
 const routes: Routes = [
   {
@@ -28,10 +29,15 @@ const routes: Routes = [
     component: PortalInternalComponent,
     data: { title: "adoya" },
   },
+  // {
+  //   path: "login",
+  //   component: CreateAccountComponent,
+  //   data: { title: "adoya" },
+  // },
   {
-    path: "login",
-    component: CreateAccountComponent,
-    data: { title: "adoya" },
+    path: "agents",
+    component: AgentsComponent,
+    data: { title: "agents" },
   },
   {
     path: "start",
@@ -80,7 +86,7 @@ const routes: Routes = [
 @NgModule({
   imports: [
     RouterModule.forRoot(routes, {
-      // enableTracing: true,
+      enableTracing: true,
       preloadingStrategy: PreloadAllModules,
     }),
   ],

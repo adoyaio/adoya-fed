@@ -30,13 +30,15 @@ export class HasRegisteredGuard implements CanActivate {
 
         // const orgId = get(val.attributes, "custom:org_id");
 
+        const isAgent = get(val.attributes, "custom:agent", 0) ? true : false;
+
         if (isNil(user)) {
           return this.handleResult(false);
         }
 
-        // if (this.initialized) {
-        //   return this.handleResult(true);
-        // }
+        if (isAgent) {
+          return this.handleResult(true);
+        }
 
         return this.clientService
           .getClient(user)

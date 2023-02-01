@@ -13,6 +13,7 @@ import { PreferencesComponent } from "src/app/features/preferences/components/pr
 import { ReportingComponent } from "src/app/features/reporting/components/reporting.component";
 import { FaqComponent } from "src/app/features/legal/components/faq/faq.component";
 import { LegalSecureComponent } from "src/app/features/secure-legal/legal-secure.component";
+import { AgentsComponent } from "src/app/features/agents/agents.component";
 
 const routes: Routes = [
   {
@@ -93,6 +94,11 @@ const routes: Routes = [
         path: "policy",
         component: LegalSecureComponent,
         data: { title: "Legal" },
+      },
+      {
+        path: "agents",
+        component: AgentsComponent,
+        data: { title: "Agents" },
       },
     ],
   },

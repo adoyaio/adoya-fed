@@ -3,6 +3,7 @@ import { Title } from "@angular/platform-browser";
 import { AmplifyService } from "aws-amplify-angular";
 import { Router } from "@angular/router";
 import { UserAccountService } from "src/app/core/services/user-account.service";
+import { isNil } from "lodash";
 
 @Component({
   selector: "app-main-section",
@@ -32,7 +33,11 @@ export class MainSectionComponent implements OnInit {
   }
 
   getPageTitle() {
-    return this.titleService.getTitle();
+    let retVal = this.titleService.getTitle();
+    if (!isNil(this.userAccountService.browsingAsString)) {
+      retVal = `${retVal} (${this.userAccountService.browsingAsString})`;
+    }
+    return retVal;
   }
 
   onProfileClicked() {

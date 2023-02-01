@@ -54,21 +54,45 @@ export class OnboardingComponent implements OnInit {
       .pipe(
         take(1),
         tap((val) => {
+          this.isSendingResults = false;
+          this.form1.get("publicKey").setValue(get(val, "publicKey"));
+
+          if (get(val, "keyCreated", false) === false) {
+            this.openSnackBar(
+              `found existing key in s3 for ${
+                this.form1.get("appleOrgId").value
+              } `,
+              "dismiss"
+            );
+
+            return;
+          }
+
           this.openSnackBar(
             "successfully created key and uploaded to s3",
             "dismiss"
           );
-          this.isSendingResults = false;
-          this.form1.get("publicKey").setValue(get(val, "publicKey"));
         })
       )
       .subscribe();
   }
 
-  handleSubmit() {
+  handleSubmit(forAgent = false) {
     this.isSendingResults = true;
     const newClient = new Client();
+
+    if (forAgent) {
+      newClient.orgId =
+        this.form.get("userId").value + "||" + this.form1.get("appleOrgId");
+    } else {
+      newClient.orgId = this.form.get("userId").value;
+    }
+
     // mapping of cognito user id to dynamo root org id
+
+    // TODO pivot here if an agent is registering a new client
+    // add the agents cognito id to the apple org
+
     newClient.orgId = this.form.get("userId").value;
     newClient.orgDetails = new OrgDetails();
     newClient.orgDetails.auth = {

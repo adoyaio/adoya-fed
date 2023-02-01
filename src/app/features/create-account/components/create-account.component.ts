@@ -89,6 +89,7 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
     confirmpassword: new FormControl("", [Validators.required]),
     first: new FormControl(""),
     last: new FormControl(""),
+    agent: new FormControl(false),
   });
 
   loginForm = this.fb.group({
@@ -212,12 +213,13 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
       .then((user) => {
         const un = get(user, "attributes.email");
         this.isSendingResults = false;
-        this.openSnackBar(`welcome, ${un} :)`, "dismiss");
+        this.openSnackBar(`welcome, ${un} ⌐■-■`, "");
         this.userAccountService.amplifyService.setAuthState({
           state: "signedIn",
           user,
         });
 
+        // TODO pivot here
         this.router.navigateByUrl("/workbench");
       })
       .catch((err) => {
@@ -228,14 +230,15 @@ export class CreateAccountComponent implements OnInit, AfterViewInit {
 
   handleSignUp() {
     this.isSendingResults = true;
+
     Auth.signUp({
       username: this.form.get("email").value,
       password: this.form.get("password").value,
-      // attributes: {
-      //     first_name,          // optional
-      //     phone_number,   // optional - E.164 number convention
-      //     // other custom attributes
-      // },
+      attributes: {
+        "custom:first_name": this.form.get("first").value,
+        "custom:last_name": this.form.get("last").value,
+        "custom:agent": this.form.get("agent") ? "1" : "0", // optional - E.164 number convention
+      },
       //autoSignIn: {
       // optional - enables auto sign in after user is confirmed
       //  enabled: true,
