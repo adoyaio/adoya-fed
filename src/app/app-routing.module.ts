@@ -35,9 +35,9 @@ const routes: Routes = [
   //   data: { title: "adoya" },
   // },
   {
-    path: "agents",
+    path: "applications",
     component: AgentsComponent,
-    data: { title: "agents" },
+    data: { title: "applications" },
   },
   {
     path: "start",

@@ -27,8 +27,8 @@ export class NavLinkService implements OnDestroy {
       LayoutNavLinks.build(
         1,
         "button",
-        "Agents",
-        "/workbench/agents",
+        "Applications",
+        "/workbench/applications",
         "badge",
         undefined,
         undefined

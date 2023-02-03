@@ -41,7 +41,7 @@
                 <a
                   href="https://app.searchads.apple.com/cm/app/settings/users/invite"
                   target="_blank"
-                  class="adoya-link"
+                  class="adoya-link font-weight-bold"
                   >Apple Search Ads UI</a
                 >, choose Sign In Advanced and log in as an account
                 administrator.
@@ -56,21 +56,60 @@
               </li>
               <li class="mb-2 p-2 border-bottom">
                 In the User Details section, enter values
-                <ul>
-                  <li class="p-2">first name: <strong>adoya</strong></li>
-                  <li class="p-2">last name: <strong>info</strong></li>
-                  <li class="p-2">apple id: <strong>info@adoya.io</strong></li>
+
+                <div class="mt-2">
+                  <mat-icon color="accent" class="font-size-8">lens</mat-icon>
+                  first name:
+                  <span class="text-secondary font-weight-bold">adoya</span>
+                </div>
+                <div>
+                  <mat-icon color="accent" class="font-size-8">lens</mat-icon>
+                  last name:
+                  <span class="text-secondary font-weight-bold">info</span>
+                </div>
+                <div>
+                  <mat-icon color="accent" class="font-size-8">lens</mat-icon>
+                  apple id:
+                  <span class="text-secondary font-weight-bold"
+                    >info@adoya.io</span
+                  >
+                </div>
+                <div>
+                  <mat-icon color="accent" class="font-size-8">lens</mat-icon>
+                  role:<span class="text-secondary font-weight-bold"
+                    >api account manager</span
+                  >
+                </div>
+                <!-- <ul>
                   <li class="p-2">
-                    role: <strong>api account manager</strong>
+                    first name:
+                    <span class="text-secondary font-weight-bold">adoya</span>
                   </li>
-                </ul>
+                  <li class="p-2">
+                    last name:
+                    <span class="text-secondary font-weight-bold">info</span>
+                  </li>
+                  <li class="p-2">
+                    apple id:
+                    <span class="text-secondary font-weight-bold"
+                      >info@adoya.io</span
+                    >
+                  </li>
+                  <li class="p-2">
+                    role:<span class="text-secondary font-weight-bold"
+                      >api account manager</span
+                    >
+                  </li>
+                </ul> -->
               </li>
               <li class="mb-2 p-2 border-bottom">Click Send Invite.</li>
             </ol>
 
             When completed, enter your Apple Org Id and click 'ready to
-            proceed'. In 24-48 hours, we'll email you when we're linked up and
-            you're ready to continue.
+            proceed'. In 24-48 hours, we'll email you at
+            <span class="adoya-link font-weight-bold">
+              {{ emailAddresses }} </span
+            >when we're linked up and you're ready to continue.
           </div>
 
           <div class="col-6 no-gutters">

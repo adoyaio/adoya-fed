@@ -96,7 +96,6 @@
           </button> -->
         </div>
         <mat-accordion multi class="col-2">
-          <!-- <div *ngFor="let client of clients">{{ client | json}}</div> -->
           <ng-container *ngFor="let client of clients | async">
             <!-- campaigns panels -->
             <!-- <mat-expansion-panel
@@ -138,7 +137,9 @@
                   <ng-template #pausedIcon>
                     <mat-icon class="align-middle">pause</mat-icon>
                   </ng-template>
-                  {{ client.orgDetails.appName }}
+                  {{ client.orgDetails.appName }} ({{
+                    client.orgDetails.appId
+                  }})
                 </div>
               </mat-expansion-panel-header>
 
@@ -146,24 +147,11 @@
                 class="d-flex flex-row flex-wrap no-gutters justify-content-start"
               >
                 <div class="w-100 d-flex justify-content-start p-2">
-                  <!-- <mat-slide-toggle
+                  <mat-slide-toggle
                     color="primary"
-                    [formControlName]="'status' + campaign.campaignId"
+                    [formControlName]="'status' + client.orgId"
                     >Enable</mat-slide-toggle
-                  > -->
-                  <mat-slide-toggle color="primary">Enable</mat-slide-toggle>
-                </div>
-                <div class="w-100 d-flex justify-content-start p-2">
-                  Agent Id: {{ userAccountService.agentId }}
-                </div>
-                <div class="w-100 d-flex justify-content-start p-2">
-                  client level org id: {{ client.orgId }}
-                </div>
-                <div class="w-100 d-flex justify-content-start p-2">
-                  ASA id : {{ client.orgDetails.orgId }}
-                </div>
-                <div class="w-100 d-flex justify-content-start p-2">
-                  APP ID: {{ client.orgDetails.appId }}
+                  >
                 </div>
 
                 <div class="w-100 d-flex justify-content-start p-2">

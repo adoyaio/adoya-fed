@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
-import { FormBuilder } from "@angular/forms";
+import { FormBuilder, FormControl } from "@angular/forms";
 import { Router } from "@angular/router";
+import { chain } from "lodash";
 
 import { BehaviorSubject, Observable, of } from "rxjs";
 import { map, take, tap } from "rxjs/operators";
@@ -26,14 +27,13 @@ export class AgentsComponent implements OnInit {
   isSendingResults;
   orgId: string;
 
-  clientForm = this.fb.group({
-    objective: [""],
-    cpi: [""],
-  });
+  clientForm = this.fb.group({});
 
   ngOnInit() {
+    // reset context switching
     this.userAccountService.browsingAsString = undefined;
     this.userAccountService.orgId = this.userAccountService.agentId;
+
     this.orgId = this.userAccountService.orgId;
     this.clientService
       .getClients(this.orgId)
@@ -41,6 +41,14 @@ export class AgentsComponent implements OnInit {
         take(1),
         tap((val) => {
           this.clients.next(Client.buildListFromResponse(val));
+          chain(val)
+            .each((org) => {
+              this.clientForm.addControl(
+                "status" + org.orgId,
+                new FormControl(org.orgDetails.isActiveClient)
+              );
+            })
+            .value();
           this.isLoadingResults = false;
         })
       )

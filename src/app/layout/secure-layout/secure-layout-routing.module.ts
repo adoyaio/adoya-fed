@@ -96,9 +96,9 @@ const routes: Routes = [
         data: { title: "Legal" },
       },
       {
-        path: "agents",
+        path: "applications",
         component: AgentsComponent,
-        data: { title: "Agents" },
+        data: { title: "Applications" },
       },
     ],
   },

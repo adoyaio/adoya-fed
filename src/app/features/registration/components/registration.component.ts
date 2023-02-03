@@ -97,7 +97,7 @@ export class RegistrationComponent implements OnInit {
   orgId: string;
   asaId: string;
   clientKey: string;
-  emailAddresses: string;
+  public emailAddresses: string;
   username: string;
   campaigns = [];
   inviteSent = false;
@@ -1110,9 +1110,7 @@ export class RegistrationComponent implements OnInit {
           this.inviteSent = true;
           this.isSendingResults = false;
           this.openSnackBar(
-            `thank you for inviting adoya to manage your campaigns!
-
-            we'll notify you via email when you may refresh this page and continue to the next step.`,
+            `thank you for inviting us to manage your campaigns! we'll notify you when you may continue to the next step.`,
             "dismiss"
           );
 
