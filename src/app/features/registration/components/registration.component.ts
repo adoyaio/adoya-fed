@@ -1111,7 +1111,7 @@ export class RegistrationComponent implements OnInit {
           this.isSendingResults = false;
           this.openSnackBar(
             `thank you for inviting us to manage your campaigns! we'll notify you when you may continue to the next step.`,
-            "dismiss"
+            ""
           );
 
           return data;
