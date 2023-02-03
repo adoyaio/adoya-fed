@@ -1,11 +1,13 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, FormControl } from "@angular/forms";
+import { MatAccordion, MatSnackBar } from "@angular/material";
 import { Router } from "@angular/router";
 import { chain } from "lodash";
 
-import { BehaviorSubject, Observable, of } from "rxjs";
-import { map, take, tap } from "rxjs/operators";
+import { BehaviorSubject, forkJoin, Observable, of } from "rxjs";
+import { map, switchMap, take, tap } from "rxjs/operators";
 import { Client } from "src/app/core/models/client";
+import { ClientPayload } from "src/app/core/models/client-payload";
 import { ClientService } from "src/app/core/services/client.service";
 import { UserAccountService } from "src/app/core/services/user-account.service";
 
@@ -15,11 +17,13 @@ import { UserAccountService } from "src/app/core/services/user-account.service";
   styleUrls: ["./agents.component.scss"],
 })
 export class AgentsComponent implements OnInit {
+  @ViewChild(MatAccordion, { static: false }) accordion: MatAccordion;
   constructor(
     private clientService: ClientService,
     public userAccountService: UserAccountService,
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {}
 
   clients: BehaviorSubject<Array<Client>> = new BehaviorSubject([]);
@@ -44,7 +48,7 @@ export class AgentsComponent implements OnInit {
           chain(val)
             .each((org) => {
               this.clientForm.addControl(
-                "status" + org.orgId,
+                org.orgId,
                 new FormControl(org.orgDetails.isActiveClient)
               );
             })
@@ -63,13 +67,102 @@ export class AgentsComponent implements OnInit {
     );
   }
 
-  undoDisabled() {}
+  undoDisabled() {
+    return (
+      this.clientForm.pristine || this.isLoadingResults || this.isSendingResults
+    );
+  }
 
-  submitDisabled() {}
-  submit() {}
+  submitDisabled() {
+    return (
+      this.clientForm.pristine || this.isLoadingResults || this.isSendingResults
+    );
+  }
+  submit() {
+    this.isSendingResults = true;
+    this.clients
+      .pipe(
+        take(1),
+        switchMap((clients) => {
+          const clientCalls = chain(this.clientForm)
+            .get("controls")
+            .keys()
+            .filter((control) => {
+              return this.clientForm.get(control).dirty;
+            })
+            .map((changedClientId) => {
+              const isActive = this.clientForm.get(changedClientId).value;
+
+              const newClient = clients.find(
+                (client) => client.orgId === changedClientId
+              );
+
+              newClient.orgDetails.isActiveClient = isActive;
+
+              return this.clientService.postClient(
+                ClientPayload.buildFromClient(newClient),
+                false
+              );
+            })
+            .value();
+
+          return forkJoin(clientCalls).pipe(
+            take(1),
+            switchMap((val) => {
+              return this.clientService.getClients(this.orgId).pipe(
+                take(1),
+                tap((val) => {
+                  this.clientForm.markAsPristine();
+                  this.accordion.closeAll();
+                  this.isSendingResults = false;
+                  this.openSnackBar(
+                    "successfully updated your applications",
+                    ""
+                  );
+                })
+              );
+            })
+          );
+        })
+      )
+      .subscribe();
+  }
+
+  onResetForm() {
+    this.isLoadingResults = true;
+    return this.clientService
+      .getClients(this.orgId)
+      .pipe(
+        take(1),
+        tap((val) => {
+          chain(val)
+            .each((org) => {
+              this.clientForm
+                .get(org.orgId)
+                .setValue(org.orgDetails.isActiveClient);
+            })
+            .value();
+          this.clientForm.markAsPristine();
+          this.accordion.closeAll();
+          this.isLoadingResults = false;
+        })
+      )
+      .subscribe();
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 10000,
+      panelClass: "standard",
+    });
+  }
 
   handleRegistration() {
     this.router.navigateByUrl("/registration");
+  }
+
+  isClientDirty(client) {
+    return this.clientForm.get(client.orgId).dirty;
   }
 
   contextSwitch(clientOrgId, appName) {

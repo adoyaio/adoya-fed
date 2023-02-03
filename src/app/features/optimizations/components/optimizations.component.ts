@@ -954,8 +954,6 @@ export class OptimizationsComponent implements OnInit {
       })
       .value();
 
-    console.log("james test " + hasInvalid);
-
     return hasInvalid;
   }
 }

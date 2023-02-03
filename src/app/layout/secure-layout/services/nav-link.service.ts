@@ -29,7 +29,7 @@ export class NavLinkService implements OnDestroy {
         "button",
         "Applications",
         "/workbench/applications",
-        "badge",
+        "view_list",
         undefined,
         undefined
       )

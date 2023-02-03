@@ -120,7 +120,8 @@
               [ngClass]="[
                 client.orgDetails.isActiveClient
                   ? 'workbench_campaign__card'
-                  : 'workbench_campaign__card-disabled'
+                  : 'workbench_campaign__card-disabled',
+                isClientDirty(client) ? 'workbench_campaign__card-dirty' : ''
               ]"
             >
               <mat-expansion-panel-header>
@@ -149,20 +150,23 @@
                 <div class="w-100 d-flex justify-content-start p-2">
                   <mat-slide-toggle
                     color="primary"
-                    [formControlName]="'status' + client.orgId"
+                    [formControlName]="client.orgId"
                     >Enable</mat-slide-toggle
                   >
                 </div>
 
                 <div class="w-100 d-flex justify-content-start p-2">
                   <button
-                    mat-button
+                    [disabled]="!client.orgDetails.isActiveClient"
+                    mat-raised-button
                     class="border rounded"
                     (click)="
                       contextSwitch(client.orgId, client.orgDetails.appName)
                     "
                   >
-                    Browse as this client & application
+                    Browse as this client & application<mat-icon class="ml-2">
+                      badge
+                    </mat-icon>
                   </button>
                 </div>
               </div>
