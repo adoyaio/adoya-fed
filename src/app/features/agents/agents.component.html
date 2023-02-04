@@ -7,74 +7,75 @@
 </div>
 <mat-card class="workbench__card mat-elevation-z0 mt-3 w-100">
   <mat-card-title class="pb-2">
-    <!-- Bid Optimization Settings For Installs -->
-    <button
-      (click)="onResetForm()"
-      [disabled]="undoDisabled()"
-      mat-button
-      class="workbench__buttons float-right"
-    >
-      <mat-icon
-        [ngClass]="undoDisabled() ? '' : 'adoya-web-primary'"
-        aria-label="reset"
-        >refresh</mat-icon
-      >
-      <span [ngClass]="undoDisabled() ? '' : 'adoya-web-primary'"
-        >undo changes</span
-      >
-    </button>
+    <div class="d-flex col-12 justify-content-between">
+      <div class="col-5 justify-content-start">
+        <!-- <span class="float-left"> -->
+        <mat-card-subtitle class="mt-2 mb-2 font-weight-bold">
+          Manage Applications and Clients
+        </mat-card-subtitle>
+        <!-- </span> -->
+      </div>
+      <div class="d-flex col-7 justify-content-end">
+        <button mat-button class="rounded" (click)="handleRegistration()">
+          <mat-icon class="pr-2" color="accent">add</mat-icon>
+          add a new client or application to your account
+        </button>
+        <button
+          (click)="onResetForm()"
+          [disabled]="undoDisabled()"
+          mat-button
+          class="workbench__buttons"
+        >
+          <mat-icon
+            [ngClass]="undoDisabled() ? '' : 'adoya-web-primary'"
+            aria-label="reset"
+            >refresh</mat-icon
+          >
+          <span [ngClass]="undoDisabled() ? '' : 'adoya-web-primary'"
+            >undo changes</span
+          >
+        </button>
 
-    <button
-      (click)="submit()"
-      [disabled]="submitDisabled()"
-      mat-button
-      class="workbench__buttons float-right"
-    >
-      <mat-icon
-        [ngClass]="submitDisabled() ? '' : 'adoya-web-primary'"
-        aria-label="save"
-        >cloud_done</mat-icon
-      >
-      <span [ngClass]="submitDisabled() ? '' : 'adoya-web-primary'">
-        save changes</span
-      >
-    </button>
-
-    <button
-      mat-button
-      class="rounded float-right"
-      (click)="handleRegistration()"
-    >
-      <mat-icon class="pr-2" color="accent">add</mat-icon>
-      add a new client or application to your account
-    </button>
+        <button
+          (click)="submit()"
+          [disabled]="submitDisabled()"
+          mat-button
+          class="workbench__buttons"
+        >
+          <mat-icon
+            [ngClass]="submitDisabled() ? '' : 'adoya-web-primary'"
+            aria-label="save"
+            >cloud_done</mat-icon
+          >
+          <span [ngClass]="submitDisabled() ? '' : 'adoya-web-primary'">
+            save changes</span
+          >
+        </button>
+      </div>
+    </div>
   </mat-card-title>
 
   <!-- form -->
   <form [formGroup]="clientForm">
     <mat-card-content>
-      <div class="w-100">
-        <mat-card-subtitle class="mt-2 mb-2 font-weight-bold">
-          Manage Applications and Clients
-        </mat-card-subtitle>
-      </div>
-
       <!-- campaigns title -->
-      <mat-card-subtitle class="mt-2 mb-2 font-weight-bold">
-        <button
-          class="float-right"
-          mat-button
-          (click)="$event.preventDefault(); accordion.openAll()"
-        >
-          <mat-icon color="primary">expand_more</mat-icon>Expand All
-        </button>
-        <button
-          class="float-right"
-          mat-button
-          (click)="$event.preventDefault(); accordion.closeAll()"
-        >
-          <mat-icon color="primary">expand_less</mat-icon>Collapse All
-        </button>
+      <mat-card-subtitle
+        class="mt-2 mb-2 font-weight-bold d-flex justify-content-end"
+      >
+        <div class="w-100">
+          <button
+            mat-button
+            (click)="$event.preventDefault(); accordion.openAll()"
+          >
+            <mat-icon color="primary">expand_more</mat-icon>Expand All
+          </button>
+          <button
+            mat-button
+            (click)="$event.preventDefault(); accordion.closeAll()"
+          >
+            <mat-icon color="primary">expand_less</mat-icon>Collapse All
+          </button>
+        </div>
       </mat-card-subtitle>
 
       <!-- campaigns subtitle  -->

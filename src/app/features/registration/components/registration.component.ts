@@ -32,7 +32,7 @@ import {
   each,
   some,
 } from "lodash";
-import { combineLatest, EMPTY, of, Subject } from "rxjs";
+import { combineLatest, EMPTY, of, Subject, throwError } from "rxjs";
 import {
   catchError,
   map,
@@ -97,6 +97,7 @@ export class RegistrationComponent implements OnInit {
   orgId: string;
   asaId: string;
   clientKey: string;
+  appKey: string;
   public emailAddresses: string;
   username: string;
   campaigns = [];
@@ -301,6 +302,10 @@ export class RegistrationComponent implements OnInit {
     return this.step2Form.get("substep6");
   }
 
+  get applicationControl(): AbstractControl {
+    return this.step2Form.get("substep1").get("application");
+  }
+
   get cpiControl(): AbstractControl {
     return this.step2Form.get("substep2").get("cpi");
   }
@@ -426,7 +431,6 @@ export class RegistrationComponent implements OnInit {
           .pipe(
             take(1),
             tap((data: any) => {
-              debugger;
               this.client = Client.buildFromGetClientResponse(
                 data,
                 this.clientKey
@@ -550,6 +554,7 @@ export class RegistrationComponent implements OnInit {
             // set values from token
             // this.client.orgDetails.orgId = +this.orgId;
             // this.client.orgId = this.orgId; // NOTE this has diverged from asa id
+
             this.client.orgId = this.clientKey; // NOTE this now uses the composite key of cognito id - asa id
             this.client.orgDetails.orgId = this.appleOrgIdControl.value; // this represents an asa id
             this.client.orgDetails.hasInvitedApiUser = true;
@@ -567,8 +572,11 @@ export class RegistrationComponent implements OnInit {
                     );
                     this.isLoadingResults = false;
                   }
+
                   return this.appleService.getAppleApps(this.clientKey).pipe(
                     tap((val) => {
+                      // TODO check for apps result and compare to getClients response
+
                       this.isLoadingResults = false;
                       if (isEmpty(val.apps.data) || isEmpty(val.acls)) {
                         this.openSnackBar(
@@ -953,11 +961,11 @@ export class RegistrationComponent implements OnInit {
   complete() {
     this.isLoadingResults = true;
     this.clientService
-      .getClient(this.clientKey)
+      .getClient(this.appKey)
       .pipe(
         take(1),
         switchMap((val) => {
-          const client = Client.buildFromGetClientResponse(val, this.clientKey);
+          const client = Client.buildFromGetClientResponse(val, this.appKey);
           client.orgDetails.hasRegistered = true;
           client.orgDetails.isActiveClient = true;
           return this.clientService
@@ -1226,9 +1234,31 @@ export class RegistrationComponent implements OnInit {
               take(1),
               switchMap((val) => {
                 // for adoya
+                // const client = Client.buildFromGetClientResponse(
+                //   val,
+                //   this.clientKey
+                // );
+
+                // WRITE FINAL DB ENTRY TO APP KEY
+                this.appKey = `${this.clientKey}||${this.applicationControl.value}`;
+
+                // TODO handle this
+                // this.clientService
+                //   .getClient(this.appKey).pipe(
+                //     take(1),
+                //     tap((val) => {
+                //         if(val){
+                //           this.
+                //         }
+                //     }),
+                //     catchError((err) => {
+
+                //     })
+                //   ).subscribe()
+
                 const client = Client.buildFromGetClientResponse(
                   val,
-                  this.clientKey
+                  this.appKey
                 );
 
                 client.orgDetails.bidParameters.objective =
@@ -1272,6 +1302,8 @@ export class RegistrationComponent implements OnInit {
                     this.substep6.get("branchSecret").value;
                 }
 
+                // debugger;
+
                 // write the substep 1 values to client
                 client.orgDetails.appID =
                   this.substep1.get("application").value;
@@ -1293,7 +1325,6 @@ export class RegistrationComponent implements OnInit {
 
                 // for apple
                 const campaignData = new CampaignData();
-                // campaignData.org_id = this.orgId;
                 campaignData.org_id = client.orgDetails.orgId.toString();
                 campaignData.app_name = get(this.app, "appName");
                 campaignData.adam_id = get(this.app, "adamId");
@@ -1331,7 +1362,7 @@ export class RegistrationComponent implements OnInit {
                     set(competitorData, "campaignType", "competitor");
 
                     return this.appleService
-                      .postAppleCampaign(this.clientKey, competitorData)
+                      .postAppleCampaign(this.appKey, competitorData)
                       .pipe(
                         take(1),
                         tap((val) => {
@@ -1368,7 +1399,7 @@ export class RegistrationComponent implements OnInit {
                           const categoryData = cloneDeep(campaignData);
                           set(categoryData, "campaignType", "category");
                           return this.appleService
-                            .postAppleCampaign(this.clientKey, categoryData)
+                            .postAppleCampaign(this.appKey, categoryData)
                             .pipe(
                               take(1),
                               tap((val) => {
@@ -1409,7 +1440,7 @@ export class RegistrationComponent implements OnInit {
                                 const brandData = cloneDeep(campaignData);
                                 set(brandData, "campaignType", "brand");
                                 return this.appleService
-                                  .postAppleCampaign(this.clientKey, brandData)
+                                  .postAppleCampaign(this.appKey, brandData)
                                   .pipe(
                                     take(1),
                                     tap((val) => {
@@ -1454,7 +1485,7 @@ export class RegistrationComponent implements OnInit {
                                       );
                                       return this.appleService
                                         .postAppleCampaign(
-                                          this.clientKey,
+                                          this.appKey,
                                           exactDiscoveryData
                                         )
                                         .pipe(
@@ -1502,7 +1533,7 @@ export class RegistrationComponent implements OnInit {
                                             );
                                             return this.appleService
                                               .postAppleCampaign(
-                                                this.clientKey,
+                                                this.appKey,
                                                 broadDiscoveryData
                                               )
                                               .pipe(
@@ -1552,7 +1583,7 @@ export class RegistrationComponent implements OnInit {
                                                   );
                                                   return this.appleService
                                                     .postAppleCampaign(
-                                                      this.clientKey,
+                                                      this.appKey,
                                                       searchDiscoveryData
                                                     )
                                                     .pipe(
@@ -1597,6 +1628,11 @@ export class RegistrationComponent implements OnInit {
                                                           "orgDetails.appleCampaigns",
                                                           this.campaigns
                                                         );
+                                                        set(
+                                                          client,
+                                                          "orgDetails.hasRegistered",
+                                                          true
+                                                        );
                                                         return this.clientService
                                                           .postClient(
                                                             ClientPayload.buildFromClient(
@@ -1607,6 +1643,14 @@ export class RegistrationComponent implements OnInit {
                                                           .pipe(
                                                             take(1),
                                                             tap(() => {
+                                                              this.stepper.steps.forEach(
+                                                                (step, i) => {
+                                                                  if (i < 3) {
+                                                                    step.editable =
+                                                                      false;
+                                                                  }
+                                                                }
+                                                              );
                                                               this.client =
                                                                 client;
                                                               this.isLoadingResults =
