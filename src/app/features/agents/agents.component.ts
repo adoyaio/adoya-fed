@@ -5,7 +5,7 @@ import { Router } from "@angular/router";
 import { chain } from "lodash";
 
 import { BehaviorSubject, forkJoin, Observable, of } from "rxjs";
-import { map, switchMap, take, tap } from "rxjs/operators";
+import { filter, map, switchMap, take, tap } from "rxjs/operators";
 import { Client } from "src/app/core/models/client";
 import { ClientPayload } from "src/app/core/models/client-payload";
 import { ClientService } from "src/app/core/services/client.service";
@@ -43,8 +43,12 @@ export class AgentsComponent implements OnInit {
       .getClients(this.orgId)
       .pipe(
         take(1),
-        tap((val) => {
-          this.clients.next(Client.buildListFromResponse(val));
+
+        tap((val: Client[]) => {
+          const filteredValues = val.filter(
+            (client) => client.orgDetails.hasRegistered
+          );
+          this.clients.next(Client.buildListFromResponse(filteredValues));
           chain(val)
             .each((org) => {
               this.clientForm.addControl(
@@ -136,6 +140,7 @@ export class AgentsComponent implements OnInit {
         take(1),
         tap((val) => {
           chain(val)
+            .filter((val) => val.orgDetails.hasRegistered)
             .each((org) => {
               this.clientForm
                 .get(org.orgId)
