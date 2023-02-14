@@ -703,6 +703,7 @@ export class OptimizationsComponent implements OnInit {
             this.isSendingResults = false;
             this.appleForm.markAsPristine();
             this.branchForm.markAsPristine();
+            this.accordion.closeAll();
             this.openSnackBar("successfully updated settings!", "dismiss");
             return data;
           }),
@@ -745,9 +746,10 @@ export class OptimizationsComponent implements OnInit {
       return true;
     }
 
-    if (this.campaignsInvalid()) {
-      return true;
-    }
+    // TODO this not working idk why
+    // if (this.campaignsInvalid()) {
+    //   return true;
+    // }
 
     return false;
   }
@@ -885,6 +887,7 @@ export class OptimizationsComponent implements OnInit {
               this.isLoadingResults = false;
               this.client = Client.buildFromGetClientResponse(val, this.orgId);
               this.appleForm.markAsPristine();
+              this.accordion.closeAll();
               this.openSnackBar(
                 "we've completed updating your campaigns! please review details and complete registration to finalize",
                 ""
@@ -920,6 +923,7 @@ export class OptimizationsComponent implements OnInit {
       .some((campaign) => {
         const lifetimeBudgetCtrl =
           this.appleForm["controls"][`lifetimeBudget${campaign.campaignId}`];
+
         const dailyBudgetCtrl =
           this.appleForm["controls"][`dailyBudget${campaign.campaignId}`];
 
@@ -929,8 +933,8 @@ export class OptimizationsComponent implements OnInit {
         const dailyBudgetCtrlValue: number = +dailyBudgetCtrl.value;
 
         const localCpi: number = +cpiCtrl.value;
-        console.log("local cpi");
-        console.log(localCpi);
+        // console.log("local cpi");
+        // console.log(localCpi);
 
         const cpi: number =
           isNil(localCpi) || isNaN(localCpi) ? globalCpi : localCpi;
