@@ -18,7 +18,7 @@ import { NgxSkeletonLoaderModule } from "ngx-skeleton-loader";
     MaterialModule,
     DynamicFormModule,
     SharedModule,
-    NgxSkeletonLoaderModule
+    NgxSkeletonLoaderModule,
   ],
   providers: [],
 })

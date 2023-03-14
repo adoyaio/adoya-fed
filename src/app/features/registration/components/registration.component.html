@@ -445,143 +445,237 @@
               }"
             ></ngx-skeleton-loader>
           </div>
-          <!-- TODO create or import -->
 
+          <!--  create or import -->
           <!-- 2.1 Select app, select country-->
           <ng-container *ngIf="!isLoadingResults">
-            <div
-              formGroupName="substep1"
-              class="w-100 mt-2"
-              *ngIf="isOrdinalActive(1)"
-            >
-              <div class="w-100 row no-gutters">
-                <!-- form -->
-                <div class="col-6">
-                  <!-- field and icon -->
-                  <div class="w-100 no-gutters">
-                    <mat-form-field
-                      class="col-10 ml-1"
-                      appearance="fill"
-                      color="primary"
-                    >
-                      <mat-select formControlName="application">
-                        <ng-container *ngFor="let app of apps">
-                          <mat-option [value]="app.adamId">{{
-                            app.appName
-                          }}</mat-option>
-                        </ng-container>
-                      </mat-select>
-                      <mat-label>&nbsp;Select Application </mat-label>
-                    </mat-form-field>
+            <div *ngIf="isOrdinalActive(1)">
+              <div
+                formGroupName="substep1"
+                class="w-100 mt-2"
+                *ngIf="!hasExistingAsaCampaigns"
+              >
+                <div class="w-100 row no-gutters">
+                  <!-- form -->
+                  <div class="col-6">
+                    <!-- field and icon -->
+                    <div class="w-100 no-gutters">
+                      <mat-form-field
+                        class="col-10 ml-1"
+                        appearance="fill"
+                        color="primary"
+                      >
+                        <mat-select formControlName="application">
+                          <ng-container *ngFor="let app of apps">
+                            <mat-option [value]="app.adamId">{{
+                              app.appName
+                            }}</mat-option>
+                          </ng-container>
+                        </mat-select>
+                        <mat-label>&nbsp;Select Application </mat-label>
+                      </mat-form-field>
 
-                    <mat-icon
-                      class="float-left pr-2"
-                      color="primary"
-                      matTooltip="Select the app you want to promote. &#13; &#13; If you have more than one app, you'll have a chance to create campaigns for those later."
-                      >help</mat-icon
-                    >
+                      <mat-icon
+                        class="float-left pr-2"
+                        color="primary"
+                        matTooltip="Select the app you want to promote. &#13; &#13; If you have more than one app, you'll have a chance to create campaigns for those later."
+                        >help</mat-icon
+                      >
+                    </div>
+
+                    <!-- field and icon -->
+                    <div class="w-100 no-gutters">
+                      <mat-form-field
+                        class="col-10 ml-1"
+                        appearance="fill"
+                        color="primary"
+                      >
+                        <mat-select formControlName="country">
+                          <ng-container *ngFor="let country of countries">
+                            <mat-option [value]="country.code">{{
+                              country.name
+                            }}</mat-option>
+                          </ng-container>
+                        </mat-select>
+                        <mat-label>Select Country</mat-label>
+                      </mat-form-field>
+
+                      <mat-icon
+                        class="float-left"
+                        color="primary"
+                        matTooltip="Select the country where you want to promote your app. &#13; &#13; If you want to target additional countries, you'll have a chance to create country-specific campaigns later"
+                        >help</mat-icon
+                      >
+                    </div>
+
+                    <!-- field and icon -->
+                    <div class="w-100 no-gutters">
+                      <mat-form-field
+                        class="col-10 ml-1"
+                        appearance="fill"
+                        color="primary"
+                      >
+                        <mat-select formControlName="currency">
+                          <ng-container *ngFor="let currency of currencies">
+                            <mat-option [value]="currency.code">{{
+                              currency.code
+                            }}</mat-option>
+                          </ng-container>
+                        </mat-select>
+                        <mat-label>Select Currency</mat-label>
+                      </mat-form-field>
+
+                      <mat-icon
+                        class="float-left"
+                        color="primary"
+                        matTooltip="Select the currency you're using in Apple Search Ads."
+                        >help</mat-icon
+                      >
+                    </div>
                   </div>
 
-                  <!-- field and icon -->
-                  <div class="w-100 no-gutters">
-                    <mat-form-field
-                      class="col-10 ml-1"
-                      appearance="fill"
-                      color="primary"
-                    >
-                      <mat-select formControlName="country">
-                        <ng-container *ngFor="let country of countries">
-                          <mat-option [value]="country.code">{{
-                            country.name
-                          }}</mat-option>
-                        </ng-container>
-                      </mat-select>
-                      <mat-label>Select Country</mat-label>
-                    </mat-form-field>
-
-                    <mat-icon
-                      class="float-left"
-                      color="primary"
-                      matTooltip="Select the country where you want to promote your app. &#13; &#13; If you want to target additional countries, you'll have a chance to create country-specific campaigns later"
-                      >help</mat-icon
-                    >
-                  </div>
-
-                  <!-- field and icon -->
-                  <div class="w-100 no-gutters">
-                    <mat-form-field
-                      class="col-10 ml-1"
-                      appearance="fill"
-                      color="primary"
-                    >
-                      <mat-select formControlName="currency">
-                        <ng-container *ngFor="let currency of currencies">
-                          <mat-option [value]="currency.code">{{
-                            currency.code
-                          }}</mat-option>
-                        </ng-container>
-                      </mat-select>
-                      <mat-label>Select Currency</mat-label>
-                    </mat-form-field>
-
-                    <mat-icon
-                      class="float-left"
-                      color="primary"
-                      matTooltip="Select the currency you're using in Apple Search Ads."
-                      >help</mat-icon
-                    >
+                  <!-- explainer text -->
+                  <div class="col-6">
+                    <mat-list class="p-0 m-0 pb-2">
+                      <mat-list-item class="pb-2 mb-2 border-bottom">
+                        <mat-icon color="primary" class="align-text-top mr-2"
+                          >done</mat-icon
+                        >
+                        <mat-label
+                          >To create campaigns we'll need the country and app
+                          name
+                        </mat-label>
+                      </mat-list-item>
+                      <mat-list-item class="pb-2 mb-2 border-bottom">
+                        <mat-icon color="primary" class="align-text-top mr-2"
+                          >done</mat-icon
+                        >
+                        <mat-label>
+                          Hover on the help icons for more information
+                        </mat-label>
+                      </mat-list-item>
+                    </mat-list>
                   </div>
                 </div>
 
-                <!-- explainer text -->
-                <div class="col-6">
-                  <mat-list class="p-0 m-0 pb-2">
-                    <mat-list-item class="pb-2 mb-2 border-bottom">
-                      <mat-icon color="primary" class="align-text-top mr-2"
-                        >done</mat-icon
-                      >
-                      <mat-label
-                        >To create campaigns we'll need the country and app name
-                      </mat-label>
-                    </mat-list-item>
-                    <mat-list-item class="pb-2 mb-2 border-bottom">
-                      <mat-icon color="primary" class="align-text-top mr-2"
-                        >done</mat-icon
-                      >
-                      <mat-label>
-                        Hover on the help icons for more information
-                      </mat-label>
-                    </mat-list-item>
-                  </mat-list>
+                <!-- buttons -->
+                <div class="w-100 row ml-2">
+                  <button
+                    mat-flat-button
+                    matStepperPrevious
+                    class="float-left ml-2 border rounded"
+                  >
+                    <mat-icon aria-label="back">arrow_left</mat-icon>
+                    <span>back</span>
+                  </button>
+
+                  <button
+                    mat-flat-button
+                    color="primary"
+                    class="float-left ml-2"
+                    (click)="submitStep(1)"
+                    [disabled]="substepDisabled()"
+                  >
+                    <mat-icon class="text-light" aria-label="submit"
+                      >done</mat-icon
+                    >
+                    <span class="text-light pl-1">next</span>
+                  </button>
                 </div>
               </div>
 
-              <!-- buttons -->
-              <div class="w-100 row ml-2">
-                <button
-                  mat-flat-button
-                  matStepperPrevious
-                  class="float-left ml-2 border rounded"
-                >
-                  <mat-icon aria-label="back">arrow_left</mat-icon>
-                  <span>back</span>
-                </button>
+              <!------------------------------------>
+              <!-- substep 1 import campaign flow -->
+              <div
+                formGroupName="substep1import"
+                class="w-100 mt-2"
+                *ngIf="hasExistingAsaCampaigns"
+              >
+                <div class="w-100 row no-gutters">
+                  <!-- form -->
+                  <div class="col-6">
+                    <!-- field and icon -->
+                    <div class="w-100 no-gutters">
+                      Would you like to import your existing campaigns
+                    </div>
+                    <!-- field and icon -->
+                    <div class="w-100 no-gutters">
+                      <mat-form-field
+                        class="col-10 ml-1"
+                        appearance="fill"
+                        color="primary"
+                      >
+                        <mat-select formControlName="appleCampaign" multiple>
+                          <ng-container *ngFor="let campaign of appleCampaigns">
+                            <mat-option [value]="campaign.id">{{
+                              campaign.name
+                            }}</mat-option>
+                          </ng-container>
+                        </mat-select>
+                        <mat-label>&nbsp;Select Campaign </mat-label>
+                      </mat-form-field>
 
-                <button
-                  mat-flat-button
-                  color="primary"
-                  class="float-left ml-2"
-                  (click)="submitStep(1)"
-                  [disabled]="substepDisabled()"
-                >
-                  <mat-icon class="text-light" aria-label="submit"
-                    >done</mat-icon
+                      <mat-icon
+                        class="float-left pr-2"
+                        color="primary"
+                        matTooltip="Select the app you want to promote. &#13; &#13; If you have more than one app, you'll have a chance to create campaigns for those later."
+                        >help</mat-icon
+                      >
+                    </div>
+                  </div>
+
+                  <!-- explainer text -->
+                  <div class="col-6">
+                    <mat-list class="p-0 m-0 pb-2">
+                      <mat-list-item class="pb-2 mb-2 border-bottom">
+                        <mat-icon color="primary" class="align-text-top mr-2"
+                          >done</mat-icon
+                        >
+                        <mat-label
+                          >To create campaigns we'll need the country and app
+                          name
+                        </mat-label>
+                      </mat-list-item>
+                      <mat-list-item class="pb-2 mb-2 border-bottom">
+                        <mat-icon color="primary" class="align-text-top mr-2"
+                          >done</mat-icon
+                        >
+                        <mat-label>
+                          Hover on the help icons for more information
+                        </mat-label>
+                      </mat-list-item>
+                    </mat-list>
+                  </div>
+                </div>
+
+                <!-- buttons -->
+                <div class="w-100 row ml-2">
+                  <button
+                    mat-flat-button
+                    matStepperPrevious
+                    class="float-left ml-2 border rounded"
                   >
-                  <span class="text-light pl-1">next</span>
-                </button>
+                    <mat-icon aria-label="back">arrow_left</mat-icon>
+                    <span>back</span>
+                  </button>
+
+                  <button
+                    mat-flat-button
+                    color="primary"
+                    class="float-left ml-2"
+                    (click)="continueImportFlow()"
+                    [disabled]="substepDisabled()"
+                  >
+                    <mat-icon class="text-light" aria-label="submit"
+                      >done</mat-icon
+                    >
+                    <span class="text-light pl-1">next</span>
+                  </button>
+                </div>
               </div>
             </div>
 
+            <!-- both import and create flow -->
             <!-- 2.2 Objective, CPI -->
             <div
               formGroupName="substep2"
@@ -720,6 +814,7 @@
               </div>
             </div>
 
+            <!-- only for create flow -->
             <!-- 2.3 budget -->
             <div
               formGroupName="substep3"
@@ -840,6 +935,7 @@
               </div>
             </div>
 
+            <!-- only for create flow -->
             <!-- 2.4 keywords, competitor category brand  -->
             <div
               formGroupName="substep4"
@@ -1078,6 +1174,7 @@
               </div>
             </div>
 
+            <!-- only for create flow -->
             <!-- 2.5 genders and age groups -->
             <div
               formGroupName="substep5"
@@ -1181,6 +1278,7 @@
               </div>
             </div>
 
+            <!-- only for create flow -->
             <!-- 2.6 post-install/optional -->
             <div
               formGroupName="substep6"

@@ -31,8 +31,9 @@ import {
   cloneDeep,
   each,
   some,
+  includes,
 } from "lodash";
-import { combineLatest, EMPTY, of, Subject, throwError } from "rxjs";
+import { combineLatest, EMPTY, forkJoin, of, Subject, throwError } from "rxjs";
 import {
   catchError,
   map,
@@ -53,6 +54,7 @@ import { SupportItem } from "../../support/models/support-item";
 import { CampaignData } from "../model/campaign-data";
 import { SupportService } from "src/app/core/services/support.service";
 import { Location } from "@angular/common";
+import { AdoyaCampaign } from "../model/adoya-campaign";
 
 @Component({
   selector: "app-registration",
@@ -102,6 +104,9 @@ export class RegistrationComponent implements OnInit {
   username: string;
   campaigns = [];
   inviteSent = false;
+  public isImportFlow = false;
+  public hasExistingAsaCampaigns = false;
+  appleCampaigns = [];
 
   dailyBudgetValidators = [
     Validators.required,
@@ -168,7 +173,7 @@ export class RegistrationComponent implements OnInit {
 
   private _destroyed$: Subject<boolean> = new Subject<boolean>();
 
-  step2: any[] = [
+  substeps: any[] = [
     {
       ordinal: 1,
       complete: false,
@@ -227,6 +232,9 @@ export class RegistrationComponent implements OnInit {
           country: new FormControl(undefined, Validators.required),
           currency: new FormControl(undefined, Validators.required),
         }),
+        substep1import: this.fb.group({
+          appleCampaign: new FormControl(undefined, Validators.required),
+        }),
         substep2: this.fb.group({
           objective: new FormControl(undefined, Validators.required),
           cpi: new FormControl(undefined, this.costValidators),
@@ -258,8 +266,8 @@ export class RegistrationComponent implements OnInit {
           branchKey: new FormControl(undefined, Validators.required),
           branchSecret: new FormControl(undefined, Validators.required),
         }),
-      },
-      { validators: CustomFormValidators.budgetCpiValidator }
+      }
+      // { validators: CustomFormValidators.budgetCpiValidator }
     ),
     step3Form: this.fb.group({}),
   });
@@ -271,7 +279,7 @@ export class RegistrationComponent implements OnInit {
     return this.form.get("step1Form") as FormGroup;
   }
 
-  get step2Form(): FormGroup {
+  public get step2Form(): FormGroup {
     return this.form.get("step2Form") as FormGroup;
   }
 
@@ -286,6 +294,11 @@ export class RegistrationComponent implements OnInit {
   get substep1(): any {
     return this.step2Form.get("substep1");
   }
+
+  public get substep1import(): any {
+    return this.step2Form.get("substep1import");
+  }
+
   get substep2(): any {
     return this.step2Form.get("substep2");
   }
@@ -416,7 +429,6 @@ export class RegistrationComponent implements OnInit {
     }
     Auth.currentUserInfo().then((val) => {
       // 2 flows, agent or directly as a client
-      // debugger;
 
       this.orgId = this.userAccountService.orgId;
       this.emailAddresses = get(val.attributes, "email");
@@ -573,6 +585,7 @@ export class RegistrationComponent implements OnInit {
                     this.isLoadingResults = false;
                   }
 
+                  // on step 2 submission pull the
                   return this.appleService.getAppleApps(this.clientKey).pipe(
                     tap((val) => {
                       // TODO check for apps result and compare to getClients response
@@ -944,18 +957,126 @@ export class RegistrationComponent implements OnInit {
   }
 
   isOrdinalActive(ordinal: number): boolean {
-    const step = find(this.step2, (step) => step.ordinal === ordinal);
+    const step = find(this.substeps, (step) => step.ordinal === ordinal);
     return get(step, "active", false);
   }
 
+  continueImportFlow() {
+    debugger;
+
+    this.isLoadingResults = true;
+
+    const campaignsToImport = get(this.substep1import.value, "appleCampaign");
+
+    // const campaignsToImport =
+    //   this.substep1import.value.get("appleCampaign").value;
+
+    // const campaignsToImport = this.substep1import
+    //   .value()
+    //   .get("appleCampaign")
+    //   .value();
+
+    if (!isNil(campaignsToImport) && !isEmpty(campaignsToImport)) {
+      // make calls to adgroup for each selected campaign
+      let adgroupCalls = campaignsToImport.map((campaign) => {
+        return this.appleService.getAppleAdgroups(this.clientKey, campaign);
+      });
+
+      forkJoin(adgroupCalls)
+        .pipe(
+          tap((adgroupResponses) => {
+            this.isLoadingResults = false;
+            this.isImportFlow = true;
+
+            adgroupResponses.forEach((adGroupResponse: any) => {
+              get(adGroupResponse, "data").forEach((adGroup) => {
+                // find the campaign
+                let campaign = this.appleCampaigns.find((appleCampaign) => {
+                  return appleCampaign.id === adGroup.campaignId;
+                });
+
+                this.campaigns.push(
+                  // build adoya campaign from asa campaign and adgroup info
+                  AdoyaCampaign.buildAdoyaCampaign(campaign, adGroup)
+                );
+              });
+            });
+
+            debugger;
+            this.goNext(1);
+          })
+        )
+        .subscribe();
+
+      // this.campaigns = this.appleCampaigns.filter((val) =>
+      //   includes(campaignsToImport, val.id)
+      // );
+    }
+
+    // const step = find(this.substeps, (step) => step.ordinal === 1);
+    // set(step, "complete", true);
+    // set(step, "active", false);
+
+    // const nextStep = find(this.substeps, (step) => step.ordinal === 2);
+    // set(nextStep, "complete", false);
+    // set(nextStep, "active", true);
+  }
+
+  // step 3 substeps
   submitStep(ordinal: number) {
-    const step = find(this.step2, (step) => step.ordinal === ordinal);
+    // on the first substep check for existing campaigns for the selected app
+    if (ordinal === 1) {
+      this.isLoadingResults = true;
+      this.appleService
+        .getAppleCampaigns(this.clientKey)
+        .pipe(
+          tap((val) => {
+            this.isLoadingResults = false;
+
+            if (!isNil(val.data) && !isEmpty(val.data)) {
+              this.appleCampaigns = val.data;
+              this.hasExistingAsaCampaigns = true;
+            } else {
+              this.goNext(ordinal);
+            }
+          })
+        )
+        .subscribe();
+    } else if (ordinal === 2) {
+      // if import flow skip all remaining substeps
+      if (this.isImportFlow) {
+        this.completeImportFlow();
+      } else {
+      }
+    } else {
+      this.goNext(ordinal);
+    }
+  }
+
+  goNext(ordinal: number) {
+    const step = find(this.substeps, (step) => step.ordinal === ordinal);
     set(step, "complete", true);
     set(step, "active", false);
 
-    const nextStep = find(this.step2, (step) => step.ordinal === ordinal + 1);
+    const nextStep = find(
+      this.substeps,
+      (step) => step.ordinal === ordinal + 1
+    );
     set(nextStep, "complete", false);
     set(nextStep, "active", true);
+  }
+
+  goBack(ordinal: number) {
+    const step = find(this.substeps, (step) => step.ordinal === ordinal);
+    set(step, "complete", true);
+    set(step, "active", false);
+
+    const prevStep = find(
+      this.substeps,
+      (step) => step.ordinal === ordinal - 1
+    );
+    set(prevStep, "complete", false);
+    set(prevStep, "active", true);
   }
 
   complete() {
@@ -990,16 +1111,6 @@ export class RegistrationComponent implements OnInit {
       .subscribe();
   }
 
-  goBack(ordinal: number) {
-    const step = find(this.step2, (step) => step.ordinal === ordinal);
-    set(step, "complete", true);
-    set(step, "active", false);
-
-    const prevStep = find(this.step2, (step) => step.ordinal === ordinal - 1);
-    set(prevStep, "complete", false);
-    set(prevStep, "active", true);
-  }
-
   step1NextVisible(): boolean {
     if (isNil(this.client)) {
       return true;
@@ -1008,7 +1119,7 @@ export class RegistrationComponent implements OnInit {
   }
 
   substepDisabled(): boolean {
-    const activeSubstep = find(this.step2, (step) => step.active === true);
+    const activeSubstep = find(this.substeps, (step) => step.active === true);
 
     if (activeSubstep.ordinal === 1) {
       return this.step2Form.get("substep1").invalid;
@@ -1205,6 +1316,208 @@ export class RegistrationComponent implements OnInit {
     this.substep4.get(`${type}`).setValue(newValue);
   }
 
+  completeImportFlow() {
+    this.dialog
+      .open(DynamicModalComponent, {
+        data: {
+          title: ``,
+          content: AppService.clickWrap,
+          actionYes: "Agree",
+          actionNo: "Cancel",
+        },
+        maxWidth: "500px",
+        width: "500px",
+        panelClass: "tooltip-dialog-box",
+        autoFocus: false,
+      })
+      .afterClosed()
+      .pipe(
+        take(1),
+        switchMap((val) => {
+          if (val) {
+            this.openSnackBar(
+              "one moment, while we save your campaign configuration",
+              ""
+            );
+            this.termsControl.setValue(true);
+            this.substep3.disable();
+            this.substep4.disable();
+            this.substep5.disable();
+            this.substep6.disable();
+
+            this.isLoadingResults = true;
+            return this.clientService.getClient(this.clientKey).pipe(
+              take(1),
+              switchMap((val) => {
+                // WRITE FINAL DB ENTRY TO APP KEY
+                debugger;
+
+                this.appKey = `${this.clientKey}||${this.applicationControl.value}`;
+
+                const client = Client.buildFromGetClientResponse(
+                  val,
+                  this.appKey
+                );
+
+                client.orgDetails.bidParameters.objective =
+                  this.substep2.get("objective").value;
+
+                client.orgDetails.adgroupBidParameters.objective =
+                  this.substep2.get("objective").value;
+
+                client.orgDetails.bidParameters.highCPIBidDecreaseThresh =
+                  this.substep2.get("cpi").value;
+
+                client.orgDetails.adgroupBidParameters.highCPIBidDecreaseThresh =
+                  this.substep2.get("cpi").value;
+
+                // branch fields
+                if (!isNil(this.substep6.get("mmpObjective").value)) {
+                  client.orgDetails.branchBidParameters.branchOptimizationGoal =
+                    this.substep6.get("mmpObjective").value;
+                }
+
+                if (!isNil(this.substep6.get("cpp").value)) {
+                  client.orgDetails.branchBidParameters.costPerPurchaseThreshold =
+                    this.substep6.get("cpp").value;
+                }
+
+                if (!isNil(this.substep6.get("roas").value)) {
+                  client.orgDetails.branchBidParameters.revenueOverAdSpendThreshold =
+                    this.substep6.get("roas").value;
+                }
+
+                client.orgDetails.branchIntegrationParameters.branchBidAdjusterEnabled =
+                  this.substep6.get("branchBidAdjusterEnabled").value;
+
+                if (!isNil(this.substep6.get("branchKey").value)) {
+                  client.orgDetails.branchIntegrationParameters.branchKey =
+                    this.substep6.get("branchKey").value;
+                }
+
+                if (!isNil(this.substep6.get("branchSecret").value)) {
+                  client.orgDetails.branchIntegrationParameters.branchSecret =
+                    this.substep6.get("branchSecret").value;
+                }
+
+                // write the substep 1 values to client
+                client.orgDetails.appID =
+                  this.substep1.get("application").value;
+
+                this.app = chain(this.apps)
+                  .find((app) => {
+                    return (
+                      app.adamId === this.substep1.get("application").value
+                    );
+                  })
+                  .value();
+
+                client.orgDetails.appName = get(this.app, "appName");
+                client.orgDetails.appID = get(this.app, "adamId");
+                client.orgDetails.clientName = get(this.app, "developerName");
+
+                client.orgDetails.currency =
+                  this.substep1.get("currency").value;
+
+                // get auth
+                return this.appleService.getAppleAuth(this.clientKey).pipe(
+                  take(1),
+                  switchMap((val) => {
+                    this.openIndefiniteSnackBar(
+                      "importing apple search ads campaigns, this may take a few minutes. please don't refresh your browser during this time!",
+                      ""
+                    );
+                    set(client, "orgDetails.appleCampaigns", this.campaigns);
+                    set(client, "orgDetails.hasRegistered", true);
+
+                    chain(this.campaigns)
+                      .each((campaign) => {
+                        debugger;
+                        const statusControl = `status|${campaign.campaignId}`;
+
+                        this.step3Form.addControl(
+                          statusControl,
+                          new FormControl(
+                            campaign.status === "ENABLED" ? true : false
+                          )
+                        );
+
+                        const lifetimeBudgetControl = `lifetimeBudget|${campaign.campaignId}`;
+                        this.step3Form.addControl(
+                          lifetimeBudgetControl,
+                          new FormControl(
+                            campaign.lifetimeBudget
+                            // this.lifetimeBudgetValidatorsCompetitor
+                          )
+                        );
+
+                        const dailyBudgetControl = `dailyBudget|${campaign.campaignId}`;
+                        this.step3Form.addControl(
+                          dailyBudgetControl,
+                          new FormControl(
+                            campaign.dailyBudget
+                            // this.dailyBudgetValidators
+                          )
+                        );
+                      })
+                      .value();
+                    return this.clientService
+                      .postClient(ClientPayload.buildFromClient(client), false)
+                      .pipe(
+                        take(1),
+                        tap(() => {
+                          this.stepper.steps.forEach((step, i) => {
+                            if (i < 3) {
+                              step.editable = false;
+                            }
+                          });
+                          this.client = client;
+                          this.isLoadingResults = false;
+                          this.openSnackBar(
+                            "we've completed importing your campaigns! please review details and complete registration to finalize",
+                            ""
+                          );
+                          this.stepper.next();
+                        })
+                      );
+                  })
+                );
+
+                // post to apple service for campaign creation
+                // return this.appleService.postAppleCampaign(this.orgId, campaignData).pipe(
+                //   take(1),
+                //   switchMap((val) => {
+                //       set(client, 'orgDetails.appleCampaigns', get(val, 'campaigns', []));
+                //        // post to client service for clients json
+                //       return this.clientService.postClient(ClientPayload.buildFromClient(client)).pipe(
+                //         take(1),
+                //         tap(() => {
+                //           this.client = client;
+                //           this.isLoadingResults = false;
+                //           this.openSnackBar("we completed creating your campaigns! please review details and complete registration to finalize", "")
+                //         })
+                //       )
+                //   })
+                // )
+              }),
+              catchError(() => {
+                this.isLoadingResults = false;
+                this.openSnackBar(
+                  "unable to process changes to settings at this time",
+                  "dismiss"
+                );
+                this.stepper.previous();
+                return [];
+              })
+            );
+          } else {
+            this.resetStep2();
+          }
+        })
+      )
+      .subscribe();
+  }
+
   completeStep2() {
     this.dialog
       .open(DynamicModalComponent, {
@@ -1301,8 +1614,6 @@ export class RegistrationComponent implements OnInit {
                   client.orgDetails.branchIntegrationParameters.branchSecret =
                     this.substep6.get("branchSecret").value;
                 }
-
-                // debugger;
 
                 // write the substep 1 values to client
                 client.orgDetails.appID =
@@ -1713,7 +2024,7 @@ export class RegistrationComponent implements OnInit {
   }
 
   resetStep2() {
-    chain(this.step2)
+    chain(this.substeps)
       .each((substep) => {
         set(substep, "complete", false);
         set(substep, "active", false);

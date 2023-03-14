@@ -28,12 +28,38 @@ export class AppleService {
   baseUrl = environment.baseUrl;
   getAppleAppsUrl = this.baseUrl + `/apple/apps`;
   getAppleAclsUrl = this.baseUrl + `/apple/acls`;
+  getAppleCampaignsUrl = this.baseUrl + `/apple/campaign/list`;
+  getAppleAdgroupsUrl = this.baseUrl + `/apple/adgroup/list`;
   getAppleAuthUrl = this.baseUrl + `/apple/auth`;
   createAppleCampaignsUrl = this.baseUrl + `/apple/campaign/post`;
   updateAppleCampaignsUrl = this.baseUrl + `/apple/campaign/patch`;
 
   public getAppleApps(orgId: string): Observable<any> {
     const url = `${this.getAppleAppsUrl}?org_id=${orgId}`;
+    let headers = new HttpHeaders();
+    headers = headers.set("x-api-key", this.authKey);
+    headers = headers.set("Authorization", this.userAccountservice.jwtToken);
+    return this.http.get<any>(url, { headers: headers }).pipe(
+      map((response) => {
+        return response;
+      })
+    );
+  }
+
+  public getAppleCampaigns(orgId: string): Observable<any> {
+    const url = `${this.getAppleCampaignsUrl}?org_id=${orgId}`;
+    let headers = new HttpHeaders();
+    headers = headers.set("x-api-key", this.authKey);
+    headers = headers.set("Authorization", this.userAccountservice.jwtToken);
+    return this.http.get<any>(url, { headers: headers }).pipe(
+      map((response) => {
+        return response;
+      })
+    );
+  }
+
+  public getAppleAdgroups(orgId: string, campaignId: string): Observable<any> {
+    const url = `${this.getAppleAdgroupsUrl}?org_id=${orgId}&campaign_id=${campaignId}`;
     let headers = new HttpHeaders();
     headers = headers.set("x-api-key", this.authKey);
     headers = headers.set("Authorization", this.userAccountservice.jwtToken);
