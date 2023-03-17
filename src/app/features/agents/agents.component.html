@@ -162,7 +162,10 @@
                     mat-raised-button
                     class="border rounded"
                     (click)="
-                      contextSwitch(client.orgId, client.orgDetails.appName)
+                      userAccountService.contextSwitch(
+                        client.orgId,
+                        client.orgDetails.appName
+                      )
                     "
                   >
                     Browse as this client & application<mat-icon class="ml-2">

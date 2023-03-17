@@ -266,8 +266,8 @@ export class RegistrationComponent implements OnInit {
           branchKey: new FormControl(undefined, Validators.required),
           branchSecret: new FormControl(undefined, Validators.required),
         }),
-      }
-      // { validators: CustomFormValidators.budgetCpiValidator }
+      },
+      { validators: CustomFormValidators.budgetCpiValidator }
     ),
     step3Form: this.fb.group({}),
   });
@@ -429,8 +429,9 @@ export class RegistrationComponent implements OnInit {
     }
     Auth.currentUserInfo().then((val) => {
       // 2 flows, agent or directly as a client
+      // NOTE now just one flow all users are agents
 
-      this.orgId = this.userAccountService.orgId;
+      this.orgId = this.userAccountService.agentId;
       this.emailAddresses = get(val.attributes, "email");
       // this.username = get(val, "username"); // NOTE unused, this is the same as orgId
 
@@ -962,10 +963,7 @@ export class RegistrationComponent implements OnInit {
   }
 
   continueImportFlow() {
-    debugger;
-
     this.isLoadingResults = true;
-
     const campaignsToImport = get(this.substep1import.value, "appleCampaign");
 
     // const campaignsToImport =
@@ -1002,7 +1000,6 @@ export class RegistrationComponent implements OnInit {
               });
             });
 
-            debugger;
             this.goNext(1);
           })
         )
@@ -1011,6 +1008,11 @@ export class RegistrationComponent implements OnInit {
       // this.campaigns = this.appleCampaigns.filter((val) =>
       //   includes(campaignsToImport, val.id)
       // );
+    } else {
+      this.isLoadingResults = false;
+      this.isImportFlow = false;
+      this.substep1import.disable();
+      this.goNext(1);
     }
 
     // const step = find(this.substeps, (step) => step.ordinal === 1);
@@ -1047,6 +1049,7 @@ export class RegistrationComponent implements OnInit {
       if (this.isImportFlow) {
         this.completeImportFlow();
       } else {
+        this.goNext(ordinal);
       }
     } else {
       this.goNext(ordinal);
@@ -1350,8 +1353,6 @@ export class RegistrationComponent implements OnInit {
               take(1),
               switchMap((val) => {
                 // WRITE FINAL DB ENTRY TO APP KEY
-                debugger;
-
                 this.appKey = `${this.clientKey}||${this.applicationControl.value}`;
 
                 const client = Client.buildFromGetClientResponse(
@@ -1432,7 +1433,6 @@ export class RegistrationComponent implements OnInit {
 
                     chain(this.campaigns)
                       .each((campaign) => {
-                        debugger;
                         const statusControl = `status|${campaign.campaignId}`;
 
                         this.step3Form.addControl(
@@ -1542,6 +1542,7 @@ export class RegistrationComponent implements OnInit {
               ""
             );
             this.termsControl.setValue(true);
+            this.substep1import.disable();
             this.isLoadingResults = true;
             return this.clientService.getClient(this.clientKey).pipe(
               take(1),

@@ -4,6 +4,7 @@ import { BehaviorSubject, from, Observable, of } from "rxjs";
 import { UserAccount } from "../../shared/models/user-account";
 import { AmplifyService } from "aws-amplify-angular";
 import { isNil } from "lodash";
+import { Router } from "@angular/router";
 
 @Injectable({
   providedIn: "root",
@@ -20,9 +21,12 @@ export class UserAccountService {
   public agentId = undefined;
   public browsingAsString = undefined;
 
-  constructor(public amplifyService: AmplifyService) {
-    this.currentUserSubject = new BehaviorSubject<UserAccount>(this.storedUser);
-    this.currentUser$ = this.currentUserSubject.asObservable();
+  constructor(public amplifyService: AmplifyService, private router: Router) {
+    // this.currentUserSubject = new BehaviorSubject<UserAccount>(this.storedUser);
+    // this.currentUser$ = this.currentUserSubject.asObservable();
+
+    // reset agent values from local storage
+    this.browsingAsString = localStorage.getItem("browsingAsString");
   }
 
   public get currentUserValue(): UserAccount {
@@ -52,13 +56,22 @@ export class UserAccountService {
   }
 
   logout() {
-    // this.signedIn = false;
-    this.clearStorage();
+    Auth.signOut().then((val) => {
+      this.clearStorage();
+    });
   }
 
   clearStorage() {
-    localStorage.clear();
+    // localStorage.clear();
     this.storedUser = null;
     this.currentUserSubject.next(null);
+  }
+
+  contextSwitch(clientOrgId, appName) {
+    this.orgId = clientOrgId;
+    this.browsingAsString = appName;
+    localStorage.setItem("browsingAsString", appName);
+    localStorage.setItem("orgId", clientOrgId);
+    this.router.navigateByUrl("/workbench/optimizations");
   }
 }

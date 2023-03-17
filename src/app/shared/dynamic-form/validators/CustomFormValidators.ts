@@ -313,6 +313,10 @@ export class CustomFormValidators {
     if (form.untouched) {
       return null;
     }
+
+    if (!isEmpty(form.get("substep1import").get("appleCampaign").value)) {
+      return null;
+    }
     const error = { invalidDailyBudget: true };
     const dailyBudgetValue: number = +form.get("substep3").get("dailyBudget")
       .value;

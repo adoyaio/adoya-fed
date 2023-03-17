@@ -69,7 +69,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
         tap((authState) => {
           if (!(authState.state === "signedIn")) {
             this.userAccountService.jwtToken = undefined;
-            this.userAccountService.orgId = undefined;
+
             if (
               !window.location.href.includes("home") &&
               !window.location.href.includes("start") &&
@@ -84,8 +84,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
             "user.signInUserSession.idToken.jwtToken"
           );
 
-          // TODO check if user is an agent and if so org id is set from agents page
-          //debugger;
+          // check if user is an agent and if so org id is set from agents page
           const isAgent = get(
             authState,
             "user.signInUserSession.idToken.payload.custom:agent",
@@ -96,22 +95,23 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
           if (isAgent) {
             //this.router.navigateByUrl("/workbench/agents");
-            //return;
             this.userAccountService.agentId = get(authState, "user.username");
+            this.userAccountService.orgId = localStorage.getItem("orgId")
+              ? localStorage.getItem("orgId")
+              : get(authState, "user.username");
+          } else {
+            //  orgid from custom:org_id if there is one
+            //  legacy and admin users fallback to cognito id
+            const orgId = get(
+              authState,
+              "user.signInUserSession.idToken.payload.custom:org_id",
+              get(authState, "user.username")
+            );
+            this.userAccountService.orgId = orgId;
           }
 
-          // orgid from custom:org_id if there is one
-          //  legacy and admin users fallback to cognito id
-          const orgId = get(
-            authState,
-            "user.signInUserSession.idToken.payload.custom:org_id",
-            get(authState, "user.username")
-          );
-
           const userName = get(authState, "user.attributes.email");
-
           this.userAccountService.jwtToken = jwtToken;
-          this.userAccountService.orgId = orgId;
           this.userAccountService.userName = userName;
         })
       )

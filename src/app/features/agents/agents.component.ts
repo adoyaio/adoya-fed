@@ -170,9 +170,10 @@ export class AgentsComponent implements OnInit {
     return this.clientForm.get(client.orgId).dirty;
   }
 
-  contextSwitch(clientOrgId, appName) {
-    this.userAccountService.orgId = clientOrgId;
-    this.userAccountService.browsingAsString = appName;
-    this.router.navigateByUrl("/workbench/optimizations");
-  }
+  // contextSwitch(clientOrgId, appName) {
+  //   this.userAccountService.orgId = clientOrgId;
+  //   this.userAccountService.browsingAsString = appName;
+  //   // TODO set local storate
+  //   this.router.navigateByUrl("/workbench/optimizations");
+  // }
 }
