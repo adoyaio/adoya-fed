@@ -1,11 +1,19 @@
 import { Injectable } from "@angular/core";
 import { MatDialog } from "@angular/material";
+import { BehaviorSubject } from "rxjs";
+import { Client } from "../models/client";
 
 @Injectable({
   providedIn: "root",
 })
 export class AppService {
   constructor() {}
+
+  // TODO move into state
+  public isAgentsInitialized = false;
+  public isOptimizationsInitialized = false;
+
+  public apps$: BehaviorSubject<Array<Client>> = new BehaviorSubject([]);
 
   static privacyPolicy: string = `
   <div><h4>Adoya, Inc. Privacy Policy</h4></div>

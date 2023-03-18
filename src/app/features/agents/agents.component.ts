@@ -8,6 +8,7 @@ import { BehaviorSubject, forkJoin, Observable, of } from "rxjs";
 import { filter, map, switchMap, take, tap } from "rxjs/operators";
 import { Client } from "src/app/core/models/client";
 import { ClientPayload } from "src/app/core/models/client-payload";
+import { AppService } from "src/app/core/services/app.service";
 import { ClientService } from "src/app/core/services/client.service";
 import { UserAccountService } from "src/app/core/services/user-account.service";
 
@@ -23,11 +24,12 @@ export class AgentsComponent implements OnInit {
     public userAccountService: UserAccountService,
     private fb: FormBuilder,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    public appService: AppService
   ) {}
 
-  clients: BehaviorSubject<Array<Client>> = new BehaviorSubject([]);
-  isLoadingResults = true;
+  // clients: BehaviorSubject<Array<Client>> = new BehaviorSubject([]);
+  isLoadingResults;
   isSendingResults;
   orgId: string;
 
@@ -38,33 +40,55 @@ export class AgentsComponent implements OnInit {
     this.userAccountService.browsingAsString = undefined;
     this.userAccountService.orgId = this.userAccountService.agentId;
 
-    this.orgId = this.userAccountService.orgId;
-    this.clientService
-      .getClients(this.orgId)
-      .pipe(
-        take(1),
+    if (!this.appService.isAgentsInitialized) {
+      this.isLoadingResults = true;
+      this.orgId = this.userAccountService.orgId;
+      this.clientService
+        .getClients(this.orgId)
+        .pipe(
+          take(1),
 
-        tap((val: Client[]) => {
-          const filteredValues = val.filter(
-            (client) => client.orgDetails.hasRegistered
-          );
-          this.clients.next(Client.buildListFromResponse(filteredValues));
-          chain(val)
-            .each((org) => {
-              this.clientForm.addControl(
-                org.orgId,
-                new FormControl(org.orgDetails.isActiveClient)
-              );
-            })
-            .value();
-          this.isLoadingResults = false;
-        })
-      )
-      .subscribe();
+          tap((val: Client[]) => {
+            const filteredValues = val.filter(
+              (client) => client.orgDetails.hasRegistered
+            );
+            this.appService.apps$.next(
+              Client.buildListFromResponse(filteredValues)
+            );
+            chain(val)
+              .each((org) => {
+                this.clientForm.addControl(
+                  org.orgId,
+                  new FormControl(org.orgDetails.isActiveClient)
+                );
+              })
+              .value();
+            this.isLoadingResults = false;
+            this.appService.isAgentsInitialized = true;
+          })
+        )
+        .subscribe();
+    } else {
+      this.appService.apps$
+        .pipe(
+          tap((val: Client[]) => {
+            chain(val)
+              .each((org) => {
+                this.clientForm.addControl(
+                  org.orgId,
+                  new FormControl(org.orgDetails.isActiveClient)
+                );
+              })
+              .value();
+            this.isLoadingResults = false;
+          })
+        )
+        .subscribe();
+    }
   }
 
   public hasNoClients(): Observable<boolean> {
-    return this.clients.pipe(
+    return this.appService.apps$.pipe(
       map((val) => {
         return val.length === 0;
       })
@@ -84,7 +108,7 @@ export class AgentsComponent implements OnInit {
   }
   submit() {
     this.isSendingResults = true;
-    this.clients
+    this.appService.apps$
       .pipe(
         take(1),
         switchMap((clients) => {

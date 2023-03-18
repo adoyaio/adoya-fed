@@ -219,7 +219,8 @@ export class RegistrationComponent implements OnInit {
     }),
     step1Form: this.fb.group({
       orgId: new FormControl("", Validators.required), // this is the adoya orgId/cognito id
-      // appleOrgId: new FormControl("", Validators.required),
+      // NOTE moved into step 0 so  we can pull
+      // the skeleton appleOrgId: new FormControl("", Validators.required),
       clientId: new FormControl("", Validators.required),
       teamId: new FormControl("", Validators.required),
       keyId: new FormControl("", Validators.required),
@@ -431,9 +432,9 @@ export class RegistrationComponent implements OnInit {
       // 2 flows, agent or directly as a client
       // NOTE now just one flow all users are agents
 
+      // NOTE this is the cognito id
       this.orgId = this.userAccountService.agentId;
       this.emailAddresses = get(val.attributes, "email");
-      // this.username = get(val, "username"); // NOTE unused, this is the same as orgId
 
       // if they have a client entry then populate step 2 values and proceed
       if (!isNil(this.asaId)) {
@@ -564,11 +565,9 @@ export class RegistrationComponent implements OnInit {
               keyId: this.step1Form.get("keyId").value,
             };
 
-            // set values from token
-            // this.client.orgDetails.orgId = +this.orgId;
-            // this.client.orgId = this.orgId; // NOTE this has diverged from asa id
-
-            this.client.orgId = this.clientKey; // NOTE this now uses the composite key of cognito id - asa id
+            // NOTE this now uses the composite key of cognito id || asa id,
+            // and once an app is selected will become cognito || asa || adamId
+            this.client.orgId = this.clientKey;
             this.client.orgDetails.orgId = this.appleOrgIdControl.value; // this represents an asa id
             this.client.orgDetails.hasInvitedApiUser = true;
             this.client.orgDetails.emailAddresses = [this.emailAddresses];
@@ -618,39 +617,6 @@ export class RegistrationComponent implements OnInit {
                       return [];
                     })
                   );
-                  // return combineLatest([
-                  //   this.appleService.getAppleApps(this.orgId),
-                  //   this.appleService.getAppleAcls(this.orgId),
-                  // ]).pipe(
-                  //   tap(([apps, acls]) => {
-                  //     this.isLoadingResults = false;
-
-                  //     if (isEmpty(apps.data) || isEmpty(acls)) {
-                  //       this.openSnackBar(
-                  //         "unable to process changes to settings at this time",
-                  //         "dismiss"
-                  //       );
-                  //     }
-                  //     if (!isEmpty(apps.data)) {
-                  //       this.openSnackBar(
-                  //         "we found some of your applications! please select from the dropdown to continue",
-                  //         ""
-                  //       );
-                  //     }
-                  //     this.apps = apps.data;
-                  //     this.currencies = _map(acls, (acl) => {
-                  //       return { code: acl.currency };
-                  //     });
-                  //   }),
-                  //   catchError(() => {
-                  //     this.isLoadingResults = false;
-                  //     this.openSnackBar(
-                  //       "unable to process changes to settings at this time",
-                  //       ""
-                  //     );
-                  //     return [];
-                  //   })
-                  // );
                 }),
                 catchError(() => {
                   this.isLoadingResults = false;
@@ -767,6 +733,8 @@ export class RegistrationComponent implements OnInit {
         }
       })
       .value();
+
+    debugger;
 
     this.appleService
       .patchAppleCampaign(this.clientKey, payload)
@@ -1428,9 +1396,12 @@ export class RegistrationComponent implements OnInit {
                       "importing apple search ads campaigns, this may take a few minutes. please don't refresh your browser during this time!",
                       ""
                     );
+
+                    // finalize client with campaigns and hasRegistered
                     set(client, "orgDetails.appleCampaigns", this.campaigns);
                     set(client, "orgDetails.hasRegistered", true);
 
+                    // set step 3 (4th total step) form controls
                     chain(this.campaigns)
                       .each((campaign) => {
                         const statusControl = `status|${campaign.campaignId}`;
@@ -1445,22 +1416,18 @@ export class RegistrationComponent implements OnInit {
                         const lifetimeBudgetControl = `lifetimeBudget|${campaign.campaignId}`;
                         this.step3Form.addControl(
                           lifetimeBudgetControl,
-                          new FormControl(
-                            campaign.lifetimeBudget
-                            // this.lifetimeBudgetValidatorsCompetitor
-                          )
+                          new FormControl(campaign.lifetimeBudget)
                         );
 
                         const dailyBudgetControl = `dailyBudget|${campaign.campaignId}`;
                         this.step3Form.addControl(
                           dailyBudgetControl,
-                          new FormControl(
-                            campaign.dailyBudget
-                            // this.dailyBudgetValidators
-                          )
+                          new FormControl(campaign.dailyBudget)
                         );
                       })
                       .value();
+
+                    // post the client changes
                     return this.clientService
                       .postClient(ClientPayload.buildFromClient(client), false)
                       .pipe(
@@ -1482,23 +1449,6 @@ export class RegistrationComponent implements OnInit {
                       );
                   })
                 );
-
-                // post to apple service for campaign creation
-                // return this.appleService.postAppleCampaign(this.orgId, campaignData).pipe(
-                //   take(1),
-                //   switchMap((val) => {
-                //       set(client, 'orgDetails.appleCampaigns', get(val, 'campaigns', []));
-                //        // post to client service for clients json
-                //       return this.clientService.postClient(ClientPayload.buildFromClient(client)).pipe(
-                //         take(1),
-                //         tap(() => {
-                //           this.client = client;
-                //           this.isLoadingResults = false;
-                //           this.openSnackBar("we completed creating your campaigns! please review details and complete registration to finalize", "")
-                //         })
-                //       )
-                //   })
-                // )
               }),
               catchError(() => {
                 this.isLoadingResults = false;
@@ -1657,7 +1607,7 @@ export class RegistrationComponent implements OnInit {
                 campaignData.targeted_keywords_category = this.keywordsCategory;
                 campaignData.targeted_keywords_brand = this.keywordsBrand;
 
-                // get auth
+                // TODO remove get auth
                 return this.appleService.getAppleAuth(this.clientKey).pipe(
                   take(1),
                   switchMap((val) => {
@@ -1989,6 +1939,7 @@ export class RegistrationComponent implements OnInit {
                   })
                 );
 
+                // NOTE has been broken into multiple calls to get around lambda timeout
                 // post to apple service for campaign creation
                 // return this.appleService.postAppleCampaign(this.orgId, campaignData).pipe(
                 //   take(1),

@@ -97,7 +97,7 @@
           </button> -->
         </div>
         <mat-accordion multi class="col-2">
-          <ng-container *ngFor="let client of clients | async">
+          <ng-container *ngFor="let client of appService.apps$ | async">
             <!-- campaigns panels -->
             <!-- <mat-expansion-panel
               class="mat-elevation-z0 mt-1 m-2 text-center"
