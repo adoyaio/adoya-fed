@@ -139,7 +139,13 @@ export class AgentsComponent implements OnInit {
             switchMap((val) => {
               return this.clientService.getClients(this.orgId).pipe(
                 take(1),
-                tap((val) => {
+                tap((val: Client[]) => {
+                  const filteredValues = val.filter(
+                    (client) => client.orgDetails.hasRegistered
+                  );
+                  this.appService.apps$.next(
+                    Client.buildListFromResponse(filteredValues)
+                  );
                   this.clientForm.markAsPristine();
                   this.accordion.closeAll();
                   this.isSendingResults = false;

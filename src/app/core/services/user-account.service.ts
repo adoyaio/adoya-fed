@@ -19,6 +19,7 @@ export class UserAccountService {
   public orgId: string;
   public userName: string;
   public agentId = undefined;
+  public isAgent = false;
   public browsingAsString = undefined;
 
   constructor(public amplifyService: AmplifyService, private router: Router) {

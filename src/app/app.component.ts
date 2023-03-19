@@ -31,6 +31,7 @@ import { UserAccountService } from "./core/services/user-account.service";
 })
 export class AppComponent implements AfterViewInit, OnDestroy {
   isAppLoading = true;
+  public isAgent;
   destroyed$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
@@ -85,7 +86,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
           );
 
           // check if user is an agent and if so org id is set from agents page
-          const isAgent = get(
+          this.isAgent = get(
             authState,
             "user.signInUserSession.idToken.payload.custom:agent",
             0
@@ -93,8 +94,9 @@ export class AppComponent implements AfterViewInit, OnDestroy {
             ? true
             : false;
 
-          if (isAgent) {
+          if (this.isAgent) {
             //this.router.navigateByUrl("/workbench/agents");
+            this.userAccountService.isAgent = true;
             this.userAccountService.agentId = get(authState, "user.username");
             this.userAccountService.orgId = localStorage.getItem("orgId")
               ? localStorage.getItem("orgId")

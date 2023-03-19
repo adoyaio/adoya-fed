@@ -420,7 +420,8 @@ export class RegistrationComponent implements OnInit {
     private userAccountService: UserAccountService,
     private supportService: SupportService,
     private activatedRoute: ActivatedRoute,
-    private location: Location
+    private location: Location,
+    public appService: AppService
   ) {}
 
   ngOnInit() {
@@ -737,19 +738,16 @@ export class RegistrationComponent implements OnInit {
     debugger;
 
     this.appleService
-      .patchAppleCampaign(this.clientKey, payload)
+      .patchAppleCampaign(this.appKey, payload)
       .pipe(
         take(1),
         switchMap((val) => {
-          return this.clientService.getClient(this.clientKey).pipe(
+          return this.clientService.getClient(this.appKey).pipe(
             take(1),
             tap((val) => {
               debugger;
               this.isLoadingResults = false;
-              this.client = Client.buildFromGetClientResponse(
-                val,
-                this.clientKey
-              );
+              this.client = Client.buildFromGetClientResponse(val, this.appKey);
               this.step3Form.markAsPristine();
               this.openSnackBar(
                 "we've completed updating your campaigns! please review details and complete registration to finalize",
@@ -1066,7 +1064,14 @@ export class RegistrationComponent implements OnInit {
               take(1),
               tap(() => {
                 // this.isLoadingResults = false;
-                this.router.navigateByUrl("/workbench");
+
+                if (this.userAccountService.isAgent) {
+                  // reset the saved apps
+                  this.appService.isAgentsInitialized = false;
+                  this.router.navigateByUrl("/workbench/applications");
+                } else {
+                  this.router.navigateByUrl("/workbench");
+                }
               }),
               catchError(() => {
                 this.isLoadingResults = false;
