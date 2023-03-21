@@ -440,7 +440,7 @@ export class RegistrationComponent implements OnInit {
       // if they have a client entry then populate step 2 values and proceed
       if (!isNil(this.asaId)) {
         this.isLoadingResults = true;
-        this.clientKey = `${this.orgId}||${this.asaId}`;
+        this.clientKey = `${this.orgId}__${this.asaId}`;
         this.clientService
           .getClient(this.clientKey)
           .pipe(
@@ -566,8 +566,8 @@ export class RegistrationComponent implements OnInit {
               keyId: this.step1Form.get("keyId").value,
             };
 
-            // NOTE this now uses the composite key of cognito id || asa id,
-            // and once an app is selected will become cognito || asa || adamId
+            // NOTE this now uses the composite key of cognito id __ asa id,
+            // and once an app is selected will become cognito __ asa __ adamId
             this.client.orgId = this.clientKey;
             this.client.orgDetails.orgId = this.appleOrgIdControl.value; // this represents an asa id
             this.client.orgDetails.hasInvitedApiUser = true;
@@ -1004,6 +1004,10 @@ export class RegistrationComponent implements OnInit {
             if (!isNil(val.data) && !isEmpty(val.data)) {
               this.appleCampaigns = val.data;
               this.hasExistingAsaCampaigns = true;
+              this.openSnackBar(
+                "we found some of your apple search ads campaigns. please select campaigns that you would like to import, or to continue, click 'next'",
+                ""
+              );
             } else {
               this.goNext(ordinal);
             }
@@ -1185,7 +1189,7 @@ export class RegistrationComponent implements OnInit {
 
     // we now know what the asa id is, if we didn't before from url
     this.asaId = this.appleOrgIdControl.value;
-    this.clientKey = `${this.orgId}||${this.asaId}`;
+    this.clientKey = `${this.orgId}__${this.asaId}`;
 
     this.location.replaceState(`/registration?id=${this.asaId}`);
 
@@ -1326,7 +1330,7 @@ export class RegistrationComponent implements OnInit {
               take(1),
               switchMap((val) => {
                 // WRITE FINAL DB ENTRY TO APP KEY
-                this.appKey = `${this.clientKey}||${this.applicationControl.value}`;
+                this.appKey = `${this.clientKey}__${this.applicationControl.value}`;
 
                 const client = Client.buildFromGetClientResponse(
                   val,
@@ -1509,7 +1513,7 @@ export class RegistrationComponent implements OnInit {
                 // );
 
                 // WRITE FINAL DB ENTRY TO APP KEY
-                this.appKey = `${this.clientKey}||${this.applicationControl.value}`;
+                this.appKey = `${this.clientKey}__${this.applicationControl.value}`;
 
                 // TODO handle this
                 // this.clientService

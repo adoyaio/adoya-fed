@@ -82,8 +82,10 @@ export class OnboardingComponent implements OnInit {
     const newClient = new Client();
 
     if (forAgent) {
+      // newClient.orgId =
+      //   this.form.get("userId").value + "__" + this.form1.get("appleOrgId");
       newClient.orgId =
-        this.form.get("userId").value + "||" + this.form1.get("appleOrgId");
+        this.form.get("userId").value + "__" + this.form1.get("appleOrgId");
     } else {
       newClient.orgId = this.form.get("userId").value;
     }
