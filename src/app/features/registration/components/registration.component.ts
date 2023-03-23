@@ -543,6 +543,15 @@ export class RegistrationComponent implements OnInit {
       .pipe(
         tap((val) => {
           // STEP 2
+          this.substeps.forEach((val) => {
+            if (val.ordinal === 1) {
+              val.complete = false;
+              val.active = true;
+            } else {
+              val.complete = false;
+              val.active = false;
+            }
+          });
           if (val.selectedIndex === 2) {
             this.openSnackBar(
               "one moment, while we gather more details about your account",
@@ -735,8 +744,6 @@ export class RegistrationComponent implements OnInit {
       })
       .value();
 
-    debugger;
-
     this.appleService
       .patchAppleCampaign(this.appKey, payload)
       .pipe(
@@ -745,7 +752,6 @@ export class RegistrationComponent implements OnInit {
           return this.clientService.getClient(this.appKey).pipe(
             take(1),
             tap((val) => {
-              debugger;
               this.isLoadingResults = false;
               this.client = Client.buildFromGetClientResponse(val, this.appKey);
               this.step3Form.markAsPristine();
@@ -929,6 +935,7 @@ export class RegistrationComponent implements OnInit {
   }
 
   continueImportFlow() {
+    this.campaigns = [];
     this.isLoadingResults = true;
     const campaignsToImport = get(this.substep1import.value, "appleCampaign");
 
