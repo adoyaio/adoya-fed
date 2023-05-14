@@ -33,7 +33,7 @@ const routes: Routes = [
         //     (m) => m.WorkbenchModule
         //   ),
         // canActivate: [AuthGuard],
-        data: { title: "Optimizations" },
+        data: { title: "Settings" },
       },
       {
         path: "preferences",

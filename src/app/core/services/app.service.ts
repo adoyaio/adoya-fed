@@ -487,8 +487,8 @@ export class AppService {
 
   <div class="mb-2 mt-2"><u><h4>PAYMENT:</h4></u></div>
   <div class="mb-3">
-  The first 30 days of Adoya is free. After that, Adoya will provide Apple Search Ads campaign management support at a rate of $250 per month. The first billable month will be prorated.
-  Subsequent months will be billed at the entire $250 per month rate. You understand and agree that your payment information will be stored and charged automatically on the first calendar day of each month.
+  The first 30 days of Adoya is free. After that, Adoya will provide Apple Search Ads campaign management support at a rate of $500 per month. The first billable month will be prorated.
+  Subsequent months will be billed at the entire $500 per month rate. You understand and agree that your payment information will be stored and charged automatically on the first calendar day of each month.
   </div>
 
   <div class="mb-3">

@@ -3,7 +3,7 @@
   <mat-tab>
     <ng-template mat-tab-label>
       <mat-icon>tune</mat-icon>
-      <span class="ml-2">Install Optimizations</span>
+      <span class="ml-2">Apple Search Ads Setting</span>
     </ng-template>
 
     <div class="workbench__loading-shade" *ngIf="isLoadingResults">
@@ -55,11 +55,12 @@
           <mat-card-content>
             <div class="w-100">
               <mat-card-subtitle class="mt-2 mb-2 font-weight-bold">
-                Apple Search Ads Settings
+                Default Settings
               </mat-card-subtitle>
 
               <mat-label class="d-block mb-2">
-                Set Default Objective and Target CPI
+                Set Default Bid Optimizer Objective & Target Cost Per Install
+                (CPI)
               </mat-label>
 
               <div class="w-100 d-flex flex-row justify-content-between">
@@ -156,7 +157,8 @@
 
             <!-- campaigns subtitle  -->
             <mat-label class="d-block">
-              Set Campaign specific Objective and Target CPI
+              Set Campaign Specific Settings, Bid Optimizer Objective & Target
+              Cost Per Install (CPI)
             </mat-label>
 
             <!-- campaigns  -->
@@ -576,7 +578,7 @@
   <mat-tab>
     <ng-template mat-tab-label>
       <mat-icon>tune</mat-icon>
-      <span class="ml-2">Post-Install Optimizations</span>
+      <span class="ml-2">Mobile Marketing Partner Settings</span>
     </ng-template>
     <div class="workbench__loading-shade" *ngIf="isLoadingResults">
       <mat-spinner color="primary" strokeWidth="6.5"></mat-spinner>

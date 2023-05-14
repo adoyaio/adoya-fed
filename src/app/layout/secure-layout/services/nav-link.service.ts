@@ -39,7 +39,7 @@ export class NavLinkService implements OnDestroy {
       LayoutNavLinks.build(
         2,
         "button",
-        "Optimizations",
+        "Settings",
         "/workbench/optimizations",
         "dashboard",
         undefined,
