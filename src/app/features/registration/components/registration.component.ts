@@ -578,7 +578,7 @@ export class RegistrationComponent implements OnInit {
             // NOTE this now uses the composite key of cognito id __ asa id,
             // and once an app is selected will become cognito __ asa __ adamId
             this.client.orgId = this.clientKey;
-            this.client.orgDetails.orgId = this.appleOrgIdControl.value; // this represents an asa id
+            this.client.orgDetails.orgId = +this.appleOrgIdControl.value; // this represents an asa id number
             this.client.orgDetails.hasInvitedApiUser = true;
             this.client.orgDetails.emailAddresses = [this.emailAddresses];
 
