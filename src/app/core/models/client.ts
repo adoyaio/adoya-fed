@@ -136,6 +136,8 @@ export class OrgDetails {
   clientName: string;
   appName: string;
   pemFilename: string;
+  // orgId: string;
+  // asaId: number;
   orgId: number;
   keyFilename: string;
   emailAddresses: string[];
@@ -160,7 +162,7 @@ export class OrgDetails {
     retVal.appID = response.appID;
     retVal.emailAddresses = response.emailAddresses;
     retVal.keyFilename = response.keyFilename;
-    retVal.orgId = response.orgId;
+    retVal.orgId = response.asaId; // orgdetail org is asa id
     retVal.pemFilename = response.pemFilename;
     retVal.appName = response.appName;
     retVal.clientName = response.clientName;
@@ -192,7 +194,6 @@ export class Client {
     const retVal = new Client();
     // TODO response shouldn't be a pythonic/blackbox client, it should return complete dynamo response
     retVal.orgDetails = OrgDetails.buildFromResponse(response);
-    //retVal.orgId = retVal.orgDetails.orgId;
     retVal.orgId = orgId;
     return retVal;
   }

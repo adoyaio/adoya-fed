@@ -24,11 +24,11 @@
             class="workbench__buttons float-right"
           >
             <mat-icon
-              [ngClass]="undoDisabled() ? '' : 'adoya-web-primary'"
+              [ngClass]="undoDisabled() ? '' : 'adoya-web-button-accent'"
               aria-label="reset"
               >refresh</mat-icon
             >
-            <span [ngClass]="undoDisabled() ? '' : 'adoya-web-primary'"
+            <span [ngClass]="undoDisabled() ? '' : 'adoya-web-button-accent'"
               >undo changes</span
             >
           </button>
@@ -40,11 +40,13 @@
             class="workbench__buttons float-right"
           >
             <mat-icon
-              [ngClass]="appleSubmitDisabled() ? '' : 'adoya-web-primary'"
+              [ngClass]="appleSubmitDisabled() ? '' : 'adoya-web-button-accent'"
               aria-label="save"
-              >cloud_done</mat-icon
+              >done</mat-icon
             >
-            <span [ngClass]="appleSubmitDisabled() ? '' : 'adoya-web-primary'">
+            <span
+              [ngClass]="appleSubmitDisabled() ? '' : 'adoya-web-button-accent'"
+            >
               save changes</span
             >
           </button>
@@ -593,33 +595,39 @@
           <!-- Bid Optimization Settings For Post-Install Events -->
 
           <button
+            mat-button
             (click)="onResetForm()"
             [disabled]="undoDisabled()"
-            mat-button
             class="workbench__buttons float-right"
           >
             <mat-icon
-              [ngClass]="undoDisabled() ? '' : 'adoya-web-primary'"
+              [ngClass]="undoDisabled() ? '' : 'adoya-web-button-accent'"
               aria-label="reset"
               >refresh</mat-icon
             >
-            <span [ngClass]="undoDisabled() ? '' : 'adoya-web-primary'"
+            <span [ngClass]="undoDisabled() ? '' : 'adoya-web-button-accent'"
               >undo changes</span
             >
           </button>
 
           <button
+            mat-button
             (click)="onAppleSubmit()"
             [disabled]="branchSubmitDisabled()"
-            mat-button
             class="workbench__buttons float-right"
           >
             <mat-icon
-              [ngClass]="branchSubmitDisabled() ? '' : 'adoya-web-primary'"
+              [ngClass]="
+                branchSubmitDisabled() ? '' : 'adoya-web-button-accent'
+              "
               aria-label="save"
-              >cloud_done</mat-icon
+              >done</mat-icon
             >
-            <span [ngClass]="branchSubmitDisabled() ? '' : 'adoya-web-primary'">
+            <span
+              [ngClass]="
+                branchSubmitDisabled() ? '' : 'adoya-web-button-accent'
+              "
+            >
               save changes</span
             >
           </button>
