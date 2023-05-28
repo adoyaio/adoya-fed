@@ -125,13 +125,12 @@ export class AggregateReportingComponent implements OnInit {
           );
 
           this.aggregatePaginator.length = data["count"];
-
           this.isAggregateDataVisMode = true;
-
           return data;
         }),
         catchError(() => {
           this.reportingService.isLoadingCPI = false;
+
           return [];
         })
       )

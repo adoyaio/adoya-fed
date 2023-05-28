@@ -205,6 +205,10 @@ export class OptimizationsComponent implements OnInit {
         take(1),
         catchError(() => {
           this.isLoadingResults = false;
+          this.openSnackBar(
+            "No data for this application. Please select another application or try again later",
+            "dismiss"
+          );
           return EMPTY;
         })
       )

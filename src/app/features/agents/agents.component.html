@@ -20,37 +20,6 @@
           <mat-icon class="pr-2" color="accent">add</mat-icon>
           add a new client or application to your account
         </button>
-        <button
-          (click)="onResetForm()"
-          [disabled]="undoDisabled()"
-          mat-button
-          class="workbench__buttons"
-        >
-          <mat-icon
-            [ngClass]="undoDisabled() ? '' : 'adoya-web-primary'"
-            aria-label="reset"
-            >refresh</mat-icon
-          >
-          <span [ngClass]="undoDisabled() ? '' : 'adoya-web-primary'"
-            >undo changes</span
-          >
-        </button>
-
-        <button
-          (click)="submit()"
-          [disabled]="submitDisabled()"
-          mat-button
-          class="workbench__buttons"
-        >
-          <mat-icon
-            [ngClass]="submitDisabled() ? '' : 'adoya-web-primary'"
-            aria-label="save"
-            >done</mat-icon
-          >
-          <span [ngClass]="submitDisabled() ? '' : 'adoya-web-primary'">
-            save changes</span
-          >
-        </button>
       </div>
     </div>
   </mat-card-title>
@@ -60,9 +29,9 @@
     <mat-card-content>
       <!-- campaigns title -->
       <mat-card-subtitle
-        class="mt-2 mb-2 font-weight-bold d-flex justify-content-end"
+        class="mt-2 mb-2 font-weight-bold d-flex justify-content-between"
       >
-        <div class="w-100">
+        <div>
           <button
             mat-button
             (click)="$event.preventDefault(); accordion.openAll()"
@@ -74,6 +43,38 @@
             (click)="$event.preventDefault(); accordion.closeAll()"
           >
             <mat-icon color="primary">expand_less</mat-icon>Collapse All
+          </button>
+        </div>
+        <div>
+          <button
+            (click)="submit()"
+            [disabled]="submitDisabled()"
+            mat-button
+            class="workbench__buttons"
+          >
+            <mat-icon
+              [ngClass]="submitDisabled() ? '' : 'adoya-web-button-accent'"
+              aria-label="save"
+              >done</mat-icon
+            >
+            <span [ngClass]="submitDisabled() ? '' : 'adoya-web-button-accent'">
+              save changes</span
+            >
+          </button>
+          <button
+            (click)="onResetForm()"
+            [disabled]="undoDisabled()"
+            mat-button
+            class="workbench__buttons"
+          >
+            <mat-icon
+              [ngClass]="undoDisabled() ? '' : 'adoya-web-button-accent'"
+              aria-label="reset"
+              >refresh</mat-icon
+            >
+            <span [ngClass]="undoDisabled() ? '' : 'adoya-web-button-accent'"
+              >undo changes</span
+            >
           </button>
         </div>
       </mat-card-subtitle>

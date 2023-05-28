@@ -13,28 +13,42 @@
     <div class="d-flex col-12 px-0">
       <mat-card class="workbench__card mat-elevation-z0 mt-3 w-100">
         <mat-card-title class="pb-2">
-          Application Preferences
+          <!-- Application Preferences -->
           <button
             (click)="onResetForm()"
             mat-button
+            [disabled]="undoDisabled()"
             class="workbench__buttons float-right"
           >
-            <mat-icon aria-label="reset">refresh</mat-icon>
-            undo changes
+            <mat-icon
+              aria-label="reset"
+              [ngClass]="undoDisabled() ? '' : 'adoya-web-button-accent'"
+              >refresh</mat-icon
+            >
+            <span [ngClass]="undoDisabled() ? '' : 'adoya-web-button-accent'"
+              >undo changes</span
+            >
           </button>
           <button
             (click)="onPreferencesSubmit()"
             mat-button
-            class="workbench__buttons float-right"
+            [disabled]="saveDisabled()"
+            class="float-right"
           >
-            <mat-icon aria-label="done">done</mat-icon>
-            save changes
+            <mat-icon
+              aria-label="done"
+              [ngClass]="saveDisabled() ? '' : 'adoya-web-button-accent'"
+              >done</mat-icon
+            >
+            <span [ngClass]="saveDisabled() ? '' : 'adoya-web-button-accent'"
+              >save changes
+            </span>
           </button>
         </mat-card-title>
         <mat-card-content>
           <div class="w-100">
             <form [formGroup]="preferencesForm">
-              <mat-card-subtitle class="mt-2 mb-2">
+              <mat-card-subtitle class="mb-2 font-weight-bold">
                 Comma seperated list of email addresses for any individuals who
                 should receive daily performance summaries.
               </mat-card-subtitle>

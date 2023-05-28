@@ -26,7 +26,7 @@ export class PreferencesComponent implements OnInit {
     private snackBar: MatSnackBar
   ) {}
 
-  preferencesForm = this.fb.group({
+  public preferencesForm = this.fb.group({
     emailAddresses: [""],
   });
 
@@ -81,6 +81,10 @@ export class PreferencesComponent implements OnInit {
         }),
         catchError(() => {
           this.isLoadingResults = false;
+          this.openSnackBar(
+            "No data for this application. Please select another application or try again later",
+            "dismiss"
+          );
           return [];
         })
       )
@@ -88,9 +92,18 @@ export class PreferencesComponent implements OnInit {
   }
 
   onResetForm() {
+    this.preferencesForm.markAsPristine();
     this.preferencesForm
       .get("emailAddresses")
       .setValue(this.client.orgDetails.emailAddresses);
+  }
+
+  undoDisabled() {
+    return this.preferencesForm.pristine;
+  }
+
+  saveDisabled() {
+    return this.preferencesForm.invalid || this.preferencesForm.pristine;
   }
 
   onPreferencesSubmit() {
@@ -113,6 +126,7 @@ export class PreferencesComponent implements OnInit {
           map((data) => {
             this.isSendingResults = false;
             this.openSnackBar("successfully updated preferences!", "dismiss");
+            this.preferencesForm.markAsPristine();
             return data;
           }),
           catchError(() => {
