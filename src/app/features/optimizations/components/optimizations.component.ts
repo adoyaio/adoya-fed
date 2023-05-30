@@ -858,58 +858,58 @@ export class OptimizationsComponent implements OnInit {
     }
   }
 
-  updateAppleCampaign() {
-    this.isLoadingResults = true;
-    const payload = [];
-    chain(this.client.orgDetails.appleCampaigns)
-      .each((campaign) => {
-        // const statusCtrl =
-        //   this.appleForm["controls"][`status|${campaign.campaignId}`];
-        const lifetimeBudgetCtrl =
-          this.appleForm["controls"][`lifetimeBudget|${campaign.campaignId}`];
-        const dailyBudgetCtrl =
-          this.appleForm["controls"][`dailyBudget|${campaign.campaignId}`];
+  // updateAppleCampaign() {
+  //   this.isLoadingResults = true;
+  //   const payload = [];
+  //   chain(this.client.orgDetails.appleCampaigns)
+  //     .each((campaign) => {
+  //       // const statusCtrl =
+  //       //   this.appleForm["controls"][`status|${campaign.campaignId}`];
+  //       const lifetimeBudgetCtrl =
+  //         this.appleForm["controls"][`lifetimeBudget|${campaign.campaignId}`];
+  //       const dailyBudgetCtrl =
+  //         this.appleForm["controls"][`dailyBudget|${campaign.campaignId}`];
 
-        if (lifetimeBudgetCtrl.dirty || dailyBudgetCtrl.dirty) {
-          payload.push({
-            campaignId: campaign.campaignId,
-            lifetimeBudget: lifetimeBudgetCtrl.value,
-            dailyBudget: dailyBudgetCtrl.value,
-          });
-        }
-      })
-      .value();
+  //       if (lifetimeBudgetCtrl.dirty || dailyBudgetCtrl.dirty) {
+  //         payload.push({
+  //           campaignId: campaign.campaignId,
+  //           lifetimeBudget: lifetimeBudgetCtrl.value,
+  //           dailyBudget: dailyBudgetCtrl.value,
+  //         });
+  //       }
+  //     })
+  //     .value();
 
-    this.appleService
-      .patchAppleCampaign(this.orgId, payload)
-      .pipe(
-        take(1),
-        switchMap((val) => {
-          return this.clientService.getClient(this.orgId).pipe(
-            take(1),
-            tap((val) => {
-              this.isLoadingResults = false;
-              this.client = Client.buildFromGetClientResponse(val, this.orgId);
-              this.appleForm.markAsPristine();
-              this.accordion.closeAll();
-              this.openSnackBar(
-                "we've completed updating your campaigns! please review details and complete registration to finalize",
-                ""
-              );
-            })
-          );
-        }),
-        catchError(() => {
-          this.isLoadingResults = false;
-          this.openSnackBar(
-            "unable to process changes to settings at this time",
-            "dismiss"
-          );
-          return [];
-        })
-      )
-      .subscribe();
-  }
+  //   this.appleService
+  //     .patchAppleCampaign(this.orgId, payload)
+  //     .pipe(
+  //       take(1),
+  //       switchMap((val) => {
+  //         return this.clientService.getClient(this.orgId).pipe(
+  //           take(1),
+  //           tap((val) => {
+  //             this.isLoadingResults = false;
+  //             this.client = Client.buildFromGetClientResponse(val, this.orgId);
+  //             this.appleForm.markAsPristine();
+  //             this.accordion.closeAll();
+  //             this.openSnackBar(
+  //               "we've completed updating your campaigns! please review details and complete registration to finalize",
+  //               ""
+  //             );
+  //           })
+  //         );
+  //       }),
+  //       catchError(() => {
+  //         this.isLoadingResults = false;
+  //         this.openSnackBar(
+  //           "unable to process changes to settings at this time",
+  //           "dismiss"
+  //         );
+  //         return [];
+  //       })
+  //     )
+  //     .subscribe();
+  // }
 
   campaignsInvalid(): boolean {
     const globalCpi: number =
